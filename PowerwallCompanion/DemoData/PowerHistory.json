@@ -1,0 +1,2257 @@
+{
+  "response": {
+    "serial_number": "1118431-01-F--T17G0004126",
+    "time_series": [
+      {
+        "timestamp": "2018-02-27T00:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.03333333333333,
+        "grid_power": 253.765233440399
+      },
+      {
+        "timestamp": "2018-02-27T00:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 254.29036605835
+      },
+      {
+        "timestamp": "2018-02-27T00:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.966666666666667,
+        "grid_power": 261.629433771769
+      },
+      {
+        "timestamp": "2018-02-27T00:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.966666666666667,
+        "grid_power": 269.078533147176
+      },
+      {
+        "timestamp": "2018-02-27T00:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 339.398165918986
+      },
+      {
+        "timestamp": "2018-02-27T00:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.733333333333333,
+        "grid_power": 312.158467597961
+      },
+      {
+        "timestamp": "2018-02-27T00:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.1,
+        "grid_power": 259.616399765015
+      },
+      {
+        "timestamp": "2018-02-27T00:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.666666666666667,
+        "grid_power": 254.295633710225
+      },
+      {
+        "timestamp": "2018-02-27T00:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 252.783466631571
+      },
+      {
+        "timestamp": "2018-02-27T00:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1,
+        "grid_power": 251.979966812134
+      },
+      {
+        "timestamp": "2018-02-27T00:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.4,
+        "grid_power": 267.691866124471
+      },
+      {
+        "timestamp": "2018-02-27T00:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.8,
+        "grid_power": 362.917533709208
+      },
+      {
+        "timestamp": "2018-02-27T01:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.833333333333333,
+        "grid_power": 288.320066350301
+      },
+      {
+        "timestamp": "2018-02-27T01:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.766666666666667,
+        "grid_power": 272.83196627299
+      },
+      {
+        "timestamp": "2018-02-27T01:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1,
+        "grid_power": 271.179100290934
+      },
+      {
+        "timestamp": "2018-02-27T01:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.766666666666667,
+        "grid_power": 267.072866490682
+      },
+      {
+        "timestamp": "2018-02-27T01:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.866666666666667,
+        "grid_power": 266.688900286357
+      },
+      {
+        "timestamp": "2018-02-27T01:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.766666666666667,
+        "grid_power": 305.727833595276
+      },
+      {
+        "timestamp": "2018-02-27T01:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.8,
+        "grid_power": 320.126866658529
+      },
+      {
+        "timestamp": "2018-02-27T01:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1,
+        "grid_power": 263.052566973368
+      },
+      {
+        "timestamp": "2018-02-27T01:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.36666666666667,
+        "grid_power": 266.736766421
+      },
+      {
+        "timestamp": "2018-02-27T01:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.3,
+        "grid_power": 268.389766515096
+      },
+      {
+        "timestamp": "2018-02-27T01:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 257.488499704997
+      },
+      {
+        "timestamp": "2018-02-27T01:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.733333333333333,
+        "grid_power": 212.684466718038
+      },
+      {
+        "timestamp": "2018-02-27T02:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 284.073666521708
+      },
+      {
+        "timestamp": "2018-02-27T02:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.833333333333333,
+        "grid_power": 250.231666412354
+      },
+      {
+        "timestamp": "2018-02-27T02:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 222.436366386414
+      },
+      {
+        "timestamp": "2018-02-27T02:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.1,
+        "grid_power": 279.437433598836
+      },
+      {
+        "timestamp": "2018-02-27T02:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 265.360633506775
+      },
+      {
+        "timestamp": "2018-02-27T02:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.9,
+        "grid_power": 261.902433611552
+      },
+      {
+        "timestamp": "2018-02-27T02:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.23333333333333,
+        "grid_power": 270.783666508992
+      },
+      {
+        "timestamp": "2018-02-27T02:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.13333333333333,
+        "grid_power": 346.608201217651
+      },
+      {
+        "timestamp": "2018-02-27T02:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.23333333333333,
+        "grid_power": 277.997699788411
+      },
+      {
+        "timestamp": "2018-02-27T02:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.9,
+        "grid_power": 260.479966303507
+      },
+      {
+        "timestamp": "2018-02-27T02:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.9,
+        "grid_power": 267.818399556478
+      },
+      {
+        "timestamp": "2018-02-27T02:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.13333333333333,
+        "grid_power": 269.810833295186
+      },
+      {
+        "timestamp": "2018-02-27T03:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.03333333333333,
+        "grid_power": 266.505066363017
+      },
+      {
+        "timestamp": "2018-02-27T03:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 305.315799598694
+      },
+      {
+        "timestamp": "2018-02-27T03:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.766666666666667,
+        "grid_power": 343.825067380269
+      },
+      {
+        "timestamp": "2018-02-27T03:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.2,
+        "grid_power": 256.011266415914
+      },
+      {
+        "timestamp": "2018-02-27T03:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 213.344533259074
+      },
+      {
+        "timestamp": "2018-02-27T03:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 209.036133499146
+      },
+      {
+        "timestamp": "2018-02-27T03:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.3,
+        "grid_power": 198.61316666921
+      },
+      {
+        "timestamp": "2018-02-27T03:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 228.71966691335
+      },
+      {
+        "timestamp": "2018-02-27T03:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.9,
+        "grid_power": 327.471533673604
+      },
+      {
+        "timestamp": "2018-02-27T03:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 333.276332804362
+      },
+      {
+        "timestamp": "2018-02-27T03:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.766666666666667,
+        "grid_power": 272.937033742269
+      },
+      {
+        "timestamp": "2018-02-27T03:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.46666666666667,
+        "grid_power": 270.667699953715
+      },
+      {
+        "timestamp": "2018-02-27T04:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.16666666666667,
+        "grid_power": 255.888667081197
+      },
+      {
+        "timestamp": "2018-02-27T04:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.5,
+        "grid_power": 252.698133468628
+      },
+      {
+        "timestamp": "2018-02-27T04:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.03333333333333,
+        "grid_power": 251.52030061086
+      },
+      {
+        "timestamp": "2018-02-27T04:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 321.042233505249
+      },
+      {
+        "timestamp": "2018-02-27T04:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.966666666666667,
+        "grid_power": 292.05490020752
+      },
+      {
+        "timestamp": "2018-02-27T04:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.1,
+        "grid_power": 249.955999883016
+      },
+      {
+        "timestamp": "2018-02-27T04:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 250.885233205159
+      },
+      {
+        "timestamp": "2018-02-27T04:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.53333333333333,
+        "grid_power": 244.759266586304
+      },
+      {
+        "timestamp": "2018-02-27T04:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.16666666666667,
+        "grid_power": 197.273333714803
+      },
+      {
+        "timestamp": "2018-02-27T04:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.866666666666667,
+        "grid_power": 197.976867001851
+      },
+      {
+        "timestamp": "2018-02-27T04:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.16666666666667,
+        "grid_power": 282.062300249736
+      },
+      {
+        "timestamp": "2018-02-27T04:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.33333333333333,
+        "grid_power": 231.833466860453
+      },
+      {
+        "timestamp": "2018-02-27T05:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.533333333333333,
+        "grid_power": 259.058466733297
+      },
+      {
+        "timestamp": "2018-02-27T05:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 271.817966766357
+      },
+      {
+        "timestamp": "2018-02-27T05:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.43333333333333,
+        "grid_power": 272.211266810099
+      },
+      {
+        "timestamp": "2018-02-27T05:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.36666666666667,
+        "grid_power": 274.110899505615
+      },
+      {
+        "timestamp": "2018-02-27T05:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.16666666666667,
+        "grid_power": 284.390500221252
+      },
+      {
+        "timestamp": "2018-02-27T05:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.833333333333333,
+        "grid_power": 349.274599844615
+      },
+      {
+        "timestamp": "2018-02-27T05:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.03333333333333,
+        "grid_power": 270.9056665802
+      },
+      {
+        "timestamp": "2018-02-27T05:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.33333333333333,
+        "grid_power": 254.723066393534
+      },
+      {
+        "timestamp": "2018-02-27T05:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.966666666666667,
+        "grid_power": 249.240700213114
+      },
+      {
+        "timestamp": "2018-02-27T05:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.16666666666667,
+        "grid_power": 257.550966033936
+      },
+      {
+        "timestamp": "2018-02-27T05:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.9,
+        "grid_power": 261.676466655731
+      },
+      {
+        "timestamp": "2018-02-27T05:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.2,
+        "grid_power": 266.020566749573
+      },
+      {
+        "timestamp": "2018-02-27T06:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.566666666666667,
+        "grid_power": 492.085466461182
+      },
+      {
+        "timestamp": "2018-02-27T06:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.26666666666667,
+        "grid_power": 409.336233088175
+      },
+      {
+        "timestamp": "2018-02-27T06:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.33333333333333,
+        "grid_power": 401.998334070841
+      },
+      {
+        "timestamp": "2018-02-27T06:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.1,
+        "grid_power": 473.233699588776
+      },
+      {
+        "timestamp": "2018-02-27T06:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.06666666666667,
+        "grid_power": 667.267533505758
+      },
+      {
+        "timestamp": "2018-02-27T06:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1,
+        "grid_power": 601.481633771261
+      },
+      {
+        "timestamp": "2018-02-27T06:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.766666666666667,
+        "grid_power": 607.302267494202
+      },
+      {
+        "timestamp": "2018-02-27T06:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.6,
+        "grid_power": 594.683633562724
+      },
+      {
+        "timestamp": "2018-02-27T06:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": -1.2,
+        "grid_power": 1757.32839749654
+      },
+      {
+        "timestamp": "2018-02-27T06:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.533333333333333,
+        "grid_power": 2514.88199709574
+      },
+      {
+        "timestamp": "2018-02-27T06:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.866666666666667,
+        "grid_power": 1753.21583424886
+      },
+      {
+        "timestamp": "2018-02-27T06:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.933333333333333,
+        "grid_power": 1046.58273546855
+      },
+      {
+        "timestamp": "2018-02-27T07:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": -0.9,
+        "grid_power": 519.439767786662
+      },
+      {
+        "timestamp": "2018-02-27T07:05:00+11:00",
+        "solar_power": 26.3402333498001,
+        "battery_power": -0.933333333333333,
+        "grid_power": 919.72813273112
+      },
+      {
+        "timestamp": "2018-02-27T07:10:00+11:00",
+        "solar_power": 56.2212333043416,
+        "battery_power": -1.46666666666667,
+        "grid_power": 378.843399251302
+      },
+      {
+        "timestamp": "2018-02-27T07:15:00+11:00",
+        "solar_power": 71.5972333653768,
+        "battery_power": -1.13333333333333,
+        "grid_power": 1696.34063404083
+      },
+      {
+        "timestamp": "2018-02-27T07:20:00+11:00",
+        "solar_power": 140.080233484904,
+        "battery_power": -1.03333333333333,
+        "grid_power": 848.916301275889
+      },
+      {
+        "timestamp": "2018-02-27T07:25:00+11:00",
+        "solar_power": 230.263400014242,
+        "battery_power": -0.733333333333333,
+        "grid_power": 314.771933276256
+      },
+      {
+        "timestamp": "2018-02-27T07:30:00+11:00",
+        "solar_power": 327.802434082031,
+        "battery_power": -0.833333333333333,
+        "grid_power": 224.201632748445
+      },
+      {
+        "timestamp": "2018-02-27T07:35:00+11:00",
+        "solar_power": 253.582267354329,
+        "battery_power": -1.3,
+        "grid_power": 292.6129668052
+      },
+      {
+        "timestamp": "2018-02-27T07:40:00+11:00",
+        "solar_power": 211.625300140381,
+        "battery_power": -1.13333333333333,
+        "grid_power": 301.591099427392
+      },
+      {
+        "timestamp": "2018-02-27T07:45:00+11:00",
+        "solar_power": 248.127999827067,
+        "battery_power": -0.6,
+        "grid_power": 489.554100208282
+      },
+      {
+        "timestamp": "2018-02-27T07:50:00+11:00",
+        "solar_power": 306.197933349609,
+        "battery_power": -1.1,
+        "grid_power": 350.031466229757
+      },
+      {
+        "timestamp": "2018-02-27T07:55:00+11:00",
+        "solar_power": 373.943732910156,
+        "battery_power": -0.933333333333333,
+        "grid_power": 264.934433479309
+      },
+      {
+        "timestamp": "2018-02-27T08:00:00+11:00",
+        "solar_power": 452.270133260091,
+        "battery_power": -1.56666666666667,
+        "grid_power": 198.338766637941
+      },
+      {
+        "timestamp": "2018-02-27T08:05:00+11:00",
+        "solar_power": 534.599933064779,
+        "battery_power": -199.166666666667,
+        "grid_power": -1.27103261947632
+      },
+      {
+        "timestamp": "2018-02-27T08:10:00+11:00",
+        "solar_power": 622.675133056641,
+        "battery_power": -132.133333333333,
+        "grid_power": 91.8018989562988
+      },
+      {
+        "timestamp": "2018-02-27T08:15:00+11:00",
+        "solar_power": 708.931667683919,
+        "battery_power": -140.5,
+        "grid_power": 401.737966359456
+      },
+      {
+        "timestamp": "2018-02-27T08:20:00+11:00",
+        "solar_power": 814.531367797852,
+        "battery_power": -206.066666666667,
+        "grid_power": 198.971333332062
+      },
+      {
+        "timestamp": "2018-02-27T08:25:00+11:00",
+        "solar_power": 791.528133341471,
+        "battery_power": -240.866666666667,
+        "grid_power": 32.6222329862913
+      },
+      {
+        "timestamp": "2018-02-27T08:30:00+11:00",
+        "solar_power": 373.52649983724,
+        "battery_power": -3.9,
+        "grid_power": 195.936966950794
+      },
+      {
+        "timestamp": "2018-02-27T08:35:00+11:00",
+        "solar_power": 489.612398681641,
+        "battery_power": -3.9,
+        "grid_power": 51.7772670237223
+      },
+      {
+        "timestamp": "2018-02-27T08:40:00+11:00",
+        "solar_power": 694.680232950846,
+        "battery_power": -155.1,
+        "grid_power": 1.978366355896
+      },
+      {
+        "timestamp": "2018-02-27T08:45:00+11:00",
+        "solar_power": 867.512300008138,
+        "battery_power": -328.8,
+        "grid_power": -0.399266516367594
+      },
+      {
+        "timestamp": "2018-02-27T08:50:00+11:00",
+        "solar_power": 982.410866699219,
+        "battery_power": -405.2,
+        "grid_power": 5.00726726214091
+      },
+      {
+        "timestamp": "2018-02-27T08:55:00+11:00",
+        "solar_power": 1218.03586507161,
+        "battery_power": -610.766666666667,
+        "grid_power": -0.372965844472249
+      },
+      {
+        "timestamp": "2018-02-27T09:00:00+11:00",
+        "solar_power": 2089.6197664388,
+        "battery_power": -1545.06666666667,
+        "grid_power": 0.672533105214437
+      },
+      {
+        "timestamp": "2018-02-27T09:05:00+11:00",
+        "solar_power": 1797.1915633138,
+        "battery_power": -1253.06666666667,
+        "grid_power": -0.466633027394613
+      },
+      {
+        "timestamp": "2018-02-27T09:10:00+11:00",
+        "solar_power": 1759.08263448079,
+        "battery_power": -1147.6,
+        "grid_power": -0.0859998385111491
+      },
+      {
+        "timestamp": "2018-02-27T09:15:00+11:00",
+        "solar_power": 2159.27430013021,
+        "battery_power": -1695.76666666667,
+        "grid_power": 0.81609987894694
+      },
+      {
+        "timestamp": "2018-02-27T09:20:00+11:00",
+        "solar_power": 1943.64973551432,
+        "battery_power": -1480.7,
+        "grid_power": -0.57996623357137
+      },
+      {
+        "timestamp": "2018-02-27T09:25:00+11:00",
+        "solar_power": 2658.13116536458,
+        "battery_power": -2105.43333333333,
+        "grid_power": -1.08009960810343
+      },
+      {
+        "timestamp": "2018-02-27T09:30:00+11:00",
+        "solar_power": 2709.5922281901,
+        "battery_power": -2106.73333333333,
+        "grid_power": -0.258200308481852
+      },
+      {
+        "timestamp": "2018-02-27T09:35:00+11:00",
+        "solar_power": 2808.34759602865,
+        "battery_power": -2234.6,
+        "grid_power": -0.173733075459798
+      },
+      {
+        "timestamp": "2018-02-27T09:40:00+11:00",
+        "solar_power": 3309.65653564453,
+        "battery_power": -2743,
+        "grid_power": -0.0720665868123372
+      },
+      {
+        "timestamp": "2018-02-27T09:45:00+11:00",
+        "solar_power": 3487.50523763021,
+        "battery_power": -2936.96666666667,
+        "grid_power": -0.195400664011637
+      },
+      {
+        "timestamp": "2018-02-27T09:50:00+11:00",
+        "solar_power": 2268.9599987793,
+        "battery_power": -1401.96666666667,
+        "grid_power": 2.7453328259786
+      },
+      {
+        "timestamp": "2018-02-27T09:55:00+11:00",
+        "solar_power": 2483.6722277832,
+        "battery_power": -1745.46666666667,
+        "grid_power": 2.9241345278422
+      },
+      {
+        "timestamp": "2018-02-27T10:00:00+11:00",
+        "solar_power": 3618.46653727214,
+        "battery_power": -3070.43333333333,
+        "grid_power": -0.564299742380778
+      },
+      {
+        "timestamp": "2018-02-27T10:05:00+11:00",
+        "solar_power": 3002.53133138021,
+        "battery_power": -2537.13333333333,
+        "grid_power": 0.108533223470052
+      },
+      {
+        "timestamp": "2018-02-27T10:10:00+11:00",
+        "solar_power": 2564.12466959635,
+        "battery_power": -2110.9,
+        "grid_power": 0.264467423756917
+      },
+      {
+        "timestamp": "2018-02-27T10:15:00+11:00",
+        "solar_power": 2378.07090413411,
+        "battery_power": -1930.63333333333,
+        "grid_power": 0.446233406066895
+      },
+      {
+        "timestamp": "2018-02-27T10:20:00+11:00",
+        "solar_power": 2511.46122965495,
+        "battery_power": -1996.16666666667,
+        "grid_power": -0.470299841562907
+      },
+      {
+        "timestamp": "2018-02-27T10:25:00+11:00",
+        "solar_power": 2297.83799967448,
+        "battery_power": -1789.46666666667,
+        "grid_power": 0.465233008066813
+      },
+      {
+        "timestamp": "2018-02-27T10:30:00+11:00",
+        "solar_power": 2906.15293212891,
+        "battery_power": -2324.06666666667,
+        "grid_power": 0.85673397064209
+      },
+      {
+        "timestamp": "2018-02-27T10:35:00+11:00",
+        "solar_power": 3552.31559895833,
+        "battery_power": -3001.26666666667,
+        "grid_power": -0.451666380564372
+      },
+      {
+        "timestamp": "2018-02-27T10:40:00+11:00",
+        "solar_power": 2624.68753417969,
+        "battery_power": -2123.1,
+        "grid_power": 0.618966808319092
+      },
+      {
+        "timestamp": "2018-02-27T10:45:00+11:00",
+        "solar_power": 2437.91833658854,
+        "battery_power": -1932.66666666667,
+        "grid_power": -0.104100227355957
+      },
+      {
+        "timestamp": "2018-02-27T10:50:00+11:00",
+        "solar_power": 2276.83333333333,
+        "battery_power": -1775.9,
+        "grid_power": -0.383600514729818
+      },
+      {
+        "timestamp": "2018-02-27T10:55:00+11:00",
+        "solar_power": 2110.54446044922,
+        "battery_power": -1617.1,
+        "grid_power": -0.35639965057373
+      },
+      {
+        "timestamp": "2018-02-27T11:00:00+11:00",
+        "solar_power": 2396.97020019531,
+        "battery_power": -1844.3,
+        "grid_power": -2.21250007629395
+      },
+      {
+        "timestamp": "2018-02-27T11:05:00+11:00",
+        "solar_power": 2480.83736653646,
+        "battery_power": -1912.06666666667,
+        "grid_power": 0.18900005976359
+      },
+      {
+        "timestamp": "2018-02-27T11:10:00+11:00",
+        "solar_power": 2607.85130289714,
+        "battery_power": -2105,
+        "grid_power": -0.712733453114827
+      },
+      {
+        "timestamp": "2018-02-27T11:15:00+11:00",
+        "solar_power": 2700.87763427734,
+        "battery_power": -2188.8,
+        "grid_power": 0.0130997212727865
+      },
+      {
+        "timestamp": "2018-02-27T11:20:00+11:00",
+        "solar_power": 2966.43209798177,
+        "battery_power": -2504.2,
+        "grid_power": -0.808566811879476
+      },
+      {
+        "timestamp": "2018-02-27T11:25:00+11:00",
+        "solar_power": 3393.14133300781,
+        "battery_power": -2942.7,
+        "grid_power": -0.123000615437826
+      },
+      {
+        "timestamp": "2018-02-27T11:30:00+11:00",
+        "solar_power": 3317.89326334635,
+        "battery_power": -2833.53333333333,
+        "grid_power": 2.75396715164185
+      },
+      {
+        "timestamp": "2018-02-27T11:35:00+11:00",
+        "solar_power": 2903.03063232422,
+        "battery_power": -2354.1,
+        "grid_power": -1.12193360646566
+      },
+      {
+        "timestamp": "2018-02-27T11:40:00+11:00",
+        "solar_power": 2770.61769856771,
+        "battery_power": -2245.7,
+        "grid_power": -1.21950044631958
+      },
+      {
+        "timestamp": "2018-02-27T11:45:00+11:00",
+        "solar_power": 4189.3376953125,
+        "battery_power": -3635.36666666667,
+        "grid_power": -30.6619328371684
+      },
+      {
+        "timestamp": "2018-02-27T11:50:00+11:00",
+        "solar_power": 2679.89879882813,
+        "battery_power": -2147.83333333333,
+        "grid_power": -2.48729988733927
+      },
+      {
+        "timestamp": "2018-02-27T11:55:00+11:00",
+        "solar_power": 2999.79786458333,
+        "battery_power": -2474.86666666667,
+        "grid_power": 0.582266915639241
+      },
+      {
+        "timestamp": "2018-02-27T12:00:00+11:00",
+        "solar_power": 3220.96662516276,
+        "battery_power": -2684.53333333333,
+        "grid_power": -1.284800268809
+      },
+      {
+        "timestamp": "2018-02-27T12:05:00+11:00",
+        "solar_power": 3507.50936767578,
+        "battery_power": -2870.86666666667,
+        "grid_power": -28.0696339098612
+      },
+      {
+        "timestamp": "2018-02-27T12:10:00+11:00",
+        "solar_power": 3097.51236897786,
+        "battery_power": -2551.43333333333,
+        "grid_power": -2.18839952468872
+      },
+      {
+        "timestamp": "2018-02-27T12:15:00+11:00",
+        "solar_power": 3593.33799723307,
+        "battery_power": -3050.93333333333,
+        "grid_power": -3.83756516774495
+      },
+      {
+        "timestamp": "2018-02-27T12:20:00+11:00",
+        "solar_power": 3748.5154313151,
+        "battery_power": -3290.8,
+        "grid_power": -2.73966636657715
+      },
+      {
+        "timestamp": "2018-02-27T12:25:00+11:00",
+        "solar_power": 3373.15599283854,
+        "battery_power": -2925.93333333333,
+        "grid_power": -2.78550012588501
+      },
+      {
+        "timestamp": "2018-02-27T12:30:00+11:00",
+        "solar_power": 3423.18480875651,
+        "battery_power": -2955.53333333333,
+        "grid_power": -5.71186593373617
+      },
+      {
+        "timestamp": "2018-02-27T12:35:00+11:00",
+        "solar_power": 4338.76823893229,
+        "battery_power": -3174.7,
+        "grid_power": -617.186568393707
+      },
+      {
+        "timestamp": "2018-02-27T12:40:00+11:00",
+        "solar_power": 3922.41743001302,
+        "battery_power": -2815.26666666667,
+        "grid_power": -671.386898676554
+      },
+      {
+        "timestamp": "2018-02-27T12:45:00+11:00",
+        "solar_power": 3703.66630126953,
+        "battery_power": -2679,
+        "grid_power": -621.681731777191
+      },
+      {
+        "timestamp": "2018-02-27T12:50:00+11:00",
+        "solar_power": 3998.94206136068,
+        "battery_power": -2469.36666666667,
+        "grid_power": -1070.1165653801
+      },
+      {
+        "timestamp": "2018-02-27T12:55:00+11:00",
+        "solar_power": 4122.81994140625,
+        "battery_power": -2484.9,
+        "grid_power": -498.353667564392
+      },
+      {
+        "timestamp": "2018-02-27T13:00:00+11:00",
+        "solar_power": 5653.10891194661,
+        "battery_power": -2552.7,
+        "grid_power": -2464.22570591609
+      },
+      {
+        "timestamp": "2018-02-27T13:05:00+11:00",
+        "solar_power": 5490.0241780599,
+        "battery_power": -2425.66666666667,
+        "grid_power": -2328.79537433624
+      },
+      {
+        "timestamp": "2018-02-27T13:10:00+11:00",
+        "solar_power": 2178.42402913411,
+        "battery_power": -1031.7,
+        "grid_power": -511.453967609406
+      },
+      {
+        "timestamp": "2018-02-27T13:15:00+11:00",
+        "solar_power": 4281.26198567708,
+        "battery_power": -2817.96666666667,
+        "grid_power": -848.29523288091
+      },
+      {
+        "timestamp": "2018-02-27T13:20:00+11:00",
+        "solar_power": 5324.78770019531,
+        "battery_power": -2687.4,
+        "grid_power": -2008.58643163681
+      },
+      {
+        "timestamp": "2018-02-27T13:25:00+11:00",
+        "solar_power": 5055.33051920573,
+        "battery_power": -2604.56666666667,
+        "grid_power": -1834.41759923935
+      },
+      {
+        "timestamp": "2018-02-27T13:30:00+11:00",
+        "solar_power": 3346.71483439128,
+        "battery_power": -1659.9,
+        "grid_power": -1111.94976621628
+      },
+      {
+        "timestamp": "2018-02-27T13:35:00+11:00",
+        "solar_power": 2404.39029703776,
+        "battery_power": -581.3,
+        "grid_power": -5.7766677347819
+      },
+      {
+        "timestamp": "2018-02-27T13:40:00+11:00",
+        "solar_power": 1533.68293457031,
+        "battery_power": -1049.96666666667,
+        "grid_power": -5.09810031890869
+      },
+      {
+        "timestamp": "2018-02-27T13:45:00+11:00",
+        "solar_power": 1489.09416300456,
+        "battery_power": -1029.93333333333,
+        "grid_power": -6.25236652374268
+      },
+      {
+        "timestamp": "2018-02-27T13:50:00+11:00",
+        "solar_power": 1942.01920613607,
+        "battery_power": -1413.96666666667,
+        "grid_power": -5.41873331069946
+      },
+      {
+        "timestamp": "2018-02-27T13:55:00+11:00",
+        "solar_power": 3124.80817057292,
+        "battery_power": -2590.7,
+        "grid_power": -10.5777671686808
+      },
+      {
+        "timestamp": "2018-02-27T14:00:00+11:00",
+        "solar_power": 4729.7440633138,
+        "battery_power": -3578.06666666667,
+        "grid_power": -578.921068433126
+      },
+      {
+        "timestamp": "2018-02-27T14:05:00+11:00",
+        "solar_power": 1540.45106770833,
+        "battery_power": -942.733333333333,
+        "grid_power": -7.88686644236247
+      },
+      {
+        "timestamp": "2018-02-27T14:10:00+11:00",
+        "solar_power": 1236.43246419271,
+        "battery_power": -723.933333333333,
+        "grid_power": -5.40250019073486
+      },
+      {
+        "timestamp": "2018-02-27T14:15:00+11:00",
+        "solar_power": 1784.88793904622,
+        "battery_power": -1293.83333333333,
+        "grid_power": -6.92653305689494
+      },
+      {
+        "timestamp": "2018-02-27T14:20:00+11:00",
+        "solar_power": 2381.75777931981,
+        "battery_power": -1872.68456375839,
+        "grid_power": -19.6228517429941
+      },
+      {
+        "timestamp": "2018-02-27T14:25:00+11:00",
+        "solar_power": 2236.52903076172,
+        "battery_power": -1739.56666666667,
+        "grid_power": -5.97473295847575
+      },
+      {
+        "timestamp": "2018-02-27T14:30:00+11:00",
+        "solar_power": 2610.23413574219,
+        "battery_power": -2062.66666666667,
+        "grid_power": -9.56423353830973
+      },
+      {
+        "timestamp": "2018-02-27T14:35:00+11:00",
+        "solar_power": 3072.29929972331,
+        "battery_power": -2407.26666666667,
+        "grid_power": -79.1959662977854
+      },
+      {
+        "timestamp": "2018-02-27T14:40:00+11:00",
+        "solar_power": 1283.18466796875,
+        "battery_power": -777.766666666667,
+        "grid_power": -7.28296616872152
+      },
+      {
+        "timestamp": "2018-02-27T14:45:00+11:00",
+        "solar_power": 970.002900390625,
+        "battery_power": -496.766666666667,
+        "grid_power": -7.47670009613037
+      },
+      {
+        "timestamp": "2018-02-27T14:50:00+11:00",
+        "solar_power": 884.27886739095,
+        "battery_power": -439.7,
+        "grid_power": -6.32363347371419
+      },
+      {
+        "timestamp": "2018-02-27T14:55:00+11:00",
+        "solar_power": 887.516466064453,
+        "battery_power": -450.3,
+        "grid_power": -6.25236684163411
+      },
+      {
+        "timestamp": "2018-02-27T15:00:00+11:00",
+        "solar_power": 895.054300333659,
+        "battery_power": -397.666666666667,
+        "grid_power": -5.08239958445231
+      },
+      {
+        "timestamp": "2018-02-27T15:05:00+11:00",
+        "solar_power": 1068.96179972331,
+        "battery_power": -537.2,
+        "grid_power": -4.94643235524495
+      },
+      {
+        "timestamp": "2018-02-27T15:10:00+11:00",
+        "solar_power": 1328.16686523438,
+        "battery_power": -821.033333333333,
+        "grid_power": -4.68319979349772
+      },
+      {
+        "timestamp": "2018-02-27T15:15:00+11:00",
+        "solar_power": 1491.07346801758,
+        "battery_power": -991.933333333333,
+        "grid_power": -6.47519962310791
+      },
+      {
+        "timestamp": "2018-02-27T15:20:00+11:00",
+        "solar_power": 1671.06369832357,
+        "battery_power": -1072.46666666667,
+        "grid_power": 0.732599569956462
+      },
+      {
+        "timestamp": "2018-02-27T15:25:00+11:00",
+        "solar_power": 2087.4352331543,
+        "battery_power": -1580.6,
+        "grid_power": -4.86406674067179
+      },
+      {
+        "timestamp": "2018-02-27T15:30:00+11:00",
+        "solar_power": 2786.68289388021,
+        "battery_power": -2192.16666666667,
+        "grid_power": -11.2939671007792
+      },
+      {
+        "timestamp": "2018-02-27T15:35:00+11:00",
+        "solar_power": 4326.66659098307,
+        "battery_power": -3593.66666666667,
+        "grid_power": -158.610433877309
+      },
+      {
+        "timestamp": "2018-02-27T15:40:00+11:00",
+        "solar_power": 1712.70166707357,
+        "battery_power": -1218.26666666667,
+        "grid_power": -0.942433547973633
+      },
+      {
+        "timestamp": "2018-02-27T15:45:00+11:00",
+        "solar_power": 2130.69376708984,
+        "battery_power": -1631.26666666667,
+        "grid_power": -4.55923346837362
+      },
+      {
+        "timestamp": "2018-02-27T15:50:00+11:00",
+        "solar_power": 4335.81633748372,
+        "battery_power": -3808.16666666667,
+        "grid_power": -3.43660010019938
+      },
+      {
+        "timestamp": "2018-02-27T15:55:00+11:00",
+        "solar_power": 3894.3665637207,
+        "battery_power": -250.833333333333,
+        "grid_power": -3113.74433556557
+      },
+      {
+        "timestamp": "2018-02-27T16:00:00+11:00",
+        "solar_power": 4638.1391780599,
+        "battery_power": -1.66666666666667,
+        "grid_power": -4005.42176317851
+      },
+      {
+        "timestamp": "2018-02-27T16:05:00+11:00",
+        "solar_power": 2400.86326538086,
+        "battery_power": -1,
+        "grid_power": -1906.34449761709
+      },
+      {
+        "timestamp": "2018-02-27T16:10:00+11:00",
+        "solar_power": 4257.15256510417,
+        "battery_power": -1.53333333333333,
+        "grid_power": -3773.64720286051
+      },
+      {
+        "timestamp": "2018-02-27T16:15:00+11:00",
+        "solar_power": 4139.1776163737,
+        "battery_power": -1.53333333333333,
+        "grid_power": -3660.9568077596
+      },
+      {
+        "timestamp": "2018-02-27T16:20:00+11:00",
+        "solar_power": 4062.93716634115,
+        "battery_power": -1.66666666666667,
+        "grid_power": -3584.3245283254
+      },
+      {
+        "timestamp": "2018-02-27T16:25:00+11:00",
+        "solar_power": 4018.50287190755,
+        "battery_power": -1.5,
+        "grid_power": -3426.29249180476
+      },
+      {
+        "timestamp": "2018-02-27T16:30:00+11:00",
+        "solar_power": 3936.22190022786,
+        "battery_power": -1.4,
+        "grid_power": -3309.00856409709
+      },
+      {
+        "timestamp": "2018-02-27T16:35:00+11:00",
+        "solar_power": 3832.0373055013,
+        "battery_power": -1.76666666666667,
+        "grid_power": -3290.07452781041
+      },
+      {
+        "timestamp": "2018-02-27T16:40:00+11:00",
+        "solar_power": 3861.37276692708,
+        "battery_power": -1.5,
+        "grid_power": -3323.67873318354
+      },
+      {
+        "timestamp": "2018-02-27T16:45:00+11:00",
+        "solar_power": 4074.06384521484,
+        "battery_power": -1.83333333333333,
+        "grid_power": -3461.62959408442
+      },
+      {
+        "timestamp": "2018-02-27T16:50:00+11:00",
+        "solar_power": 4011.87670410156,
+        "battery_power": -1.33333333333333,
+        "grid_power": -3464.7369035085
+      },
+      {
+        "timestamp": "2018-02-27T16:55:00+11:00",
+        "solar_power": 3920.25890380859,
+        "battery_power": -1.26666666666667,
+        "grid_power": -3302.97949299494
+      },
+      {
+        "timestamp": "2018-02-27T17:00:00+11:00",
+        "solar_power": 3754.16313395182,
+        "battery_power": -1.56666666666667,
+        "grid_power": -3200.41710162481
+      },
+      {
+        "timestamp": "2018-02-27T17:05:00+11:00",
+        "solar_power": 3533.54813476563,
+        "battery_power": -1.33333333333333,
+        "grid_power": -3042.76413462957
+      },
+      {
+        "timestamp": "2018-02-27T17:10:00+11:00",
+        "solar_power": 3348.76120605469,
+        "battery_power": -1.4,
+        "grid_power": -2849.7594904836
+      },
+      {
+        "timestamp": "2018-02-27T17:15:00+11:00",
+        "solar_power": 3145.82927164714,
+        "battery_power": -1.53333333333333,
+        "grid_power": -2638.8270704333
+      },
+      {
+        "timestamp": "2018-02-27T17:20:00+11:00",
+        "solar_power": 3039.10960042318,
+        "battery_power": -1.33333333333333,
+        "grid_power": -2486.48407812754
+      },
+      {
+        "timestamp": "2018-02-27T17:25:00+11:00",
+        "solar_power": 2961.08626871745,
+        "battery_power": -1.4,
+        "grid_power": -2436.16803663254
+      },
+      {
+        "timestamp": "2018-02-27T17:30:00+11:00",
+        "solar_power": 2872.26666829427,
+        "battery_power": -1.26666666666667,
+        "grid_power": -1858.17603576024
+      },
+      {
+        "timestamp": "2018-02-27T17:35:00+11:00",
+        "solar_power": 2750.95459309896,
+        "battery_power": -1.16666666666667,
+        "grid_power": -316.222301292419
+      },
+      {
+        "timestamp": "2018-02-27T17:40:00+11:00",
+        "solar_power": 2600.91939900716,
+        "battery_power": -0.933333333333333,
+        "grid_power": -1032.83713621775
+      },
+      {
+        "timestamp": "2018-02-27T17:45:00+11:00",
+        "solar_power": 1833.00423217773,
+        "battery_power": -1.23333333333333,
+        "grid_power": -1295.81520279566
+      },
+      {
+        "timestamp": "2018-02-27T17:50:00+11:00",
+        "solar_power": 1623.89009765625,
+        "battery_power": -1.46666666666667,
+        "grid_power": -988.370864671071
+      },
+      {
+        "timestamp": "2018-02-27T17:55:00+11:00",
+        "solar_power": 2322.28213704427,
+        "battery_power": -1.26666666666667,
+        "grid_power": -1758.1730025355
+      },
+      {
+        "timestamp": "2018-02-27T18:00:00+11:00",
+        "solar_power": 2096.38583455404,
+        "battery_power": 218.8,
+        "grid_power": -1082.94336672465
+      },
+      {
+        "timestamp": "2018-02-27T18:05:00+11:00",
+        "solar_power": 1924.01809895833,
+        "battery_power": 937.566666666667,
+        "grid_power": -58.4889989598592
+      },
+      {
+        "timestamp": "2018-02-27T18:10:00+11:00",
+        "solar_power": 1805.47756551107,
+        "battery_power": 1632.93333333333,
+        "grid_power": 7.85116762797038
+      },
+      {
+        "timestamp": "2018-02-27T18:15:00+11:00",
+        "solar_power": 1723.68350016276,
+        "battery_power": 4363.2,
+        "grid_power": 173.485003420512
+      },
+      {
+        "timestamp": "2018-02-27T18:20:00+11:00",
+        "solar_power": 1583.28596516927,
+        "battery_power": 1205.93333333333,
+        "grid_power": -4.37737615585327
+      },
+      {
+        "timestamp": "2018-02-27T18:25:00+11:00",
+        "solar_power": 1395.19256591797,
+        "battery_power": 961.166666666667,
+        "grid_power": 5.52483509063721
+      },
+      {
+        "timestamp": "2018-02-27T18:30:00+11:00",
+        "solar_power": 1269.4713675944,
+        "battery_power": 747.133333333333,
+        "grid_power": 3.60116976737976
+      },
+      {
+        "timestamp": "2018-02-27T18:35:00+11:00",
+        "solar_power": 1144.17780110677,
+        "battery_power": 709.566666666667,
+        "grid_power": -16.1311391576131
+      },
+      {
+        "timestamp": "2018-02-27T18:40:00+11:00",
+        "solar_power": 997.467366536458,
+        "battery_power": -49.1666666666667,
+        "grid_power": -1.61333501180013
+      },
+      {
+        "timestamp": "2018-02-27T18:45:00+11:00",
+        "solar_power": 865.688134562174,
+        "battery_power": -343.3,
+        "grid_power": -6.13799985249837
+      },
+      {
+        "timestamp": "2018-02-27T18:50:00+11:00",
+        "solar_power": 729.027467041016,
+        "battery_power": -207.6,
+        "grid_power": -8.99790054321289
+      },
+      {
+        "timestamp": "2018-02-27T18:55:00+11:00",
+        "solar_power": 615.061165568034,
+        "battery_power": -76.2333333333333,
+        "grid_power": -11.1783334414164
+      },
+      {
+        "timestamp": "2018-02-27T19:00:00+11:00",
+        "solar_power": 500.803467814128,
+        "battery_power": 16.3666666666667,
+        "grid_power": -0.32296667098999
+      },
+      {
+        "timestamp": "2018-02-27T19:05:00+11:00",
+        "solar_power": 388.593833618164,
+        "battery_power": 128.766666666667,
+        "grid_power": -5.47773363113403
+      },
+      {
+        "timestamp": "2018-02-27T19:10:00+11:00",
+        "solar_power": 269.621099802653,
+        "battery_power": 318.033333333333,
+        "grid_power": -5.0882334391276
+      },
+      {
+        "timestamp": "2018-02-27T19:15:00+11:00",
+        "solar_power": 193.625433349609,
+        "battery_power": 448.1,
+        "grid_power": -6.91300062815348
+      },
+      {
+        "timestamp": "2018-02-27T19:20:00+11:00",
+        "solar_power": 106.367333653768,
+        "battery_power": 521.033333333333,
+        "grid_power": -3.4063666788737
+      },
+      {
+        "timestamp": "2018-02-27T19:25:00+11:00",
+        "solar_power": 32.5500000301997,
+        "battery_power": 434.2,
+        "grid_power": -5.41126670837402
+      },
+      {
+        "timestamp": "2018-02-27T19:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 401.166666666667,
+        "grid_power": -2.32206662495931
+      },
+      {
+        "timestamp": "2018-02-27T19:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 473.4,
+        "grid_power": 3.54743348439535
+      },
+      {
+        "timestamp": "2018-02-27T19:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 644.466666666667,
+        "grid_power": 12.2470667394002
+      },
+      {
+        "timestamp": "2018-02-27T19:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 734.1,
+        "grid_power": 6.87923287709554
+      },
+      {
+        "timestamp": "2018-02-27T19:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 604.5,
+        "grid_power": 7.85480036417643
+      },
+      {
+        "timestamp": "2018-02-27T19:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 629.1,
+        "grid_power": 8.99090056101481
+      },
+      {
+        "timestamp": "2018-02-27T20:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 553.066666666667,
+        "grid_power": 3.85383234659831
+      },
+      {
+        "timestamp": "2018-02-27T20:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 558.033333333333,
+        "grid_power": 3.71300156911214
+      },
+      {
+        "timestamp": "2018-02-27T20:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 600.366666666667,
+        "grid_power": -0.698466644287109
+      },
+      {
+        "timestamp": "2018-02-27T20:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 689.266666666667,
+        "grid_power": 2.85853398640951
+      },
+      {
+        "timestamp": "2018-02-27T20:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 588.666666666667,
+        "grid_power": -0.36423350016276
+      },
+      {
+        "timestamp": "2018-02-27T20:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 568.8,
+        "grid_power": 0.962299499511719
+      },
+      {
+        "timestamp": "2018-02-27T20:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 587.8,
+        "grid_power": -0.236366182963053
+      },
+      {
+        "timestamp": "2018-02-27T20:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 649.6,
+        "grid_power": -2.2016329574585
+      },
+      {
+        "timestamp": "2018-02-27T20:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 687.333333333333,
+        "grid_power": -1.29886660257975
+      },
+      {
+        "timestamp": "2018-02-27T20:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 558.1,
+        "grid_power": 0.270199839274089
+      },
+      {
+        "timestamp": "2018-02-27T20:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 552.2,
+        "grid_power": 1.01556755065918
+      },
+      {
+        "timestamp": "2018-02-27T20:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 490.433333333333,
+        "grid_power": -0.552966303825378
+      },
+      {
+        "timestamp": "2018-02-27T21:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 502.3,
+        "grid_power": 0.601399866739909
+      },
+      {
+        "timestamp": "2018-02-27T21:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 738.366666666667,
+        "grid_power": -1.04813348134359
+      },
+      {
+        "timestamp": "2018-02-27T21:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 754.666666666667,
+        "grid_power": 1.02950031518936
+      },
+      {
+        "timestamp": "2018-02-27T21:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 526.566666666667,
+        "grid_power": 0.472600173950195
+      },
+      {
+        "timestamp": "2018-02-27T21:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 566.2,
+        "grid_power": -0.505099118550619
+      },
+      {
+        "timestamp": "2018-02-27T21:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 542.566666666667,
+        "grid_power": 0.171366742451986
+      },
+      {
+        "timestamp": "2018-02-27T21:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 555.333333333333,
+        "grid_power": 2.11113275527954
+      },
+      {
+        "timestamp": "2018-02-27T21:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 628.566666666667,
+        "grid_power": 2.61056697845459
+      },
+      {
+        "timestamp": "2018-02-27T21:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 838.633333333333,
+        "grid_power": -0.0118989094595114
+      },
+      {
+        "timestamp": "2018-02-27T21:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 465.366666666667,
+        "grid_power": 0.902766914367676
+      },
+      {
+        "timestamp": "2018-02-27T21:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 515.333333333333,
+        "grid_power": -1.01256620327632
+      },
+      {
+        "timestamp": "2018-02-27T21:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 475.666666666667,
+        "grid_power": -0.859366099039714
+      },
+      {
+        "timestamp": "2018-02-27T22:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 509.766666666667,
+        "grid_power": -1.33096647898356
+      },
+      {
+        "timestamp": "2018-02-27T22:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1010.63333333333,
+        "grid_power": 8.31763263702393
+      },
+      {
+        "timestamp": "2018-02-27T22:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 816.133333333333,
+        "grid_power": 5.88166612625122
+      },
+      {
+        "timestamp": "2018-02-27T22:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 545.8,
+        "grid_power": 0.105300089518229
+      },
+      {
+        "timestamp": "2018-02-27T22:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 549.433333333333,
+        "grid_power": 0.293500378926595
+      },
+      {
+        "timestamp": "2018-02-27T22:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 356.666666666667,
+        "grid_power": 0.109399948120117
+      },
+      {
+        "timestamp": "2018-02-27T22:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 278.666666666667,
+        "grid_power": -0.413866678873698
+      },
+      {
+        "timestamp": "2018-02-27T22:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 349.733333333333,
+        "grid_power": 3.80969966888428
+      },
+      {
+        "timestamp": "2018-02-27T22:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 365.7,
+        "grid_power": -0.403066469828288
+      },
+      {
+        "timestamp": "2018-02-27T22:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 287.133333333333,
+        "grid_power": -0.0718999099731445
+      },
+      {
+        "timestamp": "2018-02-27T22:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 287.466666666667,
+        "grid_power": 0.00776667277018229
+      },
+      {
+        "timestamp": "2018-02-27T22:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 282.533333333333,
+        "grid_power": -0.25510014851888
+      },
+      {
+        "timestamp": "2018-02-27T23:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 281.466666666667,
+        "grid_power": 0.490566622416178
+      },
+      {
+        "timestamp": "2018-02-27T23:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 317.733333333333,
+        "grid_power": 4.61383358001709
+      },
+      {
+        "timestamp": "2018-02-27T23:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 363.8,
+        "grid_power": -0.160699933369954
+      },
+      {
+        "timestamp": "2018-02-27T23:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 274.566666666667,
+        "grid_power": 0.0990000661214193
+      },
+      {
+        "timestamp": "2018-02-27T23:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 271.433333333333,
+        "grid_power": -0.288066851298014
+      },
+      {
+        "timestamp": "2018-02-27T23:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 271.333333333333,
+        "grid_power": 0.189400227864583
+      },
+      {
+        "timestamp": "2018-02-27T23:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 270.9,
+        "grid_power": 0.119400227864583
+      },
+      {
+        "timestamp": "2018-02-27T23:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 298.9,
+        "grid_power": 4.38213326772054
+      },
+      {
+        "timestamp": "2018-02-27T23:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 361.533333333333,
+        "grid_power": 0.105833218892415
+      },
+      {
+        "timestamp": "2018-02-27T23:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 275.966666666667,
+        "grid_power": -0.0344330978393555
+      },
+      {
+        "timestamp": "2018-02-27T23:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 267.466666666667,
+        "grid_power": -0.031433474222819
+      },
+      {
+        "timestamp": "2018-02-27T23:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 265.633333333333,
+        "grid_power": 0.182166989644368
+      },
+      {
+        "timestamp": "2018-02-28T00:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 271.7,
+        "grid_power": -0.12953317006429
+      },
+      {
+        "timestamp": "2018-02-28T00:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 277.9,
+        "grid_power": -0.256032918294271
+      },
+      {
+        "timestamp": "2018-02-28T00:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 366.333333333333,
+        "grid_power": 0.35416690826416
+      },
+      {
+        "timestamp": "2018-02-28T00:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 303.533333333333,
+        "grid_power": 0.586866849263509
+      },
+      {
+        "timestamp": "2018-02-28T00:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 272.1,
+        "grid_power": 0.321233520507813
+      },
+      {
+        "timestamp": "2018-02-28T00:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 272.5,
+        "grid_power": 0.113033396402995
+      },
+      {
+        "timestamp": "2018-02-28T00:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 269.1,
+        "grid_power": 0.022366689046224
+      },
+      {
+        "timestamp": "2018-02-28T00:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 267.866666666667,
+        "grid_power": 0.233433418273926
+      },
+      {
+        "timestamp": "2018-02-28T00:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 331.5,
+        "grid_power": -0.953999977111816
+      },
+      {
+        "timestamp": "2018-02-28T00:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 310.1,
+        "grid_power": 0.165200220743815
+      },
+      {
+        "timestamp": "2018-02-28T00:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 257.233333333333,
+        "grid_power": 0.543333104451497
+      },
+      {
+        "timestamp": "2018-02-28T00:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 255.866666666667,
+        "grid_power": 0.364200057983398
+      },
+      {
+        "timestamp": "2018-02-28T01:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 263.233333333333,
+        "grid_power": -0.639500045776367
+      },
+      {
+        "timestamp": "2018-02-28T01:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 267.9,
+        "grid_power": -0.187366943359375
+      },
+      {
+        "timestamp": "2018-02-28T01:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 314.933333333333,
+        "grid_power": 2.22016681671143
+      },
+      {
+        "timestamp": "2018-02-28T01:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 297.933333333333,
+        "grid_power": -0.316599998474121
+      },
+      {
+        "timestamp": "2018-02-28T01:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 217.633333333333,
+        "grid_power": -0.524233563741048
+      },
+      {
+        "timestamp": "2018-02-28T01:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 215.466666666667,
+        "grid_power": -0.0171664555867513
+      },
+      {
+        "timestamp": "2018-02-28T01:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 213.8,
+        "grid_power": 0.173599942525228
+      },
+      {
+        "timestamp": "2018-02-28T01:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 273.633333333333,
+        "grid_power": -0.11463321685791
+      },
+      {
+        "timestamp": "2018-02-28T01:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 291.133333333333,
+        "grid_power": 4.50116673787435
+      },
+      {
+        "timestamp": "2018-02-28T01:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 360.133333333333,
+        "grid_power": -0.503599993387858
+      },
+      {
+        "timestamp": "2018-02-28T01:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 284.966666666667,
+        "grid_power": -0.458399721781413
+      },
+      {
+        "timestamp": "2018-02-28T01:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 270.166666666667,
+        "grid_power": -0.199299952189128
+      },
+      {
+        "timestamp": "2018-02-28T02:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 267.8,
+        "grid_power": -0.362599919637044
+      },
+      {
+        "timestamp": "2018-02-28T02:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 265.966666666667,
+        "grid_power": 0.507266642252604
+      },
+      {
+        "timestamp": "2018-02-28T02:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 265.233333333333,
+        "grid_power": -0.213899943033854
+      },
+      {
+        "timestamp": "2018-02-28T02:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 335.9,
+        "grid_power": 3.55613354682922
+      },
+      {
+        "timestamp": "2018-02-28T02:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 320.3,
+        "grid_power": -0.535066693623861
+      },
+      {
+        "timestamp": "2018-02-28T02:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 269.533333333333,
+        "grid_power": -0.3395667775472
+      },
+      {
+        "timestamp": "2018-02-28T02:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 267.266666666667,
+        "grid_power": 0.566666793823242
+      },
+      {
+        "timestamp": "2018-02-28T02:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 265.266666666667,
+        "grid_power": -0.138199691772461
+      },
+      {
+        "timestamp": "2018-02-28T02:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 250.633333333333,
+        "grid_power": -0.100532773335775
+      },
+      {
+        "timestamp": "2018-02-28T02:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 248.9,
+        "grid_power": -2.09713353474935
+      },
+      {
+        "timestamp": "2018-02-28T02:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 307.833333333333,
+        "grid_power": -0.332733586629232
+      },
+      {
+        "timestamp": "2018-02-28T02:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 219.833333333333,
+        "grid_power": -0.0660335159301758
+      },
+      {
+        "timestamp": "2018-02-28T03:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 241.633333333333,
+        "grid_power": -0.115666522979736
+      },
+      {
+        "timestamp": "2018-02-28T03:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 278.733333333333,
+        "grid_power": -0.194032961527507
+      },
+      {
+        "timestamp": "2018-02-28T03:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 277.933333333333,
+        "grid_power": -0.119533564249674
+      },
+      {
+        "timestamp": "2018-02-28T03:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 275.833333333333,
+        "grid_power": 0.401133295694987
+      },
+      {
+        "timestamp": "2018-02-28T03:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 353.333333333333,
+        "grid_power": 2.59690017700195
+      },
+      {
+        "timestamp": "2018-02-28T03:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 317.133333333333,
+        "grid_power": -0.280966466267904
+      },
+      {
+        "timestamp": "2018-02-28T03:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 270.766666666667,
+        "grid_power": 0.108033459981283
+      },
+      {
+        "timestamp": "2018-02-28T03:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 269.266666666667,
+        "grid_power": -0.0568001556396484
+      },
+      {
+        "timestamp": "2018-02-28T03:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 269.833333333333,
+        "grid_power": -0.752399991353353
+      },
+      {
+        "timestamp": "2018-02-28T03:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 271.533333333333,
+        "grid_power": -0.0928667704264323
+      },
+      {
+        "timestamp": "2018-02-28T03:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 302.033333333333,
+        "grid_power": 0.844499778747559
+      },
+      {
+        "timestamp": "2018-02-28T03:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 356.933333333333,
+        "grid_power": -0.250900014241536
+      },
+      {
+        "timestamp": "2018-02-28T04:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 270.8,
+        "grid_power": 0.0246667607625326
+      },
+      {
+        "timestamp": "2018-02-28T04:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 229.433333333333,
+        "grid_power": -0.278233286539714
+      },
+      {
+        "timestamp": "2018-02-28T04:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 218.066666666667,
+        "grid_power": -0.461766916910807
+      },
+      {
+        "timestamp": "2018-02-28T04:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 215.733333333333,
+        "grid_power": -0.174299964904785
+      },
+      {
+        "timestamp": "2018-02-28T04:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 217.733333333333,
+        "grid_power": 0.175300064086914
+      },
+      {
+        "timestamp": "2018-02-28T04:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 337.266666666667,
+        "grid_power": -3.05786678949992
+      },
+      {
+        "timestamp": "2018-02-28T04:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 330.466666666667,
+        "grid_power": -0.169466463724772
+      },
+      {
+        "timestamp": "2018-02-28T04:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 274.9,
+        "grid_power": 0.288999977111816
+      },
+      {
+        "timestamp": "2018-02-28T04:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 276.433333333333,
+        "grid_power": -0.0189332834879557
+      },
+      {
+        "timestamp": "2018-02-28T04:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 274.6,
+        "grid_power": -0.206299934387207
+      },
+      {
+        "timestamp": "2018-02-28T04:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 269.566666666667,
+        "grid_power": 0.0860998153686523
+      },
+      {
+        "timestamp": "2018-02-28T04:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 271.866666666667,
+        "grid_power": 1.21100017547607
+      },
+      {
+        "timestamp": "2018-02-28T05:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 355.633333333333,
+        "grid_power": 0.0574334335327148
+      },
+      {
+        "timestamp": "2018-02-28T05:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 291.166666666667,
+        "grid_power": -0.103699849446615
+      },
+      {
+        "timestamp": "2018-02-28T05:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 265.8,
+        "grid_power": -0.13393305460612
+      },
+      {
+        "timestamp": "2018-02-28T05:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 264.866666666667,
+        "grid_power": -0.373733037312826
+      },
+      {
+        "timestamp": "2018-02-28T05:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 261.133333333333,
+        "grid_power": 0.28303352355957
+      },
+      {
+        "timestamp": "2018-02-28T05:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 216.466666666667,
+        "grid_power": 0.103600145975749
+      },
+      {
+        "timestamp": "2018-02-28T05:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 253.1,
+        "grid_power": 1.5433004061381
+      },
+      {
+        "timestamp": "2018-02-28T05:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 288.166666666667,
+        "grid_power": -0.255266571044922
+      },
+      {
+        "timestamp": "2018-02-28T05:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 218.766666666667,
+        "grid_power": -0.0280333836873372
+      },
+      {
+        "timestamp": "2018-02-28T05:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 277.5,
+        "grid_power": 0.0331335322062174
+      },
+      {
+        "timestamp": "2018-02-28T05:50:00+11:00",
+        "solar_power": 0,
+        "battery_power": 273.233333333333,
+        "grid_power": -0.0124998982747396
+      },
+      {
+        "timestamp": "2018-02-28T05:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 272.5,
+        "grid_power": -0.396199722290039
+      },
+      {
+        "timestamp": "2018-02-28T06:00:00+11:00",
+        "solar_power": 0,
+        "battery_power": 774.433333333333,
+        "grid_power": -0.28880054473877
+      },
+      {
+        "timestamp": "2018-02-28T06:05:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1463.7,
+        "grid_power": 6.7514332707723
+      },
+      {
+        "timestamp": "2018-02-28T06:10:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1438,
+        "grid_power": 0.358399696350098
+      },
+      {
+        "timestamp": "2018-02-28T06:15:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1435.73333333333,
+        "grid_power": -0.64356684366862
+      },
+      {
+        "timestamp": "2018-02-28T06:20:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1530.53333333333,
+        "grid_power": -1.03829984029134
+      },
+      {
+        "timestamp": "2018-02-28T06:25:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1496.1,
+        "grid_power": 0.958699785868327
+      },
+      {
+        "timestamp": "2018-02-28T06:30:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1558.46666666667,
+        "grid_power": -0.679300282796224
+      },
+      {
+        "timestamp": "2018-02-28T06:35:00+11:00",
+        "solar_power": 0,
+        "battery_power": 813.633333333333,
+        "grid_power": -0.777733192443848
+      },
+      {
+        "timestamp": "2018-02-28T06:40:00+11:00",
+        "solar_power": 0,
+        "battery_power": 1686.4,
+        "grid_power": 14.76889960289
+      },
+      {
+        "timestamp": "2018-02-28T06:45:00+11:00",
+        "solar_power": 0,
+        "battery_power": 907.8,
+        "grid_power": -6.08549969991048
+      },
+      {
+        "timestamp": "2018-02-28T06:50:00+11:00",
+        "solar_power": 22.4130666872859,
+        "battery_power": 997.3,
+        "grid_power": 1.55120016733805
+      },
+      {
+        "timestamp": "2018-02-28T06:55:00+11:00",
+        "solar_power": 0,
+        "battery_power": 577.866666666667,
+        "grid_power": 0.197300389607747
+      },
+      {
+        "timestamp": "2018-02-28T07:00:00+11:00",
+        "solar_power": 40.2549666325251,
+        "battery_power": 567.3,
+        "grid_power": -0.0672000376383464
+      },
+      {
+        "timestamp": "2018-02-28T07:05:00+11:00",
+        "solar_power": 58.3936666361491,
+        "battery_power": 572.5,
+        "grid_power": -0.531333198547363
+      },
+      {
+        "timestamp": "2018-02-28T07:10:00+11:00",
+        "solar_power": 67.2885428674963,
+        "battery_power": 538.675496688742,
+        "grid_power": 0.94642442109569
+      }
+    ]
+  }
+}

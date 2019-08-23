@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PowerwallCompanion/AppPackages
+/.vs/PowerwallCompanion/v16/Server/sqlite3
+/PowerwallCompanion/bin
+/PowerwallCompanion/BundleArtifacts
+/PowerwallCompanion/obj
+/PowerwallCompanion/PowerwallCompanion_StoreKey.pfx

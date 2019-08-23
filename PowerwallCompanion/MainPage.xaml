@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="PowerwallCompanion.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerwallCompanion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    RequestedTheme="Dark"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="splitView.DisplayMode" Value="Overlay" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="splitView.DisplayMode" Value="CompactInline" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <SplitView x:Name="splitView" DisplayMode="CompactInline" OpenPaneLength="50">
+            <SplitView.Pane>
+                <StackPanel Orientation="Vertical">
+                    <ToggleButton x:Name="homeMenuButton" Background="Transparent" Margin="4" IsChecked="True" Tapped="homeMenuButton_Tapped">
+                        <SymbolIcon Symbol="Home"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="chartMenuButton" Background="Transparent" Margin="4" Tapped="chartMenuButton_Tapped">
+                        <Image Source="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="batteryHistoryMenuButton" Background="Transparent" Margin="4" IsChecked="False" Tapped="batteryHistoryMenuButton_Tapped">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE857;"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="settingsMenuButton" Background="Transparent" Margin="4" Tapped="settingsMenuButton_Tapped">
+                        <SymbolIcon Symbol="Setting"/>
+                    </ToggleButton>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Frame x:Name="frame" />
+            </SplitView.Content>
+        </SplitView>
+        
+    </Grid>
+</Page>

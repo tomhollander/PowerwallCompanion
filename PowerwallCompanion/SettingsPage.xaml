@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="PowerwallCompanion.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerwallCompanion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:PowerwallCompanion.Converters"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter"/>
+        <converters:TrueToVisibilityCollapsedConverter x:Key="TrueToVisibilityCollapsedConverter"/>
+        <converters:DecimalConverter x:Key="DecimalConverter" />
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="hamburgerMenu.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="hamburgerMenu.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="hamburgerMenu" Tapped="hamburgerMenu_Tapped" Visibility="Collapsed">
+                <Image Source="ms-appx:///Assets/Hamburger.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Button>
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Settings</TextBlock>
+            <StackPanel Orientation="Vertical" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
+                <TextBlock Margin="10">Signed In as </TextBlock>
+                <TextBlock Margin="10" Text="{x:Bind ViewModel.SignInName, Mode=OneWay}"></TextBlock>
+                <Button x:Name="signOutButton" Tapped="signOutButton_Tapped">Sign Out</Button>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" x:Name="signedOutPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}}">
+                <TextBlock Margin="10">Not Signed In</TextBlock>
+                <Button x:Name="signInButton" Tapped="signInButton_Tapped">Sign In</Button>
+            </StackPanel>
+            <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
+
+            <TextBlock>Bar Graph Scale (kW per cm):</TextBlock>
+            <TextBox x:Name="graphScale" Text="{x:Bind ViewModel.GraphScale, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Width="100" InputScope="CurrencyAmount"></TextBox>
+            
+            <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
+                This app is not built or endorsed by Tesla. 
+            </TextBlock>
+            <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
+                Tesla account credentials are sent to the Tesla web service for verification and are not stored or otherwise used by this app.
+            </TextBlock>
+            <HyperlinkButton FontSize="10" Margin="5" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">
+                Privacy Policy
+            </HyperlinkButton>
+        </StackPanel>
+    </Grid>
+</Page>

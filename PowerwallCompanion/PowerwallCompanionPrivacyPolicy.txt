@@ -1,0 +1,9 @@
+﻿Powerwall Companion Privacy Policy
+==================================
+
+This app is not built or endorsed by Tesla. 
+
+Tesla account credentials are sent to the Tesla web service for verification and are not stored or otherwise used by this app.
+Access tokens returned from the service are stored locally to enable the app to work without entering credentials each time.
+
+Information about your energy use is not stored or transmitted by this app.

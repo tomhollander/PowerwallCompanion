@@ -1,0 +1,1 @@
+c:\projects\Personal\PowerwallCompanion\PowerwallCompanion\bin\ARM\Release\Upload\PowerwallCompanion_2.2.0.0\PowerwallCompanion_2.2.0.0_x86_x64_arm.appxbundle

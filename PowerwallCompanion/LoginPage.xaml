@@ -1,0 +1,56 @@
+﻿<Page
+    x:Class="PowerwallCompanion.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerwallCompanion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Connect to Powerwall</TextBlock>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Margin="5">
+                <RadioButton x:Name="teslaAccountRadioButton" Checked="TeslaAccountRadioButton_Checked">Tesla Account</RadioButton>
+                <RadioButton x:Name="localGatwayRadioButton" Checked="LocalGatwayRadioButton_Checked">Local Gateway</RadioButton>
+            </StackPanel>
+            <Grid Padding="10" x:Name="teslaAccountSignInControls">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" x:Name="emailCaption">Email:</TextBlock>
+                <TextBox Margin="5" x:Name="emailTextBox" Grid.Row="1" Grid.Column="1" InputScope="EmailSmtpAddress"></TextBox>
+                <TextBlock Margin="5" Grid.Row="2" Grid.Column="0">Password:</TextBlock>
+                <PasswordBox Margin="5" x:Name="passwordTextBox"  Grid.Row="2" Grid.Column="1" InputScope="Password"></PasswordBox>
+                <Button x:Name="signInButton" Tapped="signInButton_Tapped"  Margin="10" Grid.Row="3" Grid.Column="1">Sign In</Button>
+            </Grid>
+
+            <Grid Padding="10" x:Name="localGatewaySignInControls" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Margin="5" Grid.Row="1" Grid.Column="0">Gateway IP:</TextBlock>
+                <TextBox Margin="5" x:Name="gatewayIpTextBox" Grid.Row="1" Grid.Column="1"></TextBox>
+                <HyperlinkButton Margin="5" Grid.Row="2" Grid.Column="1" NavigateUri="https://www.tesla.com/support/energy/powerwall/own/monitoring-from-home-network">How do I find my Gateway IP?</HyperlinkButton>
+                <Button x:Name="connectButton" Tapped="ConnectButton_Tapped"  Margin="10" Grid.Row="3" Grid.Column="1">Connect</Button>
+            </Grid>
+            <TextBlock x:Name="authFailureMessage" Visibility="Collapsed"  Foreground="Red">Connection failed. Please try again.</TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>

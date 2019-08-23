@@ -1,0 +1,12 @@
+{
+  "response": {
+    "solar_power": 73.6399993896484,
+    "energy_left": 6552.78947368421,
+    "total_pack_energy": 14057,
+    "battery_power": 530,
+    "load_power": 583.669994354248,
+    "grid_status": "Active",
+    "grid_power": -19.9700050354004,
+    "timestamp": "2018-02-28T07:12:32+11:00"
+  }
+}

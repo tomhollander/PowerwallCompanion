@@ -1,0 +1,60 @@
+{
+  "response": {
+    "serial_number": "1118431-01-F--T17G0004126",
+    "period": "month",
+    "time_series": [
+      {
+        "timestamp": "2018-02-04T00:00:00+11:00",
+        "solar_energy_exported": 242534.74694452714,
+        "grid_energy_imported": 1088.1902843387798,
+        "grid_energy_exported_from_solar": 135879.00028433837,
+        "grid_energy_exported_from_battery": 0,
+        "battery_energy_exported": 52400,
+        "battery_energy_imported_from_grid": 0,
+        "battery_energy_imported_from_solar": 57530,
+        "consumer_energy_imported_from_grid": 1088.1902843387798,
+        "consumer_energy_imported_from_solar": 49125.746660188772,
+        "consumer_energy_imported_from_battery": 52400
+      },
+      {
+        "timestamp": "2018-02-11T00:00:00+11:00",
+        "solar_energy_exported": 230211.6894445112,
+        "grid_energy_imported": 4144.172784992028,
+        "grid_energy_exported_from_solar": 80997.310840548016,
+        "grid_energy_exported_from_battery": 0,
+        "battery_energy_exported": 68220,
+        "battery_energy_imported_from_grid": 0,
+        "battery_energy_imported_from_solar": 76560,
+        "consumer_energy_imported_from_grid": 4144.172784992028,
+        "consumer_energy_imported_from_solar": 72654.378603963181,
+        "consumer_energy_imported_from_battery": 68220
+      },
+      {
+        "timestamp": "2018-02-18T00:00:00+11:00",
+        "solar_energy_exported": 172414.23805564549,
+        "grid_energy_imported": 19334.94889576803,
+        "grid_energy_exported_from_solar": 44367.216673545539,
+        "grid_energy_exported_from_battery": 0,
+        "battery_energy_exported": 71730,
+        "battery_energy_imported_from_grid": 0,
+        "battery_energy_imported_from_solar": 70020,
+        "consumer_energy_imported_from_grid": 19334.94889576803,
+        "consumer_energy_imported_from_solar": 58027.021382099949,
+        "consumer_energy_imported_from_battery": 71730
+      },
+      {
+        "timestamp": "2018-02-25T00:00:00+11:00",
+        "solar_energy_exported": 165979.51361117698,
+        "grid_energy_imported": 26094.764171513729,
+        "grid_energy_exported_from_solar": 71669.476393735968,
+        "grid_energy_exported_from_battery": 0,
+        "battery_energy_exported": 38830,
+        "battery_energy_imported_from_grid": 0,
+        "battery_energy_imported_from_solar": 54590,
+        "consumer_energy_imported_from_grid": 26094.764171513729,
+        "consumer_energy_imported_from_solar": 39720.037217441015,
+        "consumer_energy_imported_from_battery": 38830
+      }
+    ]
+  }
+}
