@@ -91,7 +91,7 @@ namespace PowerwallCompanion
                 ViewModel.SolarValue = powerInfo["response"]["solar_power"].Value<double>(); 
                 ViewModel.BatteryValue = powerInfo["response"]["battery_power"].Value<double>();
                 ViewModel.GridValue = powerInfo["response"]["grid_power"].Value<double>();
-                ViewModel.GridActive = powerInfo["response"]["grid_status"].Value<string>() == "Active";
+                ViewModel.GridActive = powerInfo["response"]["grid_status"].Value<string>() != "Inactive";
 #endif
                 ViewModel.NotifyProperties();
                 ViewModel.StatusOK = true;
