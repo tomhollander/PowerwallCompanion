@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="55758OcelotSoft.PowerwallCompanion" Publisher="CN=D7704B38-366D-4509-AEE2-22AB090DC0FD" Version="2.4.0.0" />
+  <Identity Name="55758OcelotSoft.PowerwallCompanion" Publisher="CN=D7704B38-366D-4509-AEE2-22AB090DC0FD" Version="2.6.0.0" />
   <mp:PhoneIdentity PhoneProductId="8c82cbd1-dfe0-411b-8a16-4c84b24e8587" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Powerwall Companion</DisplayName>
@@ -28,6 +28,5 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
-    <Capability Name="privateNetworkClientServer"/>
   </Capabilities>
 </Package>
