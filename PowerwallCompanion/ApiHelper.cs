@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using TeslaAuth;
 using Windows.Security.Cryptography.Certificates;
 using Windows.Storage;
 using Windows.Web.Http.Filters;
@@ -31,7 +32,7 @@ namespace PowerwallCompanion
             catch (UnauthorizedAccessException)
             {
                 // First fail - try refreshing
-                await RefreshToken();
+                RefreshToken();
                 return await CallGetApi(url, demoId);
 
             }
@@ -98,25 +99,15 @@ namespace PowerwallCompanion
             }
         }
 
-        private static async Task RefreshToken()
+        private static void RefreshToken()
         {
-            var message = new JObject();
-            message["grant_type"] = "refresh_token";
-            message["refresh_token"] = Settings.RefreshToken;
-
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("X-Tesla-User-Agent");
-            var requestMessage = new StringContent(message.ToString(), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(BaseUrl  + "/oauth/token", requestMessage);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var responseJson = JObject.Parse(await response.Content.ReadAsStringAsync());
-                Settings.AccessToken = responseJson["access_token"].Value<string>();
-                Settings.RefreshToken = responseJson["refresh_token"].Value<string>();
+                var token = TeslaAuthHelper.RefreshToken(Settings.RefreshToken);
+                Settings.AccessToken = token;
             }
-            else
-            {
+            catch
+            { 
                 throw new UnauthorizedAccessException();
             }
         }

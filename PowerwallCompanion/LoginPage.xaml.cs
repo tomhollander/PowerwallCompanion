@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using TeslaAuth;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -60,40 +61,25 @@ namespace PowerwallCompanion
                     return;
                 }
 
-                var message = new JObject();
-                message["grant_type"] = "password";
-                message["client_id"] = "e4a9949fcfa04068f59abb5a658f2bac0a3428e4652315490b659d5ab3f35a9e";
-                message["client_secret"] = "c75f14bbadc8bee3a7594412c31416f8300256d7668ea7e6e7f06727bfb9d220";
-                message["email"] = emailTextBox.Text;
-                message["password"] = passwordTextBox.Password;
+                var tokens = TeslaAuthHelper.Authenticate(emailTextBox.Text, passwordTextBox.Password, mfaCodeTextBox.Text);
 
-                var client = new HttpClient();
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("X-Tesla-User-Agent");
-                var requestMessage = new StringContent(message.ToString(), Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(ApiHelper.BaseUrl + "/oauth/token", requestMessage);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseJson = JObject.Parse(await response.Content.ReadAsStringAsync());
-                    Settings.AccessToken = responseJson["access_token"].Value<string>();
-                    Settings.RefreshToken = responseJson["refresh_token"].Value<string>();
-                    Settings.SignInName = emailTextBox.Text.ToLower();
-                    Settings.UseLocalGateway = false;
-                    UpdateMenuButtons();
-                    await GetSiteId();
-                    this.Frame.Navigate(typeof(HomePage));
-                }
-                else
-                {
-                    authFailureMessage.Visibility = Visibility.Visible;
-                }
+                Settings.AccessToken = tokens.AccessToken;
+                Settings.RefreshToken = tokens.RefreshToken;
+                Settings.SignInName = emailTextBox.Text.ToLower();
+                Settings.UseLocalGateway = false;
+                UpdateMenuButtons();
+                await GetSiteId();
+                this.Frame.Navigate(typeof(HomePage));
+           
+          
             }
-            catch
+            catch (Exception ex)
             {
                 Settings.AccessToken = null;
                 Settings.RefreshToken = null;
                 Settings.SignInName = null;
                 authFailureMessage.Visibility = Visibility.Visible;
+                authFailureMessage.Text = ex.Message;
             }
         }
 
@@ -104,7 +90,7 @@ namespace PowerwallCompanion
             {
                 if (product["resource_type"]?.Value<string>() == "battery" && product["energy_site_id"] != null)
                 {
-                    var id = product["energy_site_id"].Value<int>();
+                    var id = product["energy_site_id"].Value<long>();
                     Settings.SiteId = id.ToString();
                     return;
                 }
