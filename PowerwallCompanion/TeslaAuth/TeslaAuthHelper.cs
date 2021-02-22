@@ -221,9 +221,16 @@ namespace TeslaAuth
             body.Add("code_verifier", loginInfo.CodeVerifier);
             body.Add("redirect_uri", "https://auth.tesla.com/void/callback");
 
-            using (HttpClient client = new HttpClient())
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            using (HttpClient client = new HttpClient(handler))
             {
                 client.BaseAddress = new Uri("https://auth.tesla.com");
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Connection.Add("keep-alive");
 
                 using (var content = new StringContent(body.ToString(), System.Text.Encoding.UTF8, "application/json"))
                 {
