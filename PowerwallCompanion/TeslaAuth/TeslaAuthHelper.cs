@@ -354,6 +354,8 @@ namespace TeslaAuth
                 {
                     client.BaseAddress = new Uri("https://auth.tesla.com");
                     client.DefaultRequestHeaders.Add("Cookie", loginInfo.Cookie);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Referrer = new Uri("https://auth.tesla.com");
 
                     var body = new JObject();
                     body.Add("factor_id", factorId);

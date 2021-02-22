@@ -32,7 +32,7 @@
                 <TextBlock Margin="5" Grid.Row="2" Grid.Column="0">Password:</TextBlock>
                 <PasswordBox Margin="5" x:Name="passwordTextBox"  Grid.Row="2" Grid.Column="1" InputScope="Password"></PasswordBox>
                 <TextBlock Margin="5" Grid.Row="3" Grid.Column="0">MFA Code:</TextBlock>
-                <TextBox Margin="5" x:Name="mfaCodeTextBox"  Grid.Row="3" Grid.Column="1" InputScope="Number"></TextBox>
+                <TextBox Margin="5" x:Name="mfaCodeTextBox"  Grid.Row="3" Grid.Column="1" InputScope="Number" PlaceholderText="Leave blank if MFA not enabled"></TextBox>
                 <Button x:Name="signInButton" Tapped="signInButton_Tapped"  Margin="10" Grid.Row="4" Grid.Column="1">Sign In</Button>
             </Grid>
 
