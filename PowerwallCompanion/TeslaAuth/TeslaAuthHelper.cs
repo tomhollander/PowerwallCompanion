@@ -77,52 +77,60 @@ namespace TeslaAuth
 
             result.State = RandomString(20);
 
-            using (HttpClient client = new HttpClient())
+            using (var handler = new HttpClientHandler()
             {
-                Dictionary<string, string> values = new Dictionary<string, string>
-                {
-                    { "client_id", "ownerapi" },
-                    { "code_challenge", result.CodeChallenge },
-                    { "code_challenge_method", "S256" },
-                    { "redirect_uri", "https://auth.tesla.com/void/callback" },
-                    { "response_type", "code" },
-                    { "scope", "openid email offline_access" },
-                    { "state", result.State }
-                };
-
-                UriBuilder b = new UriBuilder("https://auth.tesla.com/oauth2/v3/authorize");
-                b.Port = -1;
-
-                using (var content = new FormUrlEncodedContent(values))
-                {
-                    b.Query = content.ReadAsStringAsync().Result;
-                }
-
-                string url = b.ToString();
-
-
-                HttpResponseMessage response = client.GetAsync(url).Result;
-                var resultContent = response.Content.ReadAsStringAsync().Result;
-
-                var hiddenFields = Regex.Matches(resultContent, "type=\\\"hidden\\\" name=\\\"(.*?)\\\" value=\\\"(.*?)\\\"");
-                var formFields = new Dictionary<string, string>();
-                foreach (Match match in hiddenFields)
-                {
-                    formFields.Add(match.Groups[1].Value, match.Groups[2].Value);
-                }
-
-                IEnumerable<string> cookies = response.Headers.SingleOrDefault(header => header.Key.ToLower() == "set-cookie").Value;
-                var cookie = cookies.ToList()[0];
-                cookie = cookie.Substring(0, cookie.IndexOf(" "));
-                cookie = cookie.Trim();
-
-                result.Cookie = cookie;
-                result.FormFields = formFields;
-
-                return result;
-
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             }
+                 )
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Connection.Add("keep-alive");
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    Dictionary<string, string> values = new Dictionary<string, string>
+                    {
+                        { "client_id", "ownerapi" },
+                        { "code_challenge", result.CodeChallenge },
+                        { "code_challenge_method", "S256" },
+                        { "redirect_uri", "https://auth.tesla.com/void/callback" },
+                        { "response_type", "code" },
+                        { "scope", "openid email offline_access" },
+                        { "state", result.State }
+                    };
 
+                    UriBuilder b = new UriBuilder("https://auth.tesla.com/oauth2/v3/authorize");
+                    b.Port = -1;
+
+                    using (var content = new FormUrlEncodedContent(values))
+                    {
+                        b.Query = content.ReadAsStringAsync().Result;
+                    }
+
+                    string url = b.ToString();
+
+
+                    HttpResponseMessage response = client.GetAsync(url).Result;
+                    var resultContent = response.Content.ReadAsStringAsync().Result;
+
+                    var hiddenFields = Regex.Matches(resultContent, "type=\\\"hidden\\\" name=\\\"(.*?)\\\" value=\\\"(.*?)\\\"");
+                    var formFields = new Dictionary<string, string>();
+                    foreach (Match match in hiddenFields)
+                    {
+                        formFields.Add(match.Groups[1].Value, match.Groups[2].Value);
+                    }
+
+                    IEnumerable<string> cookies = response.Headers.SingleOrDefault(header => header.Key.ToLower() == "set-cookie").Value;
+                    var cookie = cookies.ToList()[0];
+                    cookie = cookie.Substring(0, cookie.IndexOf(" "));
+                    cookie = cookie.Trim();
+
+                    result.Cookie = cookie;
+                    result.FormFields = formFields;
+
+                    return result;
+
+                }
+            }
 
         }
 
@@ -132,9 +140,10 @@ namespace TeslaAuth
             formFields.Add("identity", username);
             formFields.Add("credential", password);
 
-            string code = "";
-
-            using (HttpClientHandler ch = new HttpClientHandler())
+            using (HttpClientHandler ch = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            })
             {
                 ch.AllowAutoRedirect = false;
                 ch.UseCookies = false;
@@ -143,6 +152,8 @@ namespace TeslaAuth
                     // client.Timeout = TimeSpan.FromSeconds(10);
                     client.BaseAddress = new Uri("https://auth.tesla.com");
                     client.DefaultRequestHeaders.Add("Cookie", loginInfo.Cookie);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Connection.Add("keep-alive");
                     DateTime start = DateTime.UtcNow;
 
                     using (FormUrlEncodedContent content = new FormUrlEncodedContent(formFields))
@@ -384,7 +395,10 @@ namespace TeslaAuth
 
         private static string GetCodeAfterValidMfa(LoginInfo loginInfo)
         {
-            using (HttpClientHandler ch = new HttpClientHandler())
+            using (HttpClientHandler ch = new HttpClientHandler()
+                {
+                   AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                })
             {
                 ch.AllowAutoRedirect = false;
                 ch.UseCookies = false;
@@ -393,6 +407,8 @@ namespace TeslaAuth
                     // client.Timeout = TimeSpan.FromSeconds(10);
                     client.BaseAddress = new Uri("https://auth.tesla.com");
                     client.DefaultRequestHeaders.Add("Cookie", loginInfo.Cookie);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Connection.Add("keep-alive");
 
                     Dictionary<string, string> d = new Dictionary<string, string>();
                     d.Add("transaction_id", loginInfo.FormFields["transaction_id"]);
