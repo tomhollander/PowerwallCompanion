@@ -294,19 +294,27 @@ namespace TeslaAuth
             body.Add("refresh_token", refreshToken);
             body.Add("scope", "openid email offline_access");
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClientHandler ch = new HttpClientHandler()
             {
-                client.Timeout = TimeSpan.FromSeconds(5);
-
-                using (var content = new StringContent(body.ToString(), System.Text.Encoding.UTF8, "application/json"))
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            })
+            {
+                using (HttpClient client = new HttpClient(ch))
                 {
-                    HttpResponseMessage result = client.PostAsync("https://auth.tesla.com/oauth2/v3/token", content).Result;
-                    string resultContent = result.Content.ReadAsStringAsync().Result;
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Connection.Add("keep-alive");
 
-                    JObject response = JObject.Parse(resultContent);
+                    using (var content = new StringContent(body.ToString(), System.Text.Encoding.UTF8, "application/json"))
+                    {
+                        HttpResponseMessage result = client.PostAsync("https://auth.tesla.com/oauth2/v3/token", content).Result;
+                        string resultContent = result.Content.ReadAsStringAsync().Result;
 
-                    string accessToken = response["access_token"].Value<String>();
-                    return ExchangeAccessTokenForBearerToken(accessToken);
+                        JObject response = JObject.Parse(resultContent);
+
+                        string accessToken = response["access_token"].Value<String>();
+                        return ExchangeAccessTokenForBearerToken(accessToken);
+                    }
                 }
             }
         }

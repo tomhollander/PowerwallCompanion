@@ -17,6 +17,7 @@ namespace PowerwallCompanion
     static class ApiHelper
     {
         public const string BaseUrl = "https://owner-api.teslamotors.com";
+        public static object lockObj = new object();
 
         public static async Task<JObject> CallGetApiWithTokenRefresh(string url, string demoId)
         {
@@ -103,8 +104,11 @@ namespace PowerwallCompanion
         {
             try
             {
-                var token = TeslaAuthHelper.RefreshToken(Settings.RefreshToken);
-                Settings.AccessToken = token;
+                lock (lockObj)
+                {
+                    var token = TeslaAuthHelper.RefreshToken(Settings.RefreshToken);
+                    Settings.AccessToken = token;
+                }
             }
             catch
             { 
