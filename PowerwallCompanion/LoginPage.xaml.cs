@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TeslaAuth;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,6 +28,8 @@ namespace PowerwallCompanion
     /// </summary>
     public sealed partial class LoginPage : Page
     {
+        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper("PowerwallCompanionX/0.0");
+
         public LoginPage()
         {
             this.InitializeComponent();
@@ -40,48 +43,39 @@ namespace PowerwallCompanion
             else
             {
                 teslaAccountRadioButton.IsChecked = true;
-                emailTextBox.Text = Settings.SignInName ?? String.Empty;
+
             }
+            WebView.ClearTemporaryWebDataAsync().AsTask().GetAwaiter().GetResult();
+            webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
+
+        }
+        private void webView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        {
+            var url = args.Uri.ToString();
+            if (url.Contains("void/callback"))
+            {
+                var t = Task.Run(() => CompleteLogin(url));
+                t.Wait();
+                UpdateMenuButtons();
+                this.Frame.Navigate(typeof(HomePage));
+      
+            }
+
+        }
+
+        private async Task CompleteLogin(string url)
+        {
+            var tokens = await teslaAuth.GetTokenAfterLogin(url);
+            Settings.AccessToken = tokens.AccessToken;
+            Settings.RefreshToken = tokens.RefreshToken;
+            Settings.SignInName = "Tesla User";
+            Settings.UseLocalGateway = false;
+            await GetSiteId();
+
             
         }
 
-        private async void signInButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                authFailureMessage.Visibility = Visibility.Collapsed;
-
-                if (emailTextBox.Text == "demo@example.com" && passwordTextBox.Password == "demo")
-                {
-                    Settings.AccessToken = "DEMO";
-                    Settings.SignInName = emailTextBox.Text;
-                    Settings.RefreshToken = null;
-                    Settings.UseLocalGateway = false;
-                    this.Frame.Navigate(typeof(HomePage));
-                    return;
-                }
-
-                var tokens = TeslaAuthHelper.Authenticate(emailTextBox.Text, passwordTextBox.Password, mfaCodeTextBox.Text);
-
-                Settings.AccessToken = tokens.AccessToken;
-                Settings.RefreshToken = tokens.RefreshToken;
-                Settings.SignInName = emailTextBox.Text.ToLower();
-                Settings.UseLocalGateway = false;
-                UpdateMenuButtons();
-                await GetSiteId();
-                this.Frame.Navigate(typeof(HomePage));
-           
-          
-            }
-            catch (Exception ex)
-            {
-                Settings.AccessToken = null;
-                Settings.RefreshToken = null;
-                Settings.SignInName = null;
-                authFailureMessage.Visibility = Visibility.Visible;
-                authFailureMessage.Text = ex.Message;
-            }
-        }
+        
 
         private async Task GetSiteId()
         {
@@ -139,6 +133,7 @@ namespace PowerwallCompanion
         {
             teslaAccountSignInControls.Visibility = Visibility.Visible;
             localGatewaySignInControls.Visibility = Visibility.Collapsed;
+            webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
         }
 
         private void LocalGatwayRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -146,5 +141,7 @@ namespace PowerwallCompanion
             teslaAccountSignInControls.Visibility = Visibility.Collapsed;
             localGatewaySignInControls.Visibility = Visibility.Visible;
         }
+
+
     }
 }

@@ -99,12 +99,13 @@ namespace PowerwallCompanion
             }
         }
 
-        private static void RefreshToken()
+        private static async Task RefreshToken()
         {
             try
             {
-                var token = TeslaAuthHelper.RefreshToken(Settings.RefreshToken);
-                Settings.AccessToken = token;
+                var helper = new TeslaAuthHelper("PowerwallCompanion/0.0");
+                var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken, TeslaAccountRegion.Unknown);
+                Settings.AccessToken = tokens.AccessToken;
             }
             catch
             { 
