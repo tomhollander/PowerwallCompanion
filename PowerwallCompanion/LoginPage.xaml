@@ -15,8 +15,8 @@
                 <RadioButton x:Name="localGatwayRadioButton" Checked="LocalGatwayRadioButton_Checked">Local Gateway</RadioButton>
             </StackPanel>
             <Grid Padding="10" x:Name="teslaAccountSignInControls">
-               
-                <WebView Width="Auto" Height="500" x:Name="webView" NavigationStarting="webView_NavigationStarting"/>
+
+                <WebView Width="Auto" Height="500" x:Name="webView" NavigationStarting="webView_NavigationStarting" NavigationCompleted="webView_NavigationCompleted" />
             </Grid>
 
             <Grid Padding="10" x:Name="localGatewaySignInControls" Visibility="Collapsed">

@@ -32,7 +32,7 @@ namespace PowerwallCompanion
             catch (UnauthorizedAccessException)
             {
                 // First fail - try refreshing
-                RefreshToken();
+                await RefreshToken();
                 return await CallGetApi(url, demoId);
 
             }
@@ -103,8 +103,8 @@ namespace PowerwallCompanion
         {
             try
             {
-                var helper = new TeslaAuthHelper("PowerwallCompanion/0.0");
-                var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken, TeslaAccountRegion.Unknown);
+                var helper = new TeslaAuthHelper("PowerwallCompanion/0.0", TeslaAccountRegion.Unknown);
+                var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken);
                 Settings.AccessToken = tokens.AccessToken;
             }
             catch
