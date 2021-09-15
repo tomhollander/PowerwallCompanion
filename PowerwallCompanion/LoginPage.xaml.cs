@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.Web.WebView2.Core;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,12 +30,12 @@ namespace PowerwallCompanion
     /// </summary>
     public sealed partial class LoginPage : Page
     {
-        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper("PowerwallCompanionX/0.0");
+        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper("PowerwallCompanion/1.0");
 
         public LoginPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            this.NavigationCacheMode = NavigationCacheMode.Disabled;
             authFailureMessage.Visibility = Visibility.Collapsed;
             if (Settings.UseLocalGateway)
             {
@@ -45,14 +47,19 @@ namespace PowerwallCompanion
                 teslaAccountRadioButton.IsChecked = true;
 
             }
-            WebView.ClearTemporaryWebDataAsync().AsTask().GetAwaiter().GetResult();
+        }
+
+        private void webView_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
+        {
+            webView.EnsureCoreWebView2Async().AsTask().GetAwaiter().GetResult();
+            webView.CoreWebView2.CookieManager.DeleteAllCookies();
             webView.Visibility = Visibility.Visible;
             webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
-
         }
 
 
-        private async void webView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+
+        private async void webView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
         {
             var url = args.Uri.ToString();
             if (url.Contains("void/callback"))
@@ -70,22 +77,6 @@ namespace PowerwallCompanion
 
         }
 
-        private async void webView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-            if (args.IsSuccess && args.Uri.ToString().Contains("authorize"))
-            {
-                // For some reason the icons on this page render as huge in the WebView, so try to hide them.
-                try
-                {
-                    string functionString = "document.head.insertAdjacentHTML('beforeend', '<style>.tds-icon{display:none}</style>')";
-                    await webView.InvokeScriptAsync("eval", new string[] { functionString });
-                }
-                catch
-                {
-                }
-            }
-
-        }
 
         private async Task CompleteLogin(string url)
         {

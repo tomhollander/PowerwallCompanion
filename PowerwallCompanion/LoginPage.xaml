@@ -5,6 +5,7 @@
     xmlns:local="using:PowerwallCompanion"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -16,7 +17,7 @@
             </StackPanel>
             <Grid Padding="10" x:Name="teslaAccountSignInControls">
 
-                <WebView Width="Auto" Height="500" x:Name="webView" NavigationStarting="webView_NavigationStarting" NavigationCompleted="webView_NavigationCompleted" />
+                <winui:WebView2 Width="Auto" Height="500" x:Name="webView" NavigationStarting="webView_NavigationStarting"  CoreWebView2Initialized="webView_CoreWebView2Initialized" />
             </Grid>
 
             <Grid Padding="10" x:Name="localGatewaySignInControls" Visibility="Collapsed">
