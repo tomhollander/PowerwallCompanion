@@ -78,6 +78,7 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(HomePage));
             homeMenuButton.IsChecked = true;
+            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
             batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = false;
@@ -88,6 +89,7 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(ChartPage));
             homeMenuButton.IsChecked = false;
+            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = true;
             batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = false;
@@ -98,6 +100,7 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(BatteryHistoryPage));
             homeMenuButton.IsChecked = false;
+            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
             batteryHistoryMenuButton.IsChecked = true;
             settingsMenuButton.IsChecked = false;
@@ -108,11 +111,22 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(SettingsPage));
             homeMenuButton.IsChecked = false;
+            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
             batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = true;
             splitView.IsPaneOpen = false;
         }
 
+        private void energyMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            frame.Navigate(typeof(EnergyPage));
+            homeMenuButton.IsChecked = false;
+            energyMenuButton.IsChecked = true;
+            chartMenuButton.IsChecked = false;
+            batteryHistoryMenuButton.IsChecked = false;
+            settingsMenuButton.IsChecked = false;
+            splitView.IsPaneOpen = false;
+        }
     }
 }

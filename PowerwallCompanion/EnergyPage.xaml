@@ -1,0 +1,124 @@
+﻿<Page
+    x:Class="PowerwallCompanion.EnergyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerwallCompanion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:PowerwallCompanion.Converters"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <converters:KilowattHourConverter x:Key="KilowattHourConverter" />
+        <converters:NegateVisiblityConverter x:Key="NegateVisiblityConverter" />
+        <converters:StatusConverter x:Key="StatusConverter" />
+        <converters:StatusMessageConverter x:Key="StatusMessageConverter" />
+    </Page.Resources>
+    <StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="hamburgerMenu.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="hamburgerMenu.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <Grid Height="30" Grid.Row="0">
+            <Button x:Name="hamburgerMenu" Tapped="hamburgerMenu_Tapped" Visibility="Collapsed">
+                <Image Source="ms-appx:///Assets/Hamburger.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Button>
+            <Image Source="Assets/TeslaLogo.png" Height="30" />
+            <Ellipse Width="15" Height="15" Fill="{x:Bind ViewModel.StatusOK, Mode=OneWay, Converter={StaticResource StatusConverter}}" HorizontalAlignment="Right" x:Name="statusLight" Tapped="statusLight_Tapped">
+                <ToolTipService.ToolTip>
+                    <ToolTip Content="{x:Bind ViewModel.StatusOK, Mode=OneWay, Converter={StaticResource StatusMessageConverter}}" PlacementTarget="{Binding ElementName=statusLight}" />
+                </ToolTipService.ToolTip>
+            </Ellipse>
+            <TextBlock HorizontalAlignment="Right" Margin="0 5 30 0" ToolTipService.ToolTip="Energy in Kilowatt-Hours">kWh</TextBlock>
+        </Grid>
+        <Grid Margin="10" Padding="20" ColumnSpacing="20"  >
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+
+            <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.LargeCaptionFontSize}" Foreground="DarkGray" Grid.Row="1" Grid.Column="0">Today</TextBlock>
+            <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.LargeCaptionFontSize}" Foreground="DarkGray" Grid.Row="2" Grid.Column="0">Yesterday</TextBlock>
+            <Image Source="ms-appx:///Assets/icon_home.png" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_solar.png" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_grid.png" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_battery.png" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="1" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="2" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="2" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.SolarEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="3" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="3" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ></TextBlock>
+
+            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyExportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyExportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+    
+</Page>

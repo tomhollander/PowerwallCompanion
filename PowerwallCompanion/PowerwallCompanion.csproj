@@ -125,6 +125,8 @@
     </Compile>
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
+    <Compile Include="Converters\KilowattHourConverter.cs" />
+    <Compile Include="Converters\NegateVisiblityConverter.cs" />
     <Compile Include="Converters\PercentageToGridWidthConverter.cs" />
     <Compile Include="Converters\HideGridRowConverter.cs" />
     <Compile Include="Converters\KilowattConverter.cs" />
@@ -138,6 +140,9 @@
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan5Converter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan10Converter.cs" />
+    <Compile Include="EnergyPage.xaml.cs">
+      <DependentUpon>EnergyPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -154,6 +159,7 @@
     </Compile>
     <Compile Include="ViewModels\BatteryHistoryViewModel.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
+    <Compile Include="ViewModels\EnergyViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
@@ -161,6 +167,11 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\EnergyIcon.png" />
+    <Content Include="Assets\icon_battery.png" />
+    <Content Include="Assets\icon_grid.png" />
+    <Content Include="Assets\icon_home.png" />
+    <Content Include="Assets\icon_solar.png" />
     <Content Include="DemoData\SelfConsumptionHistory.json" />
     <Content Include="DemoData\LiveStatus.json" />
     <Content Include="DemoData\PowerHistory.json" />
@@ -195,6 +206,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ChartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EnergyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
