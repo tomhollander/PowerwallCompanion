@@ -61,11 +61,13 @@ namespace PowerwallCompanion
             {
                 chartMenuButton.Visibility = Visibility.Collapsed;
                 batteryHistoryMenuButton.Visibility = Visibility.Collapsed;
+                energyMenuButton.Visibility = Visibility.Collapsed;
             }
             else
             {
                 chartMenuButton.Visibility = Visibility.Visible;
                 batteryHistoryMenuButton.Visibility = Visibility.Visible;
+                energyMenuButton.Visibility = Visibility.Visible;
             }
         }
 

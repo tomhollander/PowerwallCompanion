@@ -67,10 +67,10 @@
 
             <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.LargeCaptionFontSize}" Foreground="DarkGray" Grid.Row="1" Grid.Column="0">Today</TextBlock>
             <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.LargeCaptionFontSize}" Foreground="DarkGray" Grid.Row="2" Grid.Column="0">Yesterday</TextBlock>
-            <Image Source="ms-appx:///Assets/icon_home.png" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
-            <Image Source="ms-appx:///Assets/icon_solar.png" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
-            <Image Source="ms-appx:///Assets/icon_grid.png" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
-            <Image Source="ms-appx:///Assets/icon_battery.png" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_home.png" ToolTipService.ToolTip="Home Use" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_solar.png" ToolTipService.ToolTip="Solar Generated" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_grid.png" ToolTipService.ToolTip="Grid Imported/Exported"  Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+            <Image Source="ms-appx:///Assets/icon_battery.png" ToolTipService.ToolTip="Battery Imported/Exported"  Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
             <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="1" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
             <TextBlock Grid.Row="1" Grid.Column="2" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="{x:Bind ViewModel.LargeFontSize}" Text="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
