@@ -80,42 +80,42 @@
 
             <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                     <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyExportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
-                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_grid_export.png" Width="30" VerticalAlignment="Center" Margin="5" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                     <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.GridEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
-                    <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_grid_export.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center"  Margin="5" />
                     <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyExportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
-                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                     <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.MediumFontSize}" Text="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
-                    <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.SmallFontSize}" Text="▶" />
+                    <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center" Margin="5" />
                 </StackPanel>
             </StackPanel>
         </Grid>
