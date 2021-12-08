@@ -8,6 +8,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,13 +34,22 @@ namespace PowerwallCompanion
             ShowHideButtons();
             if (Settings.AccessToken == null && Settings.LocalGatewayIP == null)
             {
-                frame.Navigate(typeof(LoginPage));
+                var installInfo = WebView2Install.GetInfo();
+                if (installInfo.InstallType == InstallType.NotInstalled)
+                {
+                    frame.Navigate(typeof(DownloadWebViewPage));
+                }
+                else
+                {
+                    frame.Navigate(typeof(LoginPage));
+                }
             }
             else
             {
                 frame.Navigate(typeof(HomePage));
             }
         }
+
 
         private async Task SetupUI()
         {

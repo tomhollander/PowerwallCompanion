@@ -1,0 +1,17 @@
+﻿<Page
+    x:Class="PowerwallCompanion.DownloadWebViewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerwallCompanion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Orientation="Vertical">
+        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Additional Download Required</TextBlock>
+        <TextBlock Margin="5">Powerwall Companion requires the Microsoft Edge WebView2 Runtime to be installed.</TextBlock>
+        <TextBlock Margin="5">Please download from the following link and restart the app.</TextBlock>
+        <HyperlinkButton Margin="5" Click="HyperlinkButton_Click">Download WebView2 Runtime</HyperlinkButton>
+    </StackPanel>
+</Page>
