@@ -1,0 +1,55 @@
+﻿{
+  "response": [
+    {
+      "id": 33333,
+      "user_id": 4444,
+      "vehicle_id": 55555,
+      "vin": "5YJ3F111111111111111",
+      "display_name": "A car",
+      "option_codes": "AD15,MDL3,PBSB,RENA,BT37,ID3W,RF3G,S3PB,DRLH,DV2W,W39B,APF0,COUS,BC3B,CH07,PC30,FC3P,FG31,GLFR,HL31,HM31,IL31,LTPB,MR31,FM3B,RS3H,SA3P,STCP,SC04,SU3C,T3CA,TW00,TM00,UT3P,WR00,AU3P,APH3,AF00,ZCST,MI00,CDM0",
+      "color": null,
+      "tokens": [
+        "xxx",
+        "ccc"
+      ],
+      "state": "offline",
+      "in_service": false,
+      "id_s": "66666666",
+      "calendar_enabled": true,
+      "api_version": 6,
+      "backseat_token": null,
+      "backseat_token_updated_at": null
+    },
+    {
+      "energy_site_id": 1111111,
+      "resource_type": "battery",
+      "site_name": "Demo site 1",
+      "id": "STE1111111-00030",
+      "gateway_id": "1111111-01-F--Z",
+      "energy_left": 6229.526315789475,
+      "total_pack_energy": 13419,
+      "percentage_charged": 46.42317844689973,
+      "battery_type": "ac_powerwall",
+      "backup_capable": true,
+      "battery_power": -3570.0000000000005,
+      "sync_grid_alert_enabled": true,
+      "breaker_alert_enabled": false
+    },
+    {
+      "energy_site_id": 22222222,
+      "resource_type": "battery",
+      "site_name": "Demo site 2",
+      "id": "STE22222222-00030",
+      "gateway_id": "22222222-01-F--Z",
+      "energy_left": 229.526315789475,
+      "total_pack_energy": 13419,
+      "percentage_charged": 16.42317844689973,
+      "battery_type": "ac_powerwall",
+      "backup_capable": true,
+      "battery_power": -3570.0000000000005,
+      "sync_grid_alert_enabled": true,
+      "breaker_alert_enabled": false
+    }
+  ],
+  "count": 3
+}

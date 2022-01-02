@@ -10,7 +10,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Vertical">
-            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Connect to Powerwall</TextBlock>
+            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" DoubleTapped="TextBlock_DoubleTapped">Connect to Powerwall</TextBlock>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Visibility="Collapsed">
                 <RadioButton x:Name="teslaAccountRadioButton" Checked="TeslaAccountRadioButton_Checked">Tesla Account</RadioButton>
                 <RadioButton x:Name="localGatwayRadioButton" Checked="LocalGatwayRadioButton_Checked">Local Gateway</RadioButton>

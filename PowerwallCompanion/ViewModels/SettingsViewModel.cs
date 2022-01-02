@@ -46,6 +46,31 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public List<KeyValuePair<string, string>> AvailableSites
+        {
+            get
+            {
+                var availableSites = Settings.AvailableSites;
+                if (availableSites == null) // Older versions may sign in without this list
+                {
+                    return new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>(Settings.SiteId, "Default")
+                    };
+                }
+                else
+                {
+                    return availableSites.ToList();
+                }
+            }
+        }
+
+        public KeyValuePair<string, string> SelectedSite
+        {
+            get => AvailableSites.Where(s => s.Key == Settings.SiteId).FirstOrDefault();
+            set => Settings.SiteId = value.Key;
+        }
+
         public void UpdateProps()
         {
             NotifyPropertyChanged(nameof(SignedIn));

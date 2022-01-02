@@ -30,7 +30,6 @@ namespace PowerwallCompanion
         public MainPage()
         {
             InitializeComponent();
-            SetupUI();
             ShowHideButtons();
             if (Settings.AccessToken == null && Settings.LocalGatewayIP == null)
             {
@@ -48,21 +47,6 @@ namespace PowerwallCompanion
             {
                 frame.Navigate(typeof(HomePage));
             }
-        }
-
-
-        private async Task SetupUI()
-        {
-            var displayRequest = new Windows.System.Display.DisplayRequest();
-            displayRequest.RequestActive();
-
-            // If we have a phone contract, hide the status bar
-            if (ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1, 0))
-            {
-                var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                await statusBar.HideAsync();
-            }
-
         }
 
         public void ShowHideButtons()

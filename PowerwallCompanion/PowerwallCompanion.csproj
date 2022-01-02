@@ -186,6 +186,8 @@
     <Content Include="DemoData\EnergyHistoryMonth.json" />
     <Content Include="DemoData\EnergyHistoryWeek.json" />
     <Content Include="DemoData\EnergyHistoryYear.json" />
+    <Content Include="DemoData\Products.json" />
+    <Content Include="DemoData\EnergyHistory.json" />
     <None Include="PowerwallCompanion_StoreKey.pfx" />
     <None Include="PowerwallCompanion_TemporaryKey.pfx" />
   </ItemGroup>

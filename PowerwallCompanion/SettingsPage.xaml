@@ -41,14 +41,17 @@
                 <Image Source="ms-appx:///Assets/Hamburger.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Settings</TextBlock>
-            <StackPanel Orientation="Vertical" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
-                <TextBlock Margin="10">Signed In as </TextBlock>
-                <TextBlock Margin="10" Text="{x:Bind ViewModel.SignInName, Mode=OneWay}"></TextBlock>
+            <StackPanel Orientation="Horizontal" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
+                <TextBlock Margin="10">Signed In</TextBlock>
                 <Button x:Name="signOutButton" Tapped="signOutButton_Tapped">Sign Out</Button>
             </StackPanel>
             <StackPanel Orientation="Vertical" x:Name="signedOutPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}}">
                 <TextBlock Margin="10">Not Signed In</TextBlock>
                 <Button x:Name="signInButton" Tapped="signInButton_Tapped">Sign In</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock>Energy Site:</TextBlock>
+                <ComboBox ItemsSource="{x:Bind ViewModel.AvailableSites}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedSite, Mode=TwoWay}" />
             </StackPanel>
             <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
 

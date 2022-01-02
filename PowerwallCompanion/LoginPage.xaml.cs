@@ -88,21 +88,37 @@ namespace PowerwallCompanion
             await GetSiteId();
         }
 
-        
+
 
         private async Task GetSiteId()
         {
             var productsResponse = await ApiHelper.CallGetApiWithTokenRefresh(ApiHelper.BaseUrl + "/api/1/products", "Products");
+            var availableSites = new Dictionary<string, string>();
+            bool foundSite = false;
             foreach (var product in productsResponse["response"])
             {
                 if (product["resource_type"]?.Value<string>() == "battery" && product["energy_site_id"] != null)
                 {
+                    var siteName = product["site_name"].Value<string>();
                     var id = product["energy_site_id"].Value<long>();
-                    Settings.SiteId = id.ToString();
-                    return;
+                    if (!foundSite)
+                    {
+                        Settings.SiteId = id.ToString();
+                        foundSite = true;
+                    }
+                    availableSites.Add(id.ToString(), siteName);
+
                 }
             }
-            throw new Exception("Powerwall site not found");
+            if (foundSite)
+            {
+                Settings.AvailableSites = availableSites;
+            }
+            else
+            {
+                throw new Exception("Powerwall site not found");
+            }
+
         }
 
 
@@ -155,6 +171,15 @@ namespace PowerwallCompanion
             localGatewaySignInControls.Visibility = Visibility.Visible;
         }
 
-
+        private async void TextBlock_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            // Sign in as demo user
+            Settings.AccessToken = "DEMO";
+            Settings.RefreshToken = "DEMO";
+            Settings.SignInName = "Demo User";
+            Settings.UseLocalGateway = false;
+            await GetSiteId();
+            this.Frame.Navigate(typeof(HomePage));
+        }
     }
 }

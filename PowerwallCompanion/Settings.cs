@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -126,6 +127,20 @@ namespace PowerwallCompanion
             set
             {
                 _localSettings.Values["LocalGatewayIP"] = value;
+            }
+        }
+
+        public static Dictionary<string, string> AvailableSites
+        {
+            get
+            {
+                var json = _localSettings.Values["AvailableSites"] as string;
+                return json == null ? null : JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            }
+            set
+            {
+                var json = JsonConvert.SerializeObject(value);
+                _localSettings.Values["AvailableSites"] = json;
             }
         }
     }
