@@ -4,19 +4,19 @@ using Windows.UI.Xaml.Data;
 
 namespace PowerwallCompanion.Converters
 {
-    class FalseToVisibilityCollapsedConverter : IValueConverter
+    internal class GridExportingToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if ((bool)value == false)
-            {
-                return Visibility.Collapsed;
-            }
-            else
+            double gridValue = (double)value;
+
+            if (gridValue < -100)
             {
                 return Visibility.Visible;
             }
+            return Visibility.Collapsed;
         }
+
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {

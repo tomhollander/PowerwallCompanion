@@ -62,6 +62,9 @@
                 This app is not built or endorsed by Tesla. 
             </TextBlock>
             <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
+                If you're enjoying it, feel free to <Hyperlink NavigateUri="https://ko-fi.com/tomhollander">show your appreciation</Hyperlink>
+            </TextBlock>
+            <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
                 Tesla account credentials are sent to the Tesla web service for verification and are not stored or otherwise used by this app.
             </TextBlock>
             <HyperlinkButton FontSize="10" Margin="5" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">

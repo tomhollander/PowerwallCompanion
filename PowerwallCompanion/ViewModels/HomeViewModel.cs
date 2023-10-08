@@ -22,6 +22,7 @@ namespace PowerwallCompanion.ViewModels
         {
             NotifyPropertyChanged(nameof(BatteryPercent));
             NotifyPropertyChanged(nameof(BatteryStatus));
+            NotifyPropertyChanged(nameof(BatteryValue));
             NotifyPropertyChanged(nameof(HomeValue));
             NotifyPropertyChanged(nameof(HomeFromBattery));
             NotifyPropertyChanged(nameof(HomeFromGrid));

@@ -4,18 +4,16 @@ using Windows.UI.Xaml.Data;
 
 namespace PowerwallCompanion.Converters
 {
-    class FalseToVisibilityCollapsedConverter : IValueConverter
+    internal class BatteryImportingToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if ((bool)value == false)
-            {
-                return Visibility.Collapsed;
-            }
-            else
+            double batteryValue = (double)value;
+            if (batteryValue < -20)
             {
                 return Visibility.Visible;
             }
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

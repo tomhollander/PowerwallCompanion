@@ -123,8 +123,12 @@
     <Compile Include="ChartPage.xaml.cs">
       <DependentUpon>ChartPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BatteryExportingToVisibilityConverter.cs" />
+    <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
+    <Compile Include="Converters\GridExportingToVisibilityConverter.cs" />
+    <Compile Include="Converters\GridImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\KilowattHourConverter.cs" />
     <Compile Include="Converters\NegateVisiblityConverter.cs" />
     <Compile Include="Converters\PercentageToGridWidthConverter.cs" />
@@ -177,6 +181,7 @@
     <Content Include="Assets\icon_battery_import.png" />
     <Content Include="Assets\icon_grid.png" />
     <Content Include="Assets\icon_grid_export.png" />
+    <Content Include="Assets\icon_grid_export_yellow.png" />
     <Content Include="Assets\icon_grid_import.png" />
     <Content Include="Assets\icon_home.png" />
     <Content Include="Assets\icon_solar.png" />

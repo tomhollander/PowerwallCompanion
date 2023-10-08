@@ -17,6 +17,10 @@
         <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter" />
         <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter" />
         <converters:GridStatusBrushSizeConverter x:Key="GridStatusBrushSizeConverter" />
+        <converters:GridExportingToVisibilityConverter x:Key="GridExportingToVisibilityConverter" />
+        <converters:GridImportingToVisibilityConverter x:Key="GridImportingToVisibilityConverter" />
+        <converters:BatteryExportingToVisibilityConverter x:Key="BatteryExportingToVisibilityConverter"/>
+        <converters:BatteryImportingToVisibilityConverter x:Key="BatteryImportingToVisibilityConverter"/>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -94,7 +98,6 @@
                             ScaleWidth="15"
                             MinAngle="185"
                             MaxAngle="175"
-                            Unit="{x:Bind ViewModel.BatteryStatus, Mode=OneWay}"
                             ScaleBrush="DimGray"
                             TickBrush="Gainsboro"
                             ScaleTickBrush="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -104,6 +107,10 @@
                             TrailBrush="LimeGreen" 
                             ValueStringFormat=" ">
                         </controls:RadialGauge>
+                        <Image Visibility="{x:Bind ViewModel.GridValue, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
+                        <Image Visibility="{x:Bind ViewModel.BatteryValue, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
+                        <Image Visibility="{x:Bind ViewModel.GridValue, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
+                        <Image Visibility="{x:Bind ViewModel.BatteryValue, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharing battery" />
                         <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-20 -10 0 20"
                          FontSize="60" Text="{x:Bind ViewModel.BatteryPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}">
                         </TextBlock>
