@@ -17,7 +17,8 @@ namespace PowerwallCompanion.ViewModels
         private double _gridValue;
         private bool _gridActive;
         private bool _statusOK;
-
+        private double _minPercentToday;
+        private double _maxPercentToday;
         public void NotifyProperties()
         {
             NotifyPropertyChanged(nameof(BatteryPercent));
@@ -84,6 +85,16 @@ namespace PowerwallCompanion.ViewModels
             {
                 _gridValue = value;
             }
+        }
+
+        public double MinBatteryPercentToday
+        {
+            get { return 20; } // _minPercentToday; }
+        }
+
+        public double MaxBatteryPercentToday
+        {
+            get { return 80; } // _maxPercentToday; }
         }
 
         public double HomeFromGrid

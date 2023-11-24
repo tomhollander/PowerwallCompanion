@@ -19,44 +19,21 @@ namespace PowerwallCompanion.ViewModels
         {
             try
             {
-                var powerInfo = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/live_status", "LiveStatus");
-                TotalPackEnergy = powerInfo["response"]["total_pack_energy"].Value<double>();
+                var soeInfo = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/calendar_history?kind=soe", "BatteryHistory");
+                var soeSeries = (JArray)soeInfo["response"]["time_series"];
 
-                BatteryHistory = new List<BatteryHistoryPoint>();
-                BatteryHistory.Add(new BatteryHistoryPoint()
+                var batteryHistory = new List<BatteryHistoryPoint>();
+               
+                for (int i=0; i< soeSeries.Count; i++)
                 {
-                    Timestamp = powerInfo["response"]["timestamp"].Value<DateTime>(),
-                    EnergyLeft = powerInfo["response"]["energy_left"].Value<double>()
-                });
-
-                var powerHistoryJson = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
-                var powerHistory = JsonConvert.DeserializeObject<List<TimeSeriesPoint>>(((JArray)(powerHistoryJson["response"]["time_series"])).ToString());
-
-                for (int i = powerHistory.Count - 1; i >= 0; i--)
-                {
-                    var mostRecentPoint = BatteryHistory.First();
-                    double energyForLastPoint = mostRecentPoint.EnergyLeft + (powerHistory[i].BatteryPower / 12); // 5 min intervals
-                    if (powerHistory[i].BatteryPower > 0)
+                    batteryHistory.Add(new BatteryHistoryPoint()
                     {
-                        energyForLastPoint = energyForLastPoint + 8; // fix??
-                    }
-                    if (energyForLastPoint > TotalPackEnergy)
-                    {
-                        energyForLastPoint = TotalPackEnergy;
-                    }
-                    else if (energyForLastPoint < 0)
-                    {
-                        energyForLastPoint = 0;
-                    }
-
-                    var newPoint = new BatteryHistoryPoint()
-                    {
-                        Timestamp = powerHistory[i].Timestamp,
-                        EnergyLeft = energyForLastPoint
-                    };
-                    BatteryHistory.Insert(0, newPoint);
+                        Timestamp = soeSeries[i]["timestamp"].Value<DateTime>(),
+                        EnergyPercent = soeSeries[i]["soe"].Value<double>(),
+                    }); 
 
                 }
+                BatteryHistory = batteryHistory;
                 DataLastUpdated = DateTime.Now;
                 this.StatusOK = true;
             }
@@ -104,13 +81,10 @@ namespace PowerwallCompanion.ViewModels
     public class BatteryHistoryPoint
     {
         public DateTime Timestamp { get; set; }
-        public double EnergyLeft { get; set; }
+
         public double EnergyPercent
         {
-            get
-            {
-                return (EnergyLeft / BatteryHistoryViewModel.TotalPackEnergy) * 100;
-            }
+            get; set; 
         }
     }
 }

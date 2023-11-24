@@ -1,0 +1,161 @@
+﻿<Page
+    x:Class="PowerwallCompanion.StatusPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerwallCompanion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:converters="using:PowerwallCompanion.Converters"
+    xmlns:gauge="using:Syncfusion.UI.Xaml.Gauges"
+    xmlns:chart="using:Syncfusion.UI.Xaml.Charts"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converters:KilowattConverter x:Key="KilowattConverter"/>
+        <converters:PositiveBarGraphConverter x:Key="PositiveBarGraphConverter"/>
+        <converters:StatusConverter x:Key="StatusConverter" />
+        <converters:StatusMessageConverter x:Key="StatusMessageConverter" />
+        <converters:HideGridRowConverter x:Key="HideGridRowConverter" />
+        <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter" />
+        <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter" />
+        <converters:GridStatusBrushSizeConverter x:Key="GridStatusBrushSizeConverter" />
+        <converters:GridExportingToVisibilityConverter x:Key="GridExportingToVisibilityConverter" />
+        <converters:GridImportingToVisibilityConverter x:Key="GridImportingToVisibilityConverter" />
+        <converters:BatteryExportingToVisibilityConverter x:Key="BatteryExportingToVisibilityConverter"/>
+        <converters:BatteryImportingToVisibilityConverter x:Key="BatteryImportingToVisibilityConverter"/>
+        <converters:GridActiveToBackgroundColorConverter x:Key="GridActiveToBackgroundColorConverter"/>
+        <converters:HighPowerToVisibilityConverter x:Key="HighPowerToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid x:Name="rootGrid">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Image Source="PowerwallLogo.png" HorizontalAlignment="Center"  Margin="0,-20,0,-20">
+        </Image>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <gauge:SfCircularGauge Margin="20"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center">
+                <gauge:SfCircularGauge.GaugeHeader>
+                    <TextBlock  FontSize="50" Text="{x:Bind ViewModel.BatteryPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}">
+                    </TextBlock>
+                </gauge:SfCircularGauge.GaugeHeader>
+
+
+                <gauge:SfCircularGauge.Annotations>
+                    <gauge:GaugeAnnotation Angle="225" Offset="1.2">
+                        <Image Visibility="{x:Bind ViewModel.GridValue, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation Angle="315" Offset="1.2">
+                        <Image Visibility="{x:Bind ViewModel.BatteryValue, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation Angle="45" Offset="1.2">
+                        <Image Visibility="{x:Bind ViewModel.GridValue, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation Angle="135" Offset="1.2">
+                        <Image Visibility="{x:Bind ViewModel.BatteryValue, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharing battery" />
+                    </gauge:GaugeAnnotation>
+                </gauge:SfCircularGauge.Annotations>
+                <gauge:SfCircularGauge.Scales>
+                    <gauge:CircularScale  StartAngle="95" SweepAngle="350" SmallTickLength="0" SmallTickStrokeThickness="0" Radius="280" RadiusFactor="1.12"
+                                            TickStroke="Black" TickLength="30" TickStrokeThickness="5"  TickPosition="Custom" 
+                                            ShowLabels="False" ShowRim="True" RimStrokeThickness="30" RimStroke="DimGray">
+                        <gauge:CircularScale.Ranges>
+                            <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.BatteryPercent, Mode=OneWay}" 
+                                                    StrokeThickness="30"  Stroke="LimeGreen" />
+                        </gauge:CircularScale.Ranges>
+                    </gauge:CircularScale>
+                    <gauge:CircularScale RangePosition="Custom" RangeOffset="0.7" StartAngle="95" SweepAngle="350" ShowLabels="False" ShowRim="False" TickLength="0" SmallTickLength="0">
+                        <gauge:CircularScale.Ranges>
+                            <gauge:CircularRange  StartValue="{x:Bind ViewModel.MinBatteryPercentToday}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday}" StrokeThickness="5" Stroke="Green" />
+                        </gauge:CircularScale.Ranges>
+                    </gauge:CircularScale>
+
+                </gauge:SfCircularGauge.Scales>
+            </gauge:SfCircularGauge>
+
+            <!-- Instantaneous Power-->
+            <Grid Grid.Column="1"  x:Name="graphGrid" HorizontalAlignment="Center" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <!-- Home -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
+                    <!--Solar -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
+                </Grid.RowDefinitions>
+
+                <!-- Home Use -->
+                <Image Source="ms-appx:///Assets/icon_home.png" Width="50" Margin="10"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                    <TextBlock Foreground="Cyan" Margin="0,0,10,0"  VerticalAlignment="Bottom" FontSize="50"  Text="{x:Bind ViewModel.HomeValue, Mode=OneWay, Converter={StaticResource KilowattConverter}}" ></TextBlock>
+                    <TextBlock FontSize="30" Margin="0,0,0,5" Foreground="#888888" VerticalAlignment="Bottom"  Text="kW" />
+                </StackPanel>
+
+                <Rectangle HorizontalAlignment="Left"  Grid.Row="1" Grid.Column="1"  Fill="Cyan" Width="{x:Bind ViewModel.HomeValue, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}" Height="20" />
+                <Image Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Source="ms-appx:///Assets/arrow_to_house.png" Width="40" Visibility="{x:Bind ViewModel.HomeValue, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}" />
+
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
+                    <Image Source="ms-appx:///Assets/icon_solar.png" Width="20" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.HomeFromSolar, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"/>
+                    <TextBlock Foreground="Gold" Margin="5,0,10,0" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.HomeFromSolar, Mode=OneWay, Converter={StaticResource KilowattConverter}}"  TextWrapping="NoWrap"  Visibility="{x:Bind ViewModel.SolarToHome, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"></TextBlock>
+                    <Image Source="ms-appx:///Assets/icon_battery.png" Width="20" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.HomeFromBattery, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"/>
+                    <TextBlock Foreground="LimeGreen" Margin="5,0,10,0" HorizontalAlignment="Center"  FontSize="30" Text="{x:Bind ViewModel.HomeFromBattery, Mode=OneWay, Converter={StaticResource KilowattConverter}}" TextWrapping="NoWrap"  Visibility="{x:Bind ViewModel.HomeFromBattery, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"></TextBlock>
+                    <Image Source="ms-appx:///Assets/icon_grid.png" Width="20" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.HomeFromGrid, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}" />
+                    <TextBlock Foreground="LightGray" Margin="5,0,10,0" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.HomeFromGrid, Mode=OneWay, Converter={StaticResource KilowattConverter}}" TextWrapping="NoWrap" Visibility="{x:Bind ViewModel.HomeFromGrid, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"></TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Grid.Row="3" Grid.Column="1" Spacing="3" >
+                    <Rectangle Fill="Gold" Width="{x:Bind ViewModel.HomeFromSolar, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}" Height="10" />
+                    <Rectangle Fill="LimeGreen" Width="{x:Bind ViewModel.HomeFromBattery, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}" Height="10" />
+                    <Rectangle Fill="LightGray" Width="{x:Bind ViewModel.HomeFromGrid, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}" Height="10" />
+                </StackPanel>
+
+
+                <!-- Solar Generation -->
+                <Image Source="ms-appx:///Assets/icon_solar.png" Width="50"  Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Margin="0,5,0,0" />
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
+                    <TextBlock  Foreground="Gold" Margin="0,0,10,0"  VerticalAlignment="Bottom" FontSize="50" Text="{x:Bind ViewModel.SolarValue, Mode=OneWay, Converter={StaticResource KilowattConverter}}" ></TextBlock>
+                    <TextBlock FontSize="30" Margin="0,0,0,5" Foreground="#888888" VerticalAlignment="Bottom"  Text="kW" />
+                </StackPanel>
+                <Rectangle HorizontalAlignment="Left" Grid.Row="5" Grid.Column="1" Fill="Gold" Width="{x:Bind ViewModel.SolarValue, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}" Height="20" />
+                <Image Grid.Column="0" Grid.Row="5" Grid.RowSpan="2" Source="ms-appx:///Assets/arrow_from_solar.png" Width="40"  Visibility="{x:Bind ViewModel.SolarValue, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}" />
+
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="6">
+                    <Image Source="ms-appx:///Assets/icon_home.png" Width="20" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.SolarToHome, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"/>
+                    <TextBlock Foreground="Cyan" Margin="5,0,10,0" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.SolarToHome, Mode=OneWay, Converter={StaticResource KilowattConverter}}"  TextWrapping="NoWrap" Visibility="{x:Bind ViewModel.SolarToHome, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"></TextBlock>
+                    <Image Source="ms-appx:///Assets/icon_battery.png" Width="20" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.SolarToBattery, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"/>
+                    <TextBlock Foreground="LimeGreen" Margin="5,0,10,0" HorizontalAlignment="Center"  FontSize="30" Text="{x:Bind ViewModel.SolarToBattery, Mode=OneWay, Converter={StaticResource KilowattConverter}}" TextWrapping="NoWrap"  Visibility="{x:Bind ViewModel.SolarToBattery, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"></TextBlock>
+                    <Image Source="ms-appx:///Assets/icon_grid.png" Width="20" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.SolarToGrid, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}" />
+                    <TextBlock Foreground="LightGray" Margin="5,0,10,0" HorizontalAlignment="Center"  FontSize="30" Text="{x:Bind ViewModel.SolarToGrid, Mode=OneWay, Converter={StaticResource KilowattConverter}}" TextWrapping="NoWrap" Visibility="{x:Bind ViewModel.SolarToGrid, Mode=OneWay, Converter={StaticResource HighPowerToVisibilityConverter}}"></TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="7" Grid.Column="1" Spacing="3" >
+                    <Rectangle Fill="Cyan" Width="{x:Bind ViewModel.SolarToHome, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}" Height="10" />
+                    <Rectangle Fill="LimeGreen" Width="{x:Bind ViewModel.SolarToBattery, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}"  Height="10" />
+                    <Rectangle Fill="LightGray" Width="{x:Bind ViewModel.SolarToGrid, Mode=OneWay, Converter={StaticResource PositiveBarGraphConverter}}"  Height="10" />
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>
+    </Grid>
+
+
+
+</Page>

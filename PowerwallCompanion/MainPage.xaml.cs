@@ -9,6 +9,7 @@ using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,6 +31,7 @@ namespace PowerwallCompanion
         public MainPage()
         {
             InitializeComponent();
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
             ShowHideButtons();
             if (Settings.AccessToken == null && Settings.LocalGatewayIP == null)
             {
@@ -45,7 +47,7 @@ namespace PowerwallCompanion
             }
             else
             {
-                frame.Navigate(typeof(HomePage));
+                frame.Navigate(typeof(StatusPage));
             }
         }
 
@@ -72,7 +74,7 @@ namespace PowerwallCompanion
 
         private void homeMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            frame.Navigate(typeof(HomePage));
+            frame.Navigate(typeof(StatusPage));
             homeMenuButton.IsChecked = true;
             energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;

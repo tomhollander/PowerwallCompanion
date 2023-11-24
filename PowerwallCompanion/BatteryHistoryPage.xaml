@@ -89,7 +89,7 @@
                     HorizontalAlignment="Stretch"  
                     VerticalAlignment="Stretch"  
                     Margin="0" 
-                    Title="Battery Storage Level since Yesterday" LegendStyle="{StaticResource HiddenLegend}"
+                    Title="Battery Storage Level Today" LegendStyle="{StaticResource HiddenLegend}"
                  >
                 <Charting:AreaSeries Title="Battery Storage"  ItemsSource="{x:Bind ViewModel.BatteryHistory, Mode=OneWay}" Opacity="0.8" 
                                  IndependentValuePath="Timestamp" DependentValuePath="EnergyPercent" DataPointStyle="{StaticResource BatteryHistoryAxisStyle}">
@@ -103,9 +103,6 @@
 
             </Charting:Chart>
             <ProgressRing x:Name="progressRing" IsActive="True" Grid.Row="1" Width="200" Height="200" />
-            <TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5">Yesterday</TextBlock>
-            <TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5">Today</TextBlock>
-            <TextBlock Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="12" TextWrapping="Wrap" Margin="5">The displayed historical battery storage is approximate, as it is based on extrapolated data.</TextBlock>
         </Grid>
     </Grid>
 </Page>

@@ -126,9 +126,11 @@
     <Compile Include="Converters\BatteryExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
+    <Compile Include="Converters\GridActiveToBackgroundColorConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\GridExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\GridImportingToVisibilityConverter.cs" />
+    <Compile Include="Converters\HighPowerToVisibilityConverter.cs" />
     <Compile Include="Converters\KilowattHourConverter.cs" />
     <Compile Include="Converters\NegateVisiblityConverter.cs" />
     <Compile Include="Converters\PercentageToGridWidthConverter.cs" />
@@ -164,6 +166,9 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StatusPage.xaml.cs">
+      <DependentUpon>StatusPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\BatteryHistoryViewModel.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
     <Compile Include="ViewModels\EnergyViewModel.cs" />
@@ -175,6 +180,8 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\arrow_from_solar.png" />
+    <Content Include="Assets\arrow_to_house.png" />
     <Content Include="Assets\EnergyIcon.png" />
     <Content Include="Assets\icon_battery.png" />
     <Content Include="Assets\icon_battery_export.png" />
@@ -248,6 +255,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="StatusPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -260,10 +271,16 @@
       <Version>2.8.0-prerelease.220118001</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Web.WebView2">
-      <Version>1.0.1189-prerelease</Version>
+      <Version>1.0.2088.41</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.SfChart.UWP">
+      <Version>23.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.SfGauge.UWP">
+      <Version>23.2.4</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
