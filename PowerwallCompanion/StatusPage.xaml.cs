@@ -27,23 +27,29 @@ namespace PowerwallCompanion
     /// 
     public sealed partial class StatusPage : Page
     {
-        public HomeViewModel ViewModel
-        {
-            get; set;
-        }
+        private StatusViewModel viewModel;
+        private readonly TimeSpan liveStatusRefreshInterval = new TimeSpan(0, 0, 30);
+        private readonly TimeSpan energyHistoryRefreshInterval = new TimeSpan(0, 5, 0);
+        private readonly TimeSpan powerHistoryRefreshInterval = new TimeSpan(0, 5, 0);
+
 
         public StatusPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
-            ViewModel = new HomeViewModel();
-            App.HomeViewModel = ViewModel;
+            viewModel = new StatusViewModel();
+
 
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
             timer.Tick += Timer_Tick;
             timer.Start();
+        }
+
+        public StatusViewModel ViewModel
+        {
+            get => viewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -60,52 +66,162 @@ namespace PowerwallCompanion
 
         private async Task RefreshDataFromTeslaOwnerApi()
         {
+            await GetCurrentPowerData();
+            await GetEnergyHistoryData();
+            await GetPowerHistoryData();
+        }
+
+        private async Task GetCurrentPowerData()
+        {
             try
             {
-                var powerInfo = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/live_status", "LiveStatus");
+                if (DateTime.Now - viewModel.LiveStatusLastRefreshed < liveStatusRefreshInterval)
+                {
+                    return;
+                }
+#if FAKE
+                viewModel.BatteryPercent = 72;
+                viewModel.HomeValue = 1900D;
+                viewModel.SolarValue = 1900D;
+                viewModel.BatteryValue = -1000D;
+                viewModel.GridValue = 100D;
+                viewModel.GridActive = true;
+#else
+                var siteId = Settings.SiteId;
+
+                var powerInfo = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{siteId}/live_status", "LiveStatus");
+
+                viewModel.BatteryPercent = GetJsonDoubleValue(powerInfo["response"]["energy_left"]) / GetJsonDoubleValue(powerInfo["response"]["total_pack_energy"]) * 100D;
+                viewModel.HomeValue = GetJsonDoubleValue(powerInfo["response"]["load_power"]);
+                viewModel.SolarValue = GetJsonDoubleValue(powerInfo["response"]["solar_power"]);
+                viewModel.BatteryValue = GetJsonDoubleValue(powerInfo["response"]["battery_power"]);
+                viewModel.GridValue = GetJsonDoubleValue(powerInfo["response"]["grid_power"]);
+                viewModel.GridActive = powerInfo["response"]["grid_status"].Value<string>() != "Inactive";
+                viewModel.TotalPackEnergy = GetJsonDoubleValue(powerInfo["response"]["total_pack_energy"]);
+                viewModel.Status = viewModel.GridActive ? StatusViewModel.StatusEnum.Online : StatusViewModel.StatusEnum.GridOutage;
+#endif
+                viewModel.LiveStatusLastRefreshed = DateTime.Now;
+                viewModel.NotifyPowerProperties();
 
 
-                ViewModel.BatteryPercent = 72;
-                ViewModel.HomeValue = 900D;
-                ViewModel.SolarValue = 1900D;
-                ViewModel.BatteryValue = -1000D;
-                ViewModel.GridValue = 0D;
-                ViewModel.GridActive = true;
-
-                //ViewModel.BatteryPercent = (powerInfo["response"]["energy_left"].Value<double>() / powerInfo["response"]["total_pack_energy"].Value<double>()) * 100D;
-                //ViewModel.HomeValue = powerInfo["response"]["load_power"].Value<double>();
-                //ViewModel.SolarValue = powerInfo["response"]["solar_power"].Value<double>();
-                //ViewModel.BatteryValue = powerInfo["response"]["battery_power"].Value<double>();
-                //ViewModel.GridValue = powerInfo["response"]["grid_power"].Value<double>();
-                //ViewModel.GridActive = powerInfo["response"]["grid_status"].Value<string>() != "Inactive";
-
-                ViewModel.NotifyProperties();
-                ViewModel.StatusOK = true;
+                //PlaySoundsOnBatteryStatus(viewModel.BatteryPercent);
             }
             catch (UnauthorizedAccessException ex)
             {
                 this.Frame?.Navigate(typeof(LoginPage));
-                ViewModel.LastExceptionMessage = ex.Message;
-                ViewModel.LastExceptionDate = DateTime.Now;
-                ViewModel.NotifyProperties();
-                ViewModel.StatusOK = false;
+                viewModel.LastExceptionMessage = ex.Message;
+                viewModel.LastExceptionDate = DateTime.Now;
+                viewModel.NotifyPowerProperties();
+                viewModel.Status = StatusViewModel.StatusEnum.Error;
+
             }
             catch (Exception ex)
             {
-                ViewModel.LastExceptionMessage = ex.Message;
-                ViewModel.LastExceptionDate = DateTime.Now;
-                ViewModel.NotifyProperties();
-                ViewModel.StatusOK = false;
+                viewModel.LastExceptionMessage = ex.Message;
+                viewModel.LastExceptionDate = DateTime.Now;
+                viewModel.NotifyPowerProperties();
+                viewModel.Status = StatusViewModel.StatusEnum.Error;
+            }
+        }
+
+        private async Task GetEnergyHistoryData()
+        {
+            try
+            {
+                if (DateTime.Now - viewModel.EnergyHistoryLastRefreshed < energyHistoryRefreshInterval)
+                {
+                    return;
+                }
+
+                string period = "day";
+                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=energy&period={period}", "EnergyHistory");
+
+                var yesterday = json["response"]["time_series"][0];
+                viewModel.HomeEnergyYesterday = GetJsonDoubleValue(yesterday["consumer_energy_imported_from_grid"]) + GetJsonDoubleValue(yesterday["consumer_energy_imported_from_solar"]) + GetJsonDoubleValue(yesterday["consumer_energy_imported_from_battery"]) + GetJsonDoubleValue(yesterday["consumer_energy_imported_from_generator"]);
+                viewModel.SolarEnergyYesterday = GetJsonDoubleValue(yesterday["solar_energy_exported"]);
+                viewModel.GridEnergyImportedYesterday = GetJsonDoubleValue(yesterday["grid_energy_imported"]);
+                viewModel.GridEnergyExportedYesterday = GetJsonDoubleValue(yesterday["grid_energy_exported_from_solar"]) + GetJsonDoubleValue(yesterday["grid_energy_exported_from_battery"]);
+                viewModel.BatteryEnergyImportedYesterday = GetJsonDoubleValue(yesterday["battery_energy_imported_from_grid"]) + GetJsonDoubleValue(yesterday["battery_energy_imported_from_solar"]);
+                viewModel.BatteryEnergyExportedYesterday = GetJsonDoubleValue(yesterday["battery_energy_exported"]);
+
+                var today = json["response"]["time_series"][1];
+                viewModel.HomeEnergyToday = GetJsonDoubleValue(today["consumer_energy_imported_from_grid"]) + GetJsonDoubleValue(today["consumer_energy_imported_from_solar"]) + GetJsonDoubleValue(today["consumer_energy_imported_from_battery"]) + GetJsonDoubleValue(today["consumer_energy_imported_from_generator"]);
+                viewModel.SolarEnergyToday = GetJsonDoubleValue(today["solar_energy_exported"]);
+                viewModel.GridEnergyImportedToday = GetJsonDoubleValue(today["grid_energy_imported"]);
+                viewModel.GridEnergyExportedToday = GetJsonDoubleValue(today["grid_energy_exported_from_solar"]) + GetJsonDoubleValue(today["grid_energy_exported_from_battery"]);
+                viewModel.BatteryEnergyImportedToday = GetJsonDoubleValue(today["battery_energy_imported_from_grid"]) + GetJsonDoubleValue(today["battery_energy_imported_from_solar"]);
+                viewModel.BatteryEnergyExportedToday = GetJsonDoubleValue(today["battery_energy_exported"]);
+
+                viewModel.EnergyHistoryLastRefreshed = DateTime.Now;
+                viewModel.NotifyDailyEnergyProperties();
+
+            }
+            catch (Exception ex)
+            {
+                viewModel.LastExceptionMessage = ex.Message;
+                viewModel.LastExceptionDate = DateTime.Now;
+                viewModel.NotifyDailyEnergyProperties();
+            }
+        }
+
+        public async Task GetPowerHistoryData()
+        {
+            try
+            {
+                if (DateTime.Now - viewModel.PowerHistoryLastRefreshed < powerHistoryRefreshInterval)
+                {
+                    return;
+                }
+
+                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
+                var homeGraphData = new List<ChartDataPoint>();
+                var solarGraphData = new List<ChartDataPoint>();
+                var batteryGraphData = new List<ChartDataPoint>();
+                var gridGraphData = new List<ChartDataPoint>();
+
+                foreach (var datapoint in (JArray)json["response"]["time_series"])
+                {
+                    var timestamp = datapoint["timestamp"].Value<DateTime>();
+                    var solarPower = datapoint["solar_power"].Value<double>() / 1000;
+                    var batteryPower = datapoint["battery_power"].Value<double>() / 1000;
+                    var gridPower = datapoint["grid_power"].Value<double>() / 1000;
+                    var homePower = solarPower + batteryPower + gridPower;
+                    homeGraphData.Add(new ChartDataPoint(timestamp, homePower));
+                    solarGraphData.Add(new ChartDataPoint(timestamp, solarPower));
+                    gridGraphData.Add(new ChartDataPoint(timestamp, gridPower));
+                    batteryGraphData.Add(new ChartDataPoint(timestamp, batteryPower));
+                }
+
+                viewModel.HomeGraphData = homeGraphData;
+                viewModel.SolarGraphData = solarGraphData;
+                viewModel.GridGraphData = gridGraphData;
+                viewModel.BatteryGraphData = batteryGraphData;
+                viewModel.PowerHistoryLastRefreshed = DateTime.Now;
+                viewModel.NotifyGraphProperties();
+            }
+            catch (Exception ex)
+            {
+                viewModel.LastExceptionDate = DateTime.Now;
+                viewModel.LastExceptionMessage = ex.Message;
             }
         }
 
 
-        private JObject LoadJson(string url)
+        private static double GetJsonDoubleValue(JToken jtoken)
         {
-            var client = new HttpClient();
-            var responseTask = client.GetStringAsync(url);
-            responseTask.Wait();
-            return JObject.Parse(responseTask.Result);
+            if (jtoken == null)
+            {
+                return 0;
+            }
+            try
+            {
+                return jtoken.Value<double>();
+            }
+            catch
+            {
+                return 0;
+            }
         }
+
     }
 }
