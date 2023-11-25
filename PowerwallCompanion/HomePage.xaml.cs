@@ -40,7 +40,6 @@ namespace PowerwallCompanion
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             ViewModel = new HomeViewModel();
-            App.HomeViewModel = ViewModel;
 
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);

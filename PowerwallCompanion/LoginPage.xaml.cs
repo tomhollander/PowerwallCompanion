@@ -69,7 +69,7 @@ namespace PowerwallCompanion
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
                     UpdateMenuButtons();
-                    this.Frame.Navigate(typeof(HomePage));
+                    this.Frame.Navigate(typeof(StatusPage));
                 });
 
 
@@ -134,7 +134,7 @@ namespace PowerwallCompanion
                     Settings.UseLocalGateway = true;
                     Settings.LocalGatewayIP = gatewayIpTextBox.Text;
                     UpdateMenuButtons();
-                    this.Frame.Navigate(typeof(HomePage));
+                    this.Frame.Navigate(typeof(StatusPage));
                 }
                 else
                 {
@@ -155,7 +155,6 @@ namespace PowerwallCompanion
         {
             var frame = (Frame)Window.Current.Content;
             var mainPage = (MainPage)frame.Content;
-            mainPage.ShowHideButtons();
         }
 
         private void TeslaAccountRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -179,7 +178,7 @@ namespace PowerwallCompanion
             Settings.SignInName = "Demo User";
             Settings.UseLocalGateway = false;
             await GetSiteId();
-            this.Frame.Navigate(typeof(HomePage));
+            this.Frame.Navigate(typeof(StatusPage));
         }
     }
 }

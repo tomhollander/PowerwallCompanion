@@ -12,17 +12,17 @@ namespace PowerwallCompanion.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IComparable xValue;
+        private DateTime xValue;
 
         private double yValue;
 
-        public ChartDataPoint(IComparable xValue, double yValue)
+        public ChartDataPoint(DateTime xValue, double yValue)
         {
             XValue = xValue;
             YValue = yValue;
         }
 
-        public IComparable XValue
+        public DateTime XValue
         {
             get
             {

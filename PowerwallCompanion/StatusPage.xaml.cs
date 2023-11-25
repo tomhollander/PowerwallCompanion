@@ -2,6 +2,7 @@
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -39,7 +40,6 @@ namespace PowerwallCompanion
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             viewModel = new StatusViewModel();
-
 
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
@@ -174,10 +174,11 @@ namespace PowerwallCompanion
                 }
 
                 var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
-                var homeGraphData = new List<ChartDataPoint>();
-                var solarGraphData = new List<ChartDataPoint>();
-                var batteryGraphData = new List<ChartDataPoint>();
-                var gridGraphData = new List<ChartDataPoint>();
+                //var homeGraphData = new ObservableCollection<ChartDataPoint>();
+                viewModel.HomeGraphData.Clear();
+                viewModel.SolarGraphData.Clear();
+                viewModel.BatteryGraphData.Clear();
+                viewModel.GridGraphData.Clear();
 
                 foreach (var datapoint in (JArray)json["response"]["time_series"])
                 {
@@ -186,16 +187,12 @@ namespace PowerwallCompanion
                     var batteryPower = datapoint["battery_power"].Value<double>() / 1000;
                     var gridPower = datapoint["grid_power"].Value<double>() / 1000;
                     var homePower = solarPower + batteryPower + gridPower;
-                    homeGraphData.Add(new ChartDataPoint(timestamp, homePower));
-                    solarGraphData.Add(new ChartDataPoint(timestamp, solarPower));
-                    gridGraphData.Add(new ChartDataPoint(timestamp, gridPower));
-                    batteryGraphData.Add(new ChartDataPoint(timestamp, batteryPower));
+                    viewModel.HomeGraphData.Add(new ChartDataPoint(timestamp, homePower));
+                    viewModel.SolarGraphData.Add(new ChartDataPoint(timestamp, solarPower));
+                    viewModel.GridGraphData.Add(new ChartDataPoint(timestamp, gridPower));
+                    viewModel.BatteryGraphData.Add(new ChartDataPoint(timestamp, batteryPower));
                 }
 
-                viewModel.HomeGraphData = homeGraphData;
-                viewModel.SolarGraphData = solarGraphData;
-                viewModel.GridGraphData = gridGraphData;
-                viewModel.BatteryGraphData = batteryGraphData;
                 viewModel.PowerHistoryLastRefreshed = DateTime.Now;
                 viewModel.NotifyGraphProperties();
             }

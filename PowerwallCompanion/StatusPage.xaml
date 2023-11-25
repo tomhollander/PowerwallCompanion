@@ -40,7 +40,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Image Source="PowerwallLogo.png" HorizontalAlignment="Center"  Margin="0,-20,0,-20">
+        <Image Source="ms-appx:///Assets/TeslaLogo.png" HorizontalAlignment="Center"  Margin="0,-20,0,-20" Grid.Row="0" Grid.ColumnSpan="2" Height="35">
         </Image>
 
         <!-- Left Column -->
@@ -77,7 +77,7 @@
                     </gauge:CircularScale>
                     <gauge:CircularScale RangePosition="Custom" RangeOffset="0.7" StartAngle="95" SweepAngle="350" ShowLabels="False" ShowRim="False" TickLength="0" SmallTickLength="0">
                         <gauge:CircularScale.Ranges>
-                            <gauge:CircularRange  StartValue="{x:Bind ViewModel.MinBatteryPercentToday}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday}" StrokeThickness="5" Stroke="Green" />
+                            <gauge:CircularRange  StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StrokeThickness="5" Stroke="Green" />
                         </gauge:CircularScale.Ranges>
                     </gauge:CircularScale>
 
@@ -159,8 +159,14 @@
         </StackPanel>
 
         <!-- Second Column-->
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" >
-            <Grid Margin="10" Padding="20" ColumnSpacing="10">
+        <Grid Grid.Row="1" Grid.Column="1"  >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Yesterday / Today energy stats -->
+            <Grid Margin="10,10,60,0" ColumnSpacing="20" RowSpacing="20" HorizontalAlignment="Center" >
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -175,9 +181,7 @@
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
 
-
-
-                <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="DarkGray" Grid.Row="0" Grid.Column="2">Today</TextBlock>
+                <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="DarkGray" Grid.Row="0" Grid.Column="2">Today ∙ kWh</TextBlock>
                 <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="DarkGray" Grid.Row="0" Grid.Column="1">Yesterday</TextBlock>
                 <Image Source="ms-appx:///Assets/icon_home.png" ToolTipService.ToolTip="Home Use" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
                 <Image Source="ms-appx:///Assets/icon_solar.png" ToolTipService.ToolTip="Solar Generated" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
@@ -231,7 +235,49 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-        </StackPanel>
+
+            <!-- Power history chart -->
+            <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,0" HorizontalAlignment="Center" >
+                <chart:SfChart.PrimaryAxis>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt"  Maximum="{x:Bind ViewModel.ChartMaxDate}">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:DateTimeAxis.LabelStyle>
+                        <chart:DateTimeAxis.MajorGridLineStyle>
+                            <!--<chart:ChartLineStyle StrokeColor="#404040" />-->
+                        </chart:DateTimeAxis.MajorGridLineStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfChart.PrimaryAxis>
+
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis RangePadding="None" LabelFormat="# kW">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        </chart:NumericalAxis.LabelStyle>
+                        <chart:NumericalAxis.MajorGridLineStyle>
+                            <!--<chart:ChartLineStyle StrokeColor="#404040" />-->
+                        </chart:NumericalAxis.MajorGridLineStyle>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                        <!--<chart:ChartLegend.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:ChartLegend.LabelStyle>-->
+                    </chart:ChartLegend>
+                </chart:SfChart.Legend>
+
+                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" ListenPropertyChange="True"/>
+                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
+                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridGraphData}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryGraphData}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+
+                <chart:SfChart.Annotations>
+                    <chart:VerticalLineAnnotation X1="{x:Bind ViewModel.GraphDayBoundary}" Stroke="LightGray" StrokeThickness="2" />
+                </chart:SfChart.Annotations>
+            </chart:SfChart>
+
+        </Grid>
     </Grid>
 
 

@@ -32,23 +32,9 @@ namespace PowerwallCompanion
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            if (!Settings.UseLocalGateway)
-            {
-                ChartViewModel = new ChartViewModel();
-                ChartViewModel.LoadPowerGraphData();
-                ChartViewModel.LoadTodaySelfConsumptionData();
-            }
         }
 
-        public static ChartViewModel ChartViewModel
-        {
-            get; set;
-        }
 
-        public static HomeViewModel HomeViewModel
-        {
-            get; set;
-        }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

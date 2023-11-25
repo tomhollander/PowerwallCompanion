@@ -35,7 +35,7 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
 
-            this.ViewModel = App.ChartViewModel;
+            this.ViewModel = new ChartViewModel();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             
         }

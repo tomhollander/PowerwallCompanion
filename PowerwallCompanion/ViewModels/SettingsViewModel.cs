@@ -32,7 +32,6 @@ namespace PowerwallCompanion.ViewModels
             set
             {
                 Settings.ShowClock = value.Value;
-                App.HomeViewModel.NotifyChangedSettings();
             }
         }
 
@@ -42,7 +41,6 @@ namespace PowerwallCompanion.ViewModels
             set
             {
                 Settings.GraphScale = value;
-                App.HomeViewModel.NotifyChangedSettings();
             }
         }
 

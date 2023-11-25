@@ -32,7 +32,6 @@ namespace PowerwallCompanion
         {
             InitializeComponent();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
-            ShowHideButtons();
             if (Settings.AccessToken == null && Settings.LocalGatewayIP == null)
             {
                 var installInfo = WebView2Install.GetInfo();
@@ -51,21 +50,7 @@ namespace PowerwallCompanion
             }
         }
 
-        public void ShowHideButtons()
-        {
-            if (Settings.UseLocalGateway)
-            {
-                chartMenuButton.Visibility = Visibility.Collapsed;
-                batteryHistoryMenuButton.Visibility = Visibility.Collapsed;
-                energyMenuButton.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                chartMenuButton.Visibility = Visibility.Visible;
-                batteryHistoryMenuButton.Visibility = Visibility.Visible;
-                energyMenuButton.Visibility = Visibility.Visible;
-            }
-        }
+
 
         public void ToggleMenuPane()
         {
@@ -76,7 +61,6 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(StatusPage));
             homeMenuButton.IsChecked = true;
-            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
             batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = false;
@@ -87,7 +71,6 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(ChartPage));
             homeMenuButton.IsChecked = false;
-            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = true;
             batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = false;
@@ -98,7 +81,6 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(BatteryHistoryPage));
             homeMenuButton.IsChecked = false;
-            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
             batteryHistoryMenuButton.IsChecked = true;
             settingsMenuButton.IsChecked = false;
@@ -109,22 +91,12 @@ namespace PowerwallCompanion
         {
             frame.Navigate(typeof(SettingsPage));
             homeMenuButton.IsChecked = false;
-            energyMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
             batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = true;
             splitView.IsPaneOpen = false;
         }
 
-        private void energyMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            frame.Navigate(typeof(EnergyPage));
-            homeMenuButton.IsChecked = false;
-            energyMenuButton.IsChecked = true;
-            chartMenuButton.IsChecked = false;
-            batteryHistoryMenuButton.IsChecked = false;
-            settingsMenuButton.IsChecked = false;
-            splitView.IsPaneOpen = false;
-        }
+
     }
 }

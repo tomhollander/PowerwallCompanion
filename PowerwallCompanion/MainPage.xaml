@@ -37,9 +37,6 @@
                     <ToggleButton ToolTipService.ToolTip="Live Stats"  x:Name="homeMenuButton" Background="Transparent" Margin="4" IsChecked="True" Tapped="homeMenuButton_Tapped">
                         <SymbolIcon Symbol="Home"/>
                     </ToggleButton>
-                    <ToggleButton ToolTipService.ToolTip="Energy Usage"  x:Name="energyMenuButton" Background="Transparent" Margin="4" IsChecked="False" Tapped="energyMenuButton_Tapped">
-                        <Image Source="ms-appx:///Assets/EnergyIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ToggleButton>
                     <ToggleButton ToolTipService.ToolTip="Historical Charts"  x:Name="chartMenuButton" Background="Transparent" Margin="4" Tapped="chartMenuButton_Tapped">
                         <Image Source="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </ToggleButton>

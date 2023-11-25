@@ -34,6 +34,10 @@ namespace PowerwallCompanion.ViewModels
 
         public StatusViewModel()
         {
+            HomeGraphData = new ObservableCollection<ChartDataPoint>();
+            SolarGraphData = new ObservableCollection<ChartDataPoint>();
+            GridGraphData = new ObservableCollection<ChartDataPoint>();
+            BatteryGraphData = new ObservableCollection<ChartDataPoint>();
         }
 
  
@@ -248,21 +252,21 @@ namespace PowerwallCompanion.ViewModels
             get { return SolarValue - SolarToGrid - SolarToBattery; }
         }
 
-        public List<ChartDataPoint> HomeGraphData
+        public ObservableCollection<ChartDataPoint> HomeGraphData
         {
-            get; set;
+            get; 
         }
-        public List<ChartDataPoint> SolarGraphData
+        public ObservableCollection<ChartDataPoint> SolarGraphData
         {
-            get; set;
+            get; 
         }
-        public List<ChartDataPoint> GridGraphData
+        public ObservableCollection<ChartDataPoint> GridGraphData
         {
-            get; set;
+            get; 
         }
-        public List<ChartDataPoint> BatteryGraphData
+        public ObservableCollection<ChartDataPoint> BatteryGraphData
         {
-            get; set;
+            get;
         }
 
         public DateTime ChartMaxDate
