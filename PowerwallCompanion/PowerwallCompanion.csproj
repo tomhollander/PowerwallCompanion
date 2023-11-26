@@ -117,15 +117,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BatteryHistoryPage.xaml.cs">
-      <DependentUpon>BatteryHistoryPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ChartPage.xaml.cs">
       <DependentUpon>ChartPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BatteryExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
+    <Compile Include="Converters\EnergyHistoryDateFormatConverter.cs" />
     <Compile Include="Converters\GridActiveToBackgroundColorConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\GridExportingToVisibilityConverter.cs" />
@@ -149,9 +147,6 @@
     <Compile Include="DownloadWebViewPage.xaml.cs">
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EnergyPage.xaml.cs">
-      <DependentUpon>EnergyPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -169,7 +164,6 @@
     <Compile Include="StatusPage.xaml.cs">
       <DependentUpon>StatusPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\BatteryHistoryViewModel.cs" />
     <Compile Include="ViewModels\ChartDataPoint.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
     <Compile Include="ViewModels\EnergyViewModel.cs" />
@@ -225,19 +219,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="BatteryHistoryPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="ChartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DownloadWebViewPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EnergyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,6 +278,9 @@
     </PackageReference>
     <PackageReference Include="TeslaAuth">
       <Version>2.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="TimeZoneConverter">
+      <Version>6.1.0</Version>
     </PackageReference>
     <PackageReference Include="WinRTXamlToolkit.Controls.DataVisualization">
       <Version>2.3.0</Version>

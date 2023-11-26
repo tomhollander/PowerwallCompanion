@@ -5,245 +5,217 @@
     xmlns:local="using:PowerwallCompanion"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
+    xmlns:chart="using:Syncfusion.UI.Xaml.Charts"
     xmlns:converters="using:PowerwallCompanion.Converters"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converters:StatusConverter x:Key="StatusConverter" />
-        <converters:StatusMessageConverter x:Key="StatusMessageConverter" />
-        <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter" />
+        <converters:KilowattHourConverter x:Key="KilowattHourConverter" />
         <converters:PercentageToGridWidthConverter x:Key="PercentageToGridWidthConverter"/>
-        <converters:KilowattConverter x:Key="KilowattConverter" />
+        <converters:VisibilityCollapsedLessThan5Converter x:Key="VisibilityCollapsedLessThan5Converter"/>
         <converters:VisibilityCollapsedLessThan10Converter x:Key="VisibilityCollapsedLessThan10Converter" />
-        <converters:VisibilityCollapsedLessThan5Converter x:Key="VisibilityCollapsedLessThan5Converter" />
-        <converters:ShortDateAxisConverter x:Key="ShortDateAxisConverter" />
-        <converters:ShortTimeAxisConverter x:Key="ShortTimeAxisConverter" />
-        <Style x:Key="HomeDataPointStyle" TargetType="Charting:AreaDataPoint">
-            <Setter Property="Background" Value="Cyan" ></Setter>
-            <Setter Property="Opacity" Value="0" />
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="SolarDataPointStyle" TargetType="Charting:AreaDataPoint">
-            <Setter Property="Background" Value="Gold" ></Setter>
-            <Setter Property="Opacity" Value="0" />
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="BatteryDataPointStyle" TargetType="Charting:AreaDataPoint">
-            <Setter Property="Background" Value="Green" ></Setter>
-            <Setter Property="Opacity" Value="0" />
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="GridDataPointStyle" TargetType="Charting:AreaDataPoint">
-            <Setter Property="Background" Value="LightGray" ></Setter>
-            <Setter Property="Opacity" Value="0" />
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-
-        <Style x:Key="HomeBarDataPointStyle" TargetType="Charting:ColumnDataPoint">
-            <Setter Property="Background" Value="Cyan" ></Setter>
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="SolarBarDataPointStyle" TargetType="Charting:ColumnDataPoint">
-            <Setter Property="Background" Value="Gold" ></Setter>
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="BatteryBarPositiveDataPointStyle" TargetType="Charting:ColumnDataPoint">
-            <Setter Property="Background" Value="Green" ></Setter>
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="BatteryBarNegativeDataPointStyle" TargetType="Charting:ColumnDataPoint">
-            <Setter Property="Background" Value="#004000" ></Setter>
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="GridBarPositiveDataPointStyle" TargetType="Charting:ColumnDataPoint">
-            <Setter Property="Background" Value="LightGray" ></Setter>
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="GridBarNegativeDataPointStyle" TargetType="Charting:ColumnDataPoint">
-            <Setter Property="Background" Value="SlateGray" ></Setter>
-            <Setter Property="DependentValueStringFormat" Value=" {0:0}" />
-        </Style>
-        <Style x:Key="SummaryChartAxisStyle" TargetType="Charting:AxisLabel">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Charting:NumericAxisLabel">
-                        <TextBlock Text="{Binding Converter={StaticResource KilowattConverter}}">
-                        </TextBlock>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="HistoryTimestampAxisStyle" TargetType="Charting:AxisLabel">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Charting:AxisLabel">
-                        <TextBlock Text="{Binding Converter={StaticResource ShortDateAxisConverter}}">
-                        </TextBlock>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="PowerTimestampAxisStyle" TargetType="Charting:AxisLabel">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Charting:AxisLabel">
-                        <TextBlock Text="{Binding Converter={StaticResource ShortTimeAxisConverter}}">
-                        </TextBlock>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter"/>
+        <converters:EnergyHistoryDateFormatConverter x:Key="EnergyHistoryDateFormatConverter"/>
     </Page.Resources>
 
         
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="NarrowView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="hamburgerMenu.Visibility" Value="Visible"/>
-                        <Setter Target="exportButton.Visibility" Value="Collapsed"/>
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="WideView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="641" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="hamburgerMenu.Visibility" Value="Collapsed"/>
-                        <Setter Target="exportButton.Visibility" Value="Visible"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        
         
         <Grid>
             <Grid.RowDefinitions>
+                <!-- 0: Banner -->
                 <RowDefinition Height="30" />
-                <!-- Banner -->
+                <!-- 1: Button bar -->
                 <RowDefinition Height="50" />
-                <!-- Button bar -->
+                <!-- 2: Energy stats -->
+                <RowDefinition Height="Auto" />
+                <!-- 3: Chart -->
                 <RowDefinition Height="*" />
-                <!-- Chart -->
+                <!-- 4: Self Consumption -->
                 <RowDefinition Height="70" />
-                <!-- Self Consumption -->
+                
             </Grid.RowDefinitions>
-            <Grid Height="30" Grid.Row="0">
-                <Button x:Name="hamburgerMenu" Tapped="hamburgerMenu_Tapped" Visibility="Collapsed">
-                    <Image Source="ms-appx:///Assets/Hamburger.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </Button>
-                <Image Source="Assets/TeslaLogo.png" Height="30" />
-                <Ellipse Width="15" Height="15" Fill="{x:Bind ViewModel.StatusOK, Mode=OneWay, Converter={StaticResource StatusConverter}}" HorizontalAlignment="Right" x:Name="statusLight" Tapped="statusLight_Tapped">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="{x:Bind ViewModel.StatusOK, Mode=OneWay, Converter={StaticResource StatusMessageConverter}}" PlacementTarget="{Binding ElementName=statusLight}" />
-                    </ToolTipService.ToolTip>
-                </Ellipse>
-            </Grid>
+            <Image Source="Assets/TeslaLogo.png" Height="35"  Grid.Row="0"/>
 
-            <ComboBox x:Name="periodCombo" SelectionChanged="periodCombo_SelectionChanged"  HorizontalAlignment="Center" Grid.Row="1" SelectedValuePath="Content">
-                <ComboBox.Items>
-                    <ComboBoxItem>Today</ComboBoxItem>
-                    <ComboBoxItem>Yesterday</ComboBoxItem>
-                    <ComboBoxItem>Week</ComboBoxItem>
-                    <ComboBoxItem>Month</ComboBoxItem>
-                    <ComboBoxItem>Year</ComboBoxItem>
-                </ComboBox.Items>
-            </ComboBox>
-  
+            <!-- Button Bar -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+                <ComboBox x:Name="periodCombo" ItemsSource="{x:Bind ViewModel.PeriodNames, Mode=OneTime}" SelectedItem="{x:Bind ViewModel.Period, Mode=TwoWay}"  VerticalAlignment="Center" Margin="0,0,20,0" SelectionChanged="periodCombo_SelectionChanged" />
+                <Button x:Name="prevPeriodButton" Tapped="prevPeriodButton_Tapped">◀</Button>
+                <CalendarDatePicker VerticalAlignment="Center" IsTodayHighlighted="True"  Margin="10,0,0,0" Date="{x:Bind ViewModel.CalendarDate,Mode=TwoWay}" Closed="CalendarDatePicker_Closed"  />
+                <Button x:Name="nextPeriodButton" Tapped="nextPeriodButton_Tapped" Margin="10,0,0,0">▶</Button>
+                <Button x:Name="todayButton" Tapped="todayButton_Tapped" Margin="10,0,0,0">Today</Button>
+            </StackPanel>
+
+
             <Button Margin="10" x:Name="exportButton" HorizontalAlignment="Right"  Grid.Row="1" Tapped="exportButton_Tapped">Export Data</Button>
-            <Charting:Chart  Grid.Row="2"
-                    x:Name="areaChart" Visibility="Collapsed"
-                    HorizontalAlignment="Stretch"  
-                    VerticalAlignment="Stretch"  
-                    Margin="0" 
-                    Tapped="areaChart_Tapped" LayoutUpdated="areaChart_LayoutUpdated" >
-                <Charting:AreaSeries  Title="Home" ItemsSource="{x:Bind ViewModel.SelectedSeries, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="LoadPower" DataPointStyle="{StaticResource HomeDataPointStyle}">
-                    <Charting:AreaSeries.DependentRangeAxis>
-                        <Charting:LinearAxis x:Name="axis" ShowGridLines="True" Title="Power (kW)" Orientation="Y"  AxisLabelStyle="{StaticResource SummaryChartAxisStyle}" />
-                    </Charting:AreaSeries.DependentRangeAxis>
-                    <Charting:AreaSeries.IndependentAxis>
-                        <Charting:DateTimeAxis x:Name="areaTimeAxis" Title="Time" Orientation="X"  AxisLabelStyle="{StaticResource PowerTimestampAxisStyle}" />
-                    </Charting:AreaSeries.IndependentAxis>
-                </Charting:AreaSeries>
-                <Charting:AreaSeries Title="Solar" ItemsSource="{x:Bind ViewModel.SelectedSeries, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="SolarPower" DataPointStyle="{StaticResource SolarDataPointStyle}">
-                </Charting:AreaSeries>
-                <Charting:AreaSeries Title="Battery" ItemsSource="{x:Bind ViewModel.SelectedSeries, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="BatteryPower" DataPointStyle="{StaticResource BatteryDataPointStyle}">
-                </Charting:AreaSeries>
-                <Charting:AreaSeries Title="Grid" ItemsSource="{x:Bind ViewModel.SelectedSeries, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="GridPower" DataPointStyle="{StaticResource GridDataPointStyle}">
-                </Charting:AreaSeries>
-            </Charting:Chart>
 
-            <Charting:Chart  Grid.Row="2"
-                    x:Name="barChart" Visibility="Collapsed"
-                    HorizontalAlignment="Stretch"  
-                    VerticalAlignment="Stretch"  
-                    Margin="0" >
-                <Charting:ColumnSeries  Title="Home Use" ItemsSource="{x:Bind ViewModel.EnergyHistory, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="TotalHomeUse" DataPointStyle="{StaticResource HomeBarDataPointStyle}">
-                    <Charting:ColumnSeries.DependentRangeAxis>
-                        <Charting:LinearAxis x:Name="columnEnergyAxis" ShowGridLines="True" Title="Energy (kWh)" Orientation="Y"  AxisLabelStyle="{StaticResource SummaryChartAxisStyle}" />
-                    </Charting:ColumnSeries.DependentRangeAxis>
-                    <Charting:ColumnSeries.IndependentAxis>
-                        <Charting:CategoryAxis x:Name="columnTimestampAxis" Title="Period starting" Orientation="X"  AxisLabelStyle="{StaticResource HistoryTimestampAxisStyle}" />
-                    </Charting:ColumnSeries.IndependentAxis>
-                </Charting:ColumnSeries>
-                <Charting:ColumnSeries Title="Solar Generated" ItemsSource="{x:Bind ViewModel.EnergyHistory, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="TotalSolarGenerated" DataPointStyle="{StaticResource SolarBarDataPointStyle}">
-                </Charting:ColumnSeries>
-                <Charting:ColumnSeries Title="From Battery" ItemsSource="{x:Bind ViewModel.EnergyHistory, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="BatteryEnergyExported" DataPointStyle="{StaticResource BatteryBarPositiveDataPointStyle}">
-                </Charting:ColumnSeries>
-                <Charting:ColumnSeries Title="To Battery" ItemsSource="{x:Bind ViewModel.EnergyHistory, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="TotalBatteryImported" DataPointStyle="{StaticResource BatteryBarNegativeDataPointStyle}">
-                </Charting:ColumnSeries>
-                <Charting:ColumnSeries Title="From Grid" ItemsSource="{x:Bind ViewModel.EnergyHistory, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="GridEnergyImported" DataPointStyle="{StaticResource GridBarPositiveDataPointStyle}">
-                </Charting:ColumnSeries>
-                <Charting:ColumnSeries Title="To Grid" ItemsSource="{x:Bind ViewModel.EnergyHistory, Mode=OneWay}" Opacity="0.8" 
-                                 IndependentValuePath="Timestamp" DependentValuePath="TotalGridExported" DataPointStyle="{StaticResource GridBarNegativeDataPointStyle}">
-                </Charting:ColumnSeries>
-            </Charting:Chart>
+            <!-- Energy Stats-->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="0">
+                    <Image Source="ms-appx:///Assets/icon_home.png" VerticalAlignment="Center" ToolTipService.ToolTip="Home Use" Width="30" Margin="5,0,5,0"></Image>
+                    <TextBlock Foreground="Cyan" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Grid.Column="1">
+                    <Image Source="ms-appx:///Assets/icon_solar.png" VerticalAlignment="Center" ToolTipService.ToolTip="Solar Generated" Width="30"></Image>
+                    <TextBlock Foreground="Gold" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center"  Spacing="-20">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Image Source="ms-appx:///Assets/icon_grid_import.png" ToolTipService.ToolTip="Imported from Grid" Width="30" VerticalAlignment="Center" Margin="5" />
+                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                        <Image Source="ms-appx:///Assets/icon_grid_export.png" ToolTipService.ToolTip="Exported to Grid" Width="30" VerticalAlignment="Center" Margin="5" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center"  Spacing="-20">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Image Source="ms-appx:///Assets/icon_battery_export.png" ToolTipService.ToolTip="Discharge from Battery" Width="30" VerticalAlignment="Center" Margin="5" />
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                        <Image Source="ms-appx:///Assets/icon_battery_import.png" ToolTipService.ToolTip="Charge to Battery" Width="30" VerticalAlignment="Center" Margin="5" />
+                    </StackPanel>
+                </StackPanel>
+
+
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="30"  Foreground="#888888" Text="kWh" Grid.Column="4"/>
+
+               
+            </Grid>
             
-            <ProgressRing x:Name="progressRing" IsActive="True" Grid.Row="2" Width="200" Height="200" />
+            <!-- Charts-->
             <StackPanel Grid.Row="3">
+                <!-- Daily power chart -->
+                <chart:SfChart x:Name="dailyChart"  HorizontalAlignment="Center" Margin="20">
+                    <chart:SfChart.PrimaryAxis>
+                        <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
+                            <chart:DateTimeAxis.LabelStyle>
+                                <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            </chart:DateTimeAxis.LabelStyle>
+                        </chart:DateTimeAxis>
+                    </chart:SfChart.PrimaryAxis>
+
+                    <chart:SfChart.SecondaryAxis>
+                        <chart:NumericalAxis RangePadding="None" LabelFormat="# kW">
+                            <chart:NumericalAxis.LabelStyle>
+                                <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            </chart:NumericalAxis.LabelStyle>
+                        </chart:NumericalAxis>
+                    </chart:SfChart.SecondaryAxis>
+                    <chart:SfChart.Legend>
+                        <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                        </chart:ChartLegend>
+                    </chart:SfChart.Legend>
+
+                    <!--<chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />-->
+                    <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
+                    <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                    <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+
+                </chart:SfChart>
+
+                <!-- Daily battery chart -->
+                <chart:SfChart x:Name="batteryChart"  HorizontalAlignment="Center" Margin="20">
+                    <chart:SfChart.PrimaryAxis>
+                        <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
+                            <chart:DateTimeAxis.LabelStyle>
+                                <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            </chart:DateTimeAxis.LabelStyle>
+                        </chart:DateTimeAxis>
+                    </chart:SfChart.PrimaryAxis>
+
+                    <chart:SfChart.SecondaryAxis>
+                        <chart:NumericalAxis RangePadding="None" Maximum="100" LabelFormat="#\%">
+                            <chart:NumericalAxis.LabelStyle>
+                                <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            </chart:NumericalAxis.LabelStyle>
+                        </chart:NumericalAxis>
+                    </chart:SfChart.SecondaryAxis>
+                    <chart:SfChart.Legend>
+                        <chart:ChartLegend ToggleSeriesVisibility="False" DockPosition="Right" ItemMargin="10,0,0,0">
+                        </chart:ChartLegend>
+                    </chart:SfChart.Legend>
+
+                   <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
+
+                </chart:SfChart>
+
+                <!-- Monthly/Yearly Energy Chart -->
+                <chart:SfChart x:Name="energyChart"  HorizontalAlignment="Center" Margin="20">
+                    <chart:SfChart.PrimaryAxis>
+                        <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
+                            <chart:DateTimeCategoryAxis.LabelStyle>
+                                <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            </chart:DateTimeCategoryAxis.LabelStyle>
+                        </chart:DateTimeCategoryAxis>
+                    </chart:SfChart.PrimaryAxis>
+
+                    <chart:SfChart.SecondaryAxis>
+                        <chart:NumericalAxis RangePadding="None" LabelFormat="# kWh">
+                            <chart:NumericalAxis.LabelStyle>
+                                <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            </chart:NumericalAxis.LabelStyle>
+                        </chart:NumericalAxis>
+                    </chart:SfChart.SecondaryAxis>
+                    <chart:SfChart.Legend>
+                        <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                        </chart:ChartLegend>
+                    </chart:SfChart.Legend>
+
+                    <chart:ColumnSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.HomeEnergyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
+                    <chart:ColumnSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarEnergyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
+                    <chart:ColumnSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" />
+                    <chart:ColumnSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" />
+                    <chart:ColumnSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" />
+                    <chart:ColumnSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" />
+                    
+
+                </chart:SfChart>
+            </StackPanel>
+            
+            <!-- Self consumption -->
+            <StackPanel Grid.Row="4">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock FontSize="20" Margin="5">Self Consumption:</TextBlock>
-                    <TextBlock FontSize="20" Margin="10 5 5 5" Text="{x:Bind ViewModel.SelfConsumption.Self, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"></TextBlock>
+                    <TextBlock FontSize="20" Margin="10 5 5 5" Text="{x:Bind ViewModel.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"></TextBlock>
                 </StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{x:Bind ViewModel.SelfConsumption.Battery, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.SelfConsumption.Solar, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.SelfConsumption.Grid, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
                     </Grid.ColumnDefinitions>
                     <Rectangle Fill="Green" Grid.Column="0" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.SelfConsumption.Battery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Battery:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.SelfConsumption.Battery, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
-                                   Visibility="{x:Bind ViewModel.SelfConsumption.Battery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
+                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Battery:</TextBlock>
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                                   Visibility="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                     <Rectangle Fill="Gold" Grid.Column="1" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
-                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.SelfConsumption.Solar, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Solar:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.SelfConsumption.Solar, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
-                                   Visibility="{x:Bind ViewModel.SelfConsumption.Solar, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
+                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Solar:</TextBlock>
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                                   Visibility="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                     <Rectangle Fill="SlateGray" Grid.Column="2" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="2">
-                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.SelfConsumption.Grid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Grid:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.SelfConsumption.Grid, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
-                                   Visibility="{x:Bind ViewModel.SelfConsumption.Grid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
+                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Grid:</TextBlock>
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                                   Visibility="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                 </Grid>
             </StackPanel>

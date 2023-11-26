@@ -62,7 +62,6 @@ namespace PowerwallCompanion
             frame.Navigate(typeof(StatusPage));
             homeMenuButton.IsChecked = true;
             chartMenuButton.IsChecked = false;
-            batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = false;
             splitView.IsPaneOpen = false;
         }
@@ -72,27 +71,16 @@ namespace PowerwallCompanion
             frame.Navigate(typeof(ChartPage));
             homeMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = true;
-            batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = false;
             splitView.IsPaneOpen = false;
         }
 
-        private void batteryHistoryMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            frame.Navigate(typeof(BatteryHistoryPage));
-            homeMenuButton.IsChecked = false;
-            chartMenuButton.IsChecked = false;
-            batteryHistoryMenuButton.IsChecked = true;
-            settingsMenuButton.IsChecked = false;
-            splitView.IsPaneOpen = false;
-        }
 
         private void settingsMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             frame.Navigate(typeof(SettingsPage));
             homeMenuButton.IsChecked = false;
             chartMenuButton.IsChecked = false;
-            batteryHistoryMenuButton.IsChecked = false;
             settingsMenuButton.IsChecked = true;
             splitView.IsPaneOpen = false;
         }

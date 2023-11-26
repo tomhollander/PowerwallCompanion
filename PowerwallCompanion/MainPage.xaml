@@ -10,27 +10,6 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="NarrowView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="splitView.DisplayMode" Value="Overlay" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="WideView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="641" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="splitView.DisplayMode" Value="CompactInline" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
         <SplitView x:Name="splitView" DisplayMode="CompactInline" OpenPaneLength="50">
             <SplitView.Pane>
                 <StackPanel Orientation="Vertical">
@@ -39,9 +18,6 @@
                     </ToggleButton>
                     <ToggleButton ToolTipService.ToolTip="Historical Charts"  x:Name="chartMenuButton" Background="Transparent" Margin="4" Tapped="chartMenuButton_Tapped">
                         <Image Source="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ToggleButton>
-                    <ToggleButton ToolTipService.ToolTip="Battery History" x:Name="batteryHistoryMenuButton" Background="Transparent" Margin="4" IsChecked="False" Tapped="batteryHistoryMenuButton_Tapped">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE857;"/>
                     </ToggleButton>
                     <ToggleButton ToolTipService.ToolTip="Settings"  x:Name="settingsMenuButton" Background="Transparent" Margin="4" Tapped="settingsMenuButton_Tapped">
                         <SymbolIcon Symbol="Setting"/>

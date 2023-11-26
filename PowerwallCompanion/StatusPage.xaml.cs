@@ -108,7 +108,11 @@ namespace PowerwallCompanion
             }
             catch (UnauthorizedAccessException ex)
             {
-                this.Frame?.Navigate(typeof(LoginPage));
+                if (this.Frame?.Content.GetType() != typeof(LoginPage))
+                {
+                    this.Frame?.Navigate(typeof(LoginPage));
+                }
+
                 viewModel.LastExceptionMessage = ex.Message;
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyPowerProperties();

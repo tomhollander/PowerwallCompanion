@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,290 +14,243 @@ namespace PowerwallCompanion.ViewModels
 {
     public class ChartViewModel : INotifyPropertyChanged
     {
-        public List<TimeSeriesPoint> Series { get; set; }
+        private DateTimeOffset? _calendarDate;
+        private DateTime _periodStart;
+        private DateTime _periodEnd;
+        private string _period;
+        private double _homeEnergy;
+        private double _solarEnergy;
+        private double _gridImportedEnergy;
+        private double _gridExportedEnergy;
+        private double _batteryImportedEnergy;
+        private double _batteryExportedEnergy;
 
-        public List<TimeSeriesPoint> TodaySeries 
+        public ChartViewModel()
         {
-            get { return Series.Where(p => p.Timestamp >= DateTime.Now.Date).ToList(); }
+            HomeDailyGraphData = new ObservableCollection<ChartDataPoint>();
+            SolarDailyGraphData = new ObservableCollection<ChartDataPoint>();
+            GridDailyGraphData = new ObservableCollection<ChartDataPoint>();
+            BatteryDailyGraphData = new ObservableCollection<ChartDataPoint>();
+            BatteryDailySoeGraphData = new ObservableCollection<ChartDataPoint>();
+            HomeEnergyGraphData = new ObservableCollection<ChartDataPoint>();
+            SolarEnergyGraphData = new ObservableCollection<ChartDataPoint>();
+            GridImportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
+            GridExportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
+            BatteryImportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
+            BatteryExportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
         }
 
-        public List<TimeSeriesPoint> YesterdaySeries
+        public IEnumerable<string> PeriodNames
         {
-            get { return Series.Where(p => p.Timestamp < DateTime.Now.Date).ToList(); }
+            get => new string[] { "Day", "Month", "Year" };
         }
 
-        private List<TimeSeriesPoint> _selectedSeries;
-        public List<TimeSeriesPoint> SelectedSeries
+        public DateTimeOffset? CalendarDate
         {
-            get { return _selectedSeries; }
+            get { return _calendarDate; }
             set
             {
-                _selectedSeries = value;
-                NotifyPropertyChanged(nameof(SelectedSeries));
+                if (_calendarDate != value)
+                {
+                    _calendarDate = value;
+                    CalculateStartAndEndDates();
+                    NotifyPropertyChanged(nameof(CalendarDate));
+                }
+            }
+        }
+        public DateTime PeriodStart
+        {
+            get { return _periodStart; }
+            set { _periodStart = value;
+                NotifyPropertyChanged(nameof(PeriodStart));
             }
         }
 
-        private List<EnergyHistoryPoint> _energyHistory;
-        public List<EnergyHistoryPoint> EnergyHistory
+        public DateTime PeriodEnd
         {
-            get { return _energyHistory; }
+            get { return _periodEnd; }
             set
             {
-                _energyHistory = value;
-                NotifyPropertyChanged(nameof(EnergyHistory));
+                _periodEnd = value;
+                NotifyPropertyChanged(nameof(PeriodEnd));
             }
         }
 
-        public List<EnergyHistoryPoint> EnergyHistoryWeek { get; set; }
-        public List<EnergyHistoryPoint> EnergyHistoryMonth { get; set; }
-        public List<EnergyHistoryPoint> EnergyHistoryYear { get; set; }
-
-        private bool _statusOK;
-        public bool StatusOK
+        public string Period
         {
-            get { return _statusOK; }
-            set
-            {
-                _statusOK = value;
-                NotifyPropertyChanged(nameof(StatusOK));
+            get {  return _period;}
+            set { 
+                if (_period != value)
+                {
+                    _period = value;
+                    CalculateStartAndEndDates();
+                    NotifyPropertyChanged(nameof(Period));
+                }
             }
         }
 
-        public string LastExceptionMessage { get; set; }
-        public DateTime LastExceptionDate { get; set; }
+        private void CalculateStartAndEndDates()
+        {
+            if (!CalendarDate.HasValue)
+            {
+                return;
+            }
+            switch (Period)
+            {
+                case "Day":
+                    PeriodStart = CalendarDate.Value.Date;
+                    PeriodEnd = PeriodStart.AddDays(1);
+                    break;
+                case "Month":
+                    PeriodStart = new DateTime(CalendarDate.Value.Year, CalendarDate.Value.Month, 1);
+                    PeriodEnd = PeriodStart.AddMonths(1);
+                    break;
+                case "Year":
+                    PeriodStart = new DateTime(CalendarDate.Value.Year, 1, 1);
+                    PeriodEnd = PeriodStart.AddYears(1);
+                    break;
+            }
+            CalendarDate = PeriodStart;    
+        }
+
+        public double HomeEnergy
+        {
+            get { return _homeEnergy; }
+            set
+            {
+                _homeEnergy = value;
+                NotifyPropertyChanged(nameof(HomeEnergy));  
+            }
+        }
+
+        public double SolarEnergy
+        {
+            get { return _solarEnergy; }
+            set
+            {
+                _solarEnergy = value;
+                NotifyPropertyChanged(nameof(SolarEnergy));
+            }
+        }
+
+
+        public double GridExportedEnergy
+        {
+            get { return _gridExportedEnergy; }
+            set
+            {
+                _gridExportedEnergy = value;
+                NotifyPropertyChanged(nameof(GridExportedEnergy));
+            }
+        }
+
+        public double GridImportedEnergy
+        {
+            get { return _gridImportedEnergy; }
+            set
+            {
+                _gridImportedEnergy = value;
+                NotifyPropertyChanged(nameof(GridImportedEnergy));
+            }
+        }
+
+        public double BatteryImportedEnergy
+        {
+            get { return _batteryImportedEnergy; }
+            set
+            {
+                _batteryImportedEnergy = value;
+                NotifyPropertyChanged(nameof(BatteryImportedEnergy));
+            }
+        }
+
+        public double BatteryExportedEnergy
+        {
+            get { return _batteryExportedEnergy; }
+            set
+            {
+                _batteryExportedEnergy = value;
+                NotifyPropertyChanged(nameof(BatteryExportedEnergy));
+            }
+        }
+
+
+        public ObservableCollection<ChartDataPoint> HomeDailyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> SolarDailyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> GridDailyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> BatteryDailyGraphData
+        {
+            get;
+        }
+
+        public ObservableCollection<ChartDataPoint> BatteryDailySoeGraphData
+        {
+            get;
+        }
+
+        public ObservableCollection<ChartDataPoint> HomeEnergyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> SolarEnergyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> GridImportedEnergyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> GridExportedEnergyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> BatteryImportedEnergyGraphData
+        {
+            get;
+        }
+        public ObservableCollection<ChartDataPoint> BatteryExportedEnergyGraphData
+        {
+            get;
+        }
+
+        public double SelfConsumption
+        {
+            get { return 40;  }
+        }
+        public double SolarUsePercent
+        {
+            get { return 20;  }
+        }
+
+        public double GridUsePercent
+        {
+            get { return 60; }
+        }
+
+        public double BatteryUsePercent
+        {
+            get { return 20; }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(string propertyName)
+        public void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-        public ConsumptionData SelfConsumptionToday { get; set; }
-        public ConsumptionData SelfConsumptionYesterday { get; set; }
-        public ConsumptionData SelfConsumptionWeek { get; set; }
-        public ConsumptionData SelfConsumptionMonth { get; set; }
-        public ConsumptionData SelfConsumptionYear { get; set; }
-
-        private ConsumptionData _selfConsumption;
-        public ConsumptionData SelfConsumption
-        {
-            get { return _selfConsumption; }
-            set { _selfConsumption = value;
-                NotifyPropertyChanged(nameof(SelfConsumption));
-            }
-        }
-
-        public async Task LoadPowerGraphData()
-        {
-            try
-            {
-                this.StatusOK = true;
-                this.Series = new List<TimeSeriesPoint>();
-
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
-
-                this.Series = JsonConvert.DeserializeObject<List<TimeSeriesPoint>>(((JArray)(json["response"]["time_series"])).ToString());
-
-                this.Series.Add(new TimeSeriesPoint() { Timestamp = DateTime.Now.AddMinutes(1), IsDummy = true }); // Dummy to force a full day
-                this.Series.Add(new TimeSeriesPoint() { Timestamp = DateTime.Now.Date.AddDays(1), IsDummy = true }); // Dummy to force a full day
-
-                NotifyPropertyChanged(nameof(Series));
-                DataLastUpdated = DateTime.Now;
-                
-            }
-            catch (Exception ex)
-            {
-                this.StatusOK = false;
-                this.LastExceptionDate = DateTime.Now;
-                this.LastExceptionMessage = ex.Message;
-
-                DataLastUpdated = DateTime.MinValue;
-                throw;
-            }
-        }
-
-        public DateTime DataLastUpdated
-        {
-            get; set;
-        }
-
-        public async Task LoadTodaySelfConsumptionData()
-        {
-            try
-            {
-                this.StatusOK = true;
-
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=self_consumption&period=day", "SelfConsumptionHistory");
-                this.SelfConsumptionYesterday = new ConsumptionData()
-                {
-                    Solar = json["response"]["time_series"][0]["solar"].Value<Double>(),
-                    Battery = json["response"]["time_series"][0]["battery"].Value<Double>()
-                };
-                this.SelfConsumptionToday = new ConsumptionData()
-                {
-                    Solar = json["response"]["time_series"][1]["solar"].Value<Double>(),
-                    Battery = json["response"]["time_series"][1]["battery"].Value<Double>()
-                };
-
-                NotifyPropertyChanged(nameof(SelfConsumption));
-            }
-            catch (Exception ex)
-            {
-                this.StatusOK = false;
-                this.LastExceptionDate = DateTime.Now;
-                this.LastExceptionMessage = ex.Message;
-                throw;
-            }
-        }
-
-
-        public async Task<ConsumptionData> GetSelfConsumptionData(string period)
-        {
-            try
-            {
-                this.StatusOK = true;
-
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=self_consumption&period={period}", "SelfConsumptionHistory");
-                if (((JArray)json["response"]["time_series"]).Count > 0)
-                {
-                    return new ConsumptionData()
-                    {
-                        Solar = json["response"]["time_series"][0]["solar"].Value<Double>(),
-                        Battery = json["response"]["time_series"][0]["battery"].Value<Double>()
-                    };
-                }
-                return new ConsumptionData() { Solar = 0, Battery = 0 } ;
-            }
-            catch (Exception ex)
-            {
-                this.StatusOK = false;
-                this.LastExceptionDate = DateTime.Now;
-                this.LastExceptionMessage = ex.Message;
-                throw;
-            }
-        }
-
-        public async Task<List<EnergyHistoryPoint>> GetEnergyHistoryData(string period)
-        {
-            try
-            {
-                this.StatusOK = true;
-       
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=energy&period={period}", "EnergyHistory" + period);
-
-                return JsonConvert.DeserializeObject<List<EnergyHistoryPoint>>(((JArray)(json["response"]["time_series"])).ToString());
-
-            }
-            catch (Exception ex)
-            {
-                this.StatusOK = false;
-                this.LastExceptionDate = DateTime.Now;
-                this.LastExceptionMessage = ex.Message;
-                throw;
-            }
-        }
     }
 
-
-
-    public class TimeSeriesPoint
-    {
-        [JsonProperty("timestamp")]
-        public DateTime Timestamp { get; set; }
-
-        [JsonProperty("battery_power")]
-        public double BatteryPower { get; set; }
-
-        [JsonProperty("grid_power")]
-        public double GridPower { get; set; }
-
-        [JsonProperty("solar_power")]
-        public double SolarPower { get; set; }
-
-        public double LoadPower
-        {
-            get
-            {
-                return BatteryPower + GridPower + SolarPower;
-            }
-        }
-
-        public bool IsDummy { get; set; }
-
-    }
-
-    public class ConsumptionData
-    {
-        public double Solar { get; set; }
-        public double Battery { get; set; }
-        public double Grid {  get { return 100 - Solar - Battery;  } }
-        public double Self {  get { return Solar + Battery;  } }
-    }
-
-    public class EnergyHistoryPoint
-    {
-        [JsonProperty("timestamp")]
-        public DateTime Timestamp { get; set; }
-
-        // Green positive bar
-        [JsonProperty("battery_energy_exported")]
-        public double BatteryEnergyExported { get; set; }
-
-        [JsonProperty("battery_energy_imported_from_grid")]
-        public double BatteryEnergyImportedFromGrid { get; set; }
-
-        [JsonProperty("battery_energy_imported_from_solar")]
-        public double BatteryEnergyImportedFromSolar { get; set; }
-
-        [JsonProperty("consumer_energy_imported_from_battery")]
-        public double ConsumerEnergyImportedFromBattery { get; set; }
-
-        [JsonProperty("consumer_energy_imported_from_grid")]
-        public double ConsumerEnergyImportedFromGrid { get; set; }
-
-        [JsonProperty("consumer_energy_imported_from_solar")]
-        public double ConsumerEnergyImportedFromSolar { get; set; }
-
-        [JsonProperty("grid_energy_exported_from_battery")]
-        public double GridEnergyExportedFromBattery { get; set; }
-
-        [JsonProperty("grid_energy_exported_from_solar")]
-        public double GridEnergyExportedFromSolar { get; set; }
-
-        // Grey positive bar
-        [JsonProperty("grid_energy_imported")]
-        public double GridEnergyImported { get; set; }
-
-        [JsonProperty("solar_energy_exported")]
-        public double SolaryEnergyExported { get; set; }
-
-        // Blue positive bar
-        public double TotalHomeUse
-        {
-            get { return ConsumerEnergyImportedFromBattery + ConsumerEnergyImportedFromGrid + ConsumerEnergyImportedFromSolar; }
-        }
-
-        // Yellow positive bar
-        public double TotalSolarGenerated
-        {
-            get { return BatteryEnergyImportedFromSolar + ConsumerEnergyImportedFromSolar + GridEnergyExportedFromSolar; }
-        }
-
-        // Green negative bar
-        public double TotalBatteryImported
-        {
-            get { return -(BatteryEnergyImportedFromGrid + BatteryEnergyImportedFromSolar); }
-        }
-
-        // Grey negative bar
-        public double TotalGridExported
-        {
-            get { return -(GridEnergyExportedFromSolar + GridEnergyExportedFromBattery); }
-        }
-
-    }
 }
