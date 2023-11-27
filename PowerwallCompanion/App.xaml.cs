@@ -31,7 +31,7 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Licenses.SyncFusionLicenseKey);
         }
 
 

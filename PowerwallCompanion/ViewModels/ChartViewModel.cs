@@ -24,6 +24,10 @@ namespace PowerwallCompanion.ViewModels
         private double _gridExportedEnergy;
         private double _batteryImportedEnergy;
         private double _batteryExportedEnergy;
+        private double _selfConsumption;
+        private double _solarUsePercent;
+        private double _gridUsePercent;
+        private double _batteryUsePercent;
 
         public ChartViewModel()
         {
@@ -222,25 +226,55 @@ namespace PowerwallCompanion.ViewModels
             get;
         }
 
+
         public double SelfConsumption
         {
-            get { return 40;  }
+            get { return _selfConsumption; }
+            set
+            {
+                _selfConsumption = value;
+                NotifyPropertyChanged(nameof(SelfConsumption));
+            }
         }
         public double SolarUsePercent
         {
-            get { return 20;  }
+            get { return _solarUsePercent; }
+            set
+            {
+                _solarUsePercent = value;
+                NotifyPropertyChanged(nameof(SolarUsePercent));
+            }
         }
 
         public double GridUsePercent
         {
-            get { return 60; }
+            get { return _gridUsePercent; }
+            set
+            {
+                _gridUsePercent = value;
+                NotifyPropertyChanged(nameof(GridUsePercent));
+            }
         }
 
         public double BatteryUsePercent
         {
-            get { return 20; }
+            get { return _batteryUsePercent; }
+            set
+            {
+                _batteryUsePercent = value;
+                NotifyPropertyChanged(nameof(BatteryUsePercent));
+            }
         }
 
+        public Dictionary<DateTime, Dictionary<string, object>> PowerDataForExport
+        { 
+            get; set;  
+        }
+
+        public Dictionary<DateTime, Dictionary<string, object>> EnergyDataForExport
+        {
+            get; set;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

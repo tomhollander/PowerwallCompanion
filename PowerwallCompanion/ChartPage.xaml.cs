@@ -1,26 +1,17 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using TimeZoneConverter;
 using Windows.Storage;
-using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using TimeZoneConverter;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -163,6 +154,9 @@ namespace PowerwallCompanion
                 double totalGridImportedEnergy = 0;
                 double totalBatteryExportedEnergy = 0;
                 double totalBatteryImportedEnergy = 0;
+                double totalHomeFromGrid = 0;
+                double totalHomeFromSolar = 0;
+                double totalHomeFromBattery = 0;
 
                 ViewModel.HomeEnergyGraphData.Clear();
                 ViewModel.SolarEnergyGraphData.Clear();
@@ -170,6 +164,7 @@ namespace PowerwallCompanion
                 ViewModel.GridImportedEnergyGraphData.Clear();
                 ViewModel.BatteryExportedEnergyGraphData.Clear();
                 ViewModel.BatteryImportedEnergyGraphData.Clear();
+                ViewModel.EnergyDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
 
                 foreach (var data in json["response"]["time_series"])
                 {
@@ -206,6 +201,15 @@ namespace PowerwallCompanion
                     totalBatteryImportedEnergy += batteryImportedEnergy;
                     ViewModel.BatteryImportedEnergyGraphData.Add(new ChartDataPoint(date, -batteryImportedEnergy / 1000));
 
+                    // Totals for self consumption calcs
+                    totalHomeFromGrid += GetJsonDoubleValue(data["consumer_energy_imported_from_grid"]) + GetJsonDoubleValue(data["consumer_energy_imported_from_generator"]);
+                    totalHomeFromSolar += GetJsonDoubleValue(data["consumer_energy_imported_from_solar"]);
+                    totalHomeFromBattery += GetJsonDoubleValue(data["consumer_energy_imported_from_battery"]);
+
+                    // Save for export
+                    ViewModel.EnergyDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
+                    ViewModel.EnergyDataForExport[date].Remove("timestamp");
+
                 }
                 ViewModel.HomeEnergy = totalHomeEnergy;
                 ViewModel.SolarEnergy = totalSolarEnergy;
@@ -213,6 +217,11 @@ namespace PowerwallCompanion
                 ViewModel.GridImportedEnergy = totalGridImportedEnergy;
                 ViewModel.BatteryExportedEnergy = totalBatteryExportedEnergy;
                 ViewModel.BatteryImportedEnergy = totalBatteryImportedEnergy;
+
+                ViewModel.SolarUsePercent = (totalHomeFromSolar / totalHomeEnergy) * 100;
+                ViewModel.BatteryUsePercent = (totalHomeFromBattery / totalHomeEnergy) * 100;
+                ViewModel.GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100;
+                ViewModel.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100;
             }
             catch
             {
@@ -230,6 +239,7 @@ namespace PowerwallCompanion
                 ViewModel.SolarDailyGraphData.Clear();
                 ViewModel.GridDailyGraphData.Clear();
                 ViewModel.BatteryDailyGraphData.Clear();
+                ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
 
                 foreach (var data in json["response"]["time_series"])
                 {
@@ -239,8 +249,13 @@ namespace PowerwallCompanion
                     ViewModel.SolarDailyGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["solar_power"]) / 1000));
                     ViewModel.GridDailyGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["grid_power"]) / 1000));
                     ViewModel.BatteryDailyGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["battery_power"]) / 1000));
+
+                    // Save for export
+                    ViewModel.PowerDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
+                    ViewModel.PowerDataForExport[date].Remove("timestamp");
                 }
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
+
             }
 
             catch
@@ -293,75 +308,95 @@ namespace PowerwallCompanion
 
         private async void exportButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-        //    try
-        //    {
-        //        var savePicker = new Windows.Storage.Pickers.FileSavePicker();
-        //        savePicker.SuggestedStartLocation =
-        //            Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
-        //        // Dropdown of file types the user can save the file as
-        //        savePicker.FileTypeChoices.Add("Comma Separated Value (CSV) file", new List<string>() { ".csv" });
-        //        // Default file name if the user does not type one in or select a file to replace
-        //        savePicker.SuggestedFileName = String.Format("Powerwall-{0:yyyy-MM-dd}-{1}.csv", DateTime.Now, periodCombo.SelectedValue);
+            try
+            {
+                var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+                savePicker.SuggestedStartLocation =
+                    Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+                // Dropdown of file types the user can save the file as
+                savePicker.FileTypeChoices.Add("Comma Separated Value (CSV) file", new List<string>() { ".csv" });
+                // Default file name if the user does not type one in or select a file to replace
+                savePicker.SuggestedFileName = String.Format("Powerwall-{0:yyyy-MM-dd}-{1}.csv", ViewModel.PeriodStart, ViewModel.Period);
 
-        //        Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
-        //        if (file != null)
-        //        {
-        //            exportButton.Content = "Saving...";
-        //            exportButton.IsEnabled = false;
+                Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    exportButton.Content = "Saving...";
+                    exportButton.IsEnabled = false;
 
-        //            if (periodCombo.SelectedIndex <= 1)
-        //            {
-        //                await SavePowerInfo(file);
-        //            }
-        //            else
-        //            {
-        //                await SaveEnergyInfo(file);
-        //            }
-
-
-        //            exportButton.Content = "Export Data";
-        //            exportButton.IsEnabled = true;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var md = new MessageDialog("Error while saving data: " + ex.Message);
-        //        await md.ShowAsync();
-        //    }
+                    if (ViewModel.Period == "Day")
+                    {
+                        await SavePowerInfo(file);
+                    }
+                    else
+                    {
+                        await SaveEnergyInfo(file);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var md = new MessageDialog("Error while saving data: " + ex.Message);
+                await md.ShowAsync();
+            }
+            exportButton.Content = "Export Data";
+            exportButton.IsEnabled = true;
         }
 
 
 
+        private async Task SavePowerInfo(StorageFile file)
+        {
+            var sb = new StringBuilder();
+            if (ViewModel.PowerDataForExport.Count > 0)
+            {
+                sb.Append("timestamp,");
+                foreach (var key in ViewModel.PowerDataForExport.First().Value.Keys)
+                {
+                    sb.Append( $"{key},");
+                }
+            }
+            sb.Append("\r\n");
 
 
-
-        //private async Task SavePowerInfo(StorageFile file)
-        //{
-        //    //Windows.Storage.CachedFileManager.DeferUpdates(file);
-        //    await Windows.Storage.FileIO.WriteTextAsync(file, "timestamp,solar_power,battery_power,grid_power,load_power\r\n");
-        //    foreach (var record in ViewModel.SelectedSeries)
-        //    {
-        //        if (!record.IsDummy)
-        //        {
-        //            await Windows.Storage.FileIO.AppendTextAsync(file, $"{record.Timestamp:yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz},{record.SolarPower},{record.BatteryPower},{record.GridPower},{record.LoadPower}\r\n");
-        //        }
-        //    }
-        //    //await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-        //}
+            foreach (var kvp in ViewModel.PowerDataForExport)
+            {
+                sb.Append($"{(kvp.Key):yyyy-MM-dd HH\\:mm\\:ss},");
+                foreach (var v in kvp.Value.Values)
+                {
+                    sb.Append($"{v},");
+                }
+                sb.Append("\r\n");
+            }
+            await Windows.Storage.FileIO.AppendTextAsync(file, sb.ToString());
+        }
 
 
-        //private async Task SaveEnergyInfo(StorageFile file)
-        //{
-        //    //Windows.Storage.CachedFileManager.DeferUpdates(file);
-        //    await Windows.Storage.FileIO.WriteTextAsync(file, "timestamp,battery_energy_output,battery_energy_imported_from_grid,battery_energy_imported_from_solar,consumer_energy_imported_from_battery,consumer_energy_imported_from_grid,consumer_energy_imported_from_solar,battery_energy_exported_to_grid,solar_energy_exported_to_grid,grid_energy_imported,solar_energy_generated\r\n");
-        //    foreach (var record in ViewModel.EnergyHistory)
-        //    {
+        private async Task SaveEnergyInfo(StorageFile file)
+        {
+            var sb = new StringBuilder();
+            if (ViewModel.EnergyDataForExport.Count > 0)
+            {
+                sb.Append("timestamp,");
+                foreach (var key in ViewModel.EnergyDataForExport.First().Value.Keys)
+                {
+                    sb.Append($"{key},");
+                }
+            }
+            sb.Append("\r\n");
 
-        //        await Windows.Storage.FileIO.AppendTextAsync(file, $"{record.Timestamp:yyyy-MM-dd},{record.BatteryEnergyExported},{record.BatteryEnergyImportedFromGrid},{record.BatteryEnergyImportedFromSolar},{record.ConsumerEnergyImportedFromBattery},{record.ConsumerEnergyImportedFromGrid},{record.ConsumerEnergyImportedFromSolar},{record.GridEnergyExportedFromBattery},{record.GridEnergyExportedFromSolar},{record.GridEnergyImported},{record.SolaryEnergyExported}\r\n");
 
-        //    }
-        //    //await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-        //}
+            foreach (var kvp in ViewModel.EnergyDataForExport)
+            {
+                sb.Append($"{(kvp.Key):yyyy-MM-dd},");
+                foreach (var v in kvp.Value.Values)
+                {
+                    sb.Append($"{v},");
+                }
+                sb.Append("\r\n");
+            }
+            await Windows.Storage.FileIO.AppendTextAsync(file, sb.ToString());
+        }
 
 
 
