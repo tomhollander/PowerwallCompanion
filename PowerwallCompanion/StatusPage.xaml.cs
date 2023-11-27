@@ -10,6 +10,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -54,6 +55,15 @@ namespace PowerwallCompanion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.Parameter != null && e.Parameter is bool && ((bool)e.Parameter) == true)
+            {
+                // Coming fron login, so reset everything
+                viewModel.Reset();
+            }
+            // Update props in case settings have changed
+            ViewModel.NotifyChangedSettings();
+            ViewModel.NotifyPowerProperties();
+
             RefreshDataFromTeslaOwnerApi();
             base.OnNavigatedTo(e);
         }
@@ -66,11 +76,15 @@ namespace PowerwallCompanion
 
         private async Task RefreshDataFromTeslaOwnerApi()
         {
-            await GetCurrentPowerData();
-            await GetEnergyHistoryData();
-            await GetPowerHistoryData();
+            var tasks = new List<Task>()
+            {
+                GetCurrentPowerData(),
+                GetEnergyHistoryData(),
+                GetPowerHistoryData(),
+            };
+            await Task.WhenAll(tasks);
         }
-
+  
         private async Task GetCurrentPowerData()
         {
             try
@@ -224,5 +238,13 @@ namespace PowerwallCompanion
             }
         }
 
+        private void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (ViewModel.LastExceptionMessage != null)
+            {
+                var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
+                md.ShowAsync();
+            }
+        }
     }
 }

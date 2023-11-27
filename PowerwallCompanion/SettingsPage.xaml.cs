@@ -45,7 +45,7 @@ namespace PowerwallCompanion
             Settings.RefreshToken = null;
             Settings.SignInName = null;
             Settings.LocalGatewayIP = null;
-            ViewModel.UpdateProps();
+            this.Frame.Navigate(typeof(LoginPage));
         }
 
         private void hamburgerMenu_Tapped(object sender, TappedRoutedEventArgs e)

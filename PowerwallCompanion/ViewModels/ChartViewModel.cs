@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static PowerwallCompanion.ViewModels.StatusViewModel;
 
 namespace PowerwallCompanion.ViewModels
 {
@@ -285,6 +286,21 @@ namespace PowerwallCompanion.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        public string LastExceptionMessage { get; set; }
+        public DateTime LastExceptionDate { get; set; }
+
+        private StatusEnum _status;
+        public StatusEnum Status
+        {
+            get { return _status; }
+            set
+            {
+                _status = value;
+                NotifyPropertyChanged(nameof(Status));
+            }
+        }
+
     }
 
 }

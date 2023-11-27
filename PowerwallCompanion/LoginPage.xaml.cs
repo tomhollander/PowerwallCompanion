@@ -69,7 +69,7 @@ namespace PowerwallCompanion
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
                     UpdateMenuButtons();
-                    this.Frame.Navigate(typeof(StatusPage));
+                    this.Frame.Navigate(typeof(StatusPage), true);
                 });
 
 
@@ -178,7 +178,7 @@ namespace PowerwallCompanion
             Settings.SignInName = "Demo User";
             Settings.UseLocalGateway = false;
             await GetSiteId();
-            this.Frame.Navigate(typeof(StatusPage));
+            this.Frame.Navigate(typeof(StatusPage), true);
         }
     }
 }

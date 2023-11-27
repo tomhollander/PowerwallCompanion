@@ -14,7 +14,7 @@
     <Page.Resources>
         <converters:KilowattConverter x:Key="KilowattConverter"/>
         <converters:PositiveBarGraphConverter x:Key="PositiveBarGraphConverter"/>
-        <converters:StatusConverter x:Key="StatusConverter" />
+        <converters:StatusToVisibilityConverter x:Key="StatusToVisibilityConverter" />
         <converters:StatusMessageConverter x:Key="StatusMessageConverter" />
         <converters:HideGridRowConverter x:Key="HideGridRowConverter" />
         <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter" />
@@ -24,10 +24,10 @@
         <converters:GridImportingToVisibilityConverter x:Key="GridImportingToVisibilityConverter" />
         <converters:BatteryExportingToVisibilityConverter x:Key="BatteryExportingToVisibilityConverter"/>
         <converters:BatteryImportingToVisibilityConverter x:Key="BatteryImportingToVisibilityConverter"/>
-        <converters:GridActiveToBackgroundColorConverter x:Key="GridActiveToBackgroundColorConverter"/>
         <converters:HighPowerToVisibilityConverter x:Key="HighPowerToVisibilityConverter"/>
         <converters:KilowattHourConverter x:Key="KilowattHourConverter" />
         <converters:NegateVisiblityConverter x:Key="NegateVisiblityConverter" />
+        <converters:StatusToBrushConverter x:Key="StatusToBrushConverter" />
     </Page.Resources>
 
     <Grid x:Name="rootGrid">
@@ -42,6 +42,12 @@
         </Grid.ColumnDefinitions>
         <Image Source="ms-appx:///Assets/TeslaLogo.png" HorizontalAlignment="Center"  Margin="0,-20,0,-20" Grid.Row="0" Grid.ColumnSpan="2" Height="35">
         </Image>
+
+        <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
+                   Visibility="{x:Bind ViewModel.Status, Converter={StaticResource StatusToVisibilityConverter}, Mode=OneWay}" Tapped="errorIndicator_Tapped"/>
+        <TextBlock x:Name="timeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="56" Foreground="#888888" Margin="20 -40 0 0"
+                               Visibility="{x:Bind ViewModel.ShowClock, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}"
+                               Text="{x:Bind ViewModel.Time, Mode=OneWay}" Grid.Row="1" />
 
         <!-- Left Column -->
         <StackPanel Grid.Row="1" Grid.Column="0">
@@ -72,7 +78,7 @@
                                             ShowLabels="False" ShowRim="True" RimStrokeThickness="30" RimStroke="DimGray">
                         <gauge:CircularScale.Ranges>
                             <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.BatteryPercent, Mode=OneWay}" 
-                                                    StrokeThickness="30"  Stroke="LimeGreen" />
+                                                    StrokeThickness="30"  Stroke="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}" />
                         </gauge:CircularScale.Ranges>
                     </gauge:CircularScale>
                     <gauge:CircularScale RangePosition="Custom" RangeOffset="0.7" StartAngle="95" SweepAngle="350" ShowLabels="False" ShowRim="False" TickLength="0" SmallTickLength="0">

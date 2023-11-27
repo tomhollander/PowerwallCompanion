@@ -30,7 +30,6 @@ namespace PowerwallCompanion.ViewModels
         private double _gridValue;
         private bool _gridActive;
         private StatusEnum _status;
-        public string _extrasContent;
 
         public StatusViewModel()
         {
@@ -40,6 +39,14 @@ namespace PowerwallCompanion.ViewModels
             BatteryGraphData = new ObservableCollection<ChartDataPoint>();
         }
 
+        public void Reset()
+        {
+            EnergyHistoryLastRefreshed = DateTime.MinValue;
+            PowerHistoryLastRefreshed = DateTime.MinValue;
+            LiveStatusLastRefreshed = DateTime.MinValue;
+            _batteryDay = DateTime.MinValue;
+
+        }
  
         public void NotifyPowerProperties()
         {
@@ -319,15 +326,7 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public string ExtrasContent
-        {
-            get { return _extrasContent; }
-            set
-            {
-                _extrasContent = value;
-                NotifyPropertyChanged(nameof(ExtrasContent));
-            }
-        }
+  
 
         public string Time
         {

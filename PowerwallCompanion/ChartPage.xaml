@@ -16,6 +16,7 @@
         <converters:VisibilityCollapsedLessThan10Converter x:Key="VisibilityCollapsedLessThan10Converter" />
         <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter"/>
         <converters:EnergyHistoryDateFormatConverter x:Key="EnergyHistoryDateFormatConverter"/>
+        <converters:StatusToVisibilityConverter x:Key="StatusToVisibilityConverter" />
     </Page.Resources>
 
         
@@ -37,6 +38,9 @@
                 
             </Grid.RowDefinitions>
             <Image Source="Assets/TeslaLogo.png" Height="35"  Grid.Row="0"/>
+            <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
+                Visibility="{x:Bind ViewModel.Status, Converter={StaticResource StatusToVisibilityConverter}, Mode=OneWay}" Tapped="errorIndicator_Tapped"/>
+
 
             <!-- Button Bar -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">

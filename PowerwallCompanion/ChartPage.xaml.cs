@@ -113,6 +113,7 @@ namespace PowerwallCompanion
 
         private async Task FetchData()
         {
+            ViewModel.Status = StatusViewModel.StatusEnum.Online;
             var tasks = new List<Task>();
             tasks.Add(FetchEnergyData());
             if (ViewModel.Period == "Day")
@@ -223,9 +224,11 @@ namespace PowerwallCompanion
                 ViewModel.GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100;
                 ViewModel.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100;
             }
-            catch
+            catch (Exception ex)
             {
-
+                ViewModel.Status = StatusViewModel.StatusEnum.Error;
+                ViewModel.LastExceptionMessage = ex.Message;
+                ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
 
@@ -258,9 +261,11 @@ namespace PowerwallCompanion
 
             }
 
-            catch
+            catch (Exception ex)
             {
-
+                ViewModel.Status = StatusViewModel.StatusEnum.Error;
+                ViewModel.LastExceptionMessage = ex.Message;
+                ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
 
@@ -282,9 +287,11 @@ namespace PowerwallCompanion
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
             }
 
-            catch
+            catch (Exception ex)
             {
-
+                ViewModel.Status = StatusViewModel.StatusEnum.Error;
+                ViewModel.LastExceptionMessage = ex.Message;
+                ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
 
@@ -399,7 +406,14 @@ namespace PowerwallCompanion
         }
 
 
-
+        private void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (ViewModel.LastExceptionMessage != null)
+            {
+                var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
+                md.ShowAsync();
+            }
+        }
 
 
     }

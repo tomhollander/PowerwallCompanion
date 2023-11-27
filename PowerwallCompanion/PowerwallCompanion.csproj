@@ -124,7 +124,6 @@
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
     <Compile Include="Converters\EnergyHistoryDateFormatConverter.cs" />
-    <Compile Include="Converters\GridActiveToBackgroundColorConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\GridExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\GridImportingToVisibilityConverter.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="Converters\ShortDateAxisConverter.cs" />
     <Compile Include="Converters\GridStatusBrushSizeConverter.cs" />
     <Compile Include="Converters\StatusMessageConverter.cs" />
+    <Compile Include="Converters\StatusToBrushConverter.cs" />
     <Compile Include="Converters\TrueToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FalseToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\PositiveBarGraphConverter.cs" />
@@ -146,9 +146,6 @@
     <Compile Include="Converters\VisibilityCollapsedLessThan10Converter.cs" />
     <Compile Include="DownloadWebViewPage.xaml.cs">
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Licenses.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -197,6 +194,7 @@
     <Content Include="DemoData\EnergyHistoryYear.json" />
     <Content Include="DemoData\Products.json" />
     <Content Include="DemoData\EnergyHistory.json" />
+    <Content Include="DemoData\SOE.json" />
     <None Include="PowerwallCompanion_StoreKey.pfx" />
     <None Include="PowerwallCompanion_TemporaryKey.pfx" />
   </ItemGroup>
@@ -227,10 +225,6 @@
     <Page Include="DownloadWebViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HomePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
