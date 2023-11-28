@@ -38,7 +38,6 @@ namespace PowerwallCompanion
         public StatusPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             viewModel = new StatusViewModel();
 
@@ -55,15 +54,6 @@ namespace PowerwallCompanion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter != null && e.Parameter is bool && ((bool)e.Parameter) == true)
-            {
-                // Coming fron login, so reset everything
-                viewModel.Reset();
-            }
-            // Update props in case settings have changed
-            ViewModel.NotifyChangedSettings();
-            ViewModel.NotifyPowerProperties();
-
             RefreshDataFromTeslaOwnerApi();
             base.OnNavigatedTo(e);
         }

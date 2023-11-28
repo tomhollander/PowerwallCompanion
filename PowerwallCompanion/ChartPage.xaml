@@ -31,9 +31,11 @@
                 <RowDefinition Height="50" />
                 <!-- 2: Energy stats -->
                 <RowDefinition Height="Auto" />
-                <!-- 3: Chart -->
-                <RowDefinition Height="*" />
-                <!-- 4: Self Consumption -->
+                <!-- 3: Top Chart -->
+                <RowDefinition Height="3*" />
+                <!-- 4: Bottom Chart -->
+                <RowDefinition Height="2*" />
+                <!-- 5: Self Consumption -->
                 <RowDefinition Height="70" />
                 
             </Grid.RowDefinitions>
@@ -46,7 +48,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
                 <ComboBox x:Name="periodCombo" ItemsSource="{x:Bind ViewModel.PeriodNames, Mode=OneTime}" SelectedItem="{x:Bind ViewModel.Period, Mode=TwoWay}"  VerticalAlignment="Center" Margin="0,0,20,0" SelectionChanged="periodCombo_SelectionChanged" />
                 <Button x:Name="prevPeriodButton" Tapped="prevPeriodButton_Tapped">◀</Button>
-                <CalendarDatePicker VerticalAlignment="Center" IsTodayHighlighted="True"  Margin="10,0,0,0" Date="{x:Bind ViewModel.CalendarDate,Mode=TwoWay}" Closed="CalendarDatePicker_Closed"  />
+                <CalendarDatePicker x:Name="datePicker" VerticalAlignment="Center" IsTodayHighlighted="True"  Margin="10,0,0,0" Date="{x:Bind ViewModel.CalendarDate,Mode=TwoWay}" Closed="CalendarDatePicker_Closed" DateChanged="CalendarDatePicker_DateChanged" />
                 <Button x:Name="nextPeriodButton" Tapped="nextPeriodButton_Tapped" Margin="10,0,0,0">▶</Button>
                 <Button x:Name="todayButton" Tapped="todayButton_Tapped" Margin="10,0,0,0">Today</Button>
             </StackPanel>
@@ -99,97 +101,96 @@
             </Grid>
             
             <!-- Charts-->
-            <StackPanel Grid.Row="3">
-                <!-- Daily power chart -->
-                <chart:SfChart x:Name="dailyChart"  HorizontalAlignment="Center" Margin="20">
-                    <chart:SfChart.PrimaryAxis>
-                        <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
-                            <chart:DateTimeAxis.LabelStyle>
-                                <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
-                            </chart:DateTimeAxis.LabelStyle>
-                        </chart:DateTimeAxis>
-                    </chart:SfChart.PrimaryAxis>
+            <!-- Daily power chart -->
+            <chart:SfChart x:Name="dailyChart" Grid.Row="3" HorizontalAlignment="Center" Margin="20">
+                <chart:SfChart.PrimaryAxis>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfChart.PrimaryAxis>
 
-                    <chart:SfChart.SecondaryAxis>
-                        <chart:NumericalAxis RangePadding="None" LabelFormat="# kW">
-                            <chart:NumericalAxis.LabelStyle>
-                                <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
-                            </chart:NumericalAxis.LabelStyle>
-                        </chart:NumericalAxis>
-                    </chart:SfChart.SecondaryAxis>
-                    <chart:SfChart.Legend>
-                        <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
-                        </chart:ChartLegend>
-                    </chart:SfChart.Legend>
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis RangePadding="None" LabelFormat="# kW">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                    </chart:ChartLegend>
+                </chart:SfChart.Legend>
 
-                    <!--<chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />-->
-                    <chart:AreaSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
-                    <chart:AreaSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                    <chart:AreaSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
+                <chart:AreaSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
-                </chart:SfChart>
+            </chart:SfChart>
 
-                <!-- Daily battery chart -->
-                <chart:SfChart x:Name="batteryChart"  HorizontalAlignment="Center" Margin="20">
-                    <chart:SfChart.PrimaryAxis>
-                        <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
-                            <chart:DateTimeAxis.LabelStyle>
-                                <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
-                            </chart:DateTimeAxis.LabelStyle>
-                        </chart:DateTimeAxis>
-                    </chart:SfChart.PrimaryAxis>
+            <!-- Daily battery chart -->
+            <chart:SfChart x:Name="batteryChart"  Grid.Row="4" HorizontalAlignment="Center" Margin="20">
+                <chart:SfChart.PrimaryAxis>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfChart.PrimaryAxis>
 
-                    <chart:SfChart.SecondaryAxis>
-                        <chart:NumericalAxis RangePadding="None" Maximum="100" LabelFormat="#\%">
-                            <chart:NumericalAxis.LabelStyle>
-                                <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
-                            </chart:NumericalAxis.LabelStyle>
-                        </chart:NumericalAxis>
-                    </chart:SfChart.SecondaryAxis>
-                    <chart:SfChart.Legend>
-                        <chart:ChartLegend ToggleSeriesVisibility="False" DockPosition="Right" ItemMargin="10,0,0,0">
-                        </chart:ChartLegend>
-                    </chart:SfChart.Legend>
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis RangePadding="None" Maximum="100" LabelFormat="#\%">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="False" DockPosition="Right" ItemMargin="10,0,0,0">
+                    </chart:ChartLegend>
+                </chart:SfChart.Legend>
 
-                    <chart:AreaSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
 
-                </chart:SfChart>
+            </chart:SfChart>
 
-                <!-- Monthly/Yearly Energy Chart -->
-                <chart:SfChart x:Name="energyChart"  HorizontalAlignment="Center" Margin="20">
-                    <chart:SfChart.PrimaryAxis>
-                        <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
-                            <chart:DateTimeCategoryAxis.LabelStyle>
-                                <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
-                            </chart:DateTimeCategoryAxis.LabelStyle>
-                        </chart:DateTimeCategoryAxis>
-                    </chart:SfChart.PrimaryAxis>
+            <!-- Monthly/Yearly Energy Chart -->
+            <chart:SfChart x:Name="energyChart" Grid.Row="3" Grid.RowSpan="2" HorizontalAlignment="Center" Margin="20">
+                <chart:SfChart.PrimaryAxis>
+                    <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
+                        <chart:DateTimeCategoryAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:DateTimeCategoryAxis.LabelStyle>
+                    </chart:DateTimeCategoryAxis>
+                </chart:SfChart.PrimaryAxis>
 
-                    <chart:SfChart.SecondaryAxis>
-                        <chart:NumericalAxis RangePadding="None" LabelFormat="# kWh">
-                            <chart:NumericalAxis.LabelStyle>
-                                <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
-                            </chart:NumericalAxis.LabelStyle>
-                        </chart:NumericalAxis>
-                    </chart:SfChart.SecondaryAxis>
-                    <chart:SfChart.Legend>
-                        <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
-                        </chart:ChartLegend>
-                    </chart:SfChart.Legend>
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis RangePadding="None" LabelFormat="# kWh">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                    </chart:ChartLegend>
+                </chart:SfChart.Legend>
 
-                    <chart:ColumnSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.HomeEnergyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
-                    <chart:ColumnSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarEnergyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
-                    <chart:ColumnSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" />
-                    <chart:ColumnSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" />
-                    <chart:ColumnSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" />
-                    <chart:ColumnSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.HomeEnergyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarEnergyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
+                <chart:ColumnSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" />
                     
 
-                </chart:SfChart>
-            </StackPanel>
+            </chart:SfChart>
+       
             
             <!-- Self consumption -->
-            <StackPanel Grid.Row="4">
+            <StackPanel Grid.Row="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock FontSize="20" Margin="5">Self Consumption:</TextBlock>
                     <TextBlock FontSize="20" Margin="10 5 5 5" Text="{x:Bind ViewModel.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"></TextBlock>

@@ -11,6 +11,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -29,9 +30,7 @@ namespace PowerwallCompanion
 
             this.ViewModel = new ChartViewModel();
             ViewModel.Period = "Day";
-            ViewModel.CalendarDate = DateTime.Now;
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            
+            ViewModel.CalendarDate = DateTime.Now;            
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -81,6 +80,13 @@ namespace PowerwallCompanion
             RefreshDataAndCharts();
         }
 
+        private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            if (args.NewDate > DateTime.Now.Date)
+            {
+                datePicker.Date = DateTime.Now.Date;
+            }
+        }
         private void CalendarDatePicker_Closed(object sender, object e)
         {
             RefreshDataAndCharts();
@@ -242,16 +248,22 @@ namespace PowerwallCompanion
                 ViewModel.SolarDailyGraphData.Clear();
                 ViewModel.GridDailyGraphData.Clear();
                 ViewModel.BatteryDailyGraphData.Clear();
+                ViewModel.HomeDailyGraphData.Clear();
                 ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
 
                 foreach (var data in json["response"]["time_series"])
                 {
                     var date = data["timestamp"].Value<DateTime>();
 
-                    //Not sure how to get load data? 
-                    ViewModel.SolarDailyGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["solar_power"]) / 1000));
-                    ViewModel.GridDailyGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["grid_power"]) / 1000));
-                    ViewModel.BatteryDailyGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["battery_power"]) / 1000));
+                    var solarPower = GetJsonDoubleValue(data["solar_power"]);
+                    var gridPower = GetJsonDoubleValue(data["grid_power"]);
+                    var batteryPower = GetJsonDoubleValue(data["battery_power"]);
+                    var homePower = solarPower + gridPower + batteryPower;
+
+                    ViewModel.SolarDailyGraphData.Add(new ChartDataPoint(date, solarPower  / 1000));
+                    ViewModel.GridDailyGraphData.Add(new ChartDataPoint(date, gridPower / 1000));
+                    ViewModel.BatteryDailyGraphData.Add(new ChartDataPoint(date, batteryPower / 1000));
+                    ViewModel.HomeDailyGraphData.Add(new ChartDataPoint(date, homePower / 1000));
 
                     // Save for export
                     ViewModel.PowerDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
@@ -414,7 +426,6 @@ namespace PowerwallCompanion
                 md.ShowAsync();
             }
         }
-
 
     }
 

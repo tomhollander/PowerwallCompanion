@@ -30,15 +30,37 @@
         <converters:StatusToBrushConverter x:Key="StatusToBrushConverter" />
     </Page.Resources>
 
+
     <Grid x:Name="rootGrid">
 
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="column2.Width" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="column2.Width" Value="*" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition x:Name="column1" Width="*" />
+            <ColumnDefinition x:Name="column2" Width="*" />
         </Grid.ColumnDefinitions>
         <Image Source="ms-appx:///Assets/TeslaLogo.png" HorizontalAlignment="Center"  Margin="0,-20,0,-20" Grid.Row="0" Grid.ColumnSpan="2" Height="35">
         </Image>
@@ -168,7 +190,7 @@
         <Grid Grid.Row="1" Grid.Column="1"  >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
             <!-- Yesterday / Today energy stats -->
@@ -192,7 +214,7 @@
                 <Image Source="ms-appx:///Assets/icon_home.png" ToolTipService.ToolTip="Home Use" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
                 <Image Source="ms-appx:///Assets/icon_solar.png" ToolTipService.ToolTip="Solar Generated" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
                 <Image Source="ms-appx:///Assets/icon_grid.png" ToolTipService.ToolTip="Grid Imported/Exported"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
-                <Image Source="ms-appx:///Assets/icon_battery.png" ToolTipService.ToolTip="Battery Imported/Exported"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+                <Image Source="ms-appx:///Assets/icon_battery.png" ToolTipService.ToolTip="Battery Discharged/Charged"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
                 <TextBlock Grid.Row="1" Grid.Column="2" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                 <TextBlock Grid.Row="1" Grid.Column="1" Opacity="0.6" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="2" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
@@ -222,28 +244,28 @@
                 </StackPanel>
                 <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center"  Margin="5" />
+                        <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center"  Margin="5" />
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyExportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
-                        <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center" Margin="5"/>
+                        <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="4" Grid.Column="1" Opacity="0.6" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center" Margin="5"/>
+                        <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
-                        <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center" Margin="5" />
+                        <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
 
             <!-- Power history chart -->
-            <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,0" HorizontalAlignment="Center" >
+            <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,0" HorizontalAlignment="Center" MaxHeight="300">
                 <chart:SfChart.PrimaryAxis>
                     <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt"  Maximum="{x:Bind ViewModel.ChartMaxDate}">
                         <chart:DateTimeAxis.LabelStyle>
