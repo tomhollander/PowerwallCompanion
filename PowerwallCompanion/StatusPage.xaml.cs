@@ -10,6 +10,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -33,6 +35,9 @@ namespace PowerwallCompanion
         private readonly TimeSpan liveStatusRefreshInterval = new TimeSpan(0, 0, 30);
         private readonly TimeSpan energyHistoryRefreshInterval = new TimeSpan(0, 5, 0);
         private readonly TimeSpan powerHistoryRefreshInterval = new TimeSpan(0, 5, 0);
+
+        private double minPercentSinceSound = 0D;
+        private double maxPercentSinceSound = 100D;
 
 
         public StatusPage()
@@ -108,7 +113,7 @@ namespace PowerwallCompanion
                 viewModel.NotifyPowerProperties();
 
 
-                //PlaySoundsOnBatteryStatus(viewModel.BatteryPercent);
+                PlaySoundsOnBatteryStatus(viewModel.BatteryPercent);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -234,6 +239,29 @@ namespace PowerwallCompanion
             {
                 var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
                 md.ShowAsync();
+            }
+        }
+
+        private void PlaySoundsOnBatteryStatus(double newPercent)
+        {
+            if (Settings.PlaySounds)
+            {
+                minPercentSinceSound = Math.Min(minPercentSinceSound, newPercent);
+                maxPercentSinceSound = Math.Max(maxPercentSinceSound, newPercent);
+                if (newPercent >= 99.6D && minPercentSinceSound < 80D)
+                {
+                    var mediaPlayer = new MediaPlayer();
+                    mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-full.wav"));
+                    mediaPlayer.Play();
+                    minPercentSinceSound = 100D;
+                }
+                else if (newPercent <= 0.5D && maxPercentSinceSound > 20D)
+                {
+                    var mediaPlayer = new MediaPlayer();
+                    mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-empty.wav"));
+                    mediaPlayer.Play();
+                    maxPercentSinceSound = 0D;
+                }
             }
         }
     }

@@ -15,59 +15,40 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="NarrowView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="hamburgerMenu.Visibility" Value="Visible"/>
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="WideView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="641" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="hamburgerMenu.Visibility" Value="Collapsed"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-        
+
         <StackPanel Orientation="Vertical">
-            <Button x:Name="hamburgerMenu" Tapped="hamburgerMenu_Tapped" Visibility="Collapsed">
-                <Image Source="ms-appx:///Assets/Hamburger.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Button>
             <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Settings</TextBlock>
-            <StackPanel Orientation="Horizontal" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
-                <TextBlock Margin="10">Signed In</TextBlock>
+            <StackPanel HorizontalAlignment="Left"  Orientation="Horizontal" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
+                <TextBlock Margin="10" Width="200">Signed In</TextBlock>
                 <Button x:Name="signOutButton" Tapped="signOutButton_Tapped">Sign Out</Button>
             </StackPanel>
-            <StackPanel Orientation="Vertical" x:Name="signedOutPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}}">
-                <TextBlock Margin="10">Not Signed In</TextBlock>
+            <StackPanel HorizontalAlignment="Left" Orientation="Vertical" x:Name="signedOutPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}}">
+                <TextBlock Margin="10" Width="200">Not Signed In</TextBlock>
                 <Button x:Name="signInButton" Tapped="signInButton_Tapped">Sign In</Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock>Energy Site:</TextBlock>
-                <ComboBox ItemsSource="{x:Bind ViewModel.AvailableSites}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedSite, Mode=TwoWay}" />
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                <TextBlock  Width="200" VerticalAlignment="Center">Energy Site:</TextBlock>
+                <ComboBox VerticalAlignment="Center" ItemsSource="{x:Bind ViewModel.AvailableSites}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedSite, Mode=TwoWay}" />
             </StackPanel>
-            <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
-
-            <TextBlock>Bar Graph Scale (kW per cm):</TextBlock>
-            <TextBox x:Name="graphScale" Text="{x:Bind ViewModel.GraphScale, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Width="100" InputScope="CurrencyAmount"></TextBox>
             
-            <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                <TextBlock VerticalAlignment="Center" Width="200">Bar Graph Scale (kW per cm):</TextBlock>
+                <TextBox x:Name="graphScale" VerticalAlignment="Center" Text="{x:Bind ViewModel.GraphScale, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Width="100" InputScope="CurrencyAmount"></TextBox>
+            </StackPanel>
+
+            <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
+            <CheckBox IsChecked="{x:Bind ViewModel.PlaySounds, Mode=TwoWay}" Margin="5">Play sound on battery full/empty</CheckBox>
+
+            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5">
                 This app is not built or endorsed by Tesla. 
             </TextBlock>
-            <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
+            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5">
                 If you're enjoying it, feel free to <Hyperlink NavigateUri="https://ko-fi.com/tomhollander">show your appreciation</Hyperlink>
             </TextBlock>
-            <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5">
+            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5">
                 Tesla account credentials are sent to the Tesla web service for verification and are not stored or otherwise used by this app.
             </TextBlock>
-            <HyperlinkButton FontSize="10" Margin="5" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">
+            <HyperlinkButton FontSize="12" Margin="5" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">
                 Privacy Policy
             </HyperlinkButton>
         </StackPanel>

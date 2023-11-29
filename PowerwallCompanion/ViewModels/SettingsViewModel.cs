@@ -35,6 +35,15 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public bool? PlaySounds
+        {
+            get { return Settings.PlaySounds; }
+            set
+            {
+                Settings.PlaySounds = value.Value;
+            }
+        }
+
         public decimal GraphScale
         {
             get { return Settings.GraphScale; }
@@ -75,6 +84,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(SignInName));
             NotifyPropertyChanged(nameof(ShowClock));
             NotifyPropertyChanged(nameof(GraphScale));
+            NotifyPropertyChanged(nameof(PlaySounds));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

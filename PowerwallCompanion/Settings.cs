@@ -143,5 +143,24 @@ namespace PowerwallCompanion
                 _localSettings.Values["AvailableSites"] = json;
             }
         }
+
+        public static bool PlaySounds
+        {
+            get
+            {
+                if (_localSettings.Values["PlaySounds"] == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return bool.Parse((string)_localSettings.Values["PlaySounds"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["PlaySounds"] = value.ToString();
+            }
+        }
     }
 }
