@@ -267,7 +267,7 @@
             <!-- Power history chart -->
             <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,0" HorizontalAlignment="Center" MaxHeight="300">
                 <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt"  Maximum="{x:Bind ViewModel.ChartMaxDate}">
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt"  Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
                         </chart:DateTimeAxis.LabelStyle>
@@ -278,7 +278,7 @@
                 </chart:SfChart.PrimaryAxis>
 
                 <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="# kW">
+                    <chart:NumericalAxis RangePadding="None" LabelFormat="0.# kW">
                         <chart:NumericalAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>

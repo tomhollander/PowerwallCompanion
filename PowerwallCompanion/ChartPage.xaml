@@ -112,7 +112,7 @@
                 </chart:SfChart.PrimaryAxis>
 
                 <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="# kW">
+                    <chart:NumericalAxis RangePadding="None" LabelFormat="0.# kW">
                         <chart:NumericalAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>
@@ -123,7 +123,7 @@
                     </chart:ChartLegend>
                 </chart:SfChart.Legend>
 
-                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
                 <chart:AreaSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
                 <chart:AreaSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
                 <chart:AreaSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
@@ -141,7 +141,7 @@
                 </chart:SfChart.PrimaryAxis>
 
                 <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" Maximum="100" LabelFormat="#\%">
+                    <chart:NumericalAxis RangePadding="None" Maximum="100" LabelFormat="0\%">
                         <chart:NumericalAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>
