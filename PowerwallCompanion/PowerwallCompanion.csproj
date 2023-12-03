@@ -117,11 +117,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BatteryInfoPage.xaml.cs">
+      <DependentUpon>BatteryInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ChartPage.xaml.cs">
       <DependentUpon>ChartPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BatteryExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
+    <Compile Include="Converters\BatteryCapacityToBrushConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
     <Compile Include="Converters\EnergyHistoryDateFormatConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
@@ -162,6 +166,7 @@
     <Compile Include="StatusPage.xaml.cs">
       <DependentUpon>StatusPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\BatteryInfoViewModel.cs" />
     <Compile Include="ViewModels\ChartDataPoint.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
     <Compile Include="ViewModels\EnergyViewModel.cs" />
@@ -219,6 +224,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="BatteryInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ChartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

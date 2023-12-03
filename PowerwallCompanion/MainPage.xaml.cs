@@ -60,31 +60,31 @@ namespace PowerwallCompanion
         private void homeMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             frame.Navigate(typeof(StatusPage));
-            homeMenuButton.IsChecked = true;
-            chartMenuButton.IsChecked = false;
-            settingsMenuButton.IsChecked = false;
-            splitView.IsPaneOpen = false;
         }
 
         private void chartMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             frame.Navigate(typeof(ChartPage));
-            homeMenuButton.IsChecked = false;
-            chartMenuButton.IsChecked = true;
-            settingsMenuButton.IsChecked = false;
-            splitView.IsPaneOpen = false;
         }
 
 
         private void settingsMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             frame.Navigate(typeof(SettingsPage));
-            homeMenuButton.IsChecked = false;
-            chartMenuButton.IsChecked = false;
-            settingsMenuButton.IsChecked = true;
-            splitView.IsPaneOpen = false;
         }
 
+        private void batteryStatusMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            frame.Navigate(typeof(BatteryInfoPage));
+        }
 
+        private void frame_Navigated(object sender, NavigationEventArgs e)
+        {
+            homeMenuButton.IsChecked = (e.SourcePageType == typeof(StatusPage));
+            chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
+            settingsMenuButton.IsChecked = (e.SourcePageType == typeof(SettingsPage));
+            batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
+            splitView.IsPaneOpen = false;
+        }
     }
 }
