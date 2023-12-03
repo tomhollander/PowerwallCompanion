@@ -47,6 +47,9 @@ namespace PowerwallCompanion
                 case "Day":
                     ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddDays(-1);
                     break;
+                case "Week":
+                    ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddDays(-7);
+                    break;
                 case "Month":
                     ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddMonths(-1);
                     break;
@@ -63,6 +66,9 @@ namespace PowerwallCompanion
             {
                 case "Day":
                     ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddDays(1);
+                    break;
+                case "Week":
+                    ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddDays(7);
                     break;
                 case "Month":
                     ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddMonths(1);

@@ -40,30 +40,33 @@ namespace PowerwallCompanion
         {
             try
             {
-                var productsResponse = await ApiHelper.CallGetApiWithTokenRefresh(ApiHelper.BaseUrl + "/api/1/products", "Products");
-                var powerwalls = new List<BatteryInfo>();
-
-                foreach (var product in productsResponse["response"])
-                {
-                    if (product["resource_type"]?.Value<string>() == "battery" && product["energy_site_id"].Value<string>() == Settings.SiteId)
-                    {
-                        var batteryInfo = new BatteryInfo();
-                        batteryInfo.Name = product["id"].Value<string>();
-                        batteryInfo.TotalPackEnergy = product["total_pack_energy"].Value<double>();
-                        powerwalls.Add(batteryInfo);
-
-                    }
-                }
-                ViewModel.BatteryInfos = powerwalls;
+                var tasks = new List<Task> { GetBatteryCapacity(), GetBatteryCount() };
+                await Task.WhenAll(tasks);
+                ViewModel.NotifyAllProperties();
             }
             catch
             {
 
             }
-           
-
         }
 
-  
+        private async Task GetBatteryCapacity()
+        {
+            var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
+            ViewModel.SiteName = siteStatusJson["response"]["site_name"].Value<string>();
+            ViewModel.TotalPackEnergy = siteStatusJson["response"]["total_pack_energy"].Value<double>();
+        }
+
+        private async Task GetBatteryCount()
+        {
+            var siteInfoJson = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/site_info", "SiteInfo");
+            ViewModel.NumberOfBatteries = siteInfoJson["response"]["battery_count"].Value<int>();
+            if (ViewModel.NumberOfBatteries > 1)
+            {
+                multiplePowerwallMessage.Visibility = Visibility.Visible;
+            }    
+        }
+
+
     }
 }

@@ -27,81 +27,63 @@
 
         <Image Source="Assets/TeslaLogo.png" Height="35"  Grid.Row="0"/>
 
-        <controls:ItemsRepeater Grid.Row="1" ItemsSource="{x:Bind ViewModel.BatteryInfos, Mode=OneWay}" HorizontalAlignment="Center">
-            <controls:ItemsRepeater.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="20" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                        <StackPanel Margin="20">
-                            <Image Source="Assets/StoreLogo.png" HorizontalAlignment="Center" Width="80" />
-                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" />
-                        </StackPanel>
+            <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" VerticalAlignment="Top" />
 
-                        
+            <StackPanel  Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+                <TextBlock FontSize="30" Text="Energy Site" Foreground="DimGray"/>
+                <TextBlock FontSize="50" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}"></TextBlock>
+            </StackPanel>
 
-                        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center">
-        
-                            <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                                <TextBlock FontSize="30" Text="Current capacity" Foreground="DimGray"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontSize="50" Text="{Binding TotalPackEnergy, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
-                                    <TextBlock FontSize="30" Text=" kWh" Foreground="DimGray" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
-                                </StackPanel>
-                            </StackPanel>
+            <StackPanel  Orientation="Vertical" Grid.Row="0" Grid.Column="2">
+                <TextBlock FontSize="30" Text="Number of Powerwalls" Foreground="DimGray"/>
+                <TextBlock FontSize="50" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}"></TextBlock>
+            </StackPanel>
 
-                        </StackPanel>
 
-                        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center">
+            <StackPanel  Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="30" Text="Current capacity" Foreground="DimGray"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="50" Text="{x:Bind ViewModel.TotalPackEnergy, Mode=OneWay,Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
+                    <TextBlock FontSize="30" Text=" kWh" Foreground="DimGray" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                </StackPanel>
+            </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                                <TextBlock FontSize="30" Text="% of warranted" Foreground="DimGray"/>
-                                <TextBlock FontSize="50" Text="{Binding CurrentCapacityPercent, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{Binding CurrentCapacityPercent, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
-                            </StackPanel>
+            <StackPanel  Orientation="Vertical" Grid.Row="1" Grid.Column="2">
+                <TextBlock FontSize="30" Text="Warranted capacity" Foreground="DimGray"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="50" Text="{x:Bind ViewModel.WarrantedCapacity, Mode=OneWay,Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
+                    <TextBlock FontSize="30" Text=" kWh" Foreground="DimGray" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                </StackPanel>
+            </StackPanel>
 
-                        </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+                <TextBlock FontSize="30" Text="% of warranted" Foreground="DimGray"/>
+                <TextBlock FontSize="50" Text="{x:Bind ViewModel.CurrentCapacityPercent,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
+            </StackPanel>
 
-                        <!--<StackPanel Margin="20" VerticalAlignment="Center">
-                            <gauge:SfLinearGauge  HorizontalAlignment="Center" Height="80">
+            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2">
+                <TextBlock FontSize="30" Text="Degradation" Foreground="DimGray"/>
+                <TextBlock FontSize="50" Text="{x:Bind ViewModel.Degradation,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
+            </StackPanel>
 
-                                <gauge:SfLinearGauge.MainScale>
-
-                                    <gauge:LinearScale    ScaleBarStroke="Blue" MajorTickStroke="Gray" BindRangeStrokeToLabels="True" BindRangeStrokeToTicks="True"
-                                       MinorTickStroke="Gray" LabelStroke="#424242" ScaleBarBorderThickness="3"
-                                       MinorTickSize="12" LabelSize="15" MajorTickSize="25" Maximum="120"
-                                       ScaleBarSize="1" ScaleBarBorderBrush="Gray" MinorTicksPerInterval="1" ScaleBarLength="300" LabelPostfix="%">
-
-                                        <gauge:LinearScale.Ranges>
-
-                                            <gauge:LinearRange StartValue="0" EndValue="70" 
-                                                StartWidth="0" EndWidth="0" 
-                                                RangeOffset="0" RangeStroke="DarkRed"/>
-                                            <gauge:LinearRange StartValue="70" EndValue="90" 
-                                                StartWidth="0" EndWidth="0" 
-                                                RangeOffset="0" RangeStroke="DarkGoldenrod"/>
-                                            <gauge:LinearRange StartValue="90" EndValue="120" 
-                                                StartWidth="0" EndWidth="0" 
-                                                RangeOffset="0" RangeStroke="DarkGreen"/>
-
-                                            <gauge:LinearRange StartValue="0" EndValue="{Binding CurrentCapacity}"
-                                                StartWidth="10" EndWidth="10" 
-                                                RangeStroke="Magenta" BorderBrush="Black" BorderThickness="3" RangeOffset="5" />
-
-                                        </gauge:LinearScale.Ranges>
-
-                                    </gauge:LinearScale>
-
-                                </gauge:SfLinearGauge.MainScale>
-
-                            </gauge:SfLinearGauge>
-                            <TextBlock HorizontalAlignment="Center" Text="{Binding CapacityMessage}" />
-
-                        </StackPanel>-->
-
-                    </StackPanel>
-                    
-                </DataTemplate>
-            </controls:ItemsRepeater.ItemTemplate>
-        </controls:ItemsRepeater>
-
+            <TextBlock x:Name="multiplePowerwallMessage"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Foreground="LightGray" TextWrapping="Wrap" Visibility="Collapsed">
+                The Tesla API does not report capacity for individual Powerwalls. To find the status of each
+                of your batteries you must access your local gateway API.
+            </TextBlock>
+        </Grid>
+       
     </Grid>
 </Page>

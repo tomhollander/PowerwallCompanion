@@ -15,6 +15,10 @@ namespace PowerwallCompanion.Converters
             {
                 return "d MMM";
             }
+            else if ((string)value == "Week")
+            {
+                return "ddd d MMM";
+            }
             else
             {
                 return "MMM";

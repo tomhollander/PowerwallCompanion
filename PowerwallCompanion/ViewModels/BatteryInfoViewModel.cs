@@ -10,14 +10,25 @@ namespace PowerwallCompanion.ViewModels
 {
     public class BatteryInfoViewModel : INotifyPropertyChanged
     {
-        private List<BatteryInfo> _batteryInfos;
-        public List<BatteryInfo> BatteryInfos
-        {
-            get {  return _batteryInfos; }
-            set { _batteryInfos = value; 
-                NotifyPropertyChanged(nameof(BatteryInfos));
-            }
 
+        public string SiteName { get; set; }
+
+        public int NumberOfBatteries { get; set; }
+        public double WarrantedCapacity { get { return 13200 * NumberOfBatteries; } }
+
+        public double TotalPackEnergy { get; set; }
+
+        public double CurrentCapacityPercent { get { return TotalPackEnergy / WarrantedCapacity * 100; } }
+        public double Degradation { get { return 100 - CurrentCapacityPercent; } }
+
+        public void NotifyAllProperties()
+        {
+            NotifyPropertyChanged(nameof(SiteName));
+            NotifyPropertyChanged(nameof(NumberOfBatteries));
+            NotifyPropertyChanged(nameof(WarrantedCapacity));
+            NotifyPropertyChanged(nameof(TotalPackEnergy));
+            NotifyPropertyChanged(nameof(CurrentCapacityPercent));
+            NotifyPropertyChanged(nameof(Degradation));
         }
 
         private void NotifyPropertyChanged(string propertyName)
@@ -32,13 +43,7 @@ namespace PowerwallCompanion.ViewModels
 
     public class BatteryInfo
     {
-        public string Name { get; set; }
-        public double WarrantedCapacity {  get { return 13200;  } }
-
-        public double TotalPackEnergy {  get; set; }
-
-        public double CurrentCapacityPercent {  get { return TotalPackEnergy / WarrantedCapacity * 100; } }
-
+        
 
 
     }

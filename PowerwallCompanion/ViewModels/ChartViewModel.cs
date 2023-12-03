@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.ViewManagement;
 using static PowerwallCompanion.ViewModels.StatusViewModel;
 
 namespace PowerwallCompanion.ViewModels
@@ -47,7 +48,7 @@ namespace PowerwallCompanion.ViewModels
 
         public IEnumerable<string> PeriodNames
         {
-            get => new string[] { "Day", "Month", "Year" };
+            get => new string[] { "Day", "Week", "Month", "Year" };
         }
 
         public DateTimeOffset? CalendarDate
@@ -105,6 +106,17 @@ namespace PowerwallCompanion.ViewModels
                 case "Day":
                     PeriodStart = CalendarDate.Value.Date;
                     PeriodEnd = PeriodStart.AddDays(1);
+                    break;
+                case "Week":
+                    if (CalendarDate.Value.DayOfWeek == DayOfWeek.Monday)
+                    {
+                        PeriodStart = CalendarDate.Value.Date;
+                    }
+                    else
+                    {
+                        PeriodStart = CalendarDate.Value.Date.AddDays(-(int)CalendarDate.Value.Date.DayOfWeek + (int)DayOfWeek.Monday - 7);
+                    }
+                    PeriodEnd = PeriodStart.AddDays(7);
                     break;
                 case "Month":
                     PeriodStart = new DateTime(CalendarDate.Value.Year, CalendarDate.Value.Month, 1);
