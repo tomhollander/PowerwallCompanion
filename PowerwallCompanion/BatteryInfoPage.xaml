@@ -37,23 +37,26 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" VerticalAlignment="Top" />
 
-            <StackPanel  Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                <TextBlock FontSize="30" Text="Energy Site" Foreground="DimGray"/>
-                <TextBlock FontSize="50" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}"></TextBlock>
-            </StackPanel>
+            <TextBlock FontSize="30" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock FontSize="30" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}" Grid.Row="0" Grid.Column="2"></TextBlock>
 
-            <StackPanel  Orientation="Vertical" Grid.Row="0" Grid.Column="2">
-                <TextBlock FontSize="30" Text="Number of Powerwalls" Foreground="DimGray"/>
-                <TextBlock FontSize="50" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}"></TextBlock>
-            </StackPanel>
+            <TextBlock FontSize="30" Text="Install Date"  Grid.Row="1" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock FontSize="30" Text="{x:Bind ViewModel.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
+
+            <TextBlock FontSize="30" Text="Number of Powerwalls"  Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock FontSize="30" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
 
 
-            <StackPanel  Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+
+
+            <StackPanel  Orientation="Vertical" Grid.Row="3" Grid.Column="1">
                 <TextBlock FontSize="30" Text="Current capacity" Foreground="DimGray"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontSize="50" Text="{x:Bind ViewModel.TotalPackEnergy, Mode=OneWay,Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
@@ -61,7 +64,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel  Orientation="Vertical" Grid.Row="1" Grid.Column="2">
+            <StackPanel  Orientation="Vertical" Grid.Row="3" Grid.Column="2">
                 <TextBlock FontSize="30" Text="Warranted capacity" Foreground="DimGray"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontSize="50" Text="{x:Bind ViewModel.WarrantedCapacity, Mode=OneWay,Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
@@ -69,12 +72,12 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+            <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1">
                 <TextBlock FontSize="30" Text="% of warranted" Foreground="DimGray"/>
                 <TextBlock FontSize="50" Text="{x:Bind ViewModel.CurrentCapacityPercent,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2">
+            <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="2">
                 <TextBlock FontSize="30" Text="Degradation" Foreground="DimGray"/>
                 <TextBlock FontSize="50" Text="{x:Bind ViewModel.Degradation,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
             </StackPanel>

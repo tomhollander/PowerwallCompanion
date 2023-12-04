@@ -17,7 +17,7 @@
 
 
         <StackPanel Orientation="Vertical">
-            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">Settings</TextBlock>
+            <TextBlock  Margin="0,0,0,20" Style="{StaticResource SubtitleTextBlockStyle}">Powerwall Companion Settings</TextBlock>
             <StackPanel HorizontalAlignment="Left"  Orientation="Horizontal" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
                 <TextBlock Margin="10" Width="200">Signed In</TextBlock>
                 <Button x:Name="signOutButton" Tapped="signOutButton_Tapped">Sign Out</Button>

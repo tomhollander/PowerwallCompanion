@@ -12,8 +12,9 @@ namespace PowerwallCompanion.ViewModels
     {
 
         public string SiteName { get; set; }
-
         public int NumberOfBatteries { get; set; }
+        public DateTime InstallDate { get; set; }
+        public string InstallDateString { get { return InstallDate.ToString("d"); } }
         public double WarrantedCapacity { get { return 13200 * NumberOfBatteries; } }
 
         public double TotalPackEnergy { get; set; }
@@ -24,6 +25,7 @@ namespace PowerwallCompanion.ViewModels
         public void NotifyAllProperties()
         {
             NotifyPropertyChanged(nameof(SiteName));
+            NotifyPropertyChanged(nameof(InstallDateString));
             NotifyPropertyChanged(nameof(NumberOfBatteries));
             NotifyPropertyChanged(nameof(WarrantedCapacity));
             NotifyPropertyChanged(nameof(TotalPackEnergy));

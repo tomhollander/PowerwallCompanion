@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
@@ -31,6 +32,12 @@ namespace PowerwallCompanion
         public MainPage()
         {
             InitializeComponent();
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Black;
+            titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
+
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
             if (Settings.AccessToken == null && Settings.LocalGatewayIP == null)
             {

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage.AccessCache;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -40,7 +41,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var tasks = new List<Task> { GetBatteryCapacity(), GetBatteryCount() };
+                var tasks = new List<Task> { GetBatteryCapacity(), GetBatteryInfo() };
                 await Task.WhenAll(tasks);
                 ViewModel.NotifyAllProperties();
             }
@@ -57,10 +58,11 @@ namespace PowerwallCompanion
             ViewModel.TotalPackEnergy = siteStatusJson["response"]["total_pack_energy"].Value<double>();
         }
 
-        private async Task GetBatteryCount()
+        private async Task GetBatteryInfo()
         {
             var siteInfoJson = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/site_info", "SiteInfo");
             ViewModel.NumberOfBatteries = siteInfoJson["response"]["battery_count"].Value<int>();
+            ViewModel.InstallDate = siteInfoJson["response"]["installation_date"].Value<DateTime>();
             if (ViewModel.NumberOfBatteries > 1)
             {
                 multiplePowerwallMessage.Visibility = Visibility.Visible;
