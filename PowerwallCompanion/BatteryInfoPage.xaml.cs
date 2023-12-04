@@ -29,6 +29,7 @@ namespace PowerwallCompanion
         public BatteryInfoPage()
         {
             this.ViewModel = new BatteryInfoViewModel();
+            ViewModel.NumberOfBatteries = 1;
 
             GetData();
 

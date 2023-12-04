@@ -41,6 +41,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column2.Width" Value="0" />
+                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Left" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideView">
@@ -49,6 +50,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column2.Width" Value="*" />
+                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Center" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -62,12 +64,13 @@
             <ColumnDefinition x:Name="column1" Width="*" />
             <ColumnDefinition x:Name="column2" Width="*" />
         </Grid.ColumnDefinitions>
-        <Image Source="ms-appx:///Assets/TeslaLogo.png" HorizontalAlignment="Center"  Margin="0,-20,0,-20" Grid.Row="0" Grid.ColumnSpan="2" Height="35">
+        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Fill="#171717" />
+        <Image Source="ms-appx:///Assets/TeslaLogo.png" HorizontalAlignment="Center"  x:Name="teslaLogo" Grid.Row="0" Grid.ColumnSpan="2" Height="35">
         </Image>
 
         <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
                     Tapped="errorIndicator_Tapped" Visibility="{x:Bind ViewModel.Status, Converter={StaticResource StatusToVisibilityConverter}, Mode=OneWay}"/>
-        <TextBlock x:Name="timeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="56" Foreground="#888888" Margin="20 -40 0 0"
+        <TextBlock x:Name="timeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="56" Foreground="#888888" Margin="0,-15,0,0"
                                Visibility="{x:Bind ViewModel.ShowClock, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}"
                                Text="{x:Bind ViewModel.Time, Mode=OneWay}" Grid.Row="1" />
 

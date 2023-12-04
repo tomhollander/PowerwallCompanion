@@ -35,7 +35,8 @@ namespace PowerwallCompanion
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Black;
+            titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0x17, 0x17, 0x17);
+            titleBar.ButtonForegroundColor = Colors.DarkGray;
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));

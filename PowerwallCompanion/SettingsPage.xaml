@@ -13,11 +13,37 @@
         <converters:DecimalConverter x:Key="DecimalConverter" />
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Left" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Center" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Fill="#171717" />
+        <Image x:Name="teslaLogo" Source="Assets/TeslaLogo.png" Height="35"  Grid.Row="0"/>
 
-
-        <StackPanel Orientation="Vertical">
-            <TextBlock  Margin="0,0,0,20" Style="{StaticResource SubtitleTextBlockStyle}">Powerwall Companion Settings</TextBlock>
+        <StackPanel Grid.Row="1" Orientation="Vertical" Padding="10">
+            <TextBlock  Margin="0,0,0,20" Style="{StaticResource SubtitleTextBlockStyle}">Settings</TextBlock>
             <StackPanel HorizontalAlignment="Left"  Orientation="Horizontal" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
                 <TextBlock Margin="10" Width="200">Signed In</TextBlock>
                 <Button x:Name="signOutButton" Tapped="signOutButton_Tapped">Sign Out</Button>
