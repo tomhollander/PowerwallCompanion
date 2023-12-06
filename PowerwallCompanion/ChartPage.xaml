@@ -21,51 +21,26 @@
 
         
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="NarrowView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Left" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="WideView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Center" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
         <Grid>
             <Grid.RowDefinitions>
-                <!-- 0: Banner -->
-                <RowDefinition Height="30" />
-                <!-- 1: Button bar -->
+                <!-- 0: Button bar -->
                 <RowDefinition Height="50" />
-                <!-- 2: Energy stats -->
+                <!-- 1: Energy stats -->
                 <RowDefinition Height="Auto" />
-                <!-- 3: Top Chart -->
+                <!-- 2: Top Chart -->
                 <RowDefinition Height="3*" />
-                <!-- 4: Bottom Chart -->
+                <!-- 3: Bottom Chart -->
                 <RowDefinition Height="2*" />
-                <!-- 5: Self Consumption -->
+                <!-- 4: Self Consumption -->
                 <RowDefinition Height="70" />
-                
+
             </Grid.RowDefinitions>
-            <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Fill="#171717" />
-            <Image x:Name="teslaLogo" Source="Assets/TeslaLogo.png" Height="35"  Grid.Row="0"/>
-            <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
+            <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
                 Visibility="{x:Bind ViewModel.Status, Converter={StaticResource StatusToVisibilityConverter}, Mode=OneWay}" Tapped="errorIndicator_Tapped"/>
 
 
             <!-- Button Bar -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
                 <ComboBox x:Name="periodCombo" ItemsSource="{x:Bind ViewModel.PeriodNames, Mode=OneTime}" SelectedItem="{x:Bind ViewModel.Period, Mode=TwoWay}"  VerticalAlignment="Center" Margin="0,0,20,0" SelectionChanged="periodCombo_SelectionChanged" />
                 <Button x:Name="prevPeriodButton" Tapped="prevPeriodButton_Tapped">◀</Button>
                 <CalendarDatePicker x:Name="datePicker" VerticalAlignment="Center" IsTodayHighlighted="True"  Margin="10,0,0,0" Date="{x:Bind ViewModel.CalendarDate,Mode=TwoWay}" Closed="CalendarDatePicker_Closed" DateChanged="CalendarDatePicker_DateChanged" />
@@ -74,10 +49,10 @@
             </StackPanel>
 
 
-            <Button Margin="10,10,35,10" x:Name="exportButton" HorizontalAlignment="Right"  Grid.Row="1" Tapped="exportButton_Tapped">Export Data</Button>
+            <Button Margin="10,10,35,10" x:Name="exportButton" HorizontalAlignment="Right"  Grid.Row="0" Tapped="exportButton_Tapped">Export Data</Button>
 
             <!-- Energy Stats-->
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -122,7 +97,7 @@
             
             <!-- Charts-->
             <!-- Daily power chart -->
-            <chart:SfChart x:Name="dailyChart" Grid.Row="3" HorizontalAlignment="Center" Margin="20">
+            <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20">
                 <chart:SfChart.PrimaryAxis>
                     <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
                         <chart:DateTimeAxis.LabelStyle>
@@ -151,7 +126,7 @@
             </chart:SfChart>
 
             <!-- Daily battery chart -->
-            <chart:SfChart x:Name="batteryChart"  Grid.Row="4" HorizontalAlignment="Center" Margin="20">
+            <chart:SfChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20">
                 <chart:SfChart.PrimaryAxis>
                     <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
                         <chart:DateTimeAxis.LabelStyle>
@@ -177,7 +152,7 @@
             </chart:SfChart>
 
             <!-- Monthly/Yearly Energy Chart -->
-            <chart:SfChart x:Name="energyChart" Grid.Row="3" Grid.RowSpan="2" HorizontalAlignment="Center" Margin="20">
+            <chart:SfChart x:Name="energyChart" Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Center" Margin="20">
                 <chart:SfChart.PrimaryAxis>
                     <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
                         <chart:DateTimeCategoryAxis.LabelStyle>
@@ -210,7 +185,7 @@
        
             
             <!-- Self consumption -->
-            <StackPanel Grid.Row="5">
+            <StackPanel Grid.Row="4">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock FontSize="20" Margin="5">Self Consumption:</TextBlock>
                     <TextBlock FontSize="20" Margin="10 5 5 5" Text="{x:Bind ViewModel.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"></TextBlock>

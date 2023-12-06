@@ -207,7 +207,7 @@
   <ItemGroup>
     <Content Include="Assets\ChartIcon.png" />
     <Content Include="Assets\Hamburger.png" />
-    <Content Include="Assets\TeslaLogo.png" />
+    <Content Include="Assets\AppLogo.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="PowerwallCompanionPrivacyPolicy.txt" />
     <Content Include="Properties\Default.rd.xml" />

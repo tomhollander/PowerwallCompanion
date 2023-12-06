@@ -108,14 +108,11 @@ namespace PowerwallCompanion.ViewModels
                     PeriodEnd = PeriodStart.AddDays(1);
                     break;
                 case "Week":
-                    if (CalendarDate.Value.DayOfWeek == DayOfWeek.Monday)
-                    {
-                        PeriodStart = CalendarDate.Value.Date;
+                    int offset = ((int)CalendarDate.Value.Date.DayOfWeek - 1);
+                    if (offset < 0) {
+                        offset += 7;
                     }
-                    else
-                    {
-                        PeriodStart = CalendarDate.Value.Date.AddDays(-(int)CalendarDate.Value.Date.DayOfWeek + (int)DayOfWeek.Monday - 7);
-                    }
+                    PeriodStart = CalendarDate.Value.Date.AddDays(-offset);
                     PeriodEnd = PeriodStart.AddDays(7);
                     break;
                 case "Month":

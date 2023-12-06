@@ -9,35 +9,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="NarrowView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Left" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="WideView">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Center" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Fill="#171717" />
-        <Image x:Name="teslaLogo" Source="Assets/TeslaLogo.png" Height="35"  Grid.Row="0"/>
-        
-        <StackPanel Orientation="Vertical" Grid.Row="1">
+         
+        <StackPanel Orientation="Vertical" Grid.Row="0">
             <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" DoubleTapped="TextBlock_DoubleTapped">Connect to your Tesla account</TextBlock>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Visibility="Collapsed">
                 <RadioButton x:Name="teslaAccountRadioButton" Checked="TeslaAccountRadioButton_Checked">Tesla Account</RadioButton>

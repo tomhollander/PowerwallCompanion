@@ -9,10 +9,16 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Fill="#171717" />
+        <Image Source="ms-appx:///Assets/AppLogo.png" HorizontalAlignment="Center"  x:Name="appLogo" Grid.Row="0" Grid.ColumnSpan="2" Height="35" />
 
-        <SplitView x:Name="splitView" DisplayMode="CompactInline" OpenPaneLength="50">
+        <SplitView x:Name="splitView" DisplayMode="CompactInline" OpenPaneLength="50" Grid.Row="1">
             <SplitView.Pane>
-                <StackPanel Orientation="Vertical" Margin="0,30,0,0">
+                <StackPanel Orientation="Vertical">
                     <ToggleButton ToolTipService.ToolTip="Live Stats"  x:Name="homeMenuButton" Background="Transparent" Margin="4" IsChecked="True" Tapped="homeMenuButton_Tapped">
                         <SymbolIcon Symbol="Home"/>
                     </ToggleButton>

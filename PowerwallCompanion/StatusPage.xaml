@@ -41,7 +41,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column2.Width" Value="0" />
-                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Left" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideView">
@@ -50,36 +49,31 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column2.Width" Value="*" />
-                        <Setter Target="teslaLogo.HorizontalAlignment" Value="Center" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="column1" Width="*" />
             <ColumnDefinition x:Name="column2" Width="*" />
         </Grid.ColumnDefinitions>
-        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Fill="#171717" />
-        <Image Source="ms-appx:///Assets/TeslaLogo.png" HorizontalAlignment="Center"  x:Name="teslaLogo" Grid.Row="0" Grid.ColumnSpan="2" Height="35">
-        </Image>
 
-        <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
+        <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" 
                     Tapped="errorIndicator_Tapped" Visibility="{x:Bind ViewModel.Status, Converter={StaticResource StatusToVisibilityConverter}, Mode=OneWay}"/>
         <TextBlock x:Name="timeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="56" Foreground="#888888" Margin="0,-15,0,0"
                                Visibility="{x:Bind ViewModel.ShowClock, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}"
-                               Text="{x:Bind ViewModel.Time, Mode=OneWay}" Grid.Row="1" />
+                               Text="{x:Bind ViewModel.Time, Mode=OneWay}" Grid.Row="0" />
 
         <!-- Left Column -->
-        <StackPanel Grid.Row="1" Grid.Column="0">
+        <StackPanel Grid.Row="0" Grid.Column="0">
             <gauge:SfCircularGauge Margin="20"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center">
                 <gauge:SfCircularGauge.GaugeHeader>
-                    <TextBlock  FontSize="50" Text="{x:Bind ViewModel.BatteryPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}">
-                    </TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,2,-2,0"  VerticalAlignment="Center" />
+                        <TextBlock  FontSize="50" Text="{x:Bind ViewModel.BatteryPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"/>
+                    </StackPanel>
+                    
                 </gauge:SfCircularGauge.GaugeHeader>
 
 
@@ -137,7 +131,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- Home Use -->
-                <Image Source="ms-appx:///Assets/icon_home.png" Width="50" Margin="10"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                <Image Source="ms-appx:///Assets/icon_home.png" Width="40" Margin="10"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
                     <TextBlock Foreground="Cyan" Margin="0,0,10,0"  VerticalAlignment="Bottom" FontSize="50"  Text="{x:Bind ViewModel.HomeValue, Mode=OneWay, Converter={StaticResource KilowattConverter}}" ></TextBlock>
                     <TextBlock FontSize="30" Margin="0,0,0,5" Foreground="#888888" VerticalAlignment="Bottom"  Text="kW" />
@@ -163,7 +157,7 @@
 
 
                 <!-- Solar Generation -->
-                <Image Source="ms-appx:///Assets/icon_solar.png" Width="50"  Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Margin="0,5,0,0" />
+                <Image Source="ms-appx:///Assets/icon_solar.png" Width="40"  Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Margin="0,5,0,0" />
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
                     <TextBlock  Foreground="Gold" Margin="0,0,10,0"  VerticalAlignment="Bottom" FontSize="50" Text="{x:Bind ViewModel.SolarValue, Mode=OneWay, Converter={StaticResource KilowattConverter}}" ></TextBlock>
                     <TextBlock FontSize="30" Margin="0,0,0,5" Foreground="#888888" VerticalAlignment="Bottom"  Text="kW" />
@@ -190,7 +184,7 @@
         </StackPanel>
 
         <!-- Second Column-->
-        <Grid Grid.Row="1" Grid.Column="1"  >
+        <Grid Grid.Row="0" Grid.Column="1"  >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
