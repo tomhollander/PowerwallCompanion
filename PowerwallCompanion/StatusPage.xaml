@@ -70,7 +70,7 @@
             <gauge:SfCircularGauge Margin="20"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center">
                 <gauge:SfCircularGauge.GaugeHeader>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,2,-2,0"  VerticalAlignment="Center" />
+                        <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,5,-2,0" Opacity="0.6" VerticalAlignment="Center" />
                         <TextBlock  FontSize="50" Text="{x:Bind ViewModel.BatteryPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"/>
                     </StackPanel>
                     
@@ -102,7 +102,7 @@
                     </gauge:CircularScale>
                     <gauge:CircularScale RangePosition="Custom" RangeOffset="0.7" StartAngle="95" SweepAngle="350" ShowLabels="False" ShowRim="False" TickLength="0" SmallTickLength="0">
                         <gauge:CircularScale.Ranges>
-                            <gauge:CircularRange  StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StrokeThickness="5" Stroke="Green" />
+                            <gauge:CircularRange  StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StrokeThickness="5" Stroke="Green" ToolTipService.ToolTip="Range of charge level today"/>
                         </gauge:CircularScale.Ranges>
                     </gauge:CircularScale>
 

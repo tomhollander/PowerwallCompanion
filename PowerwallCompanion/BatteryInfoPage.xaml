@@ -74,7 +74,7 @@
                 <TextBlock FontSize="50" Text="{x:Bind ViewModel.Degradation,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
             </StackPanel>
 
-            <TextBlock x:Name="multiplePowerwallMessage"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Foreground="LightGray" TextWrapping="Wrap" Visibility="Collapsed">
+            <TextBlock x:Name="multiplePowerwallMessage"  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Foreground="LightGray" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,10,0">
                 The Tesla API does not report capacity for individual Powerwalls. To find the status of each
                 of your batteries you must access your local gateway API.
             </TextBlock>
