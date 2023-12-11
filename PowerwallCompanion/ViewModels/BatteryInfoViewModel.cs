@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.System.UserProfile;
 
 namespace PowerwallCompanion.ViewModels
 {
@@ -15,7 +16,19 @@ namespace PowerwallCompanion.ViewModels
         public int NumberOfBatteries { get; set; }
         public DateTime InstallDate { get; set; }
         public string InstallDateString { get { return InstallDate.ToString("d"); } }
-        public double WarrantedCapacity { get { return 13200 * NumberOfBatteries; } }
+        public double WarrantedCapacity { 
+            get 
+            {
+                int capacity = 13500;
+                var region = GlobalizationPreferences.HomeGeographicRegion;
+                if (region == "AU" || region == "NZ")
+                {
+                    capacity = 13200;
+                }
+
+                return capacity * NumberOfBatteries; 
+            } 
+        }
 
         public double TotalPackEnergy { get; set; }
 
