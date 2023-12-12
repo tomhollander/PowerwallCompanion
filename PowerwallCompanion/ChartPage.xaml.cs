@@ -30,7 +30,7 @@ namespace PowerwallCompanion
 
             this.ViewModel = new ChartViewModel();
             ViewModel.Period = "Day";
-            ViewModel.CalendarDate = DateTime.Now;            
+            ViewModel.CalendarDate = DateTime.Now;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

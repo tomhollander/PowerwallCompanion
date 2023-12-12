@@ -18,10 +18,29 @@
     </Page.Resources>
     
     <Grid>
-
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="column1.Width" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="column1.Width" Value="120" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="40">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120" x:Name="column1"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -42,14 +61,14 @@
             <TextBlock FontSize="30" Text="Install Date"  Grid.Row="1" Grid.Column="1" Foreground="DimGray"/>
             <TextBlock FontSize="30" Text="{x:Bind ViewModel.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
 
-            <TextBlock FontSize="30" Text="Number of Powerwalls"  Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock FontSize="30" Text="Number of Powerwalls" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
             <TextBlock FontSize="30" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
 
 
 
 
             <StackPanel  Orientation="Vertical" Grid.Row="3" Grid.Column="1">
-                <TextBlock FontSize="30" Text="Current capacity" Foreground="DimGray"/>
+                <TextBlock FontSize="30" Text="Current capacity" TextWrapping="Wrap" Foreground="DimGray"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontSize="50" Text="{x:Bind ViewModel.TotalPackEnergy, Mode=OneWay,Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
                     <TextBlock FontSize="30" Text=" kWh" Foreground="DimGray" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
@@ -57,7 +76,7 @@
             </StackPanel>
 
             <StackPanel  Orientation="Vertical" Grid.Row="3" Grid.Column="2">
-                <TextBlock FontSize="30" Text="Warranted capacity" Foreground="DimGray"/>
+                <TextBlock FontSize="30" Text="Warranted capacity" TextWrapping="Wrap" Foreground="DimGray"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontSize="50" Text="{x:Bind ViewModel.WarrantedCapacity, Mode=OneWay,Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}"></TextBlock>
                     <TextBlock FontSize="30" Text=" kWh" Foreground="DimGray" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
