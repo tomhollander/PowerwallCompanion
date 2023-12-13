@@ -143,6 +143,7 @@
     <Compile Include="Converters\GridStatusBrushSizeConverter.cs" />
     <Compile Include="Converters\StatusMessageConverter.cs" />
     <Compile Include="Converters\StatusToBrushConverter.cs" />
+    <Compile Include="Converters\TooltipMessageConverter.cs" />
     <Compile Include="Converters\TrueToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\FalseToVisibilityCollapsedConverter.cs" />
     <Compile Include="Converters\PositiveBarGraphConverter.cs" />

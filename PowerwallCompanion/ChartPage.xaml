@@ -19,6 +19,7 @@
         <converters:EnergyHistoryDateFormatConverter x:Key="EnergyHistoryDateFormatConverter"/>
         <converters:StatusToVisibilityConverter x:Key="StatusToVisibilityConverter" />
         <converters:DateFormatConverter x:Key="DateFormatConverter"/>
+        <converters:TooltipMessageConverter x:Key="TooltipMessageConverter"/>
     </Page.Resources>
 
         
@@ -64,29 +65,29 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="0">
                     <Image Source="ms-appx:///Assets/icon_home.png" VerticalAlignment="Center" ToolTipService.ToolTip="Home Use" Width="30" Margin="5,0,5,0"></Image>
-                    <TextBlock Foreground="Cyan" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" />
+                    <TextBlock Foreground="Cyan" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.HomeEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy used in the home during this period'}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Grid.Column="1">
                     <Image Source="ms-appx:///Assets/icon_solar.png" VerticalAlignment="Center" ToolTipService.ToolTip="Solar Generated" Width="30"></Image>
-                    <TextBlock Foreground="Gold" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" />
+                    <TextBlock Foreground="Gold" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.SolarEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar energy generated during this period'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center"  Spacing="-20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_grid_import.png" ToolTipService.ToolTip="Imported from Grid" Width="30" VerticalAlignment="Center" Margin="5" />
-                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridImportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid during this period'}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridExportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy exported to the grid during this period'}"></TextBlock>
                         <Image Source="ms-appx:///Assets/icon_grid_export.png" ToolTipService.ToolTip="Exported to Grid" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center"  Spacing="-20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_battery_export.png" ToolTipService.ToolTip="Discharge from Battery" Width="30" VerticalAlignment="Center" Margin="5" />
-                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryExportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged from the battery during this period'}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ></TextBlock>
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryImportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy charged to the battery during this period'}"></TextBlock>
                         <Image Source="ms-appx:///Assets/icon_battery_import.png" ToolTipService.ToolTip="Charge to Battery" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>
@@ -101,7 +102,7 @@
             <!-- Daily power chart -->
             <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20">
                 <chart:SfChart.Behaviors>
-                    <chart:ChartTrackBallBehavior  />
+                    <chart:ChartTrackBallBehavior x:Name="powerTrackBall"  />
                 </chart:SfChart.Behaviors>
                 
                 <chart:SfChart.PrimaryAxis>
@@ -135,7 +136,7 @@
             <!-- Daily battery chart -->
             <chart:SfChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20">
                 <chart:SfChart.Behaviors>
-                    <chart:ChartTrackBallBehavior  />
+                    <chart:ChartTrackBallBehavior x:Name="batteryTrackBall" />
                 </chart:SfChart.Behaviors>
                 
                 <chart:SfChart.PrimaryAxis>
@@ -199,11 +200,14 @@
 
                 <chart:ColumnSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.HomeEnergyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
                 <chart:ColumnSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarEnergyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:ColumnSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:ColumnSeries ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:ColumnSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:ColumnSeries ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                    
+                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+
+                <chart:SfChart.Annotations>
+                    <chart:HorizontalLineAnnotation Y1="0" Stroke="LightGray" StrokeThickness="2" />
+                </chart:SfChart.Annotations>
 
             </chart:SfChart>
        
