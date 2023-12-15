@@ -50,6 +50,10 @@
             <HyperlinkButton FontSize="12" Margin="5" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">
                 Privacy Policy
             </HyperlinkButton>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="12" Margin="5">App Version: </TextBlock>
+                <TextBlock FontSize="12" Margin="5" Text="{x:Bind ViewModel.AppVersion}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

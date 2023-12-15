@@ -187,11 +187,11 @@ namespace PowerwallCompanion
                 }
 
                 var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
-                //var homeGraphData = new ObservableCollection<ChartDataPoint>();
-                viewModel.HomeGraphData.Clear();
-                viewModel.SolarGraphData.Clear();
-                viewModel.BatteryGraphData.Clear();
-                viewModel.GridGraphData.Clear();
+                
+                var homeGraphData = new List<ChartDataPoint>();
+                var solarGraphData = new List<ChartDataPoint>();
+                var gridGraphData = new List<ChartDataPoint>();
+                var batteryGraphData = new List<ChartDataPoint>();
 
                 foreach (var datapoint in (JArray)json["response"]["time_series"])
                 {
@@ -200,10 +200,15 @@ namespace PowerwallCompanion
                     var batteryPower = datapoint["battery_power"].Value<double>() / 1000;
                     var gridPower = datapoint["grid_power"].Value<double>() / 1000;
                     var homePower = solarPower + batteryPower + gridPower;
-                    viewModel.HomeGraphData.Add(new ChartDataPoint(timestamp, homePower));
-                    viewModel.SolarGraphData.Add(new ChartDataPoint(timestamp, solarPower));
-                    viewModel.GridGraphData.Add(new ChartDataPoint(timestamp, gridPower));
-                    viewModel.BatteryGraphData.Add(new ChartDataPoint(timestamp, batteryPower));
+                    homeGraphData.Add(new ChartDataPoint(timestamp, homePower));
+                    solarGraphData.Add(new ChartDataPoint(timestamp, solarPower));
+                    gridGraphData.Add(new ChartDataPoint(timestamp, gridPower));
+                    batteryGraphData.Add(new ChartDataPoint(timestamp, batteryPower));
+
+                    viewModel.HomeGraphData = homeGraphData;
+                    viewModel.SolarGraphData = solarGraphData;
+                    viewModel.BatteryGraphData = batteryGraphData;
+                    viewModel.GridGraphData = gridGraphData;
                 }
 
                 viewModel.PowerHistoryLastRefreshed = DateTime.Now;

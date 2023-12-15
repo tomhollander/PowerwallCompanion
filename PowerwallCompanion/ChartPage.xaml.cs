@@ -31,16 +31,20 @@ namespace PowerwallCompanion
             this.ViewModel = new ChartViewModel();
             ViewModel.Period = "Day";
             ViewModel.CalendarDate = DateTime.Now;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMinutes(5);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        private void Timer_Tick(object sender, object e)
         {
-            base.OnNavigatedTo(e);
             RefreshDataAndCharts();
         }
 
 
-        private void prevPeriodButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void prevPeriodButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             switch(ViewModel.Period)
             {
@@ -57,10 +61,10 @@ namespace PowerwallCompanion
                     ViewModel.CalendarDate =ViewModel.CalendarDate.Value.AddYears(-1);
                     break;
             }
-            RefreshDataAndCharts();
+            await RefreshDataAndCharts();
         }
 
-        private void nextPeriodButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void nextPeriodButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             switch (ViewModel.Period)
             {
@@ -77,13 +81,13 @@ namespace PowerwallCompanion
                     ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddYears(1);
                     break;
             }
-            RefreshDataAndCharts();
+            await RefreshDataAndCharts();
 
         }
 
-        private void periodCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void periodCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RefreshDataAndCharts();
+            await RefreshDataAndCharts();
         }
 
         private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
@@ -93,15 +97,15 @@ namespace PowerwallCompanion
                 datePicker.Date = DateTime.Now.Date;
             }
         }
-        private void CalendarDatePicker_Closed(object sender, object e)
+        private async void CalendarDatePicker_Closed(object sender, object e)
         {
-            RefreshDataAndCharts();
+            await RefreshDataAndCharts();
         }
 
-        private void todayButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void todayButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ViewModel.CalendarDate = DateTime.Today;
-            RefreshDataAndCharts();
+            await RefreshDataAndCharts();
         }
 
     
@@ -171,12 +175,12 @@ namespace PowerwallCompanion
                 double totalHomeFromSolar = 0;
                 double totalHomeFromBattery = 0;
 
-                ViewModel.HomeEnergyGraphData.Clear();
-                ViewModel.SolarEnergyGraphData.Clear();
-                ViewModel.GridExportedEnergyGraphData.Clear();
-                ViewModel.GridImportedEnergyGraphData.Clear();
-                ViewModel.BatteryExportedEnergyGraphData.Clear();
-                ViewModel.BatteryImportedEnergyGraphData.Clear();
+                var homeEnergyGraphData = new List<ChartDataPoint>();
+                var solarEnergyGraphData = new List<ChartDataPoint>();
+                var gridExportedEnergyGraphData = new List<ChartDataPoint>();
+                var gridImportedEnergyGraphData = new List<ChartDataPoint>();
+                var batteryExportedEnergyGraphData = new List<ChartDataPoint>();
+                var batteryImportedEnergyGraphData = new List<ChartDataPoint>();
                 ViewModel.EnergyDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
 
                 foreach (var data in json["response"]["time_series"])
@@ -187,32 +191,32 @@ namespace PowerwallCompanion
                                        GetJsonDoubleValue(data["consumer_energy_imported_from_battery"]) +
                                        GetJsonDoubleValue(data["consumer_energy_imported_from_generator"]);
                     totalHomeEnergy += homeEnergy;
-                    ViewModel.HomeEnergyGraphData.Add(new ChartDataPoint(date, homeEnergy / 1000));
+                    homeEnergyGraphData.Add(new ChartDataPoint(date, homeEnergy / 1000));
  
                     var solarEnergy = GetJsonDoubleValue(data["solar_energy_exported"]);
                     totalSolarEnergy += solarEnergy;
-                    ViewModel.SolarEnergyGraphData.Add(new ChartDataPoint(date, solarEnergy / 1000));
+                    solarEnergyGraphData.Add(new ChartDataPoint(date, solarEnergy / 1000));
 
                     var gridExportedEnergy = GetJsonDoubleValue(data["grid_energy_exported_from_solar"]) +
                                              GetJsonDoubleValue(data["grid_energy_exported_from_generator"]) +
                                              GetJsonDoubleValue(data["grid_energy_exported_from_battery"]);
                     totalGridExportedEnergy += gridExportedEnergy;
-                    ViewModel.GridExportedEnergyGraphData.Add(new ChartDataPoint(date, -gridExportedEnergy / 1000));
+                    gridExportedEnergyGraphData.Add(new ChartDataPoint(date, -gridExportedEnergy / 1000));
 
                     var gridImportedEnergy = GetJsonDoubleValue(data["battery_energy_imported_from_grid"]) +
                                              GetJsonDoubleValue(data["consumer_energy_imported_from_grid"]);
                     totalGridImportedEnergy += gridImportedEnergy;
-                    ViewModel.GridImportedEnergyGraphData.Add(new ChartDataPoint(date, gridImportedEnergy / 1000));
+                    gridImportedEnergyGraphData.Add(new ChartDataPoint(date, gridImportedEnergy / 1000));
 
                     var batteryExportedEnergy = GetJsonDoubleValue(data["battery_energy_exported"]);
                     totalBatteryExportedEnergy += batteryExportedEnergy;
-                    ViewModel.BatteryExportedEnergyGraphData.Add(new ChartDataPoint(date, batteryExportedEnergy / 1000));
+                    batteryExportedEnergyGraphData.Add(new ChartDataPoint(date, batteryExportedEnergy / 1000));
 
                     var batteryImportedEnergy = GetJsonDoubleValue(data["battery_energy_imported_from_grid"]) +
                                              GetJsonDoubleValue(data["battery_energy_imported_from_solar"]) +
                                              GetJsonDoubleValue(data["battery_energy_imported_from_generator"]);
                     totalBatteryImportedEnergy += batteryImportedEnergy;
-                    ViewModel.BatteryImportedEnergyGraphData.Add(new ChartDataPoint(date, -batteryImportedEnergy / 1000));
+                    batteryImportedEnergyGraphData.Add(new ChartDataPoint(date, -batteryImportedEnergy / 1000));
 
                     // Totals for self consumption calcs
                     totalHomeFromGrid += GetJsonDoubleValue(data["consumer_energy_imported_from_grid"]) + GetJsonDoubleValue(data["consumer_energy_imported_from_generator"]);
@@ -224,6 +228,20 @@ namespace PowerwallCompanion
                     ViewModel.EnergyDataForExport[date].Remove("timestamp");
 
                 }
+                ViewModel.HomeEnergyGraphData = homeEnergyGraphData;
+                ViewModel.SolarEnergyGraphData = solarEnergyGraphData;
+                ViewModel.GridExportedEnergyGraphData = gridExportedEnergyGraphData;
+                ViewModel.GridImportedEnergyGraphData = gridImportedEnergyGraphData;
+                ViewModel.BatteryExportedEnergyGraphData = batteryExportedEnergyGraphData;
+                ViewModel.BatteryImportedEnergyGraphData = batteryImportedEnergyGraphData;
+
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.HomeEnergyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.SolarEnergyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridExportedEnergyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridImportedEnergyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryExportedEnergyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryImportedEnergyGraphData));
+
                 ViewModel.HomeEnergy = totalHomeEnergy;
                 ViewModel.SolarEnergy = totalSolarEnergy;
                 ViewModel.GridExportedEnergy = totalGridExportedEnergy;
@@ -251,10 +269,10 @@ namespace PowerwallCompanion
                 var url = GetCalendarHistoryUrl("power");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "PowerHistory");
 
-                ViewModel.SolarDailyGraphData.Clear();
-                ViewModel.GridDailyGraphData.Clear();
-                ViewModel.BatteryDailyGraphData.Clear();
-                ViewModel.HomeDailyGraphData.Clear();
+                var solarDailyGraphData = new List<ChartDataPoint>();
+                var gridDailyGraphData = new List<ChartDataPoint>();
+                var batteryDailyGraphData = new List<ChartDataPoint>();
+                var homeDailyGraphData = new List<ChartDataPoint>();
                 ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
 
                 foreach (var data in json["response"]["time_series"])
@@ -266,17 +284,25 @@ namespace PowerwallCompanion
                     var batteryPower = GetJsonDoubleValue(data["battery_power"]);
                     var homePower = solarPower + gridPower + batteryPower;
 
-                    ViewModel.SolarDailyGraphData.Add(new ChartDataPoint(date, solarPower  / 1000));
-                    ViewModel.GridDailyGraphData.Add(new ChartDataPoint(date, gridPower / 1000));
-                    ViewModel.BatteryDailyGraphData.Add(new ChartDataPoint(date, batteryPower / 1000));
-                    ViewModel.HomeDailyGraphData.Add(new ChartDataPoint(date, homePower / 1000));
+                    solarDailyGraphData.Add(new ChartDataPoint(date, solarPower  / 1000));
+                    gridDailyGraphData.Add(new ChartDataPoint(date, gridPower / 1000));
+                    batteryDailyGraphData.Add(new ChartDataPoint(date, batteryPower / 1000));
+                    homeDailyGraphData.Add(new ChartDataPoint(date, homePower / 1000));
 
                     // Save for export
                     ViewModel.PowerDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
                     ViewModel.PowerDataForExport[date].Remove("timestamp");
                 }
-                ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
+                ViewModel.SolarDailyGraphData = solarDailyGraphData;
+                ViewModel.GridDailyGraphData = gridDailyGraphData;
+                ViewModel.BatteryDailyGraphData = batteryDailyGraphData;
+                ViewModel.HomeDailyGraphData = homeDailyGraphData;
 
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.SolarDailyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridDailyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailyGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.HomeDailyGraphData));
             }
 
             catch (Exception ex)
@@ -294,14 +320,16 @@ namespace PowerwallCompanion
                 var url = GetCalendarHistoryUrl("soe");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "SoeHistory");
 
-                ViewModel.BatteryDailySoeGraphData.Clear();
+                var batteryDailySoeGraphData = new List<ChartDataPoint>();
 
                 foreach (var data in json["response"]["time_series"])
                 {
                     var date = data["timestamp"].Value<DateTime>();
-                    ViewModel.BatteryDailySoeGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["soe"])));
+                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["soe"])));
 
                 }
+                ViewModel.BatteryDailySoeGraphData = batteryDailySoeGraphData;
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
             }
 

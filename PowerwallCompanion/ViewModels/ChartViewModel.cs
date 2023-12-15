@@ -33,17 +33,6 @@ namespace PowerwallCompanion.ViewModels
 
         public ChartViewModel()
         {
-            HomeDailyGraphData = new ObservableCollection<ChartDataPoint>();
-            SolarDailyGraphData = new ObservableCollection<ChartDataPoint>();
-            GridDailyGraphData = new ObservableCollection<ChartDataPoint>();
-            BatteryDailyGraphData = new ObservableCollection<ChartDataPoint>();
-            BatteryDailySoeGraphData = new ObservableCollection<ChartDataPoint>();
-            HomeEnergyGraphData = new ObservableCollection<ChartDataPoint>();
-            SolarEnergyGraphData = new ObservableCollection<ChartDataPoint>();
-            GridImportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
-            GridExportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
-            BatteryImportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
-            BatteryExportedEnergyGraphData = new ObservableCollection<ChartDataPoint>();
         }
 
         public IEnumerable<string> PeriodNames
@@ -189,51 +178,51 @@ namespace PowerwallCompanion.ViewModels
         }
 
 
-        public ObservableCollection<ChartDataPoint> HomeDailyGraphData
+        public List<ChartDataPoint> HomeDailyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> SolarDailyGraphData
+        public List<ChartDataPoint> SolarDailyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> GridDailyGraphData
+        public List<ChartDataPoint> GridDailyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> BatteryDailyGraphData
+        public List<ChartDataPoint> BatteryDailyGraphData
         {
-            get;
-        }
-
-        public ObservableCollection<ChartDataPoint> BatteryDailySoeGraphData
-        {
-            get;
+            get; set;
         }
 
-        public ObservableCollection<ChartDataPoint> HomeEnergyGraphData
+        public List<ChartDataPoint> BatteryDailySoeGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> SolarEnergyGraphData
+
+        public List<ChartDataPoint> HomeEnergyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> GridImportedEnergyGraphData
+        public List<ChartDataPoint> SolarEnergyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> GridExportedEnergyGraphData
+        public List<ChartDataPoint> GridImportedEnergyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> BatteryImportedEnergyGraphData
+        public List<ChartDataPoint> GridExportedEnergyGraphData
         {
-            get;
+            get; set;
         }
-        public ObservableCollection<ChartDataPoint> BatteryExportedEnergyGraphData
+        public List<ChartDataPoint> BatteryImportedEnergyGraphData
         {
-            get;
+            get; set;
+        }
+        public List<ChartDataPoint> BatteryExportedEnergyGraphData
+        {
+            get; set;
         }
 
 

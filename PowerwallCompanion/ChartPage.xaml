@@ -125,10 +125,10 @@
                     </chart:ChartLegend>
                 </chart:SfChart.Legend>
 
-                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
-                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
                 
                 
             </chart:SfChart>
@@ -159,7 +159,7 @@
                     </chart:ChartLegend>
                 </chart:SfChart.Legend>
 
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData, Mode=OneWay}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
 
             </chart:SfChart>
 
@@ -198,12 +198,12 @@
                     </chart:ChartLegend>
                 </chart:SfChart.Legend>
 
-                <chart:ColumnSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.HomeEnergyGraphData}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:ColumnSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarEnergyGraphData}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.HomeEnergyGraphData, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
+                <chart:ColumnSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarEnergyGraphData, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridImportedEnergyGraphData, Mode=OneWay}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridExportedEnergyGraphData, Mode=OneWay}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryExportedEnergyGraphData, Mode=OneWay}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryImportedEnergyGraphData, Mode=OneWay}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
 
                 <chart:SfChart.Annotations>
                     <chart:HorizontalLineAnnotation Y1="0" Stroke="LightGray" StrokeThickness="2" />

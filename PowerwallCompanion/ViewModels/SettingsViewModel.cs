@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 
 namespace PowerwallCompanion.ViewModels
 {
@@ -76,6 +77,18 @@ namespace PowerwallCompanion.ViewModels
         {
             get => AvailableSites.Where(s => s.Key == Settings.SiteId).FirstOrDefault();
             set => Settings.SiteId = value.Key;
+        }
+
+        public string AppVersion
+        {
+            get
+            {
+                Package package = Package.Current;
+                PackageId packageId = package.Id;
+                PackageVersion version = packageId.Version;
+
+                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+            }
         }
 
         public void UpdateProps()
