@@ -16,10 +16,16 @@ namespace PowerwallCompanion
 {
     static class ApiHelper
     {
-        public const string BaseUrl = "https://owner-api.teslamotors.com";
+        public static string _baseUrl;
 
         public static async Task<JObject> CallGetApiWithTokenRefresh(string url, string demoId)
         {
+            string fullUrl = url;
+            if (!fullUrl.StartsWith("http"))
+            {
+                fullUrl = await GetBaseUrl() + fullUrl;
+            }
+
             if (Settings.AccessToken == null)
             {
                 throw new UnauthorizedAccessException();
@@ -27,13 +33,20 @@ namespace PowerwallCompanion
 
             try
             {
-                return await CallGetApi(url, demoId);
+                return await CallGetApi(fullUrl, demoId);
             }
             catch (UnauthorizedAccessException)
             {
-                // First fail - try refreshing
-                await RefreshToken();
-                return await CallGetApi(url, demoId);
+                if (!fullUrl.StartsWith("http"))
+                {
+                    // First fail - try refreshing, unless we don't have a region 
+                    await RefreshToken();
+                    return await CallGetApi(fullUrl, demoId);
+                }
+                else
+                {
+                    throw;
+                }
 
             }
         }
@@ -103,7 +116,8 @@ namespace PowerwallCompanion
         {
             try
             {
-                var helper = new TeslaAuthHelper("PowerwallCompanion/0.0", TeslaAccountRegion.Unknown);
+                var helper = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl, 
+                    Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
                 var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken);
                 Settings.AccessToken = tokens.AccessToken;
             }
@@ -111,6 +125,16 @@ namespace PowerwallCompanion
             { 
                 throw new UnauthorizedAccessException();
             }
+        }
+
+        private static async Task<string> GetBaseUrl()
+        {
+            if (_baseUrl == null)
+            {
+                var response = await CallGetApiWithTokenRefresh("https://fleet-api.prd.na.vn.cloud.tesla.com/api/1/users/region", "region");
+                _baseUrl = response["response"]["fleet_api_base_url"].Value<string>();
+            }
+            return _baseUrl;
         }
     }
 

@@ -387,7 +387,7 @@ namespace PowerwallCompanion.ViewModels
         {
             try
             {
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/calendar_history?kind=soe", "SOE");
+                var json = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/calendar_history?kind=soe", "SOE");
                 int min = 100;
                 int max = 0;
                 foreach (var datapoint in (JArray)json["response"]["time_series"])

@@ -263,13 +263,13 @@
       <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.8.0-prerelease.220118001</Version>
+      <Version>2.8.6</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Web.WebView2">
-      <Version>1.0.2088.41</Version>
+      <Version>1.0.2210.55</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.SfChart.UWP">
       <Version>23.2.4</Version>
@@ -284,7 +284,7 @@
       <Version>4.3.1</Version>
     </PackageReference>
     <PackageReference Include="TeslaAuth">
-      <Version>2.3.0</Version>
+      <Version>3.0.1</Version>
     </PackageReference>
     <PackageReference Include="TimeZoneConverter">
       <Version>6.1.0</Version>

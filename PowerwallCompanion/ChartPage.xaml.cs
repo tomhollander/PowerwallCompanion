@@ -148,7 +148,7 @@ namespace PowerwallCompanion
             var endDate = new DateTimeOffset(ViewModel.PeriodEnd).AddSeconds(-1);
             var timeZone = TZConvert.WindowsToIana(TimeZoneInfo.Local.Id);
 
-            sb.Append($"{ApiHelper.BaseUrl}/api/1/energy_sites/{siteId}/calendar_history?");
+            sb.Append($"/api/1/energy_sites/{siteId}/calendar_history?");
             sb.Append("kind=" + kind);
             sb.Append("&period=" + ViewModel.Period.ToLowerInvariant());
             sb.Append("&start_date=" + Uri.EscapeDataString(startDate.ToString("o")));

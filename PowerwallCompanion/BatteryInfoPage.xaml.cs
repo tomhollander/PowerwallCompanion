@@ -54,14 +54,14 @@ namespace PowerwallCompanion
 
         private async Task GetBatteryCapacity()
         {
-            var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
+            var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
             ViewModel.SiteName = siteStatusJson["response"]["site_name"].Value<string>();
             ViewModel.TotalPackEnergy = siteStatusJson["response"]["total_pack_energy"].Value<double>();
         }
 
         private async Task GetBatteryInfo()
         {
-            var siteInfoJson = await ApiHelper.CallGetApiWithTokenRefresh($"{ApiHelper.BaseUrl}/api/1/energy_sites/{Settings.SiteId}/site_info", "SiteInfo");
+            var siteInfoJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_info", "SiteInfo");
             ViewModel.NumberOfBatteries = siteInfoJson["response"]["battery_count"].Value<int>();
             ViewModel.InstallDate = siteInfoJson["response"]["installation_date"].Value<DateTime>();
             if (ViewModel.NumberOfBatteries > 1)

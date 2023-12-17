@@ -30,7 +30,8 @@ namespace PowerwallCompanion
     /// </summary>
     public sealed partial class LoginPage : Page
     {
-        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper("PowerwallCompanion/1.0");
+        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl,
+                    Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
 
         public LoginPage()
         {
@@ -62,7 +63,7 @@ namespace PowerwallCompanion
         private async void webView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
         {
             var url = args.Uri.ToString();
-            if (url.Contains("void/callback"))
+            if (url.Contains(Licenses.TeslaAppRedirectUrl))
             {
                 webView.Visibility = Visibility.Collapsed;
                 await CompleteLogin(url);
@@ -92,7 +93,7 @@ namespace PowerwallCompanion
 
         private async Task GetSiteId()
         {
-            var productsResponse = await ApiHelper.CallGetApiWithTokenRefresh(ApiHelper.BaseUrl + "/api/1/products", "Products");
+            var productsResponse = await ApiHelper.CallGetApiWithTokenRefresh("/api/1/products", "Products");
             var availableSites = new Dictionary<string, string>();
             bool foundSite = false;
             foreach (var product in productsResponse["response"])
