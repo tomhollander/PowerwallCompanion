@@ -38,16 +38,8 @@ namespace PowerwallCompanion
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
             authFailureMessage.Visibility = Visibility.Collapsed;
-            if (Settings.UseLocalGateway)
-            {
-                localGatwayRadioButton.IsChecked = true;
-                gatewayIpTextBox.Text = Settings.LocalGatewayIP ?? String.Empty;
-            }
-            else
-            {
-                teslaAccountRadioButton.IsChecked = true;
+            webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
 
-            }
         }
 
         private void webView_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
@@ -55,7 +47,7 @@ namespace PowerwallCompanion
             webView.EnsureCoreWebView2Async().AsTask().GetAwaiter().GetResult();
             webView.CoreWebView2.CookieManager.DeleteAllCookies();
             webView.Visibility = Visibility.Visible;
-            webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
+            //webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
         }
 
 
@@ -77,7 +69,6 @@ namespace PowerwallCompanion
             }
 
         }
-
 
         private async Task CompleteLogin(string url)
         {
@@ -123,53 +114,13 @@ namespace PowerwallCompanion
         }
 
 
-        private async void ConnectButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            authFailureMessage.Visibility = Visibility.Collapsed;
-            try
-            {
-                var siteMaster = await ApiHelper.CallApiIgnoreCerts($"https://{gatewayIpTextBox.Text}/api/sitemaster");
-                if (siteMaster["running"].Value<bool>() == true)
-                {
-                    Settings.SignInName = null;
-                    Settings.UseLocalGateway = true;
-                    Settings.LocalGatewayIP = gatewayIpTextBox.Text;
-                    UpdateMenuButtons();
-                    this.Frame.Navigate(typeof(StatusPage));
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-            catch
-            {
-                Settings.AccessToken = null;
-                Settings.RefreshToken = null;
-                Settings.SignInName = null;
-                Settings.LocalGatewayIP = null;
-                authFailureMessage.Visibility = Visibility.Visible;
-            }
-        }
-
+        
         private void UpdateMenuButtons()
         {
             var frame = (Frame)Window.Current.Content;
             var mainPage = (MainPage)frame.Content;
         }
 
-        private void TeslaAccountRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            teslaAccountSignInControls.Visibility = Visibility.Visible;
-            localGatewaySignInControls.Visibility = Visibility.Collapsed;
-            webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
-        }
-
-        private void LocalGatwayRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            teslaAccountSignInControls.Visibility = Visibility.Collapsed;
-            localGatewaySignInControls.Visibility = Visibility.Visible;
-        }
 
         private async void TextBlock_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -180,6 +131,16 @@ namespace PowerwallCompanion
             Settings.UseLocalGateway = false;
             await GetSiteId();
             this.Frame.Navigate(typeof(StatusPage), true);
+        }
+
+        private void showAuthInfoLink_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            authInfo.Visibility = Visibility.Visible;
+        }
+
+        private void hideAuthInfoButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            authInfo.Visibility = Visibility.Collapsed;
         }
     }
 }

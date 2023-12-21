@@ -9,36 +9,36 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-         
-        <StackPanel Orientation="Vertical" Grid.Row="0">
-            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" DoubleTapped="TextBlock_DoubleTapped">Connect to your Tesla account</TextBlock>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Visibility="Collapsed">
-                <RadioButton x:Name="teslaAccountRadioButton" Checked="TeslaAccountRadioButton_Checked">Tesla Account</RadioButton>
-                <RadioButton x:Name="localGatwayRadioButton" Checked="LocalGatwayRadioButton_Checked">Local Gateway</RadioButton>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}" DoubleTapped="TextBlock_DoubleTapped">Connect to your Tesla account</TextBlock>
+        <HyperlinkButton Margin="10" x:Name="showAuthInfoLink" Tapped="showAuthInfoLink_Tapped" Grid.Row="0" HorizontalAlignment="Right">Authentication info</HyperlinkButton>
+
+        <winui:WebView2 Grid.Row="1" Width="Auto" Height="Auto" x:Name="webView" NavigationStarting="webView_NavigationStarting"  CoreWebView2Initialized="webView_CoreWebView2Initialized" />
+
+        <TextBlock x:Name="authFailureMessage" Grid.Row="1" Visibility="Collapsed"  Foreground="Red">Connection failed. Please try again.</TextBlock>
+
+        <Grid x:Name="authInfo" Grid.Row="1"  Visibility="Collapsed" Background="LightGray" BorderBrush="Blue" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical" >
+                <TextBlock Margin="10" FontWeight="Bold" Foreground="Black">Tesla authentication info</TextBlock>
+                <TextBlock Margin="10" Foreground="Black" TextWrapping="Wrap">You must sign in with your Tesla account so that the 
+                    Powerwall Companion app  can retrieve information from the Tesla API. Your credentials are sent directly to Tesla
+                    and are not accessible by this app.</TextBlock>
+                <TextBlock Margin="10" Foreground="Black" TextWrapping="Wrap">The first time you authenticate you will be prompted on what details you want the app to be able to access. The
+            "Energy product information" scope must be selected in order for the app to work. The "Vehicle information" scope is
+            not currently used by this app, although it can be used in the Android version and may be used in a future update of 
+            this app to show details of your Tesla vehicles - you can uncheck this scope if you don't want the app to be able to
+            see this information.</TextBlock>
+                <TextBlock Margin="10" Foreground="Black" TextWrapping="Wrap">After authentication, Tesla issues an API token which is 
+                stored securely on your device. The token can only be used by this app, and only has the access to the data you
+                granted in the step mentioned above.</TextBlock>
+                <TextBlock Margin="10" Foreground="Black" TextWrapping="Wrap">If you want to revoke Powerwall Companion's access to your
+                data, you can do this by logging on to Tesla website and navigating to Account and then Third Party Apps.</TextBlock>
+                <Button Foreground="White" Background="Blue" Margin="10" x:Name="hideAuthInfoButton" Tapped="hideAuthInfoButton_Tapped">Got it!</Button>
             </StackPanel>
-            <Grid Padding="10" x:Name="teslaAccountSignInControls">
+        </Grid>
 
-                <winui:WebView2 Width="Auto" Height="500" x:Name="webView" NavigationStarting="webView_NavigationStarting"  CoreWebView2Initialized="webView_CoreWebView2Initialized" />
-            </Grid>
-
-            <Grid Padding="10" x:Name="localGatewaySignInControls" Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Margin="5" Grid.Row="1" Grid.Column="0">Gateway IP:</TextBlock>
-                <TextBox Margin="5" x:Name="gatewayIpTextBox" Grid.Row="1" Grid.Column="1"></TextBox>
-                <HyperlinkButton Margin="5" Grid.Row="2" Grid.Column="1" NavigateUri="https://www.tesla.com/support/energy/powerwall/own/monitoring-from-home-network">How do I find my Gateway IP?</HyperlinkButton>
-                <Button x:Name="connectButton" Tapped="ConnectButton_Tapped"  Margin="10" Grid.Row="3" Grid.Column="1">Connect</Button>
-            </Grid>
-            <TextBlock x:Name="authFailureMessage" Visibility="Collapsed"  Foreground="Red">Connection failed. Please try again.</TextBlock>
-        </StackPanel>
     </Grid>
 </Page>
