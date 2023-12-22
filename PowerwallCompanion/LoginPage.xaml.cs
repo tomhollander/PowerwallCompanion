@@ -3,6 +3,7 @@ using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -38,6 +39,8 @@ namespace PowerwallCompanion
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
             authFailureMessage.Visibility = Visibility.Collapsed;
+            errorBanner.Visibility = Visibility.Collapsed;
+            warningBanner.Visibility = Visibility.Visible;
             webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
 
         }
@@ -55,32 +58,63 @@ namespace PowerwallCompanion
         private async void webView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
         {
             var url = args.Uri.ToString();
+
             if (url.Contains(Licenses.TeslaAppRedirectUrl))
             {
+                warningBanner.Visibility = Visibility.Collapsed;
                 webView.Visibility = Visibility.Collapsed;
-                await CompleteLogin(url);
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+
+                if (await CompleteLogin(url))
                 {
-                    UpdateMenuButtons();
-                    this.Frame.Navigate(typeof(StatusPage), true);
-                });
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        UpdateMenuButtons();
+                        this.Frame.Navigate(typeof(StatusPage), true);
+                    });
+                }
+                else
+                {
+                    // Token could not be used
+                    errorBanner.Visibility = Visibility.Visible;
+                    warningBanner.Visibility = Visibility.Collapsed;
+                    webView.Visibility = Visibility.Visible;
+                    webView.CoreWebView2.CookieManager.DeleteAllCookies();
+                    webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
+                }
 
 
             }
 
         }
 
-        private async Task CompleteLogin(string url)
+        private async Task<bool> CompleteLogin(string url)
         {
             var tokens = await teslaAuth.GetTokenAfterLoginAsync(url);
-            Settings.AccessToken = tokens.AccessToken;
-            Settings.RefreshToken = tokens.RefreshToken;
-            Settings.SignInName = "Tesla User";
-            Settings.UseLocalGateway = false;
-            await GetSiteId();
+
+            if (CheckTokenScopes(tokens.AccessToken))
+            {
+                Settings.AccessToken = tokens.AccessToken;
+                Settings.RefreshToken = tokens.RefreshToken;
+                Settings.SignInName = "Tesla User";
+                Settings.UseLocalGateway = false;
+                await GetSiteId();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+ 
         }
 
-
+        private bool CheckTokenScopes(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(accessToken);
+            var token = jsonToken as JwtSecurityToken;
+            var scopes = token.Claims.Where(x => x.Type == "scp").Select(x => x.Value).ToList();
+            return (scopes.Contains("energy_device_data") && scopes.Contains("vehicle_device_data"));
+        }
 
         private async Task GetSiteId()
         {
@@ -133,14 +167,16 @@ namespace PowerwallCompanion
             this.Frame.Navigate(typeof(StatusPage), true);
         }
 
-        private void showAuthInfoLink_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            authInfo.Visibility = Visibility.Visible;
-        }
+
 
         private void hideAuthInfoButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             authInfo.Visibility = Visibility.Collapsed;
+        }
+
+        private void showAuthInfoLink_Clicked(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            authInfo.Visibility = Visibility.Visible;
         }
     }
 }

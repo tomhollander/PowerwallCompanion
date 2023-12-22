@@ -277,6 +277,9 @@
     <PackageReference Include="Syncfusion.SfGauge.UWP">
       <Version>23.2.4</Version>
     </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
+      <Version>7.0.3</Version>
+    </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
     </PackageReference>

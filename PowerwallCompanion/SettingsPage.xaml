@@ -18,7 +18,7 @@
         <StackPanel Grid.Row="0" Orientation="Vertical" Padding="10">
             <TextBlock  Margin="0,0,0,20" Style="{StaticResource SubtitleTextBlockStyle}">Settings</TextBlock>
             <StackPanel HorizontalAlignment="Left"  Orientation="Horizontal" x:Name="signedInPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}}">
-                <TextBlock Margin="10" Width="200">Signed In</TextBlock>
+                <TextBlock Margin="10" Width="200" x:Name="signedInLabel" DoubleTapped="signedInLabel_DoubleTapped">Signed In</TextBlock>
                 <Button x:Name="signOutButton" Tapped="signOutButton_Tapped">Sign Out</Button>
             </StackPanel>
             <StackPanel HorizontalAlignment="Left" Orientation="Vertical" x:Name="signedOutPanel" Visibility="{x:Bind ViewModel.SignedIn, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}}">
@@ -38,16 +38,14 @@
             <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
             <CheckBox IsChecked="{x:Bind ViewModel.PlaySounds, Mode=TwoWay}" Margin="5">Play sound on battery full/empty</CheckBox>
 
-            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5">
-                This app is not built or endorsed by Tesla. 
+            
+            <TextBlock TextWrapping="Wrap" Foreground="Cyan" FontSize="14" Margin="5,20,5,20">
+                If you're enjoying this app, feel free to <Hyperlink NavigateUri="https://ko-fi.com/tomhollander">show your appreciation</Hyperlink>
             </TextBlock>
-            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5">
-                If you're enjoying it, feel free to <Hyperlink NavigateUri="https://ko-fi.com/tomhollander">show your appreciation</Hyperlink>
+            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5,5,5,0">
+                Powerwall Companion is not built or endorsed by Tesla.
             </TextBlock>
-            <TextBlock TextWrapping="Wrap" FontSize="12" Margin="5">
-                Tesla account credentials are sent to the Tesla web service for verification and are not stored or otherwise used by this app.
-            </TextBlock>
-            <HyperlinkButton FontSize="12" Margin="5" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">
+            <HyperlinkButton FontSize="12" Margin="5,5,5,0" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">
                 Privacy Policy
             </HyperlinkButton>
             <StackPanel Orientation="Horizontal">
