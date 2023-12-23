@@ -37,16 +37,9 @@ namespace PowerwallCompanion
             }
             catch (UnauthorizedAccessException)
             {
-                if (!fullUrl.StartsWith("http"))
-                {
-                    // First fail - try refreshing, unless we don't have a region 
-                    await RefreshToken();
-                    return await CallGetApi(fullUrl, demoId);
-                }
-                else
-                {
-                    throw;
-                }
+                // First fail - try refreshing,
+                await RefreshToken();
+                return await CallGetApi(fullUrl, demoId);
 
             }
         }
