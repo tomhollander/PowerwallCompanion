@@ -3,9 +3,11 @@
 ################################################################################
 
 /PowerwallCompanion/AppPackages
-/.vs/PowerwallCompanion/v16/Server/sqlite3
+/.vs/PowerwallCompanion/v17
+/.vs/PowerwallCompanion/FileContentIndex
 /PowerwallCompanion/bin
 /PowerwallCompanion/BundleArtifacts
 /PowerwallCompanion/obj
 /PowerwallCompanion/PowerwallCompanion_StoreKey.pfx
 /.vs/PowerwallCompanion/v16
+/PowerwallCompanion/Licenses.cs

@@ -125,7 +125,8 @@ namespace PowerwallCompanion
             if (_baseUrl == null)
             {
                 var response = await CallGetApiWithTokenRefresh("https://fleet-api.prd.na.vn.cloud.tesla.com/api/1/users/region", "region");
-                _baseUrl = response["response"]["fleet_api_base_url"].Value<string>();
+                _baseUrl = response["response"]["fleet_api_base_url"].Value<string>()
+                    ?? "https://fleet-api.prd.na.vn.cloud.tesla.com";
             }
             return _baseUrl;
         }

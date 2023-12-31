@@ -1,25 +1,14 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using System.Threading.Tasks;
 using TeslaAuth;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -89,18 +78,25 @@ namespace PowerwallCompanion
 
         private async Task<bool> CompleteLogin(string url)
         {
-            var tokens = await teslaAuth.GetTokenAfterLoginAsync(url);
-
-            if (CheckTokenScopes(tokens.AccessToken))
+            try
             {
-                Settings.AccessToken = tokens.AccessToken;
-                Settings.RefreshToken = tokens.RefreshToken;
-                Settings.SignInName = "Tesla User";
-                Settings.UseLocalGateway = false;
-                await GetSiteId();
-                return true;
+                var tokens = await teslaAuth.GetTokenAfterLoginAsync(url);
+
+                if (CheckTokenScopes(tokens.AccessToken))
+                {
+                    Settings.AccessToken = tokens.AccessToken;
+                    Settings.RefreshToken = tokens.RefreshToken;
+                    Settings.SignInName = "Tesla User";
+                    Settings.UseLocalGateway = false;
+                    await GetSiteId();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch
             {
                 return false;
             }

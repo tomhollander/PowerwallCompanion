@@ -278,6 +278,7 @@ namespace PowerwallCompanion
                 foreach (var data in json["response"]["time_series"])
                 {
                     var date = data["timestamp"].Value<DateTime>();
+                    if (date > DateTime.Now) continue;
 
                     var solarPower = GetJsonDoubleValue(data["solar_power"]);
                     var gridPower = GetJsonDoubleValue(data["grid_power"]);
@@ -290,6 +291,7 @@ namespace PowerwallCompanion
                     homeDailyGraphData.Add(new ChartDataPoint(date, homePower / 1000));
 
                     // Save for export
+                    data["load_power"] = homePower;
                     ViewModel.PowerDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
                     ViewModel.PowerDataForExport[date].Remove("timestamp");
                 }
@@ -325,8 +327,10 @@ namespace PowerwallCompanion
                 foreach (var data in json["response"]["time_series"])
                 {
                     var date = data["timestamp"].Value<DateTime>();
-                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["soe"])));
-
+                    if (date <= DateTime.Now)
+                    {
+                        batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["soe"])));
+                    }
                 }
                 ViewModel.BatteryDailySoeGraphData = batteryDailySoeGraphData;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
