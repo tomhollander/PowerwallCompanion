@@ -265,6 +265,12 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public JObject RatePlan
+        {
+            get; set;
+        }
+
+
         public Dictionary<DateTime, Dictionary<string, object>> PowerDataForExport
         { 
             get; set;  

@@ -1,0 +1,319 @@
+﻿{
+	"response": {
+		"code": "(edited)",
+		"name": "Plan name (edited)",
+		"utility": "Acme Power",
+		"daily_charges": [
+			{
+				"amount": 0,
+				"name": "Charge"
+			}
+		],
+		"demand_charges": {
+			"ALL": {
+				"ALL": 0
+			},
+			"Summer": {},
+			"Winter": {}
+		},
+		"energy_charges": {
+			"ALL": {
+				"ALL": 0
+			},
+			"Summer": {
+				"OFF_PEAK": 0.3,
+				"ON_PEAK": 0.47,
+				"SUPER_OFF_PEAK": 0.15
+			},
+			"Winter": {
+				"OFF_PEAK": 0.3,
+				"ON_PEAK": 0.35,
+				"SUPER_OFF_PEAK": 0.08
+			}
+		},
+		"seasons": {
+			"Summer": {
+				"fromDay": 1,
+				"toDay": 31,
+				"fromMonth": 11,
+				"toMonth": 3,
+				"tou_periods": {
+					"OFF_PEAK": [
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 6,
+							"fromMinute": 0,
+							"toHour": 16,
+							"toMinute": 0
+						},
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 21,
+							"fromMinute": 0,
+							"toHour": 0,
+							"toMinute": 0
+						},
+						{
+							"fromDayOfWeek": 5,
+							"toDayOfWeek": 6,
+							"fromHour": 6,
+							"fromMinute": 0,
+							"toHour": 0,
+							"toMinute": 0
+						}
+					],
+					"ON_PEAK": [
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 16,
+							"fromMinute": 0,
+							"toHour": 21,
+							"toMinute": 0
+						}
+					],
+					"SUPER_OFF_PEAK": [
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 0,
+							"fromMinute": 0,
+							"toHour": 6,
+							"toMinute": 0
+						},
+						{
+							"fromDayOfWeek": 5,
+							"toDayOfWeek": 6,
+							"fromHour": 0,
+							"fromMinute": 0,
+							"toHour": 6,
+							"toMinute": 0
+						}
+					]
+				}
+			},
+			"Winter": {
+				"fromDay": 1,
+				"toDay": 31,
+				"fromMonth": 4,
+				"toMonth": 10,
+				"tou_periods": {
+					"OFF_PEAK": [
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 6,
+							"fromMinute": 0,
+							"toHour": 16,
+							"toMinute": 0
+						},
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 20,
+							"fromMinute": 0,
+							"toHour": 0,
+							"toMinute": 0
+						},
+						{
+							"fromDayOfWeek": 5,
+							"toDayOfWeek": 6,
+							"fromHour": 6,
+							"fromMinute": 0,
+							"toHour": 0,
+							"toMinute": 0
+						}
+					],
+					"ON_PEAK": [
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 16,
+							"fromMinute": 0,
+							"toHour": 20,
+							"toMinute": 0
+						}
+					],
+					"SUPER_OFF_PEAK": [
+						{
+							"fromDayOfWeek": 0,
+							"toDayOfWeek": 4,
+							"fromHour": 0,
+							"fromMinute": 0,
+							"toHour": 6,
+							"toMinute": 0
+						},
+						{
+							"fromDayOfWeek": 5,
+							"toDayOfWeek": 6,
+							"fromHour": 0,
+							"fromMinute": 0,
+							"toHour": 6,
+							"toMinute": 0
+						}
+					]
+				}
+			}
+		},
+		"sell_tariff": {
+			"name": "EV night saver (edited)",
+			"utility": "AGL",
+			"daily_charges": [
+				{
+					"amount": 0,
+					"name": "Charge"
+				}
+			],
+			"demand_charges": {
+				"ALL": {
+					"ALL": 0
+				},
+				"Summer": {},
+				"Winter": {}
+			},
+			"energy_charges": {
+				"ALL": {
+					"ALL": 0
+				},
+				"Summer": {
+					"OFF_PEAK": 0.07,
+					"ON_PEAK": 0.07,
+					"SUPER_OFF_PEAK": 0.07
+				},
+				"Winter": {
+					"OFF_PEAK": 0.07,
+					"ON_PEAK": 0.07,
+					"SUPER_OFF_PEAK": 0.07
+				}
+			},
+			"seasons": {
+				"Summer": {
+					"fromDay": 1,
+					"toDay": 31,
+					"fromMonth": 11,
+					"toMonth": 3,
+					"tou_periods": {
+						"OFF_PEAK": [
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 6,
+								"fromMinute": 0,
+								"toHour": 16,
+								"toMinute": 0
+							},
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 21,
+								"fromMinute": 0,
+								"toHour": 0,
+								"toMinute": 0
+							},
+							{
+								"fromDayOfWeek": 5,
+								"toDayOfWeek": 6,
+								"fromHour": 6,
+								"fromMinute": 0,
+								"toHour": 0,
+								"toMinute": 0
+							}
+						],
+						"ON_PEAK": [
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 16,
+								"fromMinute": 0,
+								"toHour": 21,
+								"toMinute": 0
+							}
+						],
+						"SUPER_OFF_PEAK": [
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 0,
+								"fromMinute": 0,
+								"toHour": 6,
+								"toMinute": 0
+							},
+							{
+								"fromDayOfWeek": 5,
+								"toDayOfWeek": 6,
+								"fromHour": 0,
+								"fromMinute": 0,
+								"toHour": 6,
+								"toMinute": 0
+							}
+						]
+					}
+				},
+				"Winter": {
+					"fromDay": 1,
+					"toDay": 31,
+					"fromMonth": 4,
+					"toMonth": 10,
+					"tou_periods": {
+						"OFF_PEAK": [
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 6,
+								"fromMinute": 0,
+								"toHour": 16,
+								"toMinute": 0
+							},
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 20,
+								"fromMinute": 0,
+								"toHour": 0,
+								"toMinute": 0
+							},
+							{
+								"fromDayOfWeek": 5,
+								"toDayOfWeek": 6,
+								"fromHour": 6,
+								"fromMinute": 0,
+								"toHour": 0,
+								"toMinute": 0
+							}
+						],
+						"ON_PEAK": [
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 16,
+								"fromMinute": 0,
+								"toHour": 20,
+								"toMinute": 0
+							}
+						],
+						"SUPER_OFF_PEAK": [
+							{
+								"fromDayOfWeek": 0,
+								"toDayOfWeek": 4,
+								"fromHour": 0,
+								"fromMinute": 0,
+								"toHour": 6,
+								"toMinute": 0
+							},
+							{
+								"fromDayOfWeek": 5,
+								"toDayOfWeek": 6,
+								"fromHour": 0,
+								"fromMinute": 0,
+								"toHour": 6,
+								"toMinute": 0
+							}
+						]
+					}
+				}
+			}
+		}
+	}
+}

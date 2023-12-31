@@ -24,6 +24,26 @@
 
         
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NarrowView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="exportButton.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="650" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="exportButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid>
             <Grid.RowDefinitions>
                 <!-- 0: Button bar -->
@@ -106,10 +126,11 @@
                 </chart:SfChart.Behaviors>
                 
                 <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2" ShowTrackBallInfo="True"  LabelFormat="t"  Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2" ShowTrackBallInfo="True"  LabelFormat="t"  LabelBorderBrush="#202020">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
                         </chart:DateTimeAxis.LabelStyle>
+ 
                     </chart:DateTimeAxis>
                 </chart:SfChart.PrimaryAxis>
 
@@ -140,7 +161,7 @@
                 </chart:SfChart.Behaviors>
                 
                 <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2"  ShowTrackBallInfo="True"  LabelFormat="t" Maximum="{x:Bind ViewModel.PeriodEnd, Mode=OneWay}">
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2"  ShowTrackBallInfo="True"  LabelFormat="t" >
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
                         </chart:DateTimeAxis.LabelStyle>
