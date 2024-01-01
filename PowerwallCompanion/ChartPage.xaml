@@ -120,7 +120,7 @@
             
             <!-- Charts-->
             <!-- Daily power chart -->
-            <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20">
+            <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0">
                 <chart:SfChart.Behaviors>
                     <chart:ChartTrackBallBehavior x:Name="powerTrackBall"  />
                 </chart:SfChart.Behaviors>
@@ -155,7 +155,7 @@
             </chart:SfChart>
 
             <!-- Daily battery chart -->
-            <chart:SfChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20">
+            <chart:SfChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20,10,20,10">
                 <chart:SfChart.Behaviors>
                     <chart:ChartTrackBallBehavior x:Name="batteryTrackBall" />
                 </chart:SfChart.Behaviors>
