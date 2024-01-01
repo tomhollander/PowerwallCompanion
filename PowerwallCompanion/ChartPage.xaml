@@ -142,18 +142,29 @@
                     </chart:NumericalAxis>
                 </chart:SfChart.SecondaryAxis>
                 <chart:SfChart.Legend>
-                    <chart:ChartLegend ToggleSeriesVisibility="True" CheckBoxVisibility="Visible" DockPosition="Right" Width="120" FontSize="14" ItemMargin="10,0,0,0">
+                    <chart:ChartLegend x:Name="powerChartLegend" ToggleSeriesVisibility="True" CheckBoxVisibility="Visible" DockPosition="Right" Width="120" FontSize="14" ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
                 </chart:SfChart.Legend>
+                <chart:AreaSeries x:Name="homeSeries" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:AreaSeries x:Name="solarSeries" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries x:Name="gridSeries" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries x:Name="batterySeries" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
-                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
-                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
-                
-                
+                <chart:StackingAreaSeries x:Name="homeStackingSeries" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeDailyGraphData, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:StackingAreaSeries x:Name="solarStackingSeries" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarDailyGraphData, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:StackingAreaSeries x:Name="gridStackingSeries" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridDailyGraphData, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:StackingAreaSeries x:Name="batteryStackingSeries" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailyGraphData, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                       
+
             </chart:SfChart>
 
+            <ComboBox x:Name="powerGraphOptionsCombo" SelectionChanged="powerGraphOptionsCombo_SelectionChanged" Grid.Row="2" SelectedIndex="0" HorizontalAlignment="Right" Margin="0,20,50,0">
+                <ComboBoxItem>All data</ComboBoxItem>
+                <ComboBoxItem>Home</ComboBoxItem>
+                <ComboBoxItem>Solar</ComboBoxItem>
+                <ComboBoxItem>Grid</ComboBoxItem>
+                <ComboBoxItem>Battery</ComboBoxItem>
+            </ComboBox>
             <!-- Daily battery chart -->
             <chart:SfChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20,10,20,10">
                 <chart:SfChart.Behaviors>
