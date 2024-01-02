@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerwallCompanion", "PowerwallCompanion\PowerwallCompanion.csproj", "{1B2CE0E2-CCE9-4FD1-A1C3-CB38A1E6FD00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3342E853-5F8D-49C8-B20D-BF91F985B1BB}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,14 +44,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB6CC172-0E54-4B04-8E20-C8D28EF42EFD}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tom.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = PowerwallCompanion\\PowerwallCompanion.csproj
-		SccProjectName1 = PowerwallCompanion
-		SccLocalPath1 = PowerwallCompanion
 	EndGlobalSection
 EndGlobal

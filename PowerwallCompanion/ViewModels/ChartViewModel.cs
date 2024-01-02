@@ -194,6 +194,22 @@ namespace PowerwallCompanion.ViewModels
         {
             get; set;
         }
+        public List<ChartDataPoint> HomeStackedDailyGraphData
+        {
+            get; set;
+        }
+        public List<ChartDataPoint> SolarStackedDailyGraphData
+        {
+            get; set;
+        }
+        public List<ChartDataPoint> GridStackedDailyGraphData
+        {
+            get; set;
+        }
+        public List<ChartDataPoint> BatteryStackedDailyGraphData
+        {
+            get; set;
+        }
 
         public List<ChartDataPoint> BatteryDailySoeGraphData
         {
