@@ -9,16 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimeZoneConverter;
-using Windows.Security.Authentication.OnlineId;
-using Windows.Services.Maps.LocalSearch;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
