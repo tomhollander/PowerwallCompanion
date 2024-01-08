@@ -1,4 +1,5 @@
-﻿using PowerwallCompanion.ViewModels;
+﻿using Microsoft.AppCenter.Analytics;
+using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +34,7 @@ namespace PowerwallCompanion
         public SettingsPage()
         {
             this.InitializeComponent();
+            Analytics.TrackEvent("SettingsPage opened");
             this.ViewModel = new SettingsViewModel();
         }
 

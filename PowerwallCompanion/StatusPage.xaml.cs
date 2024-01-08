@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Newtonsoft.Json.Linq;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -43,6 +45,7 @@ namespace PowerwallCompanion
         public StatusPage()
         {
             this.InitializeComponent();
+            Analytics.TrackEvent("StatusPage opened");
 
             viewModel = new StatusViewModel();
 
@@ -134,6 +137,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 viewModel.LastExceptionMessage = ex.Message;
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyPowerProperties();
@@ -175,6 +179,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 viewModel.LastExceptionMessage = ex.Message;
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyDailyEnergyProperties();
@@ -220,6 +225,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.LastExceptionMessage = ex.Message;
             }

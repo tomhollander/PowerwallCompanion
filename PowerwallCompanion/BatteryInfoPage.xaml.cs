@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes.Ingestion.Models;
+using Microsoft.AppCenter.Crashes;
+using Newtonsoft.Json.Linq;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,12 +31,12 @@ namespace PowerwallCompanion
     {
         public BatteryInfoPage()
         {
+            this.InitializeComponent();
+            Analytics.TrackEvent("BatteryInfoPage opened");
             this.ViewModel = new BatteryInfoViewModel();
             ViewModel.NumberOfBatteries = 1;
 
             GetData();
-
-            this.InitializeComponent();
         }
 
         public BatteryInfoViewModel ViewModel { get; set; }
@@ -46,9 +49,9 @@ namespace PowerwallCompanion
                 await Task.WhenAll(tasks);
                 ViewModel.NotifyAllProperties();
             }
-            catch
+            catch (System.Exception ex) 
             {
-
+                Crashes.TrackError(ex);
             }
         }
 

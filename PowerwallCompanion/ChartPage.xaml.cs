@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Newtonsoft.Json.Linq;
 using PowerwallCompanion.ViewModels;
 using Syncfusion.UI.Xaml.Charts;
 using System;
@@ -32,6 +34,7 @@ namespace PowerwallCompanion
         public ChartPage()
         {
             this.InitializeComponent();
+            Analytics.TrackEvent("ChartPage opened");
 
             this.ViewModel = new ChartViewModel();
             ViewModel.Period = "Day";
@@ -270,6 +273,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 ViewModel.Status = StatusViewModel.StatusEnum.Error;
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
@@ -309,6 +313,7 @@ namespace PowerwallCompanion
 
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 ViewModel.Status = StatusViewModel.StatusEnum.Error;
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
@@ -521,6 +526,7 @@ namespace PowerwallCompanion
 
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 ViewModel.Status = StatusViewModel.StatusEnum.Error;
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
@@ -549,6 +555,8 @@ namespace PowerwallCompanion
         {
             try
             {
+                Analytics.TrackEvent("Chart data exported", new Dictionary<string, string> { { "Period", ViewModel.Period} });
+
                 var savePicker = new Windows.Storage.Pickers.FileSavePicker();
                 savePicker.SuggestedStartLocation =
                     Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
@@ -575,6 +583,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 var md = new MessageDialog("Error while saving data: " + ex.Message);
                 await md.ShowAsync();
             }
@@ -700,7 +709,6 @@ namespace PowerwallCompanion
                                     var fromMinute = period["fromMinute"].Value<int>();
                                     var toHour = period["toHour"].Value<int>();
                                     var toMinute = period["toMinute"].Value<int>();
-
                                     if (fromHour < toHour)
                                     {
                                         var tariff = new Tariff
@@ -736,9 +744,9 @@ namespace PowerwallCompanion
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Crashes.TrackError(ex);
             }
 
             dailyChart.PrimaryAxis.MultiLevelLabels.Clear();

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AppCenter.Crashes;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -363,7 +364,7 @@ namespace PowerwallCompanion.ViewModels
                 NotifyPropertyChanged(nameof(MinBatteryPercentToday));
                 NotifyPropertyChanged(nameof(MaxBatteryPercentToday));
             }
-            else if (_batteryDay != DateTime.Today)
+            else if (_batteryDay != DateUtils.ConvertToPowerwallDate(DateTime.Now).Date)
             {
                 _batteryDay = DateTime.Today;
                 _minPercentToday = BatteryPercent;
@@ -392,8 +393,8 @@ namespace PowerwallCompanion.ViewModels
                 int max = 0;
                 foreach (var datapoint in (JArray)json["response"]["time_series"])
                 {
-                    var timestamp = datapoint["timestamp"].Value<DateTime>();
-                    if (timestamp.Date == DateTime.Now.Date)
+                    var timestamp = DateUtils.ConvertToPowerwallDate(datapoint["timestamp"].Value<DateTime>());
+                    if (timestamp.Date == DateUtils.ConvertToPowerwallDate(DateTime.Now).Date)
                     {
                         var soe = datapoint["soe"].Value<int>();
                         if (soe < min) min = soe;
@@ -405,9 +406,10 @@ namespace PowerwallCompanion.ViewModels
                 _minPercentToday = (double)min;
                 _maxPercentToday = (double)max;
             }
-            catch
+            catch (Exception ex)
             {
                 // Don't worry, NBD
+                Crashes.TrackError(ex);
             }
         }
 

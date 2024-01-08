@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,6 +72,7 @@ namespace PowerwallCompanion
 
         private static async Task<JObject> CallGetApi(string url, string demoId)
         {
+            Analytics.TrackEvent("CallGetApi", new Dictionary<string, string> { { "URL", url } });
             if (Settings.AccessToken == "DEMO")
             {
                 return await GetDemoDocument(demoId);
@@ -89,6 +92,7 @@ namespace PowerwallCompanion
             }
             else
             {
+                Analytics.TrackEvent("CallGetApi failed", new Dictionary<string, string> { { "URL", url }, { "StatusCode", response.StatusCode.ToString() }, { "Message", responseMessage } });
                 throw new HttpRequestException(responseMessage);
             }
         }
@@ -112,10 +116,12 @@ namespace PowerwallCompanion
                 var helper = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl, 
                     Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
                 var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken);
+                Analytics.TrackEvent("RefreshToken");
                 Settings.AccessToken = tokens.AccessToken;
             }
-            catch
-            { 
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
                 throw new UnauthorizedAccessException();
             }
         }

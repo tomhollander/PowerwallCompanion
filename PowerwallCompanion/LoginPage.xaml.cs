@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,6 +28,7 @@ namespace PowerwallCompanion
         public LoginPage()
         {
             this.InitializeComponent();
+            Analytics.TrackEvent("LoginPage opened");
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
             authFailureMessage.Visibility = Visibility.Collapsed;
             errorBanner.Visibility = Visibility.Collapsed;
@@ -89,15 +92,18 @@ namespace PowerwallCompanion
                     Settings.SignInName = "Tesla User";
                     Settings.UseLocalGateway = false;
                     await GetSiteId();
+                    Analytics.TrackEvent("Login succeeded");
                     return true;
                 }
                 else
                 {
+                    Analytics.TrackEvent("Login failed", new Dictionary<string, string> { { "Cause", "Incorrect scopes" } });
                     return false;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Crashes.TrackError(ex);
                 return false;
             }
  
@@ -109,7 +115,7 @@ namespace PowerwallCompanion
             var jsonToken = handler.ReadToken(accessToken);
             var token = jsonToken as JwtSecurityToken;
             var scopes = token.Claims.Where(x => x.Type == "scp").Select(x => x.Value).ToList();
-            return (scopes.Contains("energy_device_data") && scopes.Contains("vehicle_device_data"));
+            return (scopes.Contains("energy_device_data"));
         }
 
         private async Task GetSiteId()

@@ -16,12 +16,12 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}" DoubleTapped="TextBlock_DoubleTapped">Connect to your Tesla account</TextBlock>
         <Grid x:Name="warningBanner" Grid.Row="1" Background="LightGoldenrodYellow">
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="Black">If asked you must allow permissions to both "Vehicle Information" and "Energy Product Information", even if you have no Tesla vehicles. 
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="Black">If asked you must allow permissions to at least "Energy Product Information". 
                 <Hyperlink Click="showAuthInfoLink_Clicked">Learn more...</Hyperlink></TextBlock>
         </Grid>
         <Grid x:Name="errorBanner" Grid.Row="1" Visibility="Collapsed" Background="LightPink">
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="Black">This account cannot be used with Powerwall Companion. This could be because you have no Powerwalls in your account, or because you have not granted the required "Vehicle Information" and 
-                "Energy Product Information" scopes. Please go to your Tesla Account's <Hyperlink NavigateUri="https://accounts.tesla.com/account-settings/security?tab=tpty-apps">Third Party Apps</Hyperlink> page, delete Powerwall Companion, sign in again,
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="Black">This account cannot be used with Powerwall Companion. This could be because you have no Powerwalls in your account, or because you have not granted the required 
+                "Energy Product Information" scope. Please go to your Tesla Account's <Hyperlink NavigateUri="https://accounts.tesla.com/account-settings/security?tab=tpty-apps">Third Party Apps</Hyperlink> page, delete Powerwall Companion, sign in again,
                 and be sure to check both scopes.
         <Hyperlink Click="showAuthInfoLink_Clicked">Learn more...</Hyperlink></TextBlock>
         </Grid>
@@ -38,8 +38,7 @@
                     Powerwall Companion app  can retrieve information from the Tesla API. Your credentials are sent directly to Tesla
                     and are not accessible by this app.</TextBlock>
                 <TextBlock Margin="10" Foreground="Black" TextWrapping="Wrap">The first time you authenticate you will be prompted on what details you want the app to be able to access. 
-            You must select both the "Energy product information" and "Vehicle information" scopes for the app to work, even if you do not own any Tesla vehicles. This
-                is because the API to list all of your Tesla products (needed to find your Powerwall) is covered by the "Vehicle Information" scope.</TextBlock>
+            You must select the "Energy product information" scope for the app to work. The "Vehicle information" is optional and is only currently used by the Android version of the app.</TextBlock>
                 <TextBlock Margin="10" Foreground="Black" TextWrapping="Wrap">After authentication, Tesla issues an API token which is 
                 stored securely on your device. The token can only be used by this app, and only has the access to the data you
                 granted in the step mentioned above.</TextBlock>
