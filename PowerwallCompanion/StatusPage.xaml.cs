@@ -71,6 +71,10 @@ namespace PowerwallCompanion
 
         private async Task RefreshDataFromTeslaOwnerApi()
         {
+            if (Settings.InstallationTimeZone == null)
+            {
+                await DateUtils.GetInstallationTimeZone();
+            }
             var tasks = new List<Task>()
             {
                 GetCurrentPowerData(),
@@ -195,7 +199,7 @@ namespace PowerwallCompanion
 
                 foreach (var datapoint in (JArray)json["response"]["time_series"])
                 {
-                    var timestamp = datapoint["timestamp"].Value<DateTime>();
+                    var timestamp = DateUtils.ConvertToPowerwallDate(datapoint["timestamp"].Value<DateTime>());
                     var solarPower = datapoint["solar_power"].Value<double>() / 1000;
                     var batteryPower = datapoint["battery_power"].Value<double>() / 1000;
                     var gridPower = datapoint["grid_power"].Value<double>() / 1000;

@@ -150,6 +150,7 @@
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan5Converter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan10Converter.cs" />
+    <Compile Include="DateUtils.cs" />
     <Compile Include="DownloadWebViewPage.xaml.cs">
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>
     </Compile>

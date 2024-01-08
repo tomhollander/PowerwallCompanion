@@ -47,6 +47,7 @@ namespace PowerwallCompanion
             Settings.RefreshToken = null;
             Settings.SignInName = null;
             Settings.LocalGatewayIP = null;
+            Settings.InstallationTimeZone = null;
             this.Frame.Navigate(typeof(LoginPage));
         }
 

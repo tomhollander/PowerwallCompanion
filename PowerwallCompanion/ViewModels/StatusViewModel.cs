@@ -280,7 +280,7 @@ namespace PowerwallCompanion.ViewModels
                 {
                     return new DateTime(2021, 04, 17); // Match the dummy data
                 }
-                return DateTime.Today.AddDays(1);
+                return DateUtils.ConvertToPowerwallDate(DateTime.Now).Date.AddDays(1);
             }
         }
         public StatusEnum Status

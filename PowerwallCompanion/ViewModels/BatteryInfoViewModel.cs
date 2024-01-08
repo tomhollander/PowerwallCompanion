@@ -20,12 +20,6 @@ namespace PowerwallCompanion.ViewModels
             get 
             {
                 int capacity = 13500;
-                var region = GlobalizationPreferences.HomeGeographicRegion;
-                if (region == "AU" || region == "NZ")
-                {
-                    capacity = 13200;
-                }
-
                 return capacity * NumberOfBatteries; 
             } 
         }

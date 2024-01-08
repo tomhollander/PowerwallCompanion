@@ -15,6 +15,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -98,9 +99,9 @@ namespace PowerwallCompanion
 
         private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
-            if (args.NewDate > DateTime.Now.Date)
+            if (args.NewDate > DateUtils.ConvertToPowerwallDate(DateTime.Now).Date)
             {
-                datePicker.Date = DateTime.Now.Date;
+                datePicker.Date = DateUtils.ConvertToPowerwallDate(DateTime.Now).Date;
             }
         }
         private async void CalendarDatePicker_Closed(object sender, object e)
@@ -124,7 +125,7 @@ namespace PowerwallCompanion
                 batteryChart.Visibility = Visibility.Visible;
                 energyChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
-                await GetTariffsForDay(ViewModel.PeriodStart);
+                await GetTariffsForDay(DateUtils.ConvertToPowerwallDate(ViewModel.PeriodStart).Date);
             }
             else
             {
@@ -150,13 +151,16 @@ namespace PowerwallCompanion
             await Task.WhenAll(tasks);
         }
 
-        private string GetCalendarHistoryUrl(string kind)
+        private async Task<string> GetCalendarHistoryUrl(string kind)
         {
             var sb = new StringBuilder();
             var siteId = Settings.SiteId;
-            var startDate = new DateTimeOffset(ViewModel.PeriodStart);
-            var endDate = new DateTimeOffset(ViewModel.PeriodEnd).AddSeconds(-1);
-            var timeZone = TZConvert.WindowsToIana(TimeZoneInfo.Local.Id);
+
+            var timeZone = Settings.InstallationTimeZone;
+            var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
+            var offset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodStart);
+            var startDate = new DateTimeOffset(ViewModel.PeriodStart, offset);
+            var endDate = new DateTimeOffset(ViewModel.PeriodEnd, offset).AddSeconds(-1);
 
             sb.Append($"/api/1/energy_sites/{siteId}/calendar_history?");
             sb.Append("kind=" + kind);
@@ -172,7 +176,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = GetCalendarHistoryUrl("energy");
+                var url = await GetCalendarHistoryUrl("energy");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "EnergyHistory");
                 
                 double totalHomeEnergy = 0;
@@ -276,7 +280,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = GetCalendarHistoryUrl("power");
+                var url = await GetCalendarHistoryUrl("power");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "PowerHistory");
 
                 ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
@@ -286,6 +290,9 @@ namespace PowerwallCompanion
                     var date = data["timestamp"].Value<DateTime>();
                     if (date > DateTime.Now) continue;
 
+                    // The date may be in a different time zone to the local time, we want to use the install time
+                    date = DateUtils.ConvertToPowerwallDate(date);
+                    
                     var solarPower = GetJsonDoubleValue(data["solar_power"]);
                     var gridPower = GetJsonDoubleValue(data["grid_power"]);
                     var batteryPower = GetJsonDoubleValue(data["battery_power"]);
@@ -318,12 +325,14 @@ namespace PowerwallCompanion
             foreach (var data in ViewModel.PowerDataForExport)
             {
                 var date = data.Key;
-                if (date > DateTime.Now) continue;
 
                 var solarPower = Convert.ToDouble(data.Value["solar_power"]);
                 var gridPower = Convert.ToDouble(data.Value["grid_power"]);
                 var batteryPower = Convert.ToDouble(data.Value["battery_power"]);
                 var homePower = Convert.ToDouble(data.Value["load_power"]);
+
+                if (solarPower == 0 && gridPower == 0 && batteryPower == 0 && homePower == 0)
+                    continue; // Likely a future date, but checking dates is tricky due to potential time zone differences.
 
                 // Calcs somewhat dervied from https://raw.githubusercontent.com/reptilex/tesla-style-solar-power-card/master/README.md
                 var gridImport = gridPower >= 0 ? gridPower: 0;
@@ -429,6 +438,7 @@ namespace PowerwallCompanion
             ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridStackedDailyGraphData));
             ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryStackedDailyGraphData));
             ViewModel.NotifyPropertyChanged(nameof(ViewModel.HomeStackedDailyGraphData));
+
             ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
         }
 
@@ -481,16 +491,22 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = GetCalendarHistoryUrl("soe");
+                var url = await GetCalendarHistoryUrl("soe");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "SoeHistory");
 
                 var batteryDailySoeGraphData = new List<ChartDataPoint>();
+
+                var windowsTimeZone = TZConvert.IanaToWindows(Settings.InstallationTimeZone);
+                var offset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodStart);
 
                 foreach (var data in json["response"]["time_series"])
                 {
                     var date = data["timestamp"].Value<DateTime>();
                     if (date <= DateTime.Now)
                     {
+                        // The date may be in a different time zone to the local time, we want to use the install time
+                        date = DateUtils.ConvertToPowerwallDate(date);
+
                         batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["soe"])));
                     }
                 }
@@ -498,7 +514,9 @@ namespace PowerwallCompanion
                 ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = null;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
+
                 ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+
             }
 
             catch (Exception ex)
@@ -745,6 +763,8 @@ namespace PowerwallCompanion
                 UpdatePowerGraph();
             }
         }
+
+
     }
 
 

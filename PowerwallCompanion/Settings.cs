@@ -162,5 +162,18 @@ namespace PowerwallCompanion
                 _localSettings.Values["PlaySounds"] = value.ToString();
             }
         }
+
+        // Not set by the user
+        public static string InstallationTimeZone
+        {
+            get
+            {
+                return _localSettings.Values["InstallationTimeZone"] as string;
+            }
+            set
+            {
+                _localSettings.Values["InstallationTimeZone"] = value;
+            }
+        }
     }
 }
