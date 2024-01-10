@@ -163,6 +163,25 @@ namespace PowerwallCompanion
             }
         }
 
+        public static bool StoreBatteryHistory
+        {
+            get
+            {
+                if (_localSettings.Values["StoreBatteryHistory"] == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return bool.Parse((string)_localSettings.Values["StoreBatteryHistory"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["StoreBatteryHistory"] = value.ToString();
+            }
+        }
+
         // Not set by the user
         public static string InstallationTimeZone
         {

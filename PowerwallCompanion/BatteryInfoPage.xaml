@@ -6,15 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:gauge="using:Syncfusion.UI.Xaml.Gauges"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:converters="using:PowerwallCompanion.Converters"
+    xmlns:chart="using:Syncfusion.UI.Xaml.Charts"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
         <converters:KilowattHourConverter x:Key="KilowattHourConverter"/>
         <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter" />
         <converters:BatteryCapacityToBrushConverter x:Key="BatteryCapacityToBrushConverter"/>
+        <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter"/>
+        <converters:TrueToVisibilityCollapsedConverter x:Key="TrueToVisibilityCollapsedConverter"/>
     </Page.Resources>
     
     <Grid>
@@ -38,22 +39,22 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="40">
+        <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" x:Name="column1"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="2*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             
-            <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" VerticalAlignment="Top" />
+            <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
             <TextBlock FontSize="30" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
             <TextBlock FontSize="30" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}" Grid.Row="0" Grid.Column="2"></TextBlock>
@@ -93,10 +94,50 @@
                 <TextBlock FontSize="50" Text="{x:Bind ViewModel.Degradation,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
             </StackPanel>
 
-            <TextBlock x:Name="multiplePowerwallMessage"  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Foreground="LightGray" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,10,0">
-                The Tesla API does not report capacity for individual Powerwalls. To find the status of each
-                of your batteries you must access your local gateway API.
-            </TextBlock>
+            <chart:SfChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
+                <chart:SfChart.Behaviors>
+                    <chart:ChartTrackBallBehavior x:Name="batteryTrackBall" />
+                </chart:SfChart.Behaviors>
+
+                <chart:SfChart.PrimaryAxis>
+                    <chart:DateTimeAxis IntervalType="Months"  ShowTrackBallInfo="True" LabelFormat="d">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfChart.PrimaryAxis>
+
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis RangePadding="Auto" LabelFormat="0.## kWh" >
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="False" DockPosition="Right" FontSize="14"  ItemMargin="10,0,0,0">
+                    </chart:ChartLegend>
+                </chart:SfChart.Legend>
+
+                <chart:AreaSeries  Stroke="Blue" StrokeThickness="1" Interior="Blue" BorderBrush="Blue" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryHistoryChartData, Mode=OneWay}" Label="Battery capacity" XBindingPath="XValue" YBindingPath="YValue">
+                    <chart:AreaSeries.AdornmentsInfo>
+                        <chart:ChartAdornmentInfo SymbolStroke="Black" SymbolInterior="LightBlue" SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"></chart:ChartAdornmentInfo>
+                    </chart:AreaSeries.AdornmentsInfo>
+                </chart:AreaSeries>
+
+            </chart:SfChart>
+
+            <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.StoreBatteryHistory, Converter={StaticResource TrueToVisibilityCollapsedConverter}, Mode=OneWay}">
+                <TextBlock FontSize="16" TextWrapping="Wrap" Margin="0,0,20,0" Foreground="LightGray">Powerwall Companion can track how your battery's reported capacity changes over time. 
+                    This history data is not made available by Tesla, so using this feature requires you to opt in to storing this
+                    data in the Powerwall Companion server. Data is updated monthly and requires you to open this page.</TextBlock>
+                <Button x:Name="enableBatteryHistory" Margin="10" Tapped="enableBatteryHistory_Tapped">Enable battery history</Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.ShowNotEnoughDataMessage, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
+                <TextBlock FontSize="16" TextWrapping="Wrap" Margin="0,0,20,0" Foreground="LightGray">Battery capacity history is now enabled, but there isn't enough data
+                to show a chart just yet. Once we have over a month of data, a chart will show in this space!</TextBlock>
+            </StackPanel>
         </Grid>
        
     </Grid>

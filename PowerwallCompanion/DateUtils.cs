@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AppCenter.Crashes;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,14 +28,23 @@ namespace PowerwallCompanion
 
         public static DateTime ConvertToPowerwallDate(DateTime date)
         {
-            if (powerwallTimeZone == null)
-            { 
-                var windowsTimeZone = TZConvert.IanaToWindows(Settings.InstallationTimeZone);
-                powerwallTimeZone = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone);
+            try
+            {
+                if (powerwallTimeZone == null)
+                {
+                    var windowsTimeZone = TZConvert.IanaToWindows(Settings.InstallationTimeZone);
+                    powerwallTimeZone = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone);
+                }
+                var offset = powerwallTimeZone.GetUtcOffset(date);
+                var dto = new DateTimeOffset(date);
+                return dto.ToOffset(offset).DateTime;
             }
-            var offset = powerwallTimeZone.GetUtcOffset(date);
-            var dto = new DateTimeOffset(date);
-            return dto.ToOffset(offset).DateTime;
+            catch 
+            {
+                // Unable to convert for some reason; assume local time 
+                return date;
+            }
+
         }
     }
 }

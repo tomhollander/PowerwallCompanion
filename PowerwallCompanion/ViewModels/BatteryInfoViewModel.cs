@@ -28,7 +28,39 @@ namespace PowerwallCompanion.ViewModels
 
         public double CurrentCapacityPercent { get { return TotalPackEnergy / WarrantedCapacity * 100; } }
         public double Degradation { get { return 100 - CurrentCapacityPercent; } }
+        public string GatewayId { get; set; }
 
+        public List<ChartDataPoint> BatteryHistoryChartData
+        {
+            get; set;
+        }
+
+        public bool EnoughDataToShowChart
+        {
+            get; set;
+        }
+
+        public bool ShowChart
+        {
+            get { return EnoughDataToShowChart && StoreBatteryHistory; }
+        }
+
+        public bool ShowNotEnoughDataMessage
+        {
+            get { return !EnoughDataToShowChart && StoreBatteryHistory; }
+        }
+
+        public bool StoreBatteryHistory
+        {
+            get
+            {
+                return Settings.StoreBatteryHistory;
+            }
+            set
+            {
+                Settings.StoreBatteryHistory = value;
+            }
+        }
         public void NotifyAllProperties()
         {
             NotifyPropertyChanged(nameof(SiteName));
@@ -38,6 +70,15 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(TotalPackEnergy));
             NotifyPropertyChanged(nameof(CurrentCapacityPercent));
             NotifyPropertyChanged(nameof(Degradation));
+        }
+
+        public void NotifyChartProperties()
+        {
+            NotifyPropertyChanged(nameof(StoreBatteryHistory));
+            NotifyPropertyChanged(nameof(ShowChart));
+            NotifyPropertyChanged(nameof(EnoughDataToShowChart));
+            NotifyPropertyChanged(nameof(BatteryHistoryChartData));
+            NotifyPropertyChanged(nameof(ShowNotEnoughDataMessage));
         }
 
         private void NotifyPropertyChanged(string propertyName)
@@ -50,10 +91,5 @@ namespace PowerwallCompanion.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class BatteryInfo
-    {
-        
 
-
-    }
 }
