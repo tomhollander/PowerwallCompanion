@@ -37,8 +37,8 @@
 
             <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
             <CheckBox IsChecked="{x:Bind ViewModel.PlaySounds, Mode=TwoWay}" Margin="5">Play sound on battery full/empty</CheckBox>
+            <CheckBox IsChecked="{x:Bind ViewModel.StoreBatteryHistory, Mode=TwoWay}" Margin="5">Store historical battery capacity in the cloud</CheckBox>
 
-            
             <TextBlock TextWrapping="Wrap" Foreground="Cyan" FontSize="14" Margin="5,20,5,20">
                 If you're enjoying this app, feel free to <Hyperlink NavigateUri="https://ko-fi.com/tomhollander">show your appreciation</Hyperlink>
             </TextBlock>

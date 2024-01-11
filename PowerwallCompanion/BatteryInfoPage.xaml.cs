@@ -38,9 +38,9 @@ namespace PowerwallCompanion
             {
                 var tasks = new List<Task> { GetBatteryCapacity(), GetBatteryInfo() };
                 await Task.WhenAll(tasks);
-                await ProcessBatteryHistoryData();
-
                 ViewModel.NotifyAllProperties();
+
+                await ProcessBatteryHistoryData();
             }
             catch (System.Exception ex) 
             {
@@ -134,6 +134,7 @@ namespace PowerwallCompanion
 
         private void enableBatteryHistory_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
+            Analytics.TrackEvent("Battery history enabled");
             ViewModel.StoreBatteryHistory = true;
             ViewModel.NotifyChartProperties();
         }

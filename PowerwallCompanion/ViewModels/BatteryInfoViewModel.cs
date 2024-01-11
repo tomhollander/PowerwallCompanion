@@ -11,7 +11,10 @@ namespace PowerwallCompanion.ViewModels
 {
     public class BatteryInfoViewModel : INotifyPropertyChanged
     {
-
+        public BatteryInfoViewModel()
+        {
+            EnoughDataToShowChart = true; // Prevent flicker
+        }
         public string SiteName { get; set; }
         public int NumberOfBatteries { get; set; }
         public DateTime InstallDate { get; set; }

@@ -45,6 +45,15 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public bool? StoreBatteryHistory
+        {
+            get { return Settings.StoreBatteryHistory; }
+            set
+            {
+                Settings.StoreBatteryHistory = value.Value;
+            }
+        }
+
         public decimal GraphScale
         {
             get { return Settings.GraphScale; }
@@ -98,6 +107,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(ShowClock));
             NotifyPropertyChanged(nameof(GraphScale));
             NotifyPropertyChanged(nameof(PlaySounds));
+            NotifyPropertyChanged(nameof(StoreBatteryHistory));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

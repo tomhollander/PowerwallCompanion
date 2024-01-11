@@ -186,6 +186,7 @@
     <Content Include="Assets\arrow_to_house.png" />
     <Content Include="Assets\battery-empty.wav" />
     <Content Include="Assets\battery-full.wav" />
+    <Content Include="Assets\BatteryGraphBlur.png" />
     <Content Include="Assets\EnergyIcon.png" />
     <Content Include="Assets\icon_battery.png" />
     <Content Include="Assets\icon_battery_export.png" />

@@ -13,5 +13,6 @@ namespace PowerwallCompanion
         public const string TeslaAppClientSecret = null;
         public const string TeslaAppRedirectUrl = null;
         public const string AppCenterKey = null;
+        public const string AppServicesKey = null;
     }
 }
