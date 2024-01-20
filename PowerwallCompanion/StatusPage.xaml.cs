@@ -1,26 +1,17 @@
 ﻿using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json.Linq;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -38,8 +29,8 @@ namespace PowerwallCompanion
         private readonly TimeSpan energyHistoryRefreshInterval = new TimeSpan(0, 5, 0);
         private readonly TimeSpan powerHistoryRefreshInterval = new TimeSpan(0, 5, 0);
 
-        private double minPercentSinceSound = 0D;
-        private double maxPercentSinceSound = 100D;
+        private double minPercentSinceNotification = 0D;
+        private double maxPercentSinceNotification = 100D;
 
 
         public StatusPage()
@@ -120,7 +111,7 @@ namespace PowerwallCompanion
                 viewModel.NotifyPowerProperties();
 
 
-                PlaySoundsOnBatteryStatus(viewModel.BatteryPercent);
+                SendNotificationsOnBatteryStatus(viewModel.BatteryPercent);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -257,27 +248,39 @@ namespace PowerwallCompanion
             }
         }
 
-        private void PlaySoundsOnBatteryStatus(double newPercent)
+        private void SendNotificationsOnBatteryStatus(double newPercent)
         {
-            if (Settings.PlaySounds)
+            minPercentSinceNotification = Math.Min(minPercentSinceNotification, newPercent);
+            maxPercentSinceNotification = Math.Max(maxPercentSinceNotification, newPercent);
+            if (newPercent >= 99.6D && minPercentSinceNotification < 80D)
             {
-                minPercentSinceSound = Math.Min(minPercentSinceSound, newPercent);
-                maxPercentSinceSound = Math.Max(maxPercentSinceSound, newPercent);
-                if (newPercent >= 99.6D && minPercentSinceSound < 80D)
+                new ToastContentBuilder()
+                    .AddText("Powerwall is now fully charged")
+                    .Show();
+                if (Settings.PlaySounds)
                 {
                     var mediaPlayer = new MediaPlayer();
                     mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-full.wav"));
                     mediaPlayer.Play();
-                    minPercentSinceSound = 100D;
                 }
-                else if (newPercent <= 0.5D && maxPercentSinceSound > 20D)
+
+                minPercentSinceNotification = 100D;
+            }
+            else if (newPercent <= 0.5D && maxPercentSinceNotification > 20D)
+            {
+                new ToastContentBuilder()
+                    .AddText("Powerwall is now fully discharged")
+                    .Show();
+
+                if (Settings.PlaySounds)
                 {
                     var mediaPlayer = new MediaPlayer();
                     mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-empty.wav"));
                     mediaPlayer.Play();
-                    maxPercentSinceSound = 0D;
                 }
+                maxPercentSinceNotification = 0D;
             }
+            
         }
     }
 }

@@ -132,11 +132,11 @@ namespace PowerwallCompanion
 
         }
 
-        private void enableBatteryHistory_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private async void enableBatteryHistory_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             Analytics.TrackEvent("Battery history enabled");
             ViewModel.StoreBatteryHistory = true;
-            ViewModel.NotifyChartProperties();
+            await ProcessBatteryHistoryData();
         }
     }
 }

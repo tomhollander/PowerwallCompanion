@@ -236,8 +236,11 @@ namespace PowerwallCompanion
                     totalHomeFromBattery += GetJsonDoubleValue(data["consumer_energy_imported_from_battery"]);
 
                     // Save for export
-                    ViewModel.EnergyDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
-                    ViewModel.EnergyDataForExport[date].Remove("timestamp");
+                    if (!ViewModel.EnergyDataForExport.ContainsKey(date)) // Apparently duplicates can occur
+                    {
+                        ViewModel.EnergyDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
+                        ViewModel.EnergyDataForExport[date].Remove("timestamp");
+                    }
 
                 }
                 ViewModel.HomeEnergyGraphData = homeEnergyGraphData;

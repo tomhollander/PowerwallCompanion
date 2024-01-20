@@ -265,13 +265,10 @@
             <!-- Power history chart -->
             <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,0" HorizontalAlignment="Center" MaxHeight="300">
                 <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="htt"  Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}">
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="  htt  " Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
                         </chart:DateTimeAxis.LabelStyle>
-                        <chart:DateTimeAxis.MajorGridLineStyle>
-                            <!--<chart:ChartLineStyle StrokeColor="#404040" />-->
-                        </chart:DateTimeAxis.MajorGridLineStyle>
                     </chart:DateTimeAxis>
                 </chart:SfChart.PrimaryAxis>
 
@@ -280,9 +277,6 @@
                         <chart:NumericalAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>
-                        <chart:NumericalAxis.MajorGridLineStyle>
-                            <!--<chart:ChartLineStyle StrokeColor="#404040" />-->
-                        </chart:NumericalAxis.MajorGridLineStyle>
                     </chart:NumericalAxis>
                 </chart:SfChart.SecondaryAxis>
                 <chart:SfChart.Legend>
