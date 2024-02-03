@@ -118,6 +118,7 @@ namespace PowerwallCompanion
                 var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken);
                 Analytics.TrackEvent("RefreshToken");
                 Settings.AccessToken = tokens.AccessToken;
+                Settings.RefreshToken = tokens.RefreshToken;
             }
             catch (Exception ex)
             {

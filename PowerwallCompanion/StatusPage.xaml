@@ -256,7 +256,7 @@
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged from the battery yesterday'}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged into the battery yesterday'}"></TextBlock>
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy charged into the battery yesterday'}"></TextBlock>
                         <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>

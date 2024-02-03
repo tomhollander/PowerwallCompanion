@@ -248,39 +248,46 @@ namespace PowerwallCompanion
             }
         }
 
+        bool notifyCheckRunBefore;
         private void SendNotificationsOnBatteryStatus(double newPercent)
         {
             minPercentSinceNotification = Math.Min(minPercentSinceNotification, newPercent);
             maxPercentSinceNotification = Math.Max(maxPercentSinceNotification, newPercent);
             if (newPercent >= 99.6D && minPercentSinceNotification < 80D)
             {
-                new ToastContentBuilder()
-                    .AddText("Powerwall is now fully charged")
-                    .Show();
-                if (Settings.PlaySounds)
+                if (notifyCheckRunBefore) // Don't send notifications on the very first run
                 {
-                    var mediaPlayer = new MediaPlayer();
-                    mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-full.wav"));
-                    mediaPlayer.Play();
+                    new ToastContentBuilder()
+                        .AddText("Powerwall is now fully charged")
+                        .Show();
+                    if (Settings.PlaySounds)
+                    {
+                        var mediaPlayer = new MediaPlayer();
+                        mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-full.wav"));
+                        mediaPlayer.Play();
+                    }
                 }
 
                 minPercentSinceNotification = 100D;
             }
             else if (newPercent <= 0.5D && maxPercentSinceNotification > 20D)
             {
-                new ToastContentBuilder()
+                if (notifyCheckRunBefore) // Don't send notifications on the very first run
+                {
+                    new ToastContentBuilder()
                     .AddText("Powerwall is now fully discharged")
                     .Show();
 
-                if (Settings.PlaySounds)
-                {
-                    var mediaPlayer = new MediaPlayer();
-                    mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-empty.wav"));
-                    mediaPlayer.Play();
+                    if (Settings.PlaySounds)
+                    {
+                        var mediaPlayer = new MediaPlayer();
+                        mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/battery-empty.wav"));
+                        mediaPlayer.Play();
+                    }
                 }
                 maxPercentSinceNotification = 0D;
             }
-            
+            notifyCheckRunBefore = true;
         }
     }
 }

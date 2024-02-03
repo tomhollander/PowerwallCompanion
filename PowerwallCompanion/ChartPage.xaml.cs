@@ -614,7 +614,7 @@ namespace PowerwallCompanion
                 }
                 sb.Append("\r\n");
             }
-            await Windows.Storage.FileIO.AppendTextAsync(file, sb.ToString());
+            await Windows.Storage.FileIO.WriteTextAsync(file, sb.ToString());
         }
 
 
@@ -641,7 +641,7 @@ namespace PowerwallCompanion
                 }
                 sb.Append("\r\n");
             }
-            await Windows.Storage.FileIO.AppendTextAsync(file, sb.ToString());
+            await Windows.Storage.FileIO.WriteTextAsync(file, sb.ToString());
         }
 
 
