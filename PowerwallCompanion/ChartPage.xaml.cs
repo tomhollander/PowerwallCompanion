@@ -156,9 +156,10 @@ namespace PowerwallCompanion
 
             var timeZone = Settings.InstallationTimeZone;
             var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
-            var offset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodStart);
-            var startDate = new DateTimeOffset(ViewModel.PeriodStart, offset);
-            var endDate = new DateTimeOffset(ViewModel.PeriodEnd, offset).AddSeconds(-1);
+            var startOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodStart);
+            var endOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodEnd);
+            var startDate = new DateTimeOffset(ViewModel.PeriodStart, startOffset);
+            var endDate = new DateTimeOffset(ViewModel.PeriodEnd, endOffset).AddSeconds(-1);
 
             sb.Append($"/api/1/energy_sites/{siteId}/calendar_history?");
             sb.Append("kind=" + kind);
