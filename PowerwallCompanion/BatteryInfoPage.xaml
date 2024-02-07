@@ -140,7 +140,7 @@
         <Grid Grid.Row="1" Visibility="{x:Bind ViewModel.ShowNotEnoughDataMessage, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
             <Image Source="Assets/BatteryGraphBlur.png" HorizontalAlignment="Center" VerticalAlignment="Center"  MinHeight="100"  MaxHeight="300"/>
             <TextBlock FontSize="16" TextWrapping="Wrap" Margin="120,0,60,0" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center">Battery capacity history is now enabled, but there isn't enough data
-     to show a chart just yet. The chart will show once we have over a month of data.</TextBlock>
+     to show a chart just yet. The chart will show once we have over a week of data.</TextBlock>
         </Grid>
 
     </Grid>

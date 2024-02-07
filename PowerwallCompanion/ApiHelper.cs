@@ -1,13 +1,16 @@
 ﻿using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Utils.Synchronization;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TeslaAuth;
 using Windows.Security.Cryptography.Certificates;
@@ -39,10 +42,8 @@ namespace PowerwallCompanion
             }
             catch (UnauthorizedAccessException)
             {
-                // First fail - try refreshing,
                 await RefreshToken();
                 return await CallGetApi(fullUrl, demoId);
-
             }
         }
 
@@ -109,21 +110,34 @@ namespace PowerwallCompanion
             }
         }
 
+        private static SemaphoreSlim _tokenRefreshSemaphore = new SemaphoreSlim(1, 1);
+        private static DateTime _tokenLastRefreshed;
         private static async Task RefreshToken()
         {
+            await _tokenRefreshSemaphore.WaitAsync(); // Token refreshes invalidate past tokens, so we don't want to do this multiple times at once
             try
             {
-                var helper = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl, 
-                    Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
+                if ((DateTime.Now - _tokenLastRefreshed).TotalSeconds < 10)
+                {
+                    return; // Token was likely refreshed while waiting for the semaphore
+                }
+                var helper = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl,
+                Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
                 var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken);
                 Analytics.TrackEvent("RefreshToken");
                 Settings.AccessToken = tokens.AccessToken;
                 Settings.RefreshToken = tokens.RefreshToken;
+                _tokenLastRefreshed = DateTime.Now;
+
             }
             catch (Exception ex)
             {
                 Crashes.TrackError(ex);
                 throw new UnauthorizedAccessException();
+            }
+            finally
+            {
+                _tokenRefreshSemaphore.Release();
             }
         }
 

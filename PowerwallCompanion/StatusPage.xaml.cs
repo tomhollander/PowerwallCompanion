@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Media.Core;
 using Windows.Media.Playback;

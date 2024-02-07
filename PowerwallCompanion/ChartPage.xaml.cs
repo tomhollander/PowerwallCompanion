@@ -65,6 +65,8 @@ namespace PowerwallCompanion
                 case "Year":
                     ViewModel.CalendarDate =ViewModel.CalendarDate.Value.AddYears(-1);
                     break;
+                default:
+                    break;
             }
             await RefreshDataAndCharts();
         }
@@ -84,6 +86,8 @@ namespace PowerwallCompanion
                     break;
                 case "Year":
                     ViewModel.CalendarDate = ViewModel.CalendarDate.Value.AddYears(1);
+                    break;
+                default:
                     break;
             }
             await RefreshDataAndCharts();
@@ -149,7 +153,7 @@ namespace PowerwallCompanion
             await Task.WhenAll(tasks);
         }
 
-        private async Task<string> GetCalendarHistoryUrl(string kind)
+        private string GetCalendarHistoryUrl(string kind)
         {
             var sb = new StringBuilder();
             var siteId = Settings.SiteId;
@@ -164,8 +168,11 @@ namespace PowerwallCompanion
             sb.Append($"/api/1/energy_sites/{siteId}/calendar_history?");
             sb.Append("kind=" + kind);
             sb.Append("&period=" + ViewModel.Period.ToLowerInvariant());
-            sb.Append("&start_date=" + Uri.EscapeDataString(startDate.ToString("o")));
-            sb.Append("&end_date=" + Uri.EscapeDataString(endDate.ToString("o")));
+            if (ViewModel.Period != "Lifetime")
+            {
+                sb.Append("&start_date=" + Uri.EscapeDataString(startDate.ToString("o")));
+                sb.Append("&end_date=" + Uri.EscapeDataString(endDate.ToString("o")));
+            }
             sb.Append("&time_zone=" + Uri.EscapeDataString(timeZone));
             sb.Append("&fill_telemetry=0");
             return sb.ToString();
@@ -175,7 +182,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = await GetCalendarHistoryUrl("energy");
+                var url = GetCalendarHistoryUrl("energy");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "EnergyHistory");
                 
                 double totalHomeEnergy = 0;
@@ -283,7 +290,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = await GetCalendarHistoryUrl("power");
+                var url = GetCalendarHistoryUrl("power");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "PowerHistory");
 
                 ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
@@ -495,7 +502,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = await GetCalendarHistoryUrl("soe");
+                var url = GetCalendarHistoryUrl("soe");
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "SoeHistory");
 
                 var batteryDailySoeGraphData = new List<ChartDataPoint>();

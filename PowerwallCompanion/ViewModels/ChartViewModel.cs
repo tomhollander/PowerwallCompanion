@@ -37,7 +37,7 @@ namespace PowerwallCompanion.ViewModels
 
         public IEnumerable<string> PeriodNames
         {
-            get => new string[] { "Day", "Week", "Month", "Year" };
+            get => new string[] { "Day", "Week", "Month", "Year", "Lifetime" };
         }
 
         public DateTimeOffset? CalendarDate
@@ -111,6 +111,10 @@ namespace PowerwallCompanion.ViewModels
                 case "Year":
                     PeriodStart = new DateTime(CalendarDate.Value.Year, 1, 1);
                     PeriodEnd = PeriodStart.AddYears(1);
+                    break;
+                case "Lifetime":
+                    PeriodStart = DateTime.Now.Date;
+                    PeriodEnd = PeriodStart.AddDays(1);
                     break;
             }
             CalendarDate = PeriodStart;    

@@ -19,6 +19,10 @@ namespace PowerwallCompanion.Converters
             {
                 return "ddd d MMM";
             }
+            else if ((string)value == "Lifetime")
+            {
+                return "yyyy";
+            }
             else
             {
                 return "MMM";

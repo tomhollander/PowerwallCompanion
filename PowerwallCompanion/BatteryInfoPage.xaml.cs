@@ -126,7 +126,7 @@ namespace PowerwallCompanion
                 Crashes.TrackError(ex);
             }
             batteryHistoryChartData.Add(new ChartDataPoint(DateTime.Now, ViewModel.TotalPackEnergy/1000));
-            ViewModel.EnoughDataToShowChart = batteryHistoryChartData.Count > 2 || ((DateTime.Now - mostRecentDate).TotalDays >= 30);
+            ViewModel.EnoughDataToShowChart = batteryHistoryChartData.Count > 2 || ((DateTime.Now - mostRecentDate).TotalDays >= 7);
             ViewModel.BatteryHistoryChartData = batteryHistoryChartData;
             ViewModel.NotifyChartProperties();
 

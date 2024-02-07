@@ -117,6 +117,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AustraliaNemGenerationStats.cs" />
     <Compile Include="BatteryInfoPage.xaml.cs">
       <DependentUpon>BatteryInfoPage.xaml</DependentUpon>
     </Compile>
@@ -298,6 +299,9 @@
     </PackageReference>
     <PackageReference Include="System.Security.Cryptography.Algorithms">
       <Version>4.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>8.0.1</Version>
     </PackageReference>
     <PackageReference Include="TeslaAuth">
       <Version>3.1.0</Version>
