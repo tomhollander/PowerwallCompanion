@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -410,6 +411,43 @@ namespace PowerwallCompanion.ViewModels
             {
                 // Don't worry, NBD
                 Crashes.TrackError(ex);
+            }
+        }
+
+        private double _gridLowCarbonPercent;
+        public double GridLowCarbonPercent
+        {
+            get { return _gridLowCarbonPercent; }
+            set
+            {
+                _gridLowCarbonPercent = value;
+                NotifyPropertyChanged(nameof(GridLowCarbonPercent));
+            }
+        }
+        private GridEnergySources _gridEnergySources;
+        public GridEnergySources GridEnergySources
+        {
+            get { return _gridEnergySources; }
+            set
+            {
+                _gridEnergySources = value;
+                NotifyPropertyChanged(nameof(GridEnergySources));
+                NotifyPropertyChanged(nameof(GridEnergySourcesList));
+            }
+        }
+        public List<GridEnergySources> GridEnergySourcesList
+        {
+            get { return _gridEnergySources == null ? null : new List<GridEnergySources>() { _gridEnergySources }; }
+        }
+
+        private string _gridEnergySourcesStatusMessage;
+        public string GridEnergySourcesStatusMessage
+        {
+            get { return _gridEnergySourcesStatusMessage; }
+            set
+            {
+                _gridEnergySourcesStatusMessage = value;
+                NotifyPropertyChanged(nameof(GridEnergySourcesStatusMessage));
             }
         }
 

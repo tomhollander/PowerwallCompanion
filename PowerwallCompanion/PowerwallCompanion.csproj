@@ -117,7 +117,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AustraliaNemGenerationStats.cs" />
     <Compile Include="BatteryInfoPage.xaml.cs">
       <DependentUpon>BatteryInfoPage.xaml</DependentUpon>
     </Compile>
@@ -128,6 +127,7 @@
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryCapacityToBrushConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
+    <Compile Include="Converters\EnergySourceIconVisibilityConverter.cs" />
     <Compile Include="Converters\EnergyHistoryDateFormatConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\DateFormatConverter.cs" />
@@ -174,6 +174,7 @@
     <Compile Include="ViewModels\ChartDataPoint.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
     <Compile Include="ViewModels\EnergyViewModel.cs" />
+    <Compile Include="ViewModels\GridEnergySources.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
     <Compile Include="ViewModels\Tariff.cs" />
@@ -189,6 +190,16 @@
     <Content Include="Assets\battery-full.wav" />
     <Content Include="Assets\BatteryGraphBlur.png" />
     <Content Include="Assets\EnergyIcon.png" />
+    <Content Include="Assets\energysource_biomass.png" />
+    <Content Include="Assets\energysource_coal.png" />
+    <Content Include="Assets\energysource_gas.png" />
+    <Content Include="Assets\energysource_geothermal.png" />
+    <Content Include="Assets\energysource_grid.png" />
+    <Content Include="Assets\energysource_hydro.png" />
+    <Content Include="Assets\energysource_nuclear.png" />
+    <Content Include="Assets\energysource_renewable.png" />
+    <Content Include="Assets\energysource_solar.png" />
+    <Content Include="Assets\energysource_wind.png" />
     <Content Include="Assets\icon_battery.png" />
     <Content Include="Assets\icon_battery_export.png" />
     <Content Include="Assets\icon_battery_import.png" />
