@@ -451,6 +451,21 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public Visibility EnergySourcesVisibility
+        {
+            get 
+            {  
+                if (Settings.ShowEnergySources)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                { 
+                    return Visibility.Collapsed; 
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string propertyName)

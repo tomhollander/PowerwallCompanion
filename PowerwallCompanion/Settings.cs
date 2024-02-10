@@ -99,6 +99,38 @@ namespace PowerwallCompanion
             }
         }
 
+        public static bool ShowEnergySources
+        {
+            get
+            {
+                if (_localSettings.Values["ShowEnergySources"] == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return bool.Parse((string)_localSettings.Values["ShowEnergySources"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["ShowEnergySources"] = value.ToString();
+            }
+        }
+
+        public static string EnergySourcesZoneOverride
+        {
+            get
+            {
+                return _localSettings.Values["EnergySourcesZoneOverride"] as string;
+            }
+            set
+            {
+                _localSettings.Values["EnergySourcesZoneOverride"] = value;
+            }
+        }
+
+
         public static bool UseLocalGateway
         {
             get

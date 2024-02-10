@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.AppCenter.Crashes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 
@@ -10,6 +13,8 @@ namespace PowerwallCompanion.ViewModels
 {
     public class SettingsViewModel : INotifyPropertyChanged
     {
+        private List<KeyValuePair<string, string>> _energySourceZones;
+
         public bool SignedIn
         {
             get {  return Settings.AccessToken != null || Settings.LocalGatewayIP != null;  }
@@ -33,6 +38,54 @@ namespace PowerwallCompanion.ViewModels
             set
             {
                 Settings.ShowClock = value.Value;
+            }
+        }
+
+        public bool? ShowEnergySources
+        {
+            get { return Settings.ShowEnergySources; }
+            set
+            {
+                Settings.ShowEnergySources = value.Value;
+            }
+        }
+
+        public bool EnergySourcesUseLocation
+        {
+            get
+            {
+                return Settings.EnergySourcesZoneOverride == null;
+            }
+            set
+            {
+                Settings.EnergySourcesZoneOverride = null;
+                LastSavedEnergySourceZone = null;
+            }
+        }
+
+        public bool EnergySourcesUseCustomZone
+        {
+            get
+            {
+                return Settings.EnergySourcesZoneOverride != null;
+            }
+            set
+            {
+                if (EnergySourceZones?.Count > 1) // Could be a single null item if the list failed to load
+                {
+                    LastSavedEnergySourceZone = EnergySourceZones?[1].Key;
+                    Settings.EnergySourcesZoneOverride = EnergySourceZones?[1].Key;
+                }
+            }
+        }
+
+
+        public string EnergySourcesZoneOverride
+        {
+            get { return Settings.EnergySourcesZoneOverride; }
+            set
+            {
+                Settings.EnergySourcesZoneOverride = value;
             }
         }
 
@@ -88,6 +141,38 @@ namespace PowerwallCompanion.ViewModels
             set => Settings.SiteId = value.Key;
         }
 
+
+
+        public List<KeyValuePair<string, string>> EnergySourceZones
+        {
+            get { return _energySourceZones; }
+            set
+            {
+                _energySourceZones = value;
+                NotifyPropertyChanged(nameof(EnergySourceZones));
+            }
+        }
+
+        public string LastSavedEnergySourceZone
+        {
+            set
+            {
+                _selectedEnergySourceZone = _energySourceZones.Where(e => e.Key == value).FirstOrDefault();
+                NotifyPropertyChanged(nameof(SelectedEnergySourceZone));
+            }
+        }
+
+        private KeyValuePair<string, string> _selectedEnergySourceZone;
+        public KeyValuePair<string, string> SelectedEnergySourceZone
+        {
+            get { return _selectedEnergySourceZone; }
+            set
+            {
+                _selectedEnergySourceZone = value;
+                Settings.EnergySourcesZoneOverride = value.Key;
+            }
+        }
+
         public string AppVersion
         {
             get
@@ -105,6 +190,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(SignedIn));
             NotifyPropertyChanged(nameof(SignInName));
             NotifyPropertyChanged(nameof(ShowClock));
+            NotifyPropertyChanged(nameof(ShowEnergySources));
             NotifyPropertyChanged(nameof(GraphScale));
             NotifyPropertyChanged(nameof(PlaySounds));
             NotifyPropertyChanged(nameof(StoreBatteryHistory));

@@ -36,6 +36,12 @@
             </StackPanel>
 
             <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
+            <CheckBox IsChecked="{x:Bind ViewModel.ShowEnergySources, Mode=TwoWay}" Margin="5">Show energy sources from electricitymaps.com</CheckBox>
+            <StackPanel Orientation="Horizontal" Margin="15,5,5,5">
+                <RadioButton Margin="0,0,20,0" IsChecked="{x:Bind ViewModel.EnergySourcesUseLocation, Mode=TwoWay}">Use current location</RadioButton>
+                <RadioButton IsChecked="{x:Bind ViewModel.EnergySourcesUseCustomZone, Mode=TwoWay}">Use this zone:</RadioButton>
+                <ComboBox x:Name="energySourcesZonesCombo" Width="200" ItemsSource="{x:Bind ViewModel.EnergySourceZones, Mode=OneWay}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedEnergySourceZone, Mode=TwoWay}"></ComboBox>
+            </StackPanel>
             <CheckBox IsChecked="{x:Bind ViewModel.PlaySounds, Mode=TwoWay}" Margin="5">Play sound on battery full/empty</CheckBox>
             <CheckBox IsChecked="{x:Bind ViewModel.StoreBatteryHistory, Mode=TwoWay}" Margin="5">Store historical battery capacity in the cloud</CheckBox>
 

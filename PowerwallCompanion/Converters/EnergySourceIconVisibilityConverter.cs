@@ -21,7 +21,7 @@ namespace PowerwallCompanion.Converters
             var sourcesType = typeof(GridEnergySources);
             var sourceValue = (int)sourcesType.GetProperty((string)parameter).GetValue(sources, null);
             double proportion = (double)sourceValue / sources.Total;
-            if (proportion > 0.15)
+            if (proportion > 0.1)
             {
                 return Visibility.Visible;
             }

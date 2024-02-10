@@ -206,7 +206,7 @@
             </Grid>
             
             <!-- Grid Energy Sources -->
-            <StackPanel x:Name="gridEnergySources" Margin="30,20,30,20" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Vertical" Grid.Row="2">
+            <StackPanel x:Name="gridEnergySources" Margin="30,20,30,20" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Vertical" Grid.Row="2" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
