@@ -14,6 +14,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,6 +27,8 @@ namespace PowerwallCompanion
     {
         public ChartViewModel ViewModel { get; set; }
         private Task ratePlanTask;
+        private DispatcherTimer timer;
+
         public ChartPage()
         {
             this.InitializeComponent();
@@ -37,7 +40,7 @@ namespace PowerwallCompanion
 
             ratePlanTask = FetchRatePlan();
 
-            var timer = new DispatcherTimer();
+            timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMinutes(5);
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -48,6 +51,11 @@ namespace PowerwallCompanion
             RefreshDataAndCharts();
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            timer.Stop();
+            base.OnNavigatedFrom(e);
+        }
 
         private async void prevPeriodButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -310,7 +318,7 @@ namespace PowerwallCompanion
 
                     // Save for export and charts
                     data["load_power"] = homePower;
-                    ViewModel.PowerDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
+                    ViewModel.PowerDataForExport.TryAdd(date, data.ToObject<Dictionary<string, object>>());
                     ViewModel.PowerDataForExport[date].Remove("timestamp");
                 }
 

@@ -19,6 +19,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using WinRTXamlToolkit.IO.Serialization;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -37,14 +38,14 @@ namespace PowerwallCompanion
 
         private double minPercentSinceNotification = 0D;
         private double maxPercentSinceNotification = 100D;
-
+        private DispatcherTimer timer;
 
         public StatusPage()
         {
             this.InitializeComponent();
             Analytics.TrackEvent("StatusPage opened");
             viewModel = new StatusViewModel();
-            var timer = new DispatcherTimer();
+            timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -59,6 +60,12 @@ namespace PowerwallCompanion
         {
             RefreshDataFromTeslaOwnerApi();
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            timer.Stop();
+            base.OnNavigatedFrom(e);
         }
 
         private void Timer_Tick(object sender, object e)
@@ -298,7 +305,6 @@ namespace PowerwallCompanion
         DateTime _energyUsageDataLastUpdated;
         private async Task RefreshGridEnergyUsageData()
         {
-
             if (Settings.ShowEnergySources)
             {
                 try
@@ -333,6 +339,7 @@ namespace PowerwallCompanion
                     if (json["error"]?.GetValue<string>() != null)
                     {
                         viewModel.GridEnergySourcesStatusMessage = $"No energy source data available for selected zone.";
+                        _energyUsageDataLastUpdated = DateTime.Now;
                         return; // No data available
                     }
                     var zone = json["zone"].GetValue<string>();
