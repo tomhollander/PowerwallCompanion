@@ -131,6 +131,7 @@
     <Compile Include="Converters\EnergyHistoryDateFormatConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\DateFormatConverter.cs" />
+    <Compile Include="Converters\EnergySourcePercentageConverter.cs" />
     <Compile Include="Converters\GridExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\GridImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\HighPowerToVisibilityConverter.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan5Converter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan10Converter.cs" />
+    <Compile Include="CustomEnergySourceProviders\AustraliaNemEnergySourceProvider.cs" />
     <Compile Include="DateUtils.cs" />
     <Compile Include="DownloadWebViewPage.xaml.cs">
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>

@@ -2,10 +2,12 @@
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.CustomEnergySourceProviders;
 using PowerwallCompanion.ViewModels;
 using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http;
@@ -89,7 +91,7 @@ namespace PowerwallCompanion
             };
             await Task.WhenAll(tasks);
         }
-  
+
         private async Task GetCurrentPowerData()
         {
             try
@@ -199,7 +201,7 @@ namespace PowerwallCompanion
                 }
 
                 var json = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
-                
+
                 var homeGraphData = new List<ChartDataPoint>();
                 var solarGraphData = new List<ChartDataPoint>();
                 var gridGraphData = new List<ChartDataPoint>();
@@ -307,70 +309,120 @@ namespace PowerwallCompanion
         {
             if (Settings.ShowEnergySources)
             {
-                try
+                if ((DateTime.Now - _energyUsageDataLastUpdated).TotalMinutes > 15)
                 {
-
-                    if ((DateTime.Now - _energyUsageDataLastUpdated).TotalMinutes < 15)
+                    if (IsNemRegion(Settings.EnergySourcesZoneOverride))
                     {
-                        return;
-                    }
-                    string locationQueryString = "";
-                    if (Settings.EnergySourcesZoneOverride != null)
-                    {
-                        locationQueryString = $"zone={Settings.EnergySourcesZoneOverride}";
+                        await RefreshGridEnergyUsageDataFromOpenNem();
                     }
                     else
                     {
-                        var accessStatus = await Geolocator.RequestAccessAsync();
-                        if (accessStatus == GeolocationAccessStatus.Allowed)
-                        {
-                            var geolocator = new Geolocator();
-                            var pos = await geolocator.GetGeopositionAsync();
-                            locationQueryString = $"lat={pos.Coordinate.Point.Position.Latitude}&lon={pos.Coordinate.Point.Position.Longitude}";
-                        }
+                        await RefreshGridEnergyUsageDataFromElectricityMaps();
                     }
-
-                    var client = new HttpClient();
-                    client.DefaultRequestHeaders.Add("auth-token", Licenses.ElectricityMapsApiKey);
-                    var url = $"https://api.electricitymap.org/v3/power-breakdown/latest?{locationQueryString}&xx={new Random().Next()}";
-                    var response = await client.GetAsync(url);
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var json = JsonNode.Parse(responseContent);
-                    if (json["error"]?.GetValue<string>() != null)
-                    {
-                        viewModel.GridEnergySourcesStatusMessage = $"No energy source data available for selected zone.";
-                        _energyUsageDataLastUpdated = DateTime.Now;
-                        return; // No data available
-                    }
-                    var zone = json["zone"].GetValue<string>();
-                    var date = DateTime.Parse(json["datetime"].GetValue<string>());
-                    viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{zone}', data from {date.ToString("g")}";
-                    Analytics.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", zone } });
-                    var jsonEnergy = json["powerConsumptionBreakdown"];
-                    var energyUsage = new GridEnergySources()
-                    {
-                        Solar = jsonEnergy["solar"].GetValue<int>(),
-                        Wind = jsonEnergy["wind"].GetValue<int>(),
-                        Nuclear = jsonEnergy["nuclear"].GetValue<int>(),
-                        Geothermal = jsonEnergy["geothermal"].GetValue<int>(),
-                        Biomass = jsonEnergy["biomass"].GetValue<int>(),
-                        Coal = jsonEnergy["coal"].GetValue<int>(),
-                        Hydro = jsonEnergy["hydro"].GetValue<int>(),
-                        HydroStorage = jsonEnergy["hydro discharge"].GetValue<int>(),
-                        BatteryStorage = jsonEnergy["battery discharge"].GetValue<int>(),
-                        Oil = jsonEnergy["oil"].GetValue<int>(),
-                        Gas = jsonEnergy["gas"].GetValue<int>(),
-                        Unknown = jsonEnergy["unknown"].GetValue<int>(),
-
-                    };
-                    ViewModel.GridEnergySources = energyUsage;
-                    ViewModel.GridLowCarbonPercent = json["fossilFreePercentage"].GetValue<int>();
                     _energyUsageDataLastUpdated = DateTime.Now;
                 }
-                catch (Exception ex)
+            }
+        }
+
+        private bool IsNemRegion(string energySourcesZoneOverride)
+        {
+            return (energySourcesZoneOverride == "AU" ||
+                energySourcesZoneOverride == "AU-NSW" ||
+                energySourcesZoneOverride == "AU-QLD" ||
+                energySourcesZoneOverride == "AU-VIC" ||
+                energySourcesZoneOverride == "AU-SA" ||
+                energySourcesZoneOverride == "AU-TAS");
+        }
+
+        private async Task RefreshGridEnergyUsageDataFromOpenNem()
+        { 
+            try
+            {
+                string zone = Settings.EnergySourcesZoneOverride == "AU" ? null : 
+                    Settings.EnergySourcesZoneOverride.Substring(3);
+                var provider = new AustraliaNemEnergySourceProvider(zone);
+                await provider.Refresh();
+                Analytics.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", Settings.EnergySourcesZoneOverride }, { "Provider", "OpenNEM" } });
+                ViewModel.GridEnergySources = provider.CurrentGenerationMix;
+                ViewModel.GridLowCarbonPercent = provider.RenewablePercent;
+                viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{Settings.EnergySourcesZoneOverride}', OpenNEM data from {provider.UpdatedDate.ToString("g")}";
+                return;
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+
+        }
+
+
+        private async Task RefreshGridEnergyUsageDataFromElectricityMaps()
+        { 
+            try
+            {
+
+                string locationQueryString = "";
+                if (Settings.EnergySourcesZoneOverride != null)
                 {
-                    Crashes.TrackError(ex);
+                    locationQueryString = $"zone={Settings.EnergySourcesZoneOverride}";
                 }
+                else
+                {
+                    var accessStatus = await Geolocator.RequestAccessAsync();
+                    if (accessStatus == GeolocationAccessStatus.Allowed)
+                    {
+                        var geolocator = new Geolocator();
+                        var pos = await geolocator.GetGeopositionAsync();
+                        locationQueryString = $"lat={pos.Coordinate.Point.Position.Latitude}&lon={pos.Coordinate.Point.Position.Longitude}";
+                    }
+                }
+
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("auth-token", Licenses.ElectricityMapsApiKey);
+                var url = $"https://api.electricitymap.org/v3/power-breakdown/latest?{locationQueryString}&xx={new Random().Next()}";
+                var response = await client.GetAsync(url);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var json = JsonNode.Parse(responseContent);
+                if (json["error"]?.GetValue<string>() != null)
+                {
+                    viewModel.GridEnergySourcesStatusMessage = $"No energy source data available for selected zone.";
+                    _energyUsageDataLastUpdated = DateTime.Now;
+                    return; // No data available
+                }
+                var zone = json["zone"].GetValue<string>();
+                if (IsNemRegion(zone)) // Save geolocated zone for NEM
+                {
+                    Settings.EnergySourcesZoneOverride = zone;
+                    await RefreshGridEnergyUsageDataFromOpenNem();
+                    return;
+                }
+                var date = DateTime.Parse(json["datetime"].GetValue<string>());
+                
+                var jsonEnergy = json["powerConsumptionBreakdown"];
+                var energyUsage = new GridEnergySources()
+                {
+                    Solar = jsonEnergy["solar"].GetValue<int>(),
+                    Wind = jsonEnergy["wind"].GetValue<int>(),
+                    Nuclear = jsonEnergy["nuclear"].GetValue<int>(),
+                    Geothermal = jsonEnergy["geothermal"].GetValue<int>(),
+                    Biomass = jsonEnergy["biomass"].GetValue<int>(),
+                    Coal = jsonEnergy["coal"].GetValue<int>(),
+                    Hydro = jsonEnergy["hydro"].GetValue<int>(),
+                    HydroStorage = jsonEnergy["hydro discharge"].GetValue<int>(),
+                    BatteryStorage = jsonEnergy["battery discharge"].GetValue<int>(),
+                    Oil = jsonEnergy["oil"].GetValue<int>(),
+                    Gas = jsonEnergy["gas"].GetValue<int>(),
+                    Unknown = jsonEnergy["unknown"].GetValue<int>(),
+
+                };
+                viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{zone}', data from {date.ToString("g")}";
+                ViewModel.GridEnergySources = energyUsage;
+                ViewModel.GridLowCarbonPercent = json["fossilFreePercentage"].GetValue<int>();
+                Analytics.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", zone }, { "Provider", "ElectricityMaps.com" } });
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
             }
 
         }

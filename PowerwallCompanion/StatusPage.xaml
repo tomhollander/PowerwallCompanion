@@ -30,7 +30,8 @@
         <converters:StatusToBrushConverter x:Key="StatusToBrushConverter" />
         <converters:TooltipMessageConverter x:Key="TooltipMessageConverter"/>
         <converters:EnergySourceIconVisibilityConverter x:Key="EnergySourceIconVisibilityConverter"/>
-        <DataTemplate x:Key="energySourcesChartTooltip">
+        <converters:EnergySourcePercentageConverter x:Key="EnergySourcePercentageConverter"/>
+        <DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:BarSegment">
             <Grid Background="LightGray">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -43,6 +44,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                     <TextBlock Foreground="Black" Text="{Binding YData}"/>
                     <TextBlock Foreground="Black" Text=" MW"/>
+                    <TextBlock Foreground="Black" Text="{Binding Converter={StaticResource EnergySourcePercentageConverter}}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
