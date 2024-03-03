@@ -30,7 +30,7 @@ namespace PowerwallCompanion.ViewModels
         public double TotalPackEnergy { get; set; }
 
         public double CurrentCapacityPercent { get { return TotalPackEnergy / WarrantedCapacity * 100; } }
-        public double Degradation { get { return CurrentCapacityPercent > 100 ? 0 : 100 - CurrentCapacityPercent; } }
+        public double Degradation { get { return CurrentCapacityPercent > 100 ? 0 : 100.0 - CurrentCapacityPercent; } }
         public string GatewayId { get; set; }
 
         public List<ChartDataPoint> BatteryHistoryChartData
