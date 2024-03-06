@@ -127,6 +127,7 @@
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryCapacityToBrushConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
+    <Compile Include="Converters\IntegerConverter.cs" />
     <Compile Include="Converters\EnergySourceIconVisibilityConverter.cs" />
     <Compile Include="Converters\EnergyHistoryDateFormatConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
@@ -211,6 +212,8 @@
     <Content Include="Assets\icon_grid_import.png" />
     <Content Include="Assets\icon_home.png" />
     <Content Include="Assets\icon_solar.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
     <Content Include="DemoData\SelfConsumptionHistory.json" />
     <Content Include="DemoData\LiveStatus.json" />
     <Content Include="DemoData\PowerHistory.json" />

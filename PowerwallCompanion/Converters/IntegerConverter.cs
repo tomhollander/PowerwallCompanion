@@ -7,17 +7,25 @@ using Windows.UI.Xaml.Data;
 
 namespace PowerwallCompanion.Converters
 {
-    public class KilowattConverter : IValueConverter
+    class IntegerConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            double scaledValue = (double)(value) / 1000;
-            return scaledValue.ToString("f" + Settings.PowerDecimals.ToString());
+            return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            if (targetType == typeof(Int32))
+            {
+                Int32 result;
+                bool ok = Int32.TryParse((string)value, out result);
+                if (ok)
+                {
+                    return result > 4 ? 4 : result;
+                }
+            }
+            return 1;
         }
     }
 }

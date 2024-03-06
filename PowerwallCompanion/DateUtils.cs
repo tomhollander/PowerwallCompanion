@@ -18,7 +18,7 @@ namespace PowerwallCompanion
             try
             {
                 var siteInfoJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_info", "SiteInfo");
-                Settings.InstallationTimeZone = siteInfoJson["respose"]["installation_time_zone"].Value<string>();
+                Settings.InstallationTimeZone = siteInfoJson["response"]["installation_time_zone"].Value<string>();
             }
             catch
             {

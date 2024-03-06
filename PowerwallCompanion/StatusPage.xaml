@@ -92,7 +92,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <gauge:SfCircularGauge Margin="20"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center" Grid.Row="0">
+            <gauge:SfCircularGauge Margin="5"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center" Grid.Row="0">
                 <gauge:SfCircularGauge.GaugeHeader>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,5,-2,0"  VerticalAlignment="Center" />
@@ -216,14 +216,14 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
                         <Image ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergySourcesStatusMessage, Mode=OneWay}" Source="ms-appx:///Assets/energysource_grid.png" Width="40" Margin="10,10,20,0"/>
-                        <Image ToolTipService.ToolTip="Solar" Source="ms-appx:///Assets/energysource_solar.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}"/>
-                        <Image ToolTipService.ToolTip="Wind" Source="ms-appx:///Assets/energysource_wind.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}"/>
-                        <Image ToolTipService.ToolTip="Hydro" Source="ms-appx:///Assets/energysource_hydro.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}"/>
-                        <Image ToolTipService.ToolTip="Biomass" Source="ms-appx:///Assets/energysource_biomass.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Biomass'}"/>
-                        <Image ToolTipService.ToolTip="Geothermal" Source="ms-appx:///Assets/energysource_geothermal.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Geothermal'}"/>
-                        <Image ToolTipService.ToolTip="Nuclear" Source="ms-appx:///Assets/energysource_nuclear.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Nuclear'}"/>
-                        <Image ToolTipService.ToolTip="Gas" Source="ms-appx:///Assets/energysource_gas.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Gas'}"/>
-                        <Image ToolTipService.ToolTip="Coal" Source="ms-appx:///Assets/energysource_coal.png" Width="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}"/>
+                        <Image ToolTipService.ToolTip="Solar" Source="ms-appx:///Assets/energysource_solar.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}"/>
+                        <Image ToolTipService.ToolTip="Wind" Source="ms-appx:///Assets/energysource_wind.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}"/>
+                        <Image ToolTipService.ToolTip="Hydro" Source="ms-appx:///Assets/energysource_hydro.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}"/>
+                        <Image ToolTipService.ToolTip="Biomass" Source="ms-appx:///Assets/energysource_biomass.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Biomass'}"/>
+                        <Image ToolTipService.ToolTip="Geothermal" Source="ms-appx:///Assets/energysource_geothermal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Geothermal'}"/>
+                        <Image ToolTipService.ToolTip="Nuclear" Source="ms-appx:///Assets/energysource_nuclear.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Nuclear'}"/>
+                        <Image ToolTipService.ToolTip="Gas" Source="ms-appx:///Assets/energysource_gas.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Gas'}"/>
+                        <Image ToolTipService.ToolTip="Coal" Source="ms-appx:///Assets/energysource_coal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                         <Image ToolTipService.ToolTip="Renewable and low carbon" Source="ms-appx:///Assets/energysource_renewable.png" Width="30" Margin="0,0,0,5" VerticalAlignment="Bottom"/>

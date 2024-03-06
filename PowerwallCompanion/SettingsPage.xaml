@@ -11,6 +11,7 @@
         <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter"/>
         <converters:TrueToVisibilityCollapsedConverter x:Key="TrueToVisibilityCollapsedConverter"/>
         <converters:DecimalConverter x:Key="DecimalConverter" />
+        <converters:IntegerConverter x:Key="IntegerConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
@@ -33,6 +34,15 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
                 <TextBlock VerticalAlignment="Center" Width="200">Bar Graph Scale (kW per cm):</TextBlock>
                 <TextBox x:Name="graphScale" VerticalAlignment="Center" Text="{x:Bind ViewModel.GraphScale, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Width="100" InputScope="CurrencyAmount"></TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                <TextBlock VerticalAlignment="Center" Width="200">Decimal places:</TextBlock>
+                <TextBlock VerticalAlignment="Center" Margin="0,0,10,0">Power</TextBlock>
+                <TextBox x:Name="powerDecimals" VerticalAlignment="Center" Text="{x:Bind ViewModel.PowerDecimals, Mode=TwoWay, Converter={StaticResource IntegerConverter}}" HorizontalAlignment="Left" InputScope="Number"></TextBox>
+                <TextBlock VerticalAlignment="Center" Margin="10,0,10,0">Energy</TextBlock>
+                <TextBox x:Name="energyDecimals" VerticalAlignment="Center" Text="{x:Bind ViewModel.EnergyDecimals, Mode=TwoWay, Converter={StaticResource IntegerConverter}}" HorizontalAlignment="Left"  InputScope="Number"></TextBox>
+
             </StackPanel>
 
             <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>

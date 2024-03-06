@@ -11,7 +11,7 @@ namespace PowerwallCompanion.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            string precision = (string) parameter ?? "0";
+            string precision = (string) parameter ?? Settings.EnergyDecimals.ToString();
             double scaledValue = (double)(value) / 1000;
             return scaledValue.ToString("f" + precision);
         }

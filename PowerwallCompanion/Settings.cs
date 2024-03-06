@@ -226,5 +226,43 @@ namespace PowerwallCompanion
                 _localSettings.Values["InstallationTimeZone"] = value;
             }
         }
+
+        public static int PowerDecimals
+        {
+            get
+            {
+                if (_localSettings.Values["PowerDecimals"] == null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return Int32.Parse((string)_localSettings.Values["PowerDecimals"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["PowerDecimals"] = value.ToString();
+            }
+        }
+
+        public static int EnergyDecimals
+        {
+            get
+            {
+                if (_localSettings.Values["EnergyDecimals"] == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return Int32.Parse((string)_localSettings.Values["EnergyDecimals"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["EnergyDecimals"] = value.ToString();
+            }
+        }
     }
 }

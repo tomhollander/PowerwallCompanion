@@ -116,6 +116,24 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public int PowerDecimals
+        {
+            get { return Settings.PowerDecimals; }
+            set
+            {
+                Settings.PowerDecimals = value;
+            }
+        }
+
+        public int EnergyDecimals
+        {
+            get { return Settings.EnergyDecimals; }
+            set
+            {
+                Settings.EnergyDecimals = value;
+            }
+        }
+
         public List<KeyValuePair<string, string>> AvailableSites
         {
             get

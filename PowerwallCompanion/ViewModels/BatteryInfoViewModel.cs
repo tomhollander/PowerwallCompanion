@@ -27,12 +27,27 @@ namespace PowerwallCompanion.ViewModels
             } 
         }
 
+        public double WarrantedCapacityKWh
+        {
+            get => WarrantedCapacity / 1000;
+        }
+
+        public double MinimumWarrantedCapacityKWh
+        {
+            get
+            {
+                double warrantedProportion = 0.7; // True in most countries
+                return WarrantedCapacityKWh * warrantedProportion;
+            }
+        }
+
         public double TotalPackEnergy { get; set; }
 
         public double CurrentCapacityPercent { get { return TotalPackEnergy / WarrantedCapacity * 100; } }
-        public double Degradation { get { return CurrentCapacityPercent > 100 ? 0 : 100 - CurrentCapacityPercent; } }
+        public double Degradation { get { return CurrentCapacityPercent > 100 ? 0 : 100.0 - CurrentCapacityPercent; } }
         public string GatewayId { get; set; }
 
+    
         public List<ChartDataPoint> BatteryHistoryChartData
         {
             get; set;
@@ -82,6 +97,8 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(EnoughDataToShowChart));
             NotifyPropertyChanged(nameof(BatteryHistoryChartData));
             NotifyPropertyChanged(nameof(ShowNotEnoughDataMessage));
+            NotifyPropertyChanged(nameof(WarrantedCapacityKWh));
+            NotifyPropertyChanged(nameof(MinimumWarrantedCapacityKWh));
         }
 
         private void NotifyPropertyChanged(string propertyName)

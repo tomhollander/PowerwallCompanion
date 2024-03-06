@@ -128,6 +128,11 @@
                 </chart:AreaSeries.AdornmentsInfo>
             </chart:AreaSeries>
 
+            <chart:SfChart.Annotations>
+                <chart:HorizontalLineAnnotation ShowToolTip="True" ToolTipContent="100% Warranted capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation ShowToolTip="True" ToolTipContent="70% warranted capacity" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
+            </chart:SfChart.Annotations>
+            
         </chart:SfChart>
 
         <StackPanel Grid.Row="1" Visibility="{x:Bind ViewModel.StoreBatteryHistory, Converter={StaticResource TrueToVisibilityCollapsedConverter}, Mode=OneWay}">
