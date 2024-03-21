@@ -96,6 +96,9 @@
                 <TextBlock FontSize="30" Text="Degradation" Foreground="DimGray"/>
                 <TextBlock FontSize="50" Text="{x:Bind ViewModel.Degradation,Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind ViewModel.CurrentCapacityPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"></TextBlock>
             </StackPanel>
+            <Grid x:Name="noDataBanner" Visibility="Collapsed" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Background="LightPink" HorizontalAlignment="Center">
+                <TextBlock Margin="20" VerticalAlignment="Center" Foreground="Black" TextWrapping="Wrap">Battery degradation information is currently unavailable due to unexplained changes to Tesla's API. I will try to restore this in a future release by pulling the data from the local gateway. Apologies for the inconvenience (well really Tesla should be apologising! 😡).</TextBlock>
+            </Grid>
         </Grid>
         <chart:SfChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="1" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
             <chart:SfChart.Behaviors>

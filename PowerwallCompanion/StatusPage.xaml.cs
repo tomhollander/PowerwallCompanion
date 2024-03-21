@@ -112,7 +112,7 @@ namespace PowerwallCompanion
 
                 var powerInfo = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/live_status", "LiveStatus");
 
-                viewModel.BatteryPercent = GetJsonDoubleValue(powerInfo["response"]["energy_left"]) / GetJsonDoubleValue(powerInfo["response"]["total_pack_energy"]) * 100D;
+                viewModel.BatteryPercent = GetJsonDoubleValue(powerInfo["response"]["percentage_charged"]);
                 viewModel.HomeValue = GetJsonDoubleValue(powerInfo["response"]["load_power"]);
                 viewModel.SolarValue = GetJsonDoubleValue(powerInfo["response"]["solar_power"]);
                 viewModel.BatteryValue = GetJsonDoubleValue(powerInfo["response"]["battery_power"]);

@@ -71,10 +71,19 @@ namespace PowerwallCompanion
 
         private async Task GetBatteryCapacity()
         {
-            var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
-            ViewModel.SiteName = siteStatusJson["response"]["site_name"].Value<string>();
-            ViewModel.TotalPackEnergy = siteStatusJson["response"]["total_pack_energy"].Value<double>();
-            ViewModel.GatewayId = siteStatusJson["response"]["gateway_id"].Value<string>();
+            try
+            {
+                var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
+                ViewModel.SiteName = siteStatusJson["response"]["site_name"].Value<string>();
+                ViewModel.GatewayId = siteStatusJson["response"]["gateway_id"].Value<string>();
+                ViewModel.TotalPackEnergy = siteStatusJson["response"]["total_pack_energy"].Value<double>();
+            }
+            catch (Exception ex)
+            {
+                noDataBanner.Visibility = Visibility.Visible;
+                Crashes.TrackError(ex);
+            }
+
         }
 
         private async Task GetBatteryInfo()
@@ -88,6 +97,10 @@ namespace PowerwallCompanion
         {
             try
             {
+                if (ViewModel.TotalPackEnergy == 0)
+                {
+                    return; // Don't save invalid data
+                }
                 var client = new HttpClient();
                 var url = "https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory";
                 client.DefaultRequestHeaders.Add("apiKey", Licenses.AppServicesKey);
@@ -125,7 +138,11 @@ namespace PowerwallCompanion
             {
                 Crashes.TrackError(ex);
             }
-            batteryHistoryChartData.Add(new ChartDataPoint(DateTime.Now, ViewModel.TotalPackEnergy/1000));
+            if (ViewModel.TotalPackEnergy > 0)
+            {
+                batteryHistoryChartData.Add(new ChartDataPoint(DateTime.Now, ViewModel.TotalPackEnergy / 1000));
+            }
+            
             ViewModel.EnoughDataToShowChart = batteryHistoryChartData.Count > 2 || ((DateTime.Now - mostRecentDate).TotalDays >= 7);
             ViewModel.BatteryHistoryChartData = batteryHistoryChartData;
             ViewModel.NotifyChartProperties();
