@@ -32,6 +32,24 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public string LocalGatewayIP
+        {
+            get { return Settings.LocalGatewayIP; }
+            set
+            {
+                Settings.LocalGatewayIP = value;
+            }
+        }
+
+        public string LocalGatewayPassword
+        {
+            get { return Settings.LocalGatewayPassword; }
+            set
+            {
+                Settings.LocalGatewayPassword = value;
+            }
+        }
+
         public bool? ShowClock
         {
             get {  return Settings.ShowClock;}

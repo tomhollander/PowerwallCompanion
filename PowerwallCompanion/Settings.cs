@@ -162,6 +162,38 @@ namespace PowerwallCompanion
             }
         }
 
+        public static string LocalGatewayPassword
+        {
+            get
+            {
+                return _localSettings.Values["LocalGatewayPassword"] as string;
+            }
+            set
+            {
+                _localSettings.Values["LocalGatewayPassword"] = value;
+            }
+        }
+
+        public static DateTime CachedGatewayDetailsUpdated
+        {
+            get
+            {
+                string date = _localSettings.Values["CachedGatewayDetailsUpdated"] as string;
+                if (date == null)
+                {
+                    return DateTime.MinValue;
+                }
+                else
+                {
+                    return DateTime.Parse(date);
+                }
+            }
+            set
+            {
+                _localSettings.Values["CachedGatewayDetailsUpdated"] = value.ToString("O");
+            }
+        }
+
         public static Dictionary<string, string> AvailableSites
         {
             get

@@ -19,12 +19,17 @@ namespace PowerwallCompanion.ViewModels
         public int NumberOfBatteries { get; set; }
         public DateTime InstallDate { get; set; }
         public string InstallDateString { get { return InstallDate.ToString("d"); } }
-        public double WarrantedCapacity { 
-            get 
+        
+        public List<BatteryDetails> BatteryDetails { get; set; }
+
+        public string GatewayId { get; set; }
+        public double WarrantedCapacity
+        {
+            get
             {
                 int capacity = 13500;
-                return capacity * NumberOfBatteries; 
-            } 
+                return capacity * NumberOfBatteries;
+            }
         }
 
         public double WarrantedCapacityKWh
@@ -41,13 +46,6 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public double TotalPackEnergy { get; set; }
-
-        public double CurrentCapacityPercent { get { return TotalPackEnergy / WarrantedCapacity * 100; } }
-        public double Degradation { get { return CurrentCapacityPercent > 100 ? 0 : 100.0 - CurrentCapacityPercent; } }
-        public string GatewayId { get; set; }
-
-    
         public List<ChartDataPoint> BatteryHistoryChartData
         {
             get; set;
@@ -84,10 +82,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(SiteName));
             NotifyPropertyChanged(nameof(InstallDateString));
             NotifyPropertyChanged(nameof(NumberOfBatteries));
-            NotifyPropertyChanged(nameof(WarrantedCapacity));
-            NotifyPropertyChanged(nameof(TotalPackEnergy));
-            NotifyPropertyChanged(nameof(CurrentCapacityPercent));
-            NotifyPropertyChanged(nameof(Degradation));
+            NotifyPropertyChanged(nameof(BatteryDetails));
         }
 
         public void NotifyChartProperties()

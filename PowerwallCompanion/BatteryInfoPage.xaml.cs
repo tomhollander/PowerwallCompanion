@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -36,13 +38,65 @@ namespace PowerwallCompanion
         {
             try
             {
-                var tasks = new List<Task> { GetBatteryCapacity(), GetBatteryInfo() };
+                var tasks = new List<Task> { GetSiteStatus(), GetBatteryInfo() };
+                if (String.IsNullOrEmpty(Settings.LocalGatewayIP) || String.IsNullOrEmpty(Settings.LocalGatewayPassword))
+                {
+                    noGatewayBanner.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    tasks.Add(GetBatteryDetailsFromLocalGateway());
+                }
+
                 await Task.WhenAll(tasks);
                 ViewModel.NotifyAllProperties();
 
                 await ProcessBatteryHistoryData();
             }
             catch (System.Exception ex) 
+            {
+                Crashes.TrackError(ex);
+            }
+        }
+        
+        private async Task GetBatteryDetailsFromLocalGateway()
+        {
+            try
+            {
+                JsonObject json = null;
+                try
+                {
+                    json = await GatewayApiHelper.CallGetApi("/api/system_status");
+                    await SaveGatewayDetailsToCache(json);
+                    Settings.CachedGatewayDetailsUpdated = DateTime.Now;
+                }
+                catch
+                {
+                    var cachedData = await ReadGatewayDetailsFromCache();
+                    if (cachedData == null)
+                    {
+                        gatewayErrorBanner.Visibility = Visibility.Visible;
+                        return;
+                    }
+                    else
+                    {
+                        staleDataBannerTextBlock.Text += " " + Settings.CachedGatewayDetailsUpdated.ToString("g");
+                        staleDataBanner.Visibility = Visibility.Visible;
+                        json = cachedData;
+                    }
+                }
+                ViewModel.BatteryDetails = new List<BatteryDetails>();
+                foreach (var batteryBlock in (JsonArray)json["battery_blocks"])
+                {
+                    ViewModel.BatteryDetails.Add(new BatteryDetails
+                    {
+                        SerialNumber = batteryBlock["PackageSerialNumber"].GetValue<string>(),
+                        FullCapacity = batteryBlock["nominal_full_pack_energy"].GetValue<double>(),
+                        CurrentChargeLevel = batteryBlock["nominal_energy_remaining"].GetValue<double>()
+                    });
+                }
+            }
+            catch (Exception ex)
             {
                 Crashes.TrackError(ex);
             }
@@ -69,18 +123,16 @@ namespace PowerwallCompanion
             }
         }
 
-        private async Task GetBatteryCapacity()
+        private async Task GetSiteStatus()
         {
             try
             {
                 var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
                 ViewModel.SiteName = siteStatusJson["response"]["site_name"].Value<string>();
                 ViewModel.GatewayId = siteStatusJson["response"]["gateway_id"].Value<string>();
-                ViewModel.TotalPackEnergy = siteStatusJson["response"]["total_pack_energy"].Value<double>();
             }
             catch (Exception ex)
             {
-                noDataBanner.Visibility = Visibility.Visible;
                 Crashes.TrackError(ex);
             }
 
@@ -95,22 +147,22 @@ namespace PowerwallCompanion
 
         private async Task SaveBatteryHistoryData()
         {
-            try
-            {
-                if (ViewModel.TotalPackEnergy == 0)
-                {
-                    return; // Don't save invalid data
-                }
-                var client = new HttpClient();
-                var url = "https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory";
-                client.DefaultRequestHeaders.Add("apiKey", Licenses.AppServicesKey);
-                var body = $"{{\"siteId\": \"{Settings.SiteId}\", \"gatewayId\": \"{ViewModel.GatewayId}\", \"capacity\":{ViewModel.TotalPackEnergy}}}";
-                await client.PostAsync(url, new StringContent(body, Encoding.UTF8, "application/json"));
-            }
-            catch (Exception ex) 
-            {
-                Crashes.TrackError(ex);
-            }
+            //try
+            //{
+            //    if (ViewModel.TotalPackEnergy == 0)
+            //    {
+            //        return; // Don't save invalid data
+            //    }
+            //    var client = new HttpClient();
+            //    var url = "https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory";
+            //    client.DefaultRequestHeaders.Add("apiKey", Licenses.AppServicesKey);
+            //    var body = $"{{\"siteId\": \"{Settings.SiteId}\", \"gatewayId\": \"{ViewModel.GatewayId}\", \"capacity\":{ViewModel.TotalPackEnergy}}}";
+            //    await client.PostAsync(url, new StringContent(body, Encoding.UTF8, "application/json"));
+            //}
+            //catch (Exception ex) 
+            //{
+            //    Crashes.TrackError(ex);
+            //}
         }
 
         public async Task GetBatteryHistoryData()
@@ -138,10 +190,10 @@ namespace PowerwallCompanion
             {
                 Crashes.TrackError(ex);
             }
-            if (ViewModel.TotalPackEnergy > 0)
-            {
-                batteryHistoryChartData.Add(new ChartDataPoint(DateTime.Now, ViewModel.TotalPackEnergy / 1000));
-            }
+            //if (ViewModel.TotalPackEnergy > 0)
+            //{
+            //    batteryHistoryChartData.Add(new ChartDataPoint(DateTime.Now, ViewModel.TotalPackEnergy / 1000));
+            //}
             
             ViewModel.EnoughDataToShowChart = batteryHistoryChartData.Count > 2 || ((DateTime.Now - mostRecentDate).TotalDays >= 7);
             ViewModel.BatteryHistoryChartData = batteryHistoryChartData;
@@ -155,5 +207,28 @@ namespace PowerwallCompanion
             ViewModel.StoreBatteryHistory = true;
             await ProcessBatteryHistoryData();
         }
+
+        private async Task SaveGatewayDetailsToCache(JsonObject json)
+        {
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile cacheFile = await storageFolder.CreateFileAsync("gateway_system_status.json", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            await Windows.Storage.FileIO.WriteTextAsync(cacheFile, json.ToString());
+        }
+
+        private async Task<JsonObject> ReadGatewayDetailsFromCache()
+        {
+            try
+            {
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFile cacheFile = await storageFolder.GetFileAsync("gateway_system_status.json");
+                string text = await Windows.Storage.FileIO.ReadTextAsync(cacheFile);
+                return (JsonObject)JsonObject.Parse(text);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }
