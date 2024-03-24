@@ -140,20 +140,14 @@
                 </chart:ChartLegend>
             </chart:SfChart.Legend>
 
-            <chart:AreaSeries  Stroke="Blue" StrokeThickness="1" Interior="Blue" BorderBrush="Blue" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryHistoryChartData, Mode=OneWay}" Label="Battery capacity" XBindingPath="XValue" YBindingPath="YValue">
-                <chart:AreaSeries.AdornmentsInfo>
-                    <chart:ChartAdornmentInfo SymbolStroke="Black" SymbolInterior="LightBlue" SymbolWidth="10" SymbolHeight="10" Symbol="Ellipse"></chart:ChartAdornmentInfo>
-                </chart:AreaSeries.AdornmentsInfo>
-            </chart:AreaSeries>
-
             <chart:SfChart.Annotations>
-                <chart:HorizontalLineAnnotation ShowToolTip="True" ToolTipContent="100% Warranted capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
-                <chart:HorizontalLineAnnotation ShowToolTip="True" ToolTipContent="70% warranted capacity" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="100% Warranted capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="70% warranted capacity" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
             </chart:SfChart.Annotations>
             
         </chart:SfChart>
 
-        <StackPanel Grid.Row="1" Visibility="{x:Bind ViewModel.StoreBatteryHistory, Converter={StaticResource TrueToVisibilityCollapsedConverter}, Mode=OneWay}">
+        <StackPanel Grid.Row="2" Visibility="{x:Bind ViewModel.StoreBatteryHistory, Converter={StaticResource TrueToVisibilityCollapsedConverter}, Mode=OneWay}">
             <TextBlock FontSize="16" TextWrapping="Wrap" Margin="40,0,40,10" Foreground="LightGray">Powerwall Companion can track how your battery's reported capacity changes over time. 
          This history data is not made available by Tesla, so using this feature requires you to opt in to storing this
          data in the Powerwall Companion server. Data is updated monthly and requires you to open this page.</TextBlock>

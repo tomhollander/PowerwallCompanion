@@ -215,7 +215,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
-                        <Image ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergySourcesStatusMessage, Mode=OneWay}" Source="ms-appx:///Assets/energysource_grid.png" Width="40" Margin="10,10,20,0"/>
+                        <Image ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergySourcesStatusMessage, Mode=OneWay}" Source="ms-appx:///Assets/energysource_grid.png" Height="30" Margin="10,10,20,0"/>
                         <Image ToolTipService.ToolTip="Solar" Source="ms-appx:///Assets/energysource_solar.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}"/>
                         <Image ToolTipService.ToolTip="Wind" Source="ms-appx:///Assets/energysource_wind.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}"/>
                         <Image ToolTipService.ToolTip="Hydro" Source="ms-appx:///Assets/energysource_hydro.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}"/>

@@ -14,12 +14,14 @@ namespace PowerwallCompanion.ViewModels
         public BatteryInfoViewModel()
         {
             EnoughDataToShowChart = true; // Prevent flicker
+            SiteName = "<Data Loading>";
         }
         public string SiteName { get; set; }
         public int NumberOfBatteries { get; set; }
         public DateTime InstallDate { get; set; }
         public string InstallDateString { get { return InstallDate.ToString("d"); } }
         
+        public bool CachedData { get; set;  }
         public List<BatteryDetails> BatteryDetails { get; set; }
 
         public string GatewayId { get; set; }
@@ -46,7 +48,7 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public List<ChartDataPoint> BatteryHistoryChartData
+        public Dictionary<string, List<ChartDataPoint>> BatteryHistoryChartData
         {
             get; set;
         }
