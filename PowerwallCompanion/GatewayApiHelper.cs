@@ -26,6 +26,11 @@ namespace PowerwallCompanion
             var payload = $"{{\"username\":\"customer\",\"password\":\"{Settings.LocalGatewayPassword}\", \"email\":\"me@example.com\",\"clientInfo\":{{\"timezone\":\"Australia/Sydney\"}}}}";
             var content = new StringContent(payload, new UTF8Encoding(), "application/json");
             var response = await client.PostAsync($"https://{Settings.LocalGatewayIP}/api/login/Basic", content);
+            if (response.IsSuccessStatusCode == false)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new InvalidOperationException($"Error '{response.StatusCode}' while authenticating; response: {errorContent}");
+            }
             var cookies = response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value;
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Settings.LocalGatewayIP}{uriPath}");
@@ -35,6 +40,10 @@ namespace PowerwallCompanion
             }
             response = await client.SendAsync(request);
             var responseBody = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new InvalidOperationException($"Error '{response.StatusCode}' while calling API; response: {responseBody}");
+            }
             return (JsonObject) JsonObject.Parse(responseBody);
         }
     }

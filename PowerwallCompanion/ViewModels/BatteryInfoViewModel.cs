@@ -14,7 +14,7 @@ namespace PowerwallCompanion.ViewModels
         public BatteryInfoViewModel()
         {
             EnoughDataToShowChart = true; // Prevent flicker
-            SiteName = "<Data Loading>";
+            SiteName = "⌛ Data Loading...";
         }
         public string SiteName { get; set; }
         public int NumberOfBatteries { get; set; }
@@ -23,6 +23,8 @@ namespace PowerwallCompanion.ViewModels
         
         public bool CachedData { get; set;  }
         public List<BatteryDetails> BatteryDetails { get; set; }
+
+        public string GatewayError { get; set; }
 
         public string GatewayId { get; set; }
         public double WarrantedCapacity

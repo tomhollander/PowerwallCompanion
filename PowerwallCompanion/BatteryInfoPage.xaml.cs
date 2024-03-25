@@ -13,6 +13,7 @@ using Windows.Devices.Geolocation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -76,8 +77,10 @@ namespace PowerwallCompanion
                     Settings.CachedGatewayDetailsUpdated = DateTime.Now;
                     Analytics.TrackEvent("Gateway data retrieved");
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Crashes.TrackError(ex);
+                    ViewModel.GatewayError = FormatException(ex);
                     var cachedData = await ReadGatewayDetailsFromCache();
                     if (cachedData == null)
                     {
@@ -109,6 +112,16 @@ namespace PowerwallCompanion
             {
                 Crashes.TrackError(ex);
             }
+        }
+
+        private string FormatException(Exception ex)
+        {
+            string message = ex.GetType() + ": " + ex.Message;
+            if (ex.InnerException != null)
+            {
+                message += "\n" + FormatException(ex.InnerException);
+            }
+            return message;
         }
 
         private async Task ProcessBatteryHistoryData()
@@ -319,5 +332,11 @@ namespace PowerwallCompanion
             }
         }
 
+        private void HyperlinkButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            var md = new MessageDialog(ViewModel.GatewayError);
+            md.Title = "Unable to connect to Powerwall Gateway";
+            md.ShowAsync();
+        }
     }
 }
