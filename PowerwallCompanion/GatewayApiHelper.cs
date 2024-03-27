@@ -25,7 +25,7 @@ namespace PowerwallCompanion
             var client = new HttpClient(handler);
             var payload = $"{{\"username\":\"customer\",\"password\":\"{Settings.LocalGatewayPassword}\", \"email\":\"me@example.com\",\"clientInfo\":{{\"timezone\":\"Australia/Sydney\"}}}}";
             var content = new StringContent(payload, new UTF8Encoding(), "application/json");
-            var response = await client.PostAsync($"https://{Settings.LocalGatewayIP}/api/login/Basic", content);
+            var response = await client.PostAsync($"https://{Settings.LocalGatewayIP.Trim()}/api/login/Basic", content);
             if (response.IsSuccessStatusCode == false)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
@@ -33,7 +33,7 @@ namespace PowerwallCompanion
             }
             var cookies = response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Settings.LocalGatewayIP}{uriPath}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Settings.LocalGatewayIP.Trim()}{uriPath}");
             foreach (var cookie in cookies)
             {
                 request.Headers.Add("Cookie", cookie);

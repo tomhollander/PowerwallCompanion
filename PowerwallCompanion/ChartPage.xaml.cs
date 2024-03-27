@@ -772,7 +772,7 @@ namespace PowerwallCompanion
                     End = tariff.EndDate,
                     Text = tariff.DisplayName,
                     Foreground = tariff.Color,
-                    
+                    FontSize = 14,
                 };
                 dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
             }
