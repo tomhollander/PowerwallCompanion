@@ -89,11 +89,11 @@ namespace PowerwallCompanion.ViewModels
             }
             set
             {
-                if (EnergySourceZones?.Count > 1) // Could be a single null item if the list failed to load
-                {
-                    LastSavedEnergySourceZone = EnergySourceZones?[1].Key;
-                    Settings.EnergySourcesZoneOverride = EnergySourceZones?[1].Key;
-                }
+                //if (EnergySourceZones?.Count > 1) // Could be a single null item if the list failed to load
+                //{
+                //    //LastSavedEnergySourceZone = EnergySourceZones?[1].Key;
+                //    //Settings.EnergySourcesZoneOverride = EnergySourceZones?[1].Key;
+                //}
             }
         }
 
