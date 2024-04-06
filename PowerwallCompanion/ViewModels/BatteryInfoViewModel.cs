@@ -20,8 +20,8 @@ namespace PowerwallCompanion.ViewModels
         public int NumberOfBatteries { get; set; }
         public DateTime InstallDate { get; set; }
         public string InstallDateString { get { return InstallDate.ToString("d"); } }
-        
-        public bool CachedData { get; set;  }
+
+        public bool CachedData { get; set; }
         public List<BatteryDetails> BatteryDetails { get; set; }
 
         public string GatewayError { get; set; }
@@ -41,11 +41,18 @@ namespace PowerwallCompanion.ViewModels
             get => WarrantedCapacity / 1000;
         }
 
+        private readonly string[] regionsWith80PercentWarranty = { "AT","BE","FR","DE","IE","LU","NL","CH","GB"};
+
         public double MinimumWarrantedCapacityKWh
         {
             get
             {
                 double warrantedProportion = 0.7; // True in most countries
+                var region = Windows.System.UserProfile.GlobalizationPreferences.HomeGeographicRegion;
+                if (regionsWith80PercentWarranty.Contains(region))
+                {
+                    warrantedProportion = 0.8;
+                }
                 return WarrantedCapacityKWh * warrantedProportion;
             }
         }

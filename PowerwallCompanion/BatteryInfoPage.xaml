@@ -8,7 +8,10 @@
     mc:Ignorable="d"
     xmlns:converters="using:PowerwallCompanion.Converters"
     xmlns:viewmodels="using:PowerwallCompanion.ViewModels"
-    xmlns:chart="using:Syncfusion.UI.Xaml.Charts" xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:chart="using:Syncfusion.UI.Xaml.Charts" 
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:primitives="using:Microsoft.Toolkit.Uwp.UI.Controls.Primitives"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -37,7 +40,7 @@
                 </VisualState>
                 <VisualState x:Name="WideView">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800" />
+                        <AdaptiveTrigger MinWindowWidth="900" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column1.Width" Value="120" />
@@ -67,7 +70,7 @@
         <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="20" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" x:Name="column1"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -79,51 +82,48 @@
             
             <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-            <TextBlock FontSize="30" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock FontSize="30" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}" Grid.Row="0" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="20" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}" Grid.Row="0" Grid.Column="2"></TextBlock>
 
-            <TextBlock FontSize="30" Text="Install Date"  Grid.Row="1" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock FontSize="30" Text="{x:Bind ViewModel.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="20" Text="Install Date"  Grid.Row="1" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
 
-            <TextBlock FontSize="30" Text="Number of Powerwalls" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock FontSize="30" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="20" Text="Number of Powerwalls" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
 
-            <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="135" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock FontSize="20" Text="Serial" TextWrapping="Wrap" Grid.Column="0" Foreground="DimGray"/>
-                    <TextBlock FontSize="20" Text="Charge" TextWrapping="Wrap" Grid.Column="1" Foreground="DimGray"/>
-                    <TextBlock FontSize="20" Text="Capacity" TextWrapping="Wrap" Grid.Column="2" Foreground="DimGray"/>
-                    <TextBlock FontSize="20" Text="% Warranted" TextWrapping="Wrap" Grid.Column="3" Foreground="DimGray"/>
-                    <TextBlock FontSize="20" Text="% Degradation" TextWrapping="Wrap" Grid.Column="4" Foreground="DimGray"/>
-                </Grid>
-                <controls:ItemsRepeater ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}">
-                    <DataTemplate x:DataType="viewmodels:BatteryDetails">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="120" />
-                                <ColumnDefinition Width="135" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock FontSize="30" Text="{x:Bind ShortSerialNumber, Mode=OneWay}" TextWrapping="Wrap" Grid.Column="0" />
-                            <TextBlock FontSize="30" Text="{x:Bind CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}, Mode=OneWay}" TextWrapping="Wrap" Grid.Column="1" />
-                            <TextBlock FontSize="30" Text="{x:Bind FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2', Mode=OneWay}" TextWrapping="Wrap" Grid.Column="2" />
-                            <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Converter={StaticResource BatteryPercentageConverter}, Mode=OneWay}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}" TextWrapping="Wrap" Grid.Column="3" />
-                            <TextBlock FontSize="30" Text="{x:Bind DegradationPercent, Converter={StaticResource BatteryPercentageConverter}, Mode=OneWay}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}" TextWrapping="Wrap" Grid.Column="4" />
-                        </Grid>
-                        
-                    </DataTemplate>
-                </controls:ItemsRepeater>
-            </StackPanel>
-            
+
+
+            <toolkit:DataGrid ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                <toolkit:DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="primitives:DataGridColumnHeader">
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                </toolkit:DataGrid.ColumnHeaderStyle>
+                <toolkit:DataGrid.Columns>
+                    <toolkit:DataGridTextColumn Header="Serial" Width="SizeToCells" Binding="{Binding ShortSerialNumber}" FontSize="30" />
+                    <toolkit:DataGridTextColumn Header="Current &#x0a;Charge" Width="SizeToHeader" Binding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" FontSize="30" />
+                    <toolkit:DataGridTextColumn Header="Capacity &#x0a;(kWh)" Width="SizeToHeader" Binding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" FontSize="30" />
+                    <toolkit:DataGridTemplateColumn Header="Vs Baseline" Width="SizeToHeader">
+                        <toolkit:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate x:DataType="viewmodels:BatteryDetails">
+                                <StackPanel>
+                                    <TextBlock  FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </toolkit:DataGridTemplateColumn.CellEditingTemplate>
+                    </toolkit:DataGridTemplateColumn>
+                    <toolkit:DataGridTemplateColumn Header="Degradation" Width="SizeToHeader">
+                        <toolkit:DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate x:DataType="viewmodels:BatteryDetails">
+                                <StackPanel>
+                                    <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </toolkit:DataGridTemplateColumn.CellEditingTemplate>
+                    </toolkit:DataGridTemplateColumn>
+                </toolkit:DataGrid.Columns>
+            </toolkit:DataGrid>
+
         </Grid>
         <chart:SfChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
             <chart:SfChart.Behaviors>
@@ -151,8 +151,8 @@
             </chart:SfChart.Legend>
 
             <chart:SfChart.Annotations>
-                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="100% Warranted capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
-                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="70% warranted capacity" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="100% baseline capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="Minimum warranted capacity" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
             </chart:SfChart.Annotations>
             
         </chart:SfChart>

@@ -291,7 +291,7 @@ namespace PowerwallCompanion
 
                 }
                 ViewModel.EnoughDataToShowChart = batteryHistoryChartDictionary[batteryHistoryChartDictionary.Keys.First()].Count > 2 ||
-                    ((DateTime.Now - mostRecentDate).TotalDays >= 7);
+                    ((mostRecentDate > DateTime.MinValue) && ((DateTime.Now - mostRecentDate).TotalDays >= 7));
                 ViewModel.BatteryHistoryChartData = batteryHistoryChartDictionary;
 
             }
