@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.System.UserProfile;
@@ -41,9 +42,9 @@ namespace PowerwallCompanion.ViewModels
             get => WarrantedCapacity / 1000;
         }
 
-        private readonly string[] regionsWith80PercentWarranty = { "AT","BE","FR","DE","IE","LU","NL","CH","GB"};
+        private readonly string[] regionsWith80PercentWarranty = { "AT", "BE", "FR", "DE", "IE", "LU", "NL", "CH", "GB" };
 
-        public double MinimumWarrantedCapacityKWh
+        private double WarrantyProportion
         {
             get
             {
@@ -53,7 +54,24 @@ namespace PowerwallCompanion.ViewModels
                 {
                     warrantedProportion = 0.8;
                 }
-                return WarrantedCapacityKWh * warrantedProportion;
+                return warrantedProportion;
+            }
+
+        }
+
+        public double MinimumWarrantedCapacityKWh
+        {
+            get
+            {
+                return WarrantedCapacityKWh * WarrantyProportion;
+            }
+        }
+
+        public string MinimumWarrantedCapacityPercentageMessage
+        {
+            get
+            {
+                return $"{WarrantyProportion * 100}% baseline capacity";
             }
         }
 

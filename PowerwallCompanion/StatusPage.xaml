@@ -226,8 +226,8 @@
                         <Image ToolTipService.ToolTip="Coal" Source="ms-appx:///Assets/energysource_coal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                        <Image ToolTipService.ToolTip="Renewable and low carbon" Source="ms-appx:///Assets/energysource_renewable.png" Width="30" Margin="0,0,0,5" VerticalAlignment="Bottom"/>
-                        <TextBlock Text="{x:Bind ViewModel.GridLowCarbonPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" VerticalAlignment="Bottom" FontSize="30"></TextBlock>
+                        <Image ToolTipService.ToolTip="Grid energy from renewable and low carbon sources" Source="ms-appx:///Assets/energysource_renewable.png" Width="30" Margin="0,0,0,5" VerticalAlignment="Bottom"/>
+                        <TextBlock ToolTipService.ToolTip="Grid energy from renewable and low carbon sources" Text="{x:Bind ViewModel.GridLowCarbonPercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" VerticalAlignment="Bottom" FontSize="30"></TextBlock>
                     </StackPanel>
                 </Grid>
                 
