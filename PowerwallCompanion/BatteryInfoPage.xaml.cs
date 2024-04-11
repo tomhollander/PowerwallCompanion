@@ -126,51 +126,59 @@ namespace PowerwallCompanion
 
         private async Task ProcessBatteryHistoryData()
         {
-            if (ViewModel.StoreBatteryHistory)
+            try
             {
-                await GetBatteryHistoryData();
-                double maxValue = 0;
-                double minValue = 20;
-                // Plot series on chart
-                foreach (var serial in ViewModel.BatteryHistoryChartData.Keys)
+                if (ViewModel.StoreBatteryHistory)
                 {
-                    var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
-                    //series.Stroke = new SolidColorBrush(Colors.Blue);
-                    series.StrokeThickness = 1;
-                    series.ItemsSource = ViewModel.BatteryHistoryChartData[serial];
-                    series.Label = serial.Substring(0, 5) + "***" + serial.Substring(serial.Length - 2, 2); ;
-                    series.XBindingPath = nameof(ChartDataPoint.XValue);
-                    series.YBindingPath = nameof(ChartDataPoint.YValue);
-                    series.AdornmentsInfo = new Syncfusion.UI.Xaml.Charts.ChartAdornmentInfo()
+                    await GetBatteryHistoryData();
+                    double maxValue = 0;
+                    double minValue = 20;
+                    // Plot series on chart
+                    foreach (var serial in ViewModel.BatteryHistoryChartData.Keys)
                     {
-                        SymbolStroke = new SolidColorBrush(Colors.Black),
-                        SymbolInterior = series.Stroke,
-                        SymbolWidth = 10,
-                        SymbolHeight = 10,
-                        Symbol = Syncfusion.UI.Xaml.Charts.ChartSymbol.Ellipse,
-                    };
-                    batteryHistoryChart.Series.Add(series);
-                    double maxValueInSeries = ViewModel.BatteryHistoryChartData[serial].Max(x => x.YValue);
-                    double minValueInSeries = ViewModel.BatteryHistoryChartData[serial].Min(x => x.YValue);
-                    maxValue = Math.Max(maxValue, maxValueInSeries);
-                    minValue = Math.Min(minValue, minValueInSeries);
-                }
-                ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.SecondaryAxis).Maximum = Math.Max(maxValue, 14);
-                ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.SecondaryAxis).Minimum = Math.Min(minValue, 9);
+                        var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
+                        //series.Stroke = new SolidColorBrush(Colors.Blue);
+                        series.StrokeThickness = 1;
+                        series.ItemsSource = ViewModel.BatteryHistoryChartData[serial];
+                        series.Label = serial.Substring(0, 5) + "***" + serial.Substring(serial.Length - 2, 2); ;
+                        series.XBindingPath = nameof(ChartDataPoint.XValue);
+                        series.YBindingPath = nameof(ChartDataPoint.YValue);
+                        series.AdornmentsInfo = new Syncfusion.UI.Xaml.Charts.ChartAdornmentInfo()
+                        {
+                            SymbolStroke = new SolidColorBrush(Colors.Black),
+                            SymbolInterior = series.Stroke,
+                            SymbolWidth = 10,
+                            SymbolHeight = 10,
+                            Symbol = Syncfusion.UI.Xaml.Charts.ChartSymbol.Ellipse,
+                        };
+                        batteryHistoryChart.Series.Add(series);
+                        double maxValueInSeries = ViewModel.BatteryHistoryChartData[serial].Max(x => x.YValue);
+                        double minValueInSeries = ViewModel.BatteryHistoryChartData[serial].Min(x => x.YValue);
+                        maxValue = Math.Max(maxValue, maxValueInSeries);
+                        minValue = Math.Min(minValue, minValueInSeries);
+                    }
+                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.SecondaryAxis).Maximum = Math.Max(maxValue, 14);
+                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.SecondaryAxis).Minimum = Math.Min(minValue, 9);
 
 
-                if (ViewModel.BatteryHistoryChartData?.Count > 1) // Last record is today's data, just for show
-                {
-                    var lastSaved = ViewModel.BatteryHistoryChartData.Values.First()[ViewModel.BatteryHistoryChartData.Count - 2].XValue;
-                    SaveBatteryHistoryData();
+                    if (ViewModel.BatteryHistoryChartData?.Count > 1) // Last record is today's data, just for show
+                    {
+                        var lastSaved = ViewModel.BatteryHistoryChartData.Values.First()[ViewModel.BatteryHistoryChartData.Count - 2].XValue;
+                        SaveBatteryHistoryData();
 
-                }
-                else
-                {
-                    // First time here!
-                    await SaveBatteryHistoryData();
+                    }
+                    else
+                    {
+                        // First time here!
+                        await SaveBatteryHistoryData();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+            
         }
 
         private async Task GetSiteStatus()

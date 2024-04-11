@@ -304,10 +304,10 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.SfChart.UWP">
-      <Version>23.2.4</Version>
+      <Version>25.1.35</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.SfGauge.UWP">
-      <Version>23.2.4</Version>
+      <Version>25.1.35</Version>
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>7.2.0</Version>
