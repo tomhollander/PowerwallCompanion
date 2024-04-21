@@ -35,7 +35,7 @@
                     <TextBlock Width="40" VerticalAlignment="Center" ToolTipService.ToolTip="Enter your Powerwall Gateway details if you want to view your battery capacity and degradation info. (Sorry, Powerwall 3 is not currently supported). &#x0a;&#x0a;To find your Powerwall gateway's IP address, log into your WiFi router's admin portal and find the list of devices. Your gateway's name should be one of: Tesla Powerwall, LG Innotek, 1232100-10-E--CN3213. &#x0a; &#x0a;On most networks the gateway IP will be 192.168.x.x (the last two digits could be anything)." FontSize="16"> ℹ️</TextBlock>
                     <TextBox Width="150" Text="{x:Bind ViewModel.LocalGatewayIP, Mode=TwoWay}" />
                     <TextBlock  Width="70" VerticalAlignment="Center" Margin="10,0,0,0">Password:</TextBlock>
-                    <TextBlock Width="40" VerticalAlignment="Center" ToolTipService.ToolTip="The default password is normally the last 5 digits of the gateway serial number which is printed on label on the gateway. You can reset the password by navigating to https://&lt;your-gateway-ip&gt; in a web browser." FontSize="16"> ℹ️</TextBlock>
+                    <TextBlock Width="40" VerticalAlignment="Center" ToolTipService.ToolTip="The default password is normally the last 5 digits of the value labelled as either 'password' or 'serial number' which is printed on label on the gateway. You can reset the password by navigating to https://&lt;your-gateway-ip&gt; in a web browser." FontSize="16"> ℹ️</TextBlock>
 
                     <PasswordBox Width="150" Password="{x:Bind ViewModel.LocalGatewayPassword, Mode=TwoWay}" />
                 </StackPanel>

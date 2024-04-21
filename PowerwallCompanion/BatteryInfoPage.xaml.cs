@@ -275,11 +275,14 @@ namespace PowerwallCompanion
                             var currentDate = history["date"].Value<DateTime>();
                             mostRecentDate = currentDate > mostRecentDate ? currentDate : mostRecentDate;
                         }
-                        if (!batteryHistoryChartData.Any(x => x.YValue > 15)) // If there was more than one battery, ignore the data
+                        if (!batteryHistoryChartData.Any(x => x.YValue > 15)) // Any value over this would have been from multiple batteries
                         {
-                            batteryHistoryChartDictionary.Add(ViewModel.BatteryDetails.First().SerialNumber, batteryHistoryChartData);
+                            if (ViewModel.BatteryDetails != null)
+                            {
+                                // Replace with individual battery data
+                                batteryHistoryChartDictionary.Add(ViewModel.BatteryDetails.First().SerialNumber, batteryHistoryChartData);
+                            }   
                         }
-
                     }
 
                 }
@@ -298,9 +301,10 @@ namespace PowerwallCompanion
                     }
 
                 }
-                ViewModel.EnoughDataToShowChart = batteryHistoryChartDictionary[batteryHistoryChartDictionary.Keys.First()].Count > 2 ||
-                    ((mostRecentDate > DateTime.MinValue) && ((DateTime.Now - mostRecentDate).TotalDays >= 7));
                 ViewModel.BatteryHistoryChartData = batteryHistoryChartDictionary;
+                ViewModel.EnoughDataToShowChart = (batteryHistoryChartDictionary.Count > 1 && batteryHistoryChartDictionary[batteryHistoryChartDictionary.Keys.First()].Count > 2) ||
+                    ((mostRecentDate > DateTime.MinValue) && ((DateTime.Now - mostRecentDate).TotalDays >= 7));
+
 
             }
             catch (Exception ex)

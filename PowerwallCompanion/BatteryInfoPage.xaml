@@ -93,17 +93,17 @@
 
 
 
-            <toolkit:DataGrid ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+            <toolkit:DataGrid IsReadOnly="True" ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
                 <toolkit:DataGrid.ColumnHeaderStyle>
                     <Style TargetType="primitives:DataGridColumnHeader">
                         <Setter Property="FontSize" Value="20"/>
                     </Style>
                 </toolkit:DataGrid.ColumnHeaderStyle>
                 <toolkit:DataGrid.Columns>
-                    <toolkit:DataGridTextColumn Header="Serial" Width="200" Binding="{Binding ShortSerialNumber}" FontSize="30" />
-                    <toolkit:DataGridTextColumn Header="Current &#x0a;Charge" Width="SizeToHeader" Binding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" FontSize="30" />
-                    <toolkit:DataGridTextColumn Header="Capacity &#x0a;(kWh)" Width="SizeToHeader" Binding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" FontSize="30" />
-                    <toolkit:DataGridTemplateColumn Header="Vs Baseline" Width="SizeToHeader">
+                    <toolkit:DataGridTextColumn Header="Serial" Width="200" IsReadOnly="True" Binding="{Binding ShortSerialNumber}" FontSize="30" />
+                    <toolkit:DataGridTextColumn Header="Current &#x0a;Charge" IsReadOnly="True" Width="SizeToHeader" Binding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" FontSize="30" />
+                    <toolkit:DataGridTextColumn Header="Capacity &#x0a;(kWh)" IsReadOnly="True" Width="SizeToHeader" Binding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" FontSize="30" />
+                    <toolkit:DataGridTemplateColumn Header="Vs Baseline" IsReadOnly="True" Width="SizeToHeader">
                         <toolkit:DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate x:DataType="viewmodels:BatteryDetails">
                                 <StackPanel>

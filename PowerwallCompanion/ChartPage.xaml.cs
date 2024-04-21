@@ -256,6 +256,8 @@ namespace PowerwallCompanion
                     {
                         ViewModel.EnergyDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
                         ViewModel.EnergyDataForExport[date].Remove("timestamp");
+                        ViewModel.EnergyDataForExport[date].Remove("raw_timestamp");
+                        ViewModel.EnergyDataForExport[date].Remove("test");
                     }
 
                 }
@@ -299,12 +301,8 @@ namespace PowerwallCompanion
             }
         }
 
-        private List<ChartDataPoint> NormaliseEnergyData(List<ChartDataPoint> energyGraphData, string period)
+        private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
         {
-            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
-            var result = new List<ChartDataPoint>();
-            ChartDataPoint lastPoint = null;
-
             Func<DateTime, DateTime, bool> dateComparitor;
             if (period == "Year")
             {
@@ -318,6 +316,16 @@ namespace PowerwallCompanion
             {
                 dateComparitor = (DateTime d, DateTime c) => d.Date == c.Date;
             }
+            return dateComparitor;
+        }
+
+        private List<ChartDataPoint> NormaliseEnergyData(List<ChartDataPoint> energyGraphData, string period)
+        {
+            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
+            var result = new List<ChartDataPoint>();
+            ChartDataPoint lastPoint = null;
+
+            var dateComparitor = GetNormalisationDateComparitor(period);
 
             foreach (var dataPoint in energyGraphData)
             {
@@ -330,6 +338,55 @@ namespace PowerwallCompanion
                 else
                 {
                     lastPoint.YValue += dataPoint.YValue;
+                }
+            }
+            return result;
+        }
+
+        private Dictionary<DateTime, Dictionary<string, object>> NormaliseExportData(Dictionary<DateTime, Dictionary<string, object>> exportData, string period)
+        {
+            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
+            var result = new Dictionary <DateTime, Dictionary< string, object>>();
+            DateTime lastDate = DateTime.MinValue;
+            Dictionary<string, object> lastValue = null;
+
+            var dateComparitor = GetNormalisationDateComparitor(period);
+
+            foreach (var currentDate in exportData.Keys)
+            {
+                if (lastValue == null || !dateComparitor(currentDate, lastDate))
+                {
+                    // New period
+                    result.Add(currentDate, exportData[currentDate]);
+                    lastDate = currentDate;
+                    lastValue = exportData[currentDate];
+                }
+                else
+                {
+                    // Add the values from the current point to the last one
+                    foreach (var key in exportData[currentDate].Keys)
+                    {
+                        if (key == "timestamp")
+                        {
+                            continue;
+                        }
+                        if (exportData[currentDate][key].GetType() != typeof(DateTime))
+                        {
+                            try
+                            {
+                                if (!lastValue.ContainsKey(key))
+                                {
+                                    lastValue[key] = 0;
+                                }
+                                lastValue[key] = Convert.ToInt64(lastValue[key]) + Convert.ToInt64(exportData[currentDate][key]);
+                            }
+                            catch
+                            {
+                                // Unlikely but they could add string values...
+                            }
+                        }
+
+                    }
                 }
             }
             return result;
@@ -695,10 +752,12 @@ namespace PowerwallCompanion
         private async Task SaveEnergyInfo(StorageFile file)
         {
             var sb = new StringBuilder();
-            if (ViewModel.EnergyDataForExport.Count > 0)
+            var normalisedExportData = NormaliseExportData(ViewModel.EnergyDataForExport, ViewModel.Period);
+            if (normalisedExportData.Count > 0)
             {
+                
                 sb.Append("timestamp,");
-                foreach (var key in ViewModel.EnergyDataForExport.First().Value.Keys)
+                foreach (var key in normalisedExportData.First().Value.Keys)
                 {
                     sb.Append($"{key},");
                 }
@@ -706,9 +765,9 @@ namespace PowerwallCompanion
             sb.Append("\r\n");
 
 
-            foreach (var kvp in ViewModel.EnergyDataForExport)
+            foreach (var kvp in normalisedExportData)
             {
-                sb.Append($"{(kvp.Key):yyyy-MM-dd HH:mm:ss},");
+                sb.Append($"{(kvp.Key):yyyy-MM-dd},");
                 foreach (var v in kvp.Value.Values)
                 {
                     sb.Append($"{v},");
