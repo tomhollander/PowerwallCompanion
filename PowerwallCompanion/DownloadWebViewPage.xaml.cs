@@ -31,5 +31,10 @@ namespace PowerwallCompanion
         {
             Windows.System.Launcher.LaunchUriAsync(new Uri("https://go.microsoft.com/fwlink/p/?LinkId=2124703"));
         }
+
+        private void Button_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame?.Navigate(typeof(LoginPage));
+        }
     }
 }

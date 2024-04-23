@@ -752,6 +752,7 @@ namespace PowerwallCompanion
         private async Task SaveEnergyInfo(StorageFile file)
         {
             var sb = new StringBuilder();
+            var keys = new List<string>();
             var normalisedExportData = NormaliseExportData(ViewModel.EnergyDataForExport, ViewModel.Period);
             if (normalisedExportData.Count > 0)
             {
@@ -759,6 +760,7 @@ namespace PowerwallCompanion
                 sb.Append("timestamp,");
                 foreach (var key in normalisedExportData.First().Value.Keys)
                 {
+                    keys.Add(key);
                     sb.Append($"{key},");
                 }
             }
@@ -768,9 +770,9 @@ namespace PowerwallCompanion
             foreach (var kvp in normalisedExportData)
             {
                 sb.Append($"{(kvp.Key):yyyy-MM-dd},");
-                foreach (var v in kvp.Value.Values)
+                foreach (var key in keys)
                 {
-                    sb.Append($"{v},");
+                    sb.Append($"{kvp.Value[key]},");
                 }
                 sb.Append("\r\n");
             }

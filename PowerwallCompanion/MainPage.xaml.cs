@@ -40,7 +40,7 @@ namespace PowerwallCompanion
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
-            if (Settings.AccessToken == null && Settings.LocalGatewayIP == null)
+            if (Settings.AccessToken == null)
             {
                 var installInfo = WebView2Install.GetInfo();
                 if (installInfo.InstallType == InstallType.NotInstalled)

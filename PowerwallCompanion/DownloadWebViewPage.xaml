@@ -13,5 +13,6 @@
         <TextBlock Margin="5">Powerwall Companion requires the Microsoft Edge WebView2 Runtime to be installed.</TextBlock>
         <TextBlock Margin="5">Please download from the following link and restart the app.</TextBlock>
         <HyperlinkButton Margin="5" Click="HyperlinkButton_Click">Download WebView2 Runtime</HyperlinkButton>
+        <Button Margin="5" Tapped="Button_Tapped">Try to proceed</Button>
     </StackPanel>
 </Page>
