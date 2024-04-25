@@ -271,18 +271,19 @@ namespace PowerwallCompanion
                         var batteryHistoryChartData = new List<ChartDataPoint>();
                         foreach (var history in json["batteryHistory"])
                         {
-                            batteryHistoryChartData.Add(new ChartDataPoint(xValue: history["date"].Value<DateTime>(), yValue: history["capacity"].Value<double>() / 1000));
-                            var currentDate = history["date"].Value<DateTime>();
-                            mostRecentDate = currentDate > mostRecentDate ? currentDate : mostRecentDate;
-                        }
-                        if (!batteryHistoryChartData.Any(x => x.YValue > 15)) // Any value over this would have been from multiple batteries
-                        {
-                            if (ViewModel.BatteryDetails != null)
+                            if (history["capacity"].Value<double>() < 15000)
                             {
-                                // Replace with individual battery data
-                                batteryHistoryChartDictionary.Add(ViewModel.BatteryDetails.First().SerialNumber, batteryHistoryChartData);
-                            }   
+                                batteryHistoryChartData.Add(new ChartDataPoint(xValue: history["date"].Value<DateTime>(), yValue: history["capacity"].Value<double>() / 1000));
+                                var currentDate = history["date"].Value<DateTime>();
+                                mostRecentDate = currentDate > mostRecentDate ? currentDate : mostRecentDate;
+                            }
                         }
+  
+                        if (ViewModel.BatteryDetails != null)
+                        {
+                            // Replace with individual battery data
+                            batteryHistoryChartDictionary.Add(ViewModel.BatteryDetails.First().SerialNumber, batteryHistoryChartData);
+                        }   
                     }
 
                 }
@@ -302,7 +303,7 @@ namespace PowerwallCompanion
 
                 }
                 ViewModel.BatteryHistoryChartData = batteryHistoryChartDictionary;
-                ViewModel.EnoughDataToShowChart = (batteryHistoryChartDictionary.Count > 1 && batteryHistoryChartDictionary[batteryHistoryChartDictionary.Keys.First()].Count > 2) ||
+                ViewModel.EnoughDataToShowChart = (batteryHistoryChartDictionary.Count > 0 && batteryHistoryChartDictionary[batteryHistoryChartDictionary.Keys.First()].Count > 2) ||
                     ((mostRecentDate > DateTime.MinValue) && ((DateTime.Now - mostRecentDate).TotalDays >= 7));
 
 

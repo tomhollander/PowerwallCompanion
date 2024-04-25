@@ -15,7 +15,7 @@ namespace PowerwallCompanion.ViewModels
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
+        public string Season { get; set; }
         public string DisplayName
         {
             get
@@ -49,6 +49,14 @@ namespace PowerwallCompanion.ViewModels
                 }
                 return new SolidColorBrush(c);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var t = obj as Tariff;
+            if (t == null)
+                return false;
+            return t.Name == Name && t.StartDate == StartDate && t.EndDate == EndDate;
         }
 
     }

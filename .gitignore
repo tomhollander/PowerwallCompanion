@@ -11,3 +11,5 @@
 /PowerwallCompanion/PowerwallCompanion_StoreKey.pfx
 /.vs/PowerwallCompanion/v16
 /PowerwallCompanion/Licenses.cs
+/PowerwallCompanion.Tests/bin/x64/Debug
+/PowerwallCompanion.Tests/obj
