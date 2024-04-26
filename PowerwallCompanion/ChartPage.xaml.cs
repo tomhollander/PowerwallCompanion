@@ -28,6 +28,7 @@ namespace PowerwallCompanion
         public ChartViewModel ViewModel { get; set; }
         private Task ratePlanTask;
         private DispatcherTimer timer;
+        private TariffHelper tariffHelper;
 
         public ChartPage()
         {
@@ -613,7 +614,8 @@ namespace PowerwallCompanion
         {
             try
             {
-                ViewModel.RatePlan = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/tariff_rate", "TariffRate");
+                var ratePlan = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/tariff_rate", "TariffRate");
+                tariffHelper = new TariffHelper(ratePlan);
             }
             catch
             {
@@ -792,95 +794,11 @@ namespace PowerwallCompanion
         private async Task GetTariffsForDay(DateTime date)
         {
             await Task.WhenAll(ratePlanTask);
-            if (ViewModel.RatePlan == null)
+            if (tariffHelper == null)
             {
                 return;
             }
-            var tariffs = new List<Tariff>();
-
-            try
-            {
-
-                var seasons = ViewModel.RatePlan["response"]["seasons"];
-                foreach (var season in seasons)
-                {
-                    var seasonData = season.First;
-                    int fromMonth = seasonData["fromMonth"].Value<int>();
-                    int toMonth = seasonData["toMonth"].Value<int>();
-                    int fromDay = seasonData["fromDay"].Value<int>();
-                    int toDay = seasonData["toDay"].Value<int>();
-                    DateTime fromDate = new DateTime(date.Year, fromMonth, fromDay);
-                    DateTime toDate = new DateTime(date.Year, toMonth, toDay);
-
-                    bool dateIsInSeason = false;
-                    if (toDate > fromDate)
-                    {
-                        dateIsInSeason = (date >= fromDate && date <= toDate);
-                    }
-                    else
-                    {
-                        dateIsInSeason = (date >= fromDate || date <= toDate);
-                    }
-                    if (dateIsInSeason)
-                    {
-                        int currentWeekDay = ((int)date.DayOfWeek - 1); // Tesla uses 0 for Monday
-                        if (currentWeekDay == -1)
-                        {
-                            currentWeekDay = 6;
-                        }
-
-                        foreach (var rate in seasonData["tou_periods"])
-                        {
-                            var rateName = ((JProperty)rate).Name;
-                            foreach (var period in rate.First.Value<JArray>())
-                            {
-                                var fromWeekDay = period["fromDayOfWeek"].Value<int>();
-                                var toWeekDay = period["toDayOfWeek"].Value<int>();
-                                if (currentWeekDay >= fromWeekDay && currentWeekDay <= toWeekDay)
-                                {
-                                    var fromHour = period["fromHour"].Value<int>();
-                                    var fromMinute = period["fromMinute"].Value<int>();
-                                    var toHour = period["toHour"].Value<int>();
-                                    var toMinute = period["toMinute"].Value<int>();
-                                    if (fromHour < toHour)
-                                    {
-                                        var tariff = new Tariff
-                                        {
-                                            Name = rateName,
-                                            StartDate = date.AddHours(fromHour).AddMinutes(fromMinute),
-                                            EndDate = date.AddHours(toHour).AddMinutes(toMinute),
-                                        };
-                                        tariffs.Add(tariff);
-                                    }
-                                    else
-                                    {
-                                        var tariff1 = new Tariff
-                                        {
-                                            Name = rateName,
-                                            StartDate = date,
-                                            EndDate = date.AddHours(toHour).AddMinutes(toMinute),
-                                        };
-                                        var tariff2 = new Tariff
-                                        {
-                                            Name = rateName,
-                                            StartDate = date.AddHours(fromHour).AddMinutes(fromMinute),
-                                            EndDate = date.AddDays(1)
-                                        };
-                                        tariffs.Add(tariff1);
-                                        tariffs.Add(tariff2);
-                                    }
-                                }
-                            }
-
-                        }
-                        break; // Don't need to look for more seasons
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex);
-            }
+            var tariffs = tariffHelper.GetTariffsForDay(date);
 
             dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
             foreach (var tariff in tariffs)

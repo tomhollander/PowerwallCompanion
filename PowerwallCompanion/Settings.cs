@@ -99,6 +99,24 @@ namespace PowerwallCompanion
             }
         }
 
+        public static bool ShowEnergyRates
+        {
+            get
+            {
+                if (_localSettings.Values["ShowEnergyRates"] == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return bool.Parse((string)_localSettings.Values["ShowEnergyRates"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["ShowEnergyRates"] = value.ToString();
+            }
+        }
         public static bool ShowEnergySources
         {
             get

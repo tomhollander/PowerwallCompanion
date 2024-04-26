@@ -10,6 +10,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace PowerwallCompanion.ViewModels
 {
@@ -344,7 +345,33 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-       
+        public string TariffName
+        {
+            get; set;
+        }
+
+        public decimal TariffBuyRate
+        {
+            get; set;
+        }
+
+        public decimal TariffSellRate
+        {
+            get; set;
+        }
+
+        public Brush TariffColor
+        {
+            get; set;
+        }
+
+        public void NotifyTariffProperties()
+        {
+            NotifyPropertyChanged(nameof(TariffName));
+            NotifyPropertyChanged(nameof(TariffBuyRate));
+            NotifyPropertyChanged(nameof(TariffSellRate));
+            NotifyPropertyChanged(nameof(TariffColor));
+        }
 
         public string LastExceptionMessage { get; set; }
         public DateTime LastExceptionDate { get; set; }
@@ -462,6 +489,21 @@ namespace PowerwallCompanion.ViewModels
                 else
                 { 
                     return Visibility.Collapsed; 
+                }
+            }
+        }
+
+        public Visibility EnergyRatesVisibility
+        {
+            get
+            {
+                if (Settings.ShowEnergyRates)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
                 }
             }
         }

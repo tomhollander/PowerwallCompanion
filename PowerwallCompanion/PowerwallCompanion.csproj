@@ -141,6 +141,7 @@
     <Compile Include="Converters\PercentageToGridWidthConverter.cs" />
     <Compile Include="Converters\HideGridRowConverter.cs" />
     <Compile Include="Converters\KilowattConverter.cs" />
+    <Compile Include="Converters\RateCurrencyConverter.cs" />
     <Compile Include="Converters\ShortTimeAxisConverter.cs" />
     <Compile Include="Converters\ShortDateAxisConverter.cs" />
     <Compile Include="Converters\GridStatusBrushSizeConverter.cs" />

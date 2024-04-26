@@ -20,6 +20,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using WinRTXamlToolkit.IO.Serialization;
 
@@ -41,6 +42,7 @@ namespace PowerwallCompanion
         private double minPercentSinceNotification = 0D;
         private double maxPercentSinceNotification = 100D;
         private DispatcherTimer timer;
+        private TariffHelper tariffHelper;
 
         public StatusPage()
         {
@@ -88,6 +90,7 @@ namespace PowerwallCompanion
                 GetEnergyHistoryData(),
                 GetPowerHistoryData(),
                 RefreshGridEnergyUsageData(),
+                RefreshTariffData(),
             };
             await Task.WhenAll(tasks);
         }
@@ -236,6 +239,45 @@ namespace PowerwallCompanion
             }
         }
 
+        private async Task RefreshTariffData()
+        {
+            if (tariffHelper == null && viewModel.TariffName == null && Settings.ShowEnergyRates)
+            {
+                try
+                {
+                    var ratePlan = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/tariff_rate", "TariffRate");
+                    tariffHelper = new TariffHelper(ratePlan);
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex);
+                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
+                    viewModel.TariffName = "Rates unavailable";
+                }
+                
+            }
+            if (tariffHelper != null)
+            {
+                try
+                {
+                    var tariff = tariffHelper.GetTariffForInstant(DateTime.Now);
+                    var prices = tariffHelper.GetRatesForTariff(tariff);
+                    viewModel.TariffName = tariff.DisplayName;
+                    viewModel.TariffSellRate = prices.Item1;
+                    viewModel.TariffBuyRate = prices.Item2;
+                    viewModel.TariffColor = tariff.Color;
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex);
+                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
+                    viewModel.TariffName = "Rates unavailable";
+                }
+
+                
+            }
+            viewModel.NotifyTariffProperties();
+        }
 
         private static double GetJsonDoubleValue(JToken jtoken)
         {

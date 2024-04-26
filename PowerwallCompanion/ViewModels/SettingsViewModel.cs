@@ -59,6 +59,15 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public bool? ShowEnergyRates
+        {
+            get { return Settings.ShowEnergyRates; }
+            set
+            {
+                Settings.ShowEnergyRates = value.Value;
+            }
+        }
+
         public bool? ShowEnergySources
         {
             get { return Settings.ShowEnergySources; }
