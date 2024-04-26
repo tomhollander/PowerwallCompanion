@@ -251,7 +251,7 @@ namespace PowerwallCompanion
                 catch (Exception ex)
                 {
                     Crashes.TrackError(ex);
-                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
+                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
                 }
                 
@@ -270,7 +270,7 @@ namespace PowerwallCompanion
                 catch (Exception ex)
                 {
                     Crashes.TrackError(ex);
-                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
+                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
                 }
 

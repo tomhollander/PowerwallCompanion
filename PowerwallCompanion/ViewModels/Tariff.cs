@@ -38,13 +38,13 @@ namespace PowerwallCompanion.ViewModels
                         c = Colors.Green;
                         break;
                     case "PARTIAL_PEAK":
-                        c = Colors.Yellow;
+                        c = Colors.DarkOrange;
                         break;
                     case "ON_PEAK":
                         c = Colors.Red;
                         break;
                     default:
-                        c = Colors.White;
+                        c = Colors.DarkGray;
                         break;
                 }
                 return new SolidColorBrush(c);

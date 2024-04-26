@@ -16,7 +16,11 @@ namespace PowerwallCompanion.Converters
 
             var currencySymbol = NumberFormatInfo.CurrentInfo.CurrencySymbol;
 
-            if (rate > 1)
+            if (rate == 0)
+            {
+                return String.Empty;
+            } 
+            else if (rate > 1)
             {
                 return rate.ToString("C");
             }

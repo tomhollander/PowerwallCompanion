@@ -364,6 +364,10 @@ namespace PowerwallCompanion.ViewModels
         {
             get; set;
         }
+        public Visibility TariffBuyRateVisibility
+        {
+            get => TariffBuyRate > 0 ? Visibility.Visible : Visibility.Collapsed;
+        }
 
         public void NotifyTariffProperties()
         {
@@ -371,6 +375,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(TariffBuyRate));
             NotifyPropertyChanged(nameof(TariffSellRate));
             NotifyPropertyChanged(nameof(TariffColor));
+            NotifyPropertyChanged(nameof(TariffBuyRateVisibility));
         }
 
         public string LastExceptionMessage { get; set; }

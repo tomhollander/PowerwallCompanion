@@ -54,7 +54,7 @@
                 </StackPanel>
 
                 <CheckBox IsChecked="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" Margin="5">Show clock on main page</CheckBox>
-                <CheckBox IsChecked="{x:Bind ViewModel.ShowEnergyRates, Mode=TwoWay}" Margin="5">Show energy rate (as set in Tesla app)</CheckBox>
+                <CheckBox IsChecked="{x:Bind ViewModel.ShowEnergyRates, Mode=TwoWay}" Margin="5">Show energy tariff rate (as set in Tesla app)</CheckBox>
                 <CheckBox IsChecked="{x:Bind ViewModel.ShowEnergySources, Mode=TwoWay}" Margin="5">Show energy sources from electricitymaps.com or OpenNEM</CheckBox>
                 <StackPanel Orientation="Horizontal" Margin="15,5,5,5">
                     <RadioButton Margin="0,0,20,0" IsChecked="{x:Bind ViewModel.EnergySourcesUseLocation, Mode=TwoWay}">Use current location</RadioButton>

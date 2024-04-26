@@ -211,7 +211,7 @@
             
             <StackPanel x:Name="gridEnergySources" Margin="30,0,30,20" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Vertical" Grid.Row="2" >
                 <!-- Live energy rate -->
-                <Grid Visibility="{x:Bind ViewModel.EnergyRatesVisibility}">
+                <Grid Visibility="{x:Bind ViewModel.EnergyRatesVisibility}" HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -223,9 +223,9 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                         <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" Margin="20,0,0,0"/>
-                        <TextBlock FontSize="30" Foreground="LightGray" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffSellRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy buy price per kWh as per Tesla rate plan"></TextBlock>
-                        <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,0,0"/>
-                        <TextBlock FontSize="30" Foreground="Gold" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh as per Tesla rate plan"></TextBlock>
+                        <TextBlock FontSize="30" Foreground="LightGray" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffSellRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy buy price per kWh"></TextBlock>
+                        <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,0,0" Visibility="{x:Bind ViewModel.TariffBuyRateVisibility, Mode=OneWay}"/>
+                        <TextBlock FontSize="30" Foreground="Gold" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh"></TextBlock>
                     </StackPanel>
 
                 </Grid>
