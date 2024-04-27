@@ -138,13 +138,23 @@ namespace PowerwallCompanion
 
         public Tuple<decimal, decimal> GetRatesForTariff(Tariff tariff)
         {
+            decimal buyRate = 0;
             var buyRates = ratePlan["response"]["energy_charges"];
-            var buySeason = buyRates[tariff.Season];
-            var buyRate = buySeason[tariff.Name].Value<decimal>();
-            
+            try
+            {
+                var buySeason = buyRates[tariff.Season];
+                buyRate = buySeason[tariff.Name].Value<decimal>();
+            }
+            catch { }
+
+            decimal sellRate = 0;
             var sellRates = ratePlan["response"]["sell_tariff"]["energy_charges"];
-            var sellSeason = sellRates[tariff.Season];
-            var sellRate = sellSeason[tariff.Name].Value<decimal>();
+            try
+            {
+                var sellSeason = sellRates[tariff.Season];
+                sellRate = sellSeason[tariff.Name].Value<decimal>();
+            }
+            catch { }
 
             return new Tuple<decimal, decimal>(buyRate, sellRate);
         }

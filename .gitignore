@@ -13,3 +13,5 @@
 /PowerwallCompanion/Licenses.cs
 /PowerwallCompanion.Tests/bin/x64/Debug
 /PowerwallCompanion.Tests/obj
+/PowerwallCompanion.Tests/bin/ARM64/Debug/ilc
+/PowerwallCompanion.Tests/bin/ARM64/Debug

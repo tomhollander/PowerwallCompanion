@@ -774,7 +774,14 @@ namespace PowerwallCompanion
                 sb.Append($"{(kvp.Key):yyyy-MM-dd},");
                 foreach (var key in keys)
                 {
-                    sb.Append($"{kvp.Value[key]},");
+                    if (kvp.Value.ContainsKey(key))
+                    {
+                        sb.Append($"{kvp.Value[key]},");
+                    }
+                    else
+                    {
+                        sb.Append(",");
+                    }
                 }
                 sb.Append("\r\n");
             }
