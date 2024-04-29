@@ -26,11 +26,11 @@ namespace PowerwallCompanion.Converters
             }
             else if (currencySymbol == "$" || currencySymbol == "€")
             {
-                return (rate * 100).ToString("#.#") + "c";
+                return (rate * 100).ToString("#") + "c";
             }
             else if (currencySymbol == "£")
             {
-                return (rate * 100).ToString("#.#") + "p";
+                return (rate * 100).ToString("#") + "p";
             }
             else
             {

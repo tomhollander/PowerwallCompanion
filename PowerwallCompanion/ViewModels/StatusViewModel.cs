@@ -10,6 +10,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
 namespace PowerwallCompanion.ViewModels
@@ -61,6 +62,10 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(SolarToGrid));
             NotifyPropertyChanged(nameof(SolarToHome));
             NotifyPropertyChanged(nameof(GridValue));
+            NotifyPropertyChanged(nameof(CostPerHour));
+            NotifyPropertyChanged(nameof(FeedInPerHour));
+            NotifyPropertyChanged(nameof(TariffFeedInVisibility));
+            NotifyPropertyChanged(nameof(TariffCostVisibility));
             NotifyPropertyChanged(nameof(GridActive));
             NotifyPropertyChanged(nameof(Time));
         }
@@ -360,13 +365,29 @@ namespace PowerwallCompanion.ViewModels
             get; set;
         }
 
+        public decimal CostPerHour
+        {
+            get { return TariffSellRate * (decimal)(HomeFromGrid / 1000); }
+        }
+
+        public decimal FeedInPerHour
+        {
+            get { return TariffBuyRate * (decimal)(SolarToGrid / 1000); }
+        }
+
+
         public Brush TariffColor
         {
             get; set;
         }
-        public Visibility TariffBuyRateVisibility
+        public Visibility TariffFeedInVisibility
         {
-            get => TariffBuyRate > 0 ? Visibility.Visible : Visibility.Collapsed;
+            get => (TariffBuyRate > 0) && (SolarToGrid > 50D) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public Visibility TariffCostVisibility
+        {
+            get => HomeFromGrid > 50D ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void NotifyTariffProperties()
@@ -375,7 +396,10 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(TariffBuyRate));
             NotifyPropertyChanged(nameof(TariffSellRate));
             NotifyPropertyChanged(nameof(TariffColor));
-            NotifyPropertyChanged(nameof(TariffBuyRateVisibility));
+            NotifyPropertyChanged(nameof(TariffFeedInVisibility));
+            NotifyPropertyChanged(nameof(TariffCostVisibility));
+            NotifyPropertyChanged(nameof(CostPerHour));
+            NotifyPropertyChanged(nameof(FeedInPerHour));
         }
 
         public string LastExceptionMessage { get; set; }

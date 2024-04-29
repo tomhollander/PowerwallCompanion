@@ -19,6 +19,10 @@ namespace PowerwallCompanion
 
         public TariffHelper(JObject ratePlan)
         {
+            if (ratePlan == null)
+            {
+                throw new ArgumentNullException(nameof(ratePlan));
+            }
             this.ratePlan = ratePlan;
         }
 

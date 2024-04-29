@@ -218,14 +218,24 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <Rectangle Fill="{x:Bind ViewModel.TariffColor, Mode=OneWay}" Height="30" RadiusX="10" RadiusY="10"/>
-                        <TextBlock Text="{x:Bind ViewModel.TariffName,Mode=OneWay}" VerticalAlignment="Center" FontSize="18" Margin="5"/>
+                        <TextBlock Text="{x:Bind ViewModel.TariffName,Mode=OneWay}" VerticalAlignment="Center" FontSize="16" Margin="5"/>
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                         <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" Margin="20,0,0,0"/>
                         <TextBlock FontSize="30" Foreground="LightGray" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffSellRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy buy price per kWh"></TextBlock>
-                        <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,0,0" Visibility="{x:Bind ViewModel.TariffBuyRateVisibility, Mode=OneWay}"/>
-                        <TextBlock FontSize="30" Foreground="Gold" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh"></TextBlock>
+                        <StackPanel Orientation="Horizontal" Visibility="{x:Bind ViewModel.TariffCostVisibility, Mode=OneWay}">
+                            <TextBlock FontSize="20" VerticalAlignment="Center" Foreground="LightGray" Margin="5,0,0,0" Text="("/>
+                            <TextBlock FontSize="20" VerticalAlignment="Center" Foreground="LightGray" Text="{x:Bind ViewModel.CostPerHour, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" ToolTipService.ToolTip="Energy cost at current import rate"/>
+                            <TextBlock FontSize="20" VerticalAlignment="Center" Foreground="LightGray" Text="/h)"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Visibility="{x:Bind ViewModel.TariffFeedInVisibility, Mode=OneWay}">
+                            <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,0,0" />
+                            <TextBlock FontSize="30" Foreground="Gold" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh"></TextBlock>
+                            <TextBlock FontSize="20" VerticalAlignment="Center" Foreground="Gold" Margin="5,0,0,0" Text="("/>
+                            <TextBlock FontSize="20" VerticalAlignment="Center" Foreground="Gold" Text="{x:Bind ViewModel.FeedInPerHour, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" ToolTipService.ToolTip="Energy value at current export rate"/>
+                            <TextBlock FontSize="20" VerticalAlignment="Center" Foreground="Gold" Text="/h)"/>
+                        </StackPanel>
                     </StackPanel>
 
                 </Grid>
