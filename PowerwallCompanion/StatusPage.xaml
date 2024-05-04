@@ -224,7 +224,7 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                         <StackPanel Orientation="Horizontal" Visibility="{x:Bind ViewModel.TariffCostVisibility, Mode=OneWay}">
-                            <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" Margin="20,0,0,0"/>
+                            <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" Margin="20,0,10,0"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontSize="24" VerticalAlignment="Bottom" Foreground="LightGray" Text="{x:Bind ViewModel.CostPerHour, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" ToolTipService.ToolTip="Energy cost at current import rate"/>
                                 <TextBlock FontSize="20" VerticalAlignment="Bottom" Foreground="#888888" Text="/h ∙" Margin="0,0,0,1"/>
@@ -235,7 +235,7 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Visibility="{x:Bind ViewModel.TariffFeedInVisibility, Mode=OneWay}">
-                            <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,0,0" />
+                            <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,10,0" />
                             <TextBlock FontSize="24" VerticalAlignment="Bottom" Foreground="Gold" Text="{x:Bind ViewModel.FeedInPerHour, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" ToolTipService.ToolTip="Energy value at current export rate"/>
                             <TextBlock FontSize="20" VerticalAlignment="Bottom" Foreground="#888888" Text="/h ∙" Margin="0,0,0,1"/>
                             <TextBlock FontSize="24" Foreground="Gold" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh"></TextBlock>

@@ -208,6 +208,7 @@ namespace PowerwallCompanion
                 viewModel.EnergyCostToday = todayCost.Item1;
                 viewModel.EnergyFeedInToday = todayCost.Item2;
 
+                Analytics.TrackEvent("Energy cost data refreshed");
                 viewModel.NotifyEnergyCostProperties();
 
             }
@@ -295,6 +296,7 @@ namespace PowerwallCompanion
                     viewModel.TariffSellRate = prices.Item1;
                     viewModel.TariffBuyRate = prices.Item2;
                     viewModel.TariffColor = tariff.Color;
+                    Analytics.TrackEvent("Tariff data refreshed");
                 }
                 catch (Exception ex)
                 {

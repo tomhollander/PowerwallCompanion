@@ -245,7 +245,7 @@
             </chart:SfChart>
        
             <!-- Weekly Cost Chart -->
-            <chart:SfChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="20">
+            <chart:SfChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="Collapsed">
                 <chart:SfChart.Resources>
                     <DataTemplate x:Key="tooltipTemplate">
                         <StackPanel Orientation="Vertical">
@@ -265,7 +265,7 @@
                 </chart:SfChart.PrimaryAxis>
 
                 <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="C">
+                    <chart:NumericalAxis RangePadding="Auto" LabelFormat="C">
                         <chart:NumericalAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>
