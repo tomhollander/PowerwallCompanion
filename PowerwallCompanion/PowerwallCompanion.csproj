@@ -176,6 +176,7 @@
       <DependentUpon>StatusPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="TariffHelper.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\BatteryDetails.cs" />
     <Compile Include="ViewModels\BatteryInfoViewModel.cs" />
     <Compile Include="ViewModels\ChartDataPoint.cs" />

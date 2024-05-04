@@ -4,12 +4,8 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json.Linq;
 using PowerwallCompanion.CustomEnergySourceProviders;
 using PowerwallCompanion.ViewModels;
-using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -22,7 +18,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using WinRTXamlToolkit.IO.Serialization;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -93,6 +88,11 @@ namespace PowerwallCompanion
                 RefreshTariffData(),
             };
             await Task.WhenAll(tasks);
+            if (Settings.ShowEnergyRates)
+            {
+                // We need the tariffs for this, so don't do it aync with everything else
+                await RefreshEnergyCostData();
+            }
         }
 
         private async Task GetCurrentPowerData()
@@ -192,6 +192,35 @@ namespace PowerwallCompanion
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyDailyEnergyProperties();
             }
+        }
+
+        private async Task RefreshEnergyCostData()
+        {
+            try
+            {
+                var yesterdayEnergy = await GetCalendarHistoryData(DateTime.Now.Date.AddDays(-1));
+                var yesterdayCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory((JArray)yesterdayEnergy["response"]["time_series"]);
+                viewModel.EnergyCostYesterday = yesterdayCost.Item1;
+                viewModel.EnergyFeedInYesterday = yesterdayCost.Item2;
+
+                var todayEnergy = await GetCalendarHistoryData(DateTime.Now.Date);
+                var todayCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory((JArray)todayEnergy["response"]["time_series"]);
+                viewModel.EnergyCostToday = todayCost.Item1;
+                viewModel.EnergyFeedInToday = todayCost.Item2;
+
+                viewModel.NotifyEnergyCostProperties();
+
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+        }
+
+        private async Task<JObject> GetCalendarHistoryData(DateTime date)
+        {
+            var url = Utils.GetCalendarHistoryUrl("energy", "day", date, date.AddDays(1).AddSeconds(-1));
+            return await ApiHelper.CallGetApiWithTokenRefresh(url, "CalendarHistory");
         }
 
         public async Task GetPowerHistoryData()

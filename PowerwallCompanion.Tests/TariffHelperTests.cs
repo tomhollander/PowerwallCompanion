@@ -502,6 +502,37 @@ namespace PowerwallCompanion.Tests
     }
 }
 ";
+        private const string energyHistoryJson = @"[
+            {""timestamp"": ""2024-04-26T00:00:00+10:00"",
+                ""grid_energy_imported"": 0,
+                ""grid_energy_exported_from_solar"": 0,
+                ""grid_energy_exported_from_generator"": 0,
+                ""grid_energy_exported_from_battery"": 0,
+            },
+            {""timestamp"": ""2024-04-26T00:05:00+10:00"",
+                ""grid_energy_imported"": 500,
+                ""grid_energy_exported_from_solar"": 0,
+                ""grid_energy_exported_from_generator"": 0,
+                ""grid_energy_exported_from_battery"": 0,
+            },
+            {""timestamp"": ""2024-04-26T06:00:00+10:00"",
+                ""grid_energy_imported"": 700,
+                ""grid_energy_exported_from_solar"": 0,
+                ""grid_energy_exported_from_generator"": 0,
+                ""grid_energy_exported_from_battery"": 0,
+            },
+            {""timestamp"": ""2024-04-26T06:05:00+10:00"",
+                ""grid_energy_imported"": 200,
+                ""grid_energy_exported_from_solar"": 100,
+                ""grid_energy_exported_from_generator"": 0,
+                ""grid_energy_exported_from_battery"": 100,
+            },
+            {""timestamp"": ""2024-04-26T18:10:00+10:00"",
+                ""grid_energy_imported"": 0,
+                ""grid_energy_exported_from_solar"": 400,
+                ""grid_energy_exported_from_generator"": 0,
+                ""grid_energy_exported_from_battery"": 0,
+            }]";
 
         [TestMethod]
         public void GetWeekDayTariffsForNonWrappingSeason()
@@ -593,6 +624,16 @@ namespace PowerwallCompanion.Tests
             var rates = tariffHelper.GetRatesForTariff(tariff);
             Assert.AreEqual(0.3m, rates.Item1);
             Assert.AreEqual(0.07m, rates.Item2);
+        }
+
+        [TestMethod]
+        public void GetEnergyCostAndFeedInFromEnergyHistory()
+        {
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var energyHistory = JArray.Parse(energyHistoryJson);
+            var rates = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory);
+            Assert.AreEqual(0.08m * 0.5m + 0.3m * 0.7m + 0.3m * 0.2m, rates.Item1);
+            Assert.AreEqual(0.07m * 0.6m, rates.Item2);
         }
     }
 }

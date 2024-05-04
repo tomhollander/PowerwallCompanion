@@ -98,6 +98,19 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(GraphDayBoundary));
             NotifyPropertyChanged(nameof(ChartMaxDate));
         }
+
+        public void NotifyEnergyCostProperties()
+        {
+            NotifyPropertyChanged(nameof(EnergyCostToday));
+            NotifyPropertyChanged(nameof(EnergyFeedInToday));
+            NotifyPropertyChanged(nameof(EnergyNetCostToday));
+            NotifyPropertyChanged(nameof(EnergyCostTooltipToday));
+            NotifyPropertyChanged(nameof(EnergyCostYesterday));
+            NotifyPropertyChanged(nameof(EnergyFeedInYesterday));
+            NotifyPropertyChanged(nameof(EnergyNetCostYesterday));
+            NotifyPropertyChanged(nameof(EnergyCostTooltipYesterday));
+        }
+
         public void NotifyChangedSettings()
         {
             NotifyPropertyChanged(nameof(ShowClock));
@@ -388,6 +401,42 @@ namespace PowerwallCompanion.ViewModels
         public Visibility TariffCostVisibility
         {
             get => HomeFromGrid > 50D ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public decimal EnergyCostToday
+        {
+            get; set;
+        }
+
+        public decimal EnergyFeedInToday
+        {
+            get; set;
+        }
+        public decimal EnergyNetCostToday
+        {
+            get { return EnergyCostToday + EnergyFeedInToday; }
+        }
+        public string EnergyCostTooltipToday
+        {
+            get { return $"Estimated net cost of today's energy based on Tesla app rate plan.\nEnergy cost: {EnergyCostToday.ToString("c")}, Feed in: {EnergyFeedInToday.ToString("c")}"; }
+        }
+
+        public decimal EnergyCostYesterday
+        {
+            get; set;
+        }
+
+        public decimal EnergyFeedInYesterday
+        {
+            get; set;
+        }
+        public decimal EnergyNetCostYesterday
+        {
+            get { return EnergyCostYesterday + EnergyFeedInYesterday; }
+        }
+        public string EnergyCostTooltipYesterday
+        {
+            get { return $"Estimated net cost of yesterday's energy based on Tesla app rate plan.\nEnergy cost: {EnergyCostYesterday.ToString("c")}, Feed in: {EnergyFeedInYesterday.ToString("c")}"; }
         }
 
         public void NotifyTariffProperties()

@@ -162,36 +162,11 @@ namespace PowerwallCompanion
             await Task.WhenAll(tasks);
         }
 
-        private string GetCalendarHistoryUrl(string kind)
-        {
-            var sb = new StringBuilder();
-            var siteId = Settings.SiteId;
-
-            var timeZone = Settings.InstallationTimeZone;
-            var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
-            var startOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodStart);
-            var endOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodEnd);
-            var startDate = new DateTimeOffset(ViewModel.PeriodStart, startOffset);
-            var endDate = new DateTimeOffset(ViewModel.PeriodEnd, endOffset).AddSeconds(-1);
-
-            sb.Append($"/api/1/energy_sites/{siteId}/calendar_history?");
-            sb.Append("kind=" + kind);
-            sb.Append("&period=" + ViewModel.Period.ToLowerInvariant());
-            if (ViewModel.Period != "Lifetime")
-            {
-                sb.Append("&start_date=" + Uri.EscapeDataString(startDate.ToString("o")));
-                sb.Append("&end_date=" + Uri.EscapeDataString(endDate.ToString("o")));
-            }
-            sb.Append("&time_zone=" + Uri.EscapeDataString(timeZone));
-            sb.Append("&fill_telemetry=0");
-            return sb.ToString();
-        }
-
         private async Task FetchEnergyData()
         {
             try
             {
-                var url = GetCalendarHistoryUrl("energy");
+                var url = Utils.GetCalendarHistoryUrl("energy", ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "EnergyHistory");
                 
                 double totalHomeEnergy = 0;
@@ -397,7 +372,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = GetCalendarHistoryUrl("power");
+                var url = Utils.GetCalendarHistoryUrl("power", ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "PowerHistory");
 
                 ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
@@ -627,7 +602,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = GetCalendarHistoryUrl("soe");
+                var url = Utils.GetCalendarHistoryUrl("soe", ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
                 var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "SoeHistory");
 
                 var batteryDailySoeGraphData = new List<ChartDataPoint>();

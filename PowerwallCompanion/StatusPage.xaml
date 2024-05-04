@@ -296,13 +296,14 @@
             </Grid.RowDefinitions>
             
             <!-- Yesterday / Today energy stats -->
-            <Grid Margin="10,10,60,0" ColumnSpacing="20" RowSpacing="20" HorizontalAlignment="Center" >
+            <Grid Margin="10,10,60,0" ColumnSpacing="20"  HorizontalAlignment="Center" >
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto"  />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -316,15 +317,15 @@
                 <Image Source="ms-appx:///Assets/icon_home.png" ToolTipService.ToolTip="Home Use" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
                 <Image Source="ms-appx:///Assets/icon_solar.png" ToolTipService.ToolTip="Solar Generated" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
                 <Image Source="ms-appx:///Assets/icon_grid.png" ToolTipService.ToolTip="Grid Imported/Exported"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
-                <Image Source="ms-appx:///Assets/icon_battery.png" ToolTipService.ToolTip="Battery Discharged/Charged"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
-                <TextBlock Grid.Row="1" Grid.Column="2" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh used by home today'}" ></TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" Opacity="0.6" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh used by home yesterday'}"></TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="2" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar generated today'}"></TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="1" Opacity="0.6" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.SolarEnergyYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar generated yesterday'}"></TextBlock>
-                <TextBlock Grid.Row="3" Grid.Column="2" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid today'}"></TextBlock>
-                <TextBlock Grid.Row="3" Grid.Column="1" Opacity="0.6" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ></TextBlock>
+                <Image Source="ms-appx:///Assets/icon_battery.png" ToolTipService.ToolTip="Battery Discharged/Charged"  Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30"></Image>
+                <TextBlock Grid.Row="1" Grid.Column="2" Margin="10" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.HomeEnergyToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh used by home today'}" ></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="10" Opacity="0.6" Foreground="Cyan" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.HomeEnergyYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh used by home yesterday'}"></TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="2" Margin="10" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.SolarEnergyToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar generated today'}"></TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1" Margin="10" Opacity="0.6" Foreground="Gold" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergyYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.SolarEnergyYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar generated yesterday'}"></TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="2" Margin="10" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid today'}"></TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="10" Opacity="0.6" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid yesterday'}"></TextBlock>
 
-                <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay}">
+                <StackPanel Grid.Row="3" Grid.Column="2" Margin="10"  Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                         <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergyImportedToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid today'}"></TextBlock>
@@ -334,7 +335,7 @@
                         <Image Source="ms-appx:///Assets/icon_grid_export.png" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Grid.Row="3" Grid.Column="1" Opacity="0.6"  Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay}">
+                <StackPanel Grid.Row="3" Grid.Column="1" Margin="10" Opacity="0.6"  Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                         <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergyImportedYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid yesterday'}"></TextBlock>
@@ -344,7 +345,9 @@
                         <Image Source="ms-appx:///Assets/icon_grid_export.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Grid.Row="4" Grid.Column="1"  Opacity="0.6" Foreground="LightGray" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergyNetCostYesterday, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" Margin="0,-10,0,0" Visibility="{x:Bind ViewModel.EnergyRatesVisibility}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyCostTooltipYesterday, Mode=OneWay}"/>
+                <TextBlock Grid.Row="4" Grid.Column="2" Foreground="LightGray" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergyNetCostToday, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" Margin="0,-10,0,0" Visibility="{x:Bind ViewModel.EnergyRatesVisibility}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyCostTooltipToday, Mode=OneWay}" />
+                <StackPanel Grid.Row="5" Grid.Column="2" Margin="10" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center"  Margin="5" />
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyExportedToday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryEnergyExportedToday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged from the battery today'}"></TextBlock>
@@ -354,7 +357,7 @@
                         <Image Source="ms-appx:///Assets/icon_battery_import.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Grid.Row="4" Grid.Column="1" Opacity="0.6" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Grid.Row="5" Grid.Column="1" Margin="10" Opacity="0.6" Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_battery_export.png" Width="30" VerticalAlignment="Center" Margin="5"/>
                         <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryEnergyExportedYesterday, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged from the battery yesterday'}"></TextBlock>

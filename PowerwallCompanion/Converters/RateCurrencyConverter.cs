@@ -20,7 +20,7 @@ namespace PowerwallCompanion.Converters
             {
                 return String.Empty;
             } 
-            else if (rate > 1)
+            else if (Math.Abs(rate) > 1)
             {
                 return rate.ToString("C");
             }
