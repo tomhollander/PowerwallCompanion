@@ -130,6 +130,7 @@ namespace PowerwallCompanion
 
         private async Task RefreshDataAndCharts()
         {
+
             if (ViewModel.Period == "Day")
             {
                 dailyChart.Visibility = Visibility.Visible;
@@ -144,8 +145,22 @@ namespace PowerwallCompanion
                 batteryChart.Visibility = Visibility.Collapsed;
                 energyChart.Visibility = Visibility.Visible;
                 powerGraphOptionsCombo.Visibility = Visibility.Collapsed;
+
+                if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
+                {
+                    Grid.SetRowSpan(energyChart, 1);
+                    energyCostChart.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Grid.SetRowSpan(energyChart, 2);
+                    energyCostChart.Visibility = Visibility.Collapsed;
+                }
+
+
             }
             await FetchData();
+    
         }
 
         private async Task FetchData()
@@ -255,6 +270,10 @@ namespace PowerwallCompanion
                     ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryImportedEnergyGraphData));
                 }
 
+                if (ViewModel.Period == "Week" || ViewModel.Period == "Month")
+                {
+                    CalculateCostData((JArray)json["response"]["time_series"]);
+                }
 
                 ViewModel.HomeEnergy = totalHomeEnergy;
                 ViewModel.SolarEnergy = totalSolarEnergy;
@@ -275,6 +294,51 @@ namespace PowerwallCompanion
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
             }
+        }
+        
+        private void CalculateCostData(JArray energyTimeSeries)
+        {
+            try
+            {
+                if (!Settings.ShowEnergyRates)
+                {
+                    return;
+                }
+
+                ViewModel.EnergyCostGraphData = new List<ChartDataPoint>();
+                ViewModel.EnergyFeedInGraphData = new List<ChartDataPoint>();
+                ViewModel.EnergyNetCostGraphData = new List<ChartDataPoint>();
+
+                var dailyData = new Dictionary<DateTime, List<JObject>>();
+                // Split array by date
+                foreach (var data in energyTimeSeries)
+                {
+                    var ts = data["timestamp"].Value<DateTime>();
+                    if (!dailyData.ContainsKey(ts.Date))
+                    {
+                        dailyData[ts.Date] = new List<JObject>();
+                    }
+                    dailyData[ts.Date].Add(data as JObject);
+                }
+
+                // Calculate costs per date
+                foreach (var date in dailyData.Keys)
+                {
+                    var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(JArray.FromObject(dailyData[date]));
+                    ViewModel.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
+                    ViewModel.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
+                    ViewModel.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
+                }
+
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyCostGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyFeedInGraphData));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyNetCostGraphData));
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+
         }
 
         private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
@@ -780,21 +844,29 @@ namespace PowerwallCompanion
             {
                 return;
             }
-            var tariffs = tariffHelper.GetTariffsForDay(date);
-
-            dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
-            foreach (var tariff in tariffs)
+            try
             {
-                var multiLabel = new ChartMultiLevelLabel()
+                var tariffs = tariffHelper.GetTariffsForDay(date);
+
+                dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
+                foreach (var tariff in tariffs)
                 {
-                    Start = tariff.StartDate,
-                    End = tariff.EndDate,
-                    Text = tariff.DisplayName,
-                    Foreground = tariff.Color,
-                    FontSize = 14,
-                };
-                dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
+                    var multiLabel = new ChartMultiLevelLabel()
+                    {
+                        Start = tariff.StartDate,
+                        End = tariff.EndDate,
+                        Text = tariff.DisplayName,
+                        Foreground = tariff.Color,
+                        FontSize = 14,
+                    };
+                    dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
+                }
             }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+
         }
 
         private void powerGraphOptionsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

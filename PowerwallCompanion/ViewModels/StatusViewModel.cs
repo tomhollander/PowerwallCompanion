@@ -414,7 +414,7 @@ namespace PowerwallCompanion.ViewModels
         }
         public decimal EnergyNetCostToday
         {
-            get { return EnergyCostToday + EnergyFeedInToday; }
+            get { return EnergyCostToday - EnergyFeedInToday; }
         }
         public string EnergyCostTooltipToday
         {
@@ -432,7 +432,7 @@ namespace PowerwallCompanion.ViewModels
         }
         public decimal EnergyNetCostYesterday
         {
-            get { return EnergyCostYesterday + EnergyFeedInYesterday; }
+            get { return EnergyCostYesterday - EnergyFeedInYesterday; }
         }
         public string EnergyCostTooltipYesterday
         {

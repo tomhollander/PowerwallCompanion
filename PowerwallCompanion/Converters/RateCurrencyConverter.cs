@@ -12,7 +12,7 @@ namespace PowerwallCompanion.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var rate = (decimal)value;
+            var rate = System.Convert.ToDecimal(value);
 
             var currencySymbol = NumberFormatInfo.CurrentInfo.CurrencySymbol;
 

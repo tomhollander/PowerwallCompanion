@@ -20,6 +20,7 @@
         <converters:StatusToVisibilityConverter x:Key="StatusToVisibilityConverter" />
         <converters:DateFormatConverter x:Key="DateFormatConverter"/>
         <converters:TooltipMessageConverter x:Key="TooltipMessageConverter"/>
+        <converters:RateCurrencyConverter x:Key="RateCurrencyConverter"/>
     </Page.Resources>
 
         
@@ -195,8 +196,8 @@
 
             </chart:SfChart>
 
-            <!-- Monthly/Yearly Energy Chart -->
-            <chart:SfChart x:Name="energyChart" Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Center" Margin="20">
+            <!-- Weekly/Monthly/Yearly Energy Chart -->
+            <chart:SfChart x:Name="energyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20">
                 <chart:SfChart.Resources>
                     <DataTemplate x:Key="tooltipTemplate">
                         <StackPanel Orientation="Vertical">
@@ -243,7 +244,51 @@
 
             </chart:SfChart>
        
-            
+            <!-- Weekly Cost Chart -->
+            <chart:SfChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="20">
+                <chart:SfChart.Resources>
+                    <DataTemplate x:Key="tooltipTemplate">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Series.Label}" FontWeight="Bold" Foreground="Black" />
+                            <TextBlock Text="{Binding Item.XValue, Converter={StaticResource DateFormatConverter}, ConverterParameter='d'}" Foreground="Black"  />
+                            <TextBlock Text="{Binding Item.YValue,Converter={StaticResource RateCurrencyConverter}}" Foreground="Black"  />
+                        </StackPanel>
+                    </DataTemplate>
+                </chart:SfChart.Resources>
+
+                <chart:SfChart.PrimaryAxis>
+                    <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
+                        <chart:DateTimeCategoryAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        </chart:DateTimeCategoryAxis.LabelStyle>
+                    </chart:DateTimeCategoryAxis>
+                </chart:SfChart.PrimaryAxis>
+
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis RangePadding="None" LabelFormat="C">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                    </chart:ChartLegend>
+                </chart:SfChart.Legend>
+
+                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightCoral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyCostGraphData, Mode=OneWay}" Label="Est. Energy Cost" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGreen" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyFeedInGraphData, Mode=OneWay}" Label="Est. Feed In Value" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
+                <chart:LineSeries Interior="CornflowerBlue" StrokeThickness="3" ItemsSource="{x:Bind ViewModel.EnergyNetCostGraphData, Mode=OneWay}" Label="Est. Net Cost" XBindingPath="XValue" YBindingPath="YValue" ShowTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000">
+                    <chart:LineSeries.AdornmentsInfo>
+                        <chart:ChartAdornmentInfo ShowMarker="True" SymbolInterior="CornflowerBlue" Symbol="Diamond" />
+                    </chart:LineSeries.AdornmentsInfo>
+                </chart:LineSeries>
+                <chart:SfChart.Annotations>
+                    <chart:HorizontalLineAnnotation Y1="0" Stroke="LightGray" StrokeThickness="2" />
+                </chart:SfChart.Annotations>
+
+            </chart:SfChart>
+
             <!-- Self consumption -->
             <StackPanel Grid.Row="4">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

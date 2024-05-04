@@ -245,6 +245,18 @@ namespace PowerwallCompanion.ViewModels
             get; set;
         }
 
+        public List<ChartDataPoint> EnergyCostGraphData
+        {
+            get; set;
+        }
+        public List<ChartDataPoint> EnergyFeedInGraphData
+        {
+            get; set;
+        }
+        public List<ChartDataPoint> EnergyNetCostGraphData
+        {
+            get; set;
+        }
 
         public double SelfConsumption
         {
