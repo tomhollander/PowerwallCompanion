@@ -136,6 +136,7 @@ namespace PowerwallCompanion
                 dailyChart.Visibility = Visibility.Visible;
                 batteryChart.Visibility = Visibility.Visible;
                 energyChart.Visibility = Visibility.Collapsed;
+                energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
                 await GetTariffsForDay(DateUtils.ConvertToPowerwallDate(ViewModel.PeriodStart).Date);
             }

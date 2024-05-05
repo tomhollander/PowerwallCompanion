@@ -10,7 +10,7 @@ namespace PowerwallCompanion.Tests
     public class TariffHelperTests
     {
 
-        private const string ratePlanJson = @"{
+        private const string ratePlanJsonWithSeasons = @"{
     ""response"": {
         ""code"": ""(edited)"",
         ""name"": ""Test Tariff"",
@@ -502,6 +502,114 @@ namespace PowerwallCompanion.Tests
     }
 }
 ";
+        private const string ratePlanJsonSingleRate = @"{
+    ""response"": {
+        ""name"": ""Acme Energy"",
+        ""utility"": ""Acme"",
+        ""daily_charges"": [
+            {
+                ""amount"": 0,
+                ""name"": ""Charge""
+            }
+        ],
+        ""demand_charges"": {
+            ""ALL"": {
+                ""ALL"": 0
+            },
+            ""Summer"": {},
+            ""Winter"": {}
+        },
+        ""energy_charges"": {
+            ""ALL"": {
+                ""ALL"": 0
+            },
+            ""Summer"": {
+                ""OFF_PEAK"": 0.2
+            },
+            ""Winter"": {}
+        },
+        ""seasons"": {
+            ""Summer"": {
+                ""fromDay"": 1,
+                ""toDay"": 31,
+                ""fromMonth"": 1,
+                ""toMonth"": 12,
+                ""tou_periods"": {
+                    ""OFF_PEAK"": [
+                        {
+                            ""fromDayOfWeek"": 0,
+                            ""toDayOfWeek"": 6,
+                            ""fromHour"": 0,
+                            ""fromMinute"": 0,
+                            ""toHour"": 0,
+                            ""toMinute"": 0
+                        }
+                    ]
+                }
+            },
+            ""Winter"": {
+                ""fromDay"": 0,
+                ""toDay"": 0,
+                ""fromMonth"": 0,
+                ""toMonth"": 0,
+                ""tou_periods"": {}
+            }
+        },
+        ""sell_tariff"": {
+            ""name"": ""Acme energy"",
+            ""utility"": ""Acme"",
+            ""daily_charges"": [
+                {
+                    ""amount"": 0,
+                    ""name"": ""Charge""
+                }
+            ],
+            ""demand_charges"": {
+                ""ALL"": {
+                    ""ALL"": 0
+                },
+                ""Summer"": {},
+                ""Winter"": {}
+            },
+            ""energy_charges"": {
+                ""ALL"": {
+                    ""ALL"": 0
+                },
+                ""Summer"": {
+                    ""OFF_PEAK"": 0.04
+                },
+                ""Winter"": {}
+            },
+            ""seasons"": {
+                ""Summer"": {
+                    ""fromDay"": 1,
+                    ""toDay"": 31,
+                    ""fromMonth"": 1,
+                    ""toMonth"": 12,
+                    ""tou_periods"": {
+                        ""OFF_PEAK"": [
+                            {
+                                ""fromDayOfWeek"": 0,
+                                ""toDayOfWeek"": 6,
+                                ""fromHour"": 0,
+                                ""fromMinute"": 0,
+                                ""toHour"": 0,
+                                ""toMinute"": 0
+                            }
+                        ]
+                    }
+                },
+                ""Winter"": {
+                    ""fromDay"": 0,
+                    ""toDay"": 0,
+                    ""fromMonth"": 0,
+                    ""toMonth"": 0,
+                    ""tou_periods"": {}
+                }
+            }
+        }
+    }
+}";
         private const string energyHistoryJson = @"[
             {""timestamp"": ""2024-04-26T00:00:00+10:00"",
                 ""grid_energy_imported"": 0,
@@ -537,7 +645,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetWeekDayTariffsForNonWrappingSeason()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariffs = tariffHelper.GetTariffsForDay(new DateTime(2024, 6, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Winter", Name = "SUPER_OFF_PEAK", StartDate = new DateTime(2024, 6, 5, 0, 0, 0), EndDate = new DateTime(2024, 6, 5, 6, 0, 0) });
@@ -549,7 +657,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetWeekendTariffsForNonWrappingSeason()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariffs = tariffHelper.GetTariffsForDay(new DateTime(2024, 6, 1, 0, 0, 0));
             Assert.AreEqual(2, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Winter", Name = "SUPER_OFF_PEAK", StartDate = new DateTime(2024, 6, 1, 0, 0, 0), EndDate = new DateTime(2024, 6, 1, 6, 0, 0) });
@@ -559,7 +667,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetWeekDayTariffsForWrappingSeason()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariffs = tariffHelper.GetTariffsForDay(new DateTime(2024, 2, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Summer", Name = "SUPER_OFF_PEAK", StartDate = new DateTime(2024, 2, 5, 0, 0, 0), EndDate = new DateTime(2024, 2, 5, 6, 0, 0) });
@@ -571,7 +679,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetWeekDayTariffsForWrappingDay()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariffs = tariffHelper.GetTariffsForDay(new DateTime(2024, 11, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Season3", Name = "OFF_PEAK", StartDate = new DateTime(2024, 11, 5, 0, 0, 0), EndDate = new DateTime(2024, 11, 5, 9, 0, 0) });
@@ -581,9 +689,18 @@ namespace PowerwallCompanion.Tests
         }
 
         [TestMethod]
+        public void GetTariffsForOnePopulatedSeason()
+        {
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonSingleRate));
+            var tariffs = tariffHelper.GetTariffsForDay(new DateTime(2024, 6, 5, 0, 0, 0));
+            Assert.AreEqual(1, tariffs.Count);
+            CollectionAssert.Contains(tariffs, new Tariff { Season = "Summer", Name = "OFF_PEAK", StartDate = new DateTime(2024, 6, 5, 0, 0, 0), EndDate = new DateTime(2024, 6, 6, 0, 0, 0) });
+        }
+
+        [TestMethod]
         public void GetInstantTariff()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariff = tariffHelper.GetTariffForInstant(new DateTime(2024, 6, 5, 10, 10, 0));
             Assert.AreEqual("Winter", tariff.Season);
             Assert.AreEqual("OFF_PEAK", tariff.Name);
@@ -592,7 +709,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetInstantTariffOnBoundary()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariff = tariffHelper.GetTariffForInstant(new DateTime(2024, 6, 5, 16, 0, 0));
             Assert.AreEqual("Winter", tariff.Season);
             Assert.AreEqual("ON_PEAK", tariff.Name);
@@ -601,7 +718,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetInstantTariffOnWrappingDayMorning()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariff = tariffHelper.GetTariffForInstant(new DateTime(2024, 11, 5, 8, 0, 0));
             Assert.AreEqual("Season3", tariff.Season);
             Assert.AreEqual("OFF_PEAK", tariff.Name);
@@ -610,7 +727,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetInstantTariffOnWrappingDayEvening()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariff = tariffHelper.GetTariffForInstant(new DateTime(2024, 11, 5, 21, 0, 0));
             Assert.AreEqual("Season3", tariff.Season);
             Assert.AreEqual("OFF_PEAK", tariff.Name);
@@ -619,7 +736,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetRatesForTariff()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var tariff = new Tariff { Season = "Winter", Name = "OFF_PEAK" };
             var rates = tariffHelper.GetRatesForTariff(tariff);
             Assert.AreEqual(0.3m, rates.Item1);
@@ -629,7 +746,7 @@ namespace PowerwallCompanion.Tests
         [TestMethod]
         public void GetEnergyCostAndFeedInFromEnergyHistory()
         {
-            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJson));
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
             var energyHistory = JArray.Parse(energyHistoryJson);
             var rates = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory);
             Assert.AreEqual(0.08m * 0.5m + 0.3m * 0.7m + 0.3m * 0.2m, rates.Item1);

@@ -85,7 +85,18 @@ namespace PowerwallCompanion
                         var fromMinute = period["fromMinute"].Value<int>();
                         var toHour = period["toHour"].Value<int>();
                         var toMinute = period["toMinute"].Value<int>();
-                        if (fromHour < toHour)
+                        if (fromHour == 0 && toHour == 0 && fromMinute == 0 && toMinute == 0)
+                        {
+                            var tariff = new Tariff
+                            {
+                                Name = rateName,
+                                Season = season.Name,
+                                StartDate = date,
+                                EndDate = date.AddDays(1),
+                            };
+                            tariffs.Add(tariff);
+                        }
+                        else if (fromHour < toHour)
                         {
                             var tariff = new Tariff
                             {
