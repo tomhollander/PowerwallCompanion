@@ -2,15 +2,10 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
 namespace PowerwallCompanion.ViewModels
@@ -402,6 +397,10 @@ namespace PowerwallCompanion.ViewModels
         {
             get => HomeFromGrid > 50D ? Visibility.Visible : Visibility.Collapsed;
         }
+        public Visibility TariffBadgeVisibility
+        {
+            get; set; 
+        }
 
         public decimal EnergyCostToday
         {
@@ -449,6 +448,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(TariffCostVisibility));
             NotifyPropertyChanged(nameof(CostPerHour));
             NotifyPropertyChanged(nameof(FeedInPerHour));
+            NotifyPropertyChanged(nameof(TariffBadgeVisibility));
         }
 
         public string LastExceptionMessage { get; set; }

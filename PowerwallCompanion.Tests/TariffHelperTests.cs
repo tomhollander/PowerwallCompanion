@@ -752,5 +752,19 @@ namespace PowerwallCompanion.Tests
             Assert.AreEqual(0.08m * 0.5m + 0.3m * 0.7m + 0.3m * 0.2m, rates.Item1);
             Assert.AreEqual(0.07m * 0.6m, rates.Item2);
         }
+
+        [TestMethod]
+        public void SingleRatePlanReturnsTrue()
+        {
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonSingleRate));
+            Assert.IsTrue(tariffHelper.IsSingleRatePlan);
+        }
+
+        [TestMethod]
+        public void MultiRatePlanReturnsFalse()
+        {
+            var tariffHelper = new TariffHelper(JObject.Parse(ratePlanJsonWithSeasons));
+            Assert.IsFalse(tariffHelper.IsSingleRatePlan);
+        }
     }
 }

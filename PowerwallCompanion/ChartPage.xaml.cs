@@ -805,6 +805,12 @@ namespace PowerwallCompanion
                     keys.Add(key);
                     sb.Append($"{key},");
                 }
+                if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
+                {
+                    sb.Append("Cost,");
+                    sb.Append("FeedIn,");
+                    sb.Append("NetCost,");
+                }
             }
             sb.Append("\r\n");
 
@@ -822,6 +828,12 @@ namespace PowerwallCompanion
                     {
                         sb.Append(",");
                     }
+                }
+                if (Settings.ShowEnergyRates && ViewModel.EnergyCostGraphData != null && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
+                {
+                    sb.Append($"{ViewModel.EnergyCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
+                    sb.Append($"{ViewModel.EnergyFeedInGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
+                    sb.Append($"{ViewModel.EnergyNetCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
                 }
                 sb.Append("\r\n");
             }

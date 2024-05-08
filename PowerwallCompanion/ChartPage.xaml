@@ -245,7 +245,7 @@
             </chart:SfChart>
        
             <!-- Weekly Cost Chart -->
-            <chart:SfChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="Collapsed">
+            <chart:SfChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="28,10,20,10" Visibility="Collapsed">
                 <chart:SfChart.Resources>
                     <DataTemplate x:Key="tooltipTemplate">
                         <StackPanel Orientation="Vertical">

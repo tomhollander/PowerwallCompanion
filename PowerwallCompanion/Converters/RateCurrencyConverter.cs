@@ -19,18 +19,18 @@ namespace PowerwallCompanion.Converters
             if (rate == 0)
             {
                 return String.Empty;
-            } 
+            }
             else if (Math.Abs(rate) > 1)
             {
                 return rate.ToString("C");
             }
             else if (currencySymbol == "$" || currencySymbol == "€")
             {
-                return (rate * 100).ToString("#") + "c";
+                return (rate * 100).ToString("0") + "c";
             }
             else if (currencySymbol == "£")
             {
-                return (rate * 100).ToString("#") + "p";
+                return (rate * 100).ToString("0") + "p";
             }
             else
             {

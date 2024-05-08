@@ -4,6 +4,7 @@ using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace PowerwallCompanion
 {
@@ -11,7 +12,6 @@ namespace PowerwallCompanion
     {
 
         private JObject ratePlan;
-
 
         public TariffHelper(JObject ratePlan)
         {
@@ -138,7 +138,19 @@ namespace PowerwallCompanion
                 }
             }
             return tariffs;
+        }
 
+        public bool IsSingleRatePlan
+        {
+            get
+            {
+                var season = GetSeasonForDate(DateTime.Now.Date);
+                if (season == null || season.First()["tou_periods"] == null)
+                {
+                    return true;
+                }
+                return season.First()["tou_periods"].Children().Count() <= 1;
+            }
         }
 
         public Tariff GetTariffForInstant(DateTime date)

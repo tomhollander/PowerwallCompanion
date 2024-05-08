@@ -217,7 +217,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
+                    <Grid Grid.Column="0" Visibility="{x:Bind ViewModel.TariffBadgeVisibility, Mode=OneWay}">
                         <Rectangle Fill="{x:Bind ViewModel.TariffColor, Mode=OneWay}" Height="30" RadiusX="10" RadiusY="10"/>
                         <TextBlock Text="{x:Bind ViewModel.TariffName,Mode=OneWay}" VerticalAlignment="Center" FontSize="16" Margin="5"/>
                     </Grid>
@@ -238,7 +238,7 @@
                             <Image Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="30" Margin="20,0,10,0" />
                             <TextBlock FontSize="24" VerticalAlignment="Bottom" Foreground="Gold" Text="{x:Bind ViewModel.FeedInPerHour, Converter={StaticResource RateCurrencyConverter}, Mode=OneWay}" ToolTipService.ToolTip="Energy value at current export rate"/>
                             <TextBlock FontSize="20" VerticalAlignment="Bottom" Foreground="#888888" Text="/h ∙" Margin="0,0,0,1"/>
-                            <TextBlock FontSize="24" Foreground="Gold" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh"></TextBlock>
+                            <TextBlock FontSize="24" Foreground="#888888" Margin="5,0,0,0" Text="{x:Bind ViewModel.TariffBuyRate, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" ToolTipService.ToolTip="Current energy sell price per kWh"></TextBlock>
                             <TextBlock FontSize="20" VerticalAlignment="Bottom" Foreground="#888888" Text="/kWh" Margin="0,0,0,1"/>
 
                         </StackPanel>

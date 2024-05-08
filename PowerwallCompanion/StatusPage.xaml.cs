@@ -277,12 +277,14 @@ namespace PowerwallCompanion
                 {
                     var ratePlan = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/tariff_rate", "TariffRate");
                     tariffHelper = new TariffHelper(ratePlan);
+                    viewModel.TariffBadgeVisibility = tariffHelper.IsSingleRatePlan ? Visibility.Collapsed : Visibility.Visible;
                 }
                 catch (Exception ex)
                 {
                     Crashes.TrackError(ex);
                     viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
+                    viewModel.TariffBadgeVisibility = Visibility.Visible;
                 }
                 
             }
@@ -303,6 +305,7 @@ namespace PowerwallCompanion
                     Crashes.TrackError(ex);
                     viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
+                    viewModel.TariffBadgeVisibility = Visibility.Visible;
                 }
 
                 
