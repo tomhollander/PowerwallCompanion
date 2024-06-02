@@ -1,6 +1,7 @@
 ﻿using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.Lib;
 using PowerwallCompanion.ViewModels;
 using Syncfusion.UI.Xaml.Charts;
 using System;
@@ -28,7 +29,7 @@ namespace PowerwallCompanion
         public ChartViewModel ViewModel { get; set; }
         private Task ratePlanTask;
         private DispatcherTimer timer;
-        private TariffHelper tariffHelper;
+        private TariffHelperX tariffHelper;
 
         public ChartPage()
         {
@@ -655,7 +656,7 @@ namespace PowerwallCompanion
             try
             {
                 var ratePlan = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/tariff_rate", "TariffRate");
-                tariffHelper = new TariffHelper(ratePlan);
+                tariffHelper = new TariffHelperX(ratePlan);
             }
             catch
             {

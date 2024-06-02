@@ -1,5 +1,6 @@
 ﻿using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,21 +43,18 @@ namespace PowerwallCompanion.ViewModels
             _batteryDay = DateTime.MinValue;
 
         }
- 
+
+        public InstantaneousPower InstantaneousPower
+        {
+            get; set;
+        }
+
         public void NotifyPowerProperties()
         {
-            NotifyPropertyChanged(nameof(BatteryPercent));
-            NotifyPropertyChanged(nameof(BatteryStatus));
-            NotifyPropertyChanged(nameof(BatteryValue));
-            NotifyPropertyChanged(nameof(HomeValue));
-            NotifyPropertyChanged(nameof(HomeFromBattery));
-            NotifyPropertyChanged(nameof(HomeFromGrid));
-            NotifyPropertyChanged(nameof(HomeFromSolar));
-            NotifyPropertyChanged(nameof(SolarValue));
-            NotifyPropertyChanged(nameof(SolarToBattery));
-            NotifyPropertyChanged(nameof(SolarToGrid));
-            NotifyPropertyChanged(nameof(SolarToHome));
-            NotifyPropertyChanged(nameof(GridValue));
+            NotifyPropertyChanged(nameof(InstantaneousPower));
+            NotifyPropertyChanged(nameof(MinBatteryPercentToday));
+            NotifyPropertyChanged(nameof(MaxBatteryPercentToday));
+
             NotifyPropertyChanged(nameof(CostPerHour));
             NotifyPropertyChanged(nameof(FeedInPerHour));
             NotifyPropertyChanged(nameof(TariffFeedInVisibility));
@@ -67,20 +65,12 @@ namespace PowerwallCompanion.ViewModels
 
         public void NotifyDailyEnergyProperties()
         {
-            NotifyPropertyChanged(nameof(HomeEnergyYesterday));
-            NotifyPropertyChanged(nameof(HomeEnergyToday));
-            NotifyPropertyChanged(nameof(SolarEnergyYesterday));
-            NotifyPropertyChanged(nameof(SolarEnergyToday));
-            NotifyPropertyChanged(nameof(GridEnergyImportedYesterday));
-            NotifyPropertyChanged(nameof(GridEnergyImportedToday));
-            NotifyPropertyChanged(nameof(GridEnergyExportedYesterday));
-            NotifyPropertyChanged(nameof(GridEnergyExportedToday));
-            NotifyPropertyChanged(nameof(BatteryEnergyImportedYesterday));
-            NotifyPropertyChanged(nameof(BatteryEnergyImportedToday));
-            NotifyPropertyChanged(nameof(BatteryEnergyExportedYesterday));
-            NotifyPropertyChanged(nameof(BatteryEnergyExportedToday));
+            NotifyPropertyChanged(nameof(EnergyTotalsYesterday));
+            NotifyPropertyChanged(nameof(EnergyTotalsToday));
             NotifyPropertyChanged(nameof(ShowBothGridSettingsToday));
             NotifyPropertyChanged(nameof(ShowBothGridSettingsYesterday));
+            NotifyPropertyChanged(nameof(EnergyCostTooltipToday));
+            NotifyPropertyChanged(nameof(EnergyCostTooltipYesterday));
             NotifyPropertyChanged(nameof(Time));
         }
 
@@ -94,182 +84,59 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(ChartMaxDate));
         }
 
-        public void NotifyEnergyCostProperties()
-        {
-            NotifyPropertyChanged(nameof(EnergyCostToday));
-            NotifyPropertyChanged(nameof(EnergyFeedInToday));
-            NotifyPropertyChanged(nameof(EnergyNetCostToday));
-            NotifyPropertyChanged(nameof(EnergyCostTooltipToday));
-            NotifyPropertyChanged(nameof(EnergyCostYesterday));
-            NotifyPropertyChanged(nameof(EnergyFeedInYesterday));
-            NotifyPropertyChanged(nameof(EnergyNetCostYesterday));
-            NotifyPropertyChanged(nameof(EnergyCostTooltipYesterday));
-        }
+    
 
         public void NotifyChangedSettings()
         {
             NotifyPropertyChanged(nameof(ShowClock));
         }
 
-        public double BatteryPercent
-        {
-            get { return _batteryPercent; }
-            set
-            {
-                _batteryPercent = value;
-                UpdateMinMaxPercentToday();
-            }
-        }
 
         public double MinBatteryPercentToday
         {
-            get { return _minPercentToday; }
+            get; set;
         }
 
         public double MaxBatteryPercentToday
         {
-            get { return _maxPercentToday; }
-        }
-        public double HomeValue
-        {
-            get { return _homeValue; }
-            set
-            {
-                _homeValue = value;
-            }
-        }
-
-        public double SolarValue
-        {
-            get { return _solarValue; }
-            set
-            {
-                _solarValue = value;
-
-            }
-        }
-
-        public double BatteryValue
-        {
-            get { return _batteryValue; }
-            set
-            {
-                _batteryValue = value;
-            }
-        }
-
-        public double GridValue
-        {
-            get { return _gridValue; }
-            set
-            {
-                _gridValue = value;
-            }
-        }
-
-        public double TotalPackEnergy
-        {
             get; set;
         }
-        public double HomeEnergyToday
+        
+        public EnergyTotals EnergyTotalsYesterday
+        {
+            get; set; 
+        }
+
+        public EnergyTotals EnergyTotalsToday
         {
             get; set;
         }
 
-        public double HomeEnergyYesterday
-        {
-            get; set;
-        }
-
-        public double SolarEnergyToday
-        {
-            get; set;
-        }
-
-        public double SolarEnergyYesterday
-        {
-            get; set;
-        }
-
-        public double GridEnergyImportedToday
-        {
-            get; set;
-        }
-
-        public double GridEnergyImportedYesterday
-        {
-            get; set;
-        }
-
-        public double GridEnergyExportedToday
-        {
-            get; set;
-        }
-
-        public double GridEnergyExportedYesterday
-        {
-            get; set;
-        }
-
+        
         public Visibility ShowBothGridSettingsToday
         {
-            get { return GridEnergyExportedToday > 500 ? Visibility.Visible : Visibility.Collapsed; }
+            get 
+            { 
+                if (EnergyTotalsToday== null)
+                {
+                    return Visibility.Collapsed;
+                }
+                return EnergyTotalsToday.GridEnergyExported > 500 ? Visibility.Visible : Visibility.Collapsed; 
+            }
         }
 
         public Visibility ShowBothGridSettingsYesterday
         {
-            get { return GridEnergyExportedYesterday > 500 ? Visibility.Visible : Visibility.Collapsed; }
+            get
+            {
+                if (EnergyTotalsYesterday == null)
+                {
+                    return Visibility.Collapsed;
+                }
+                return EnergyTotalsYesterday.GridEnergyExported > 500 ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
-
-        public double BatteryEnergyImportedToday
-        {
-            get; set;
-        }
-
-        public double BatteryEnergyImportedYesterday
-        {
-            get; set;
-        }
-
-        public double BatteryEnergyExportedToday
-        {
-            get; set;
-        }
-
-        public double BatteryEnergyExportedYesterday
-        {
-            get; set;
-        }
-
-        public double HomeFromGrid
-        {
-            get { return GridValue > 0D ? GridValue : 0D; }
-        }
-
-        public double HomeFromBattery
-        {
-            get { return BatteryValue > 0D ? BatteryValue : 0D; }
-        }
-
-        public double HomeFromSolar
-        {
-            get { return HomeValue - HomeFromGrid - HomeFromBattery; }
-        }
-
-        public double SolarToGrid
-        {
-            get { return GridValue < 0D ? -GridValue : 0D; }
-        }
-
-        public double SolarToBattery
-        {
-            get { return BatteryValue < 0D ? -BatteryValue : 0D; }
-        }
-
-        public double SolarToHome
-        {
-            get { return SolarValue - SolarToGrid - SolarToBattery; }
-        }
+        
 
         public List<ChartDataPoint> HomeGraphData
         {
@@ -309,25 +176,6 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-
-        public string BatteryStatus
-        {
-            get
-            {
-                if (BatteryValue < -20)
-                {
-                    return "Charging";
-                }
-                else if (BatteryValue > 20)
-                {
-                    return "Discharging";
-                }
-                else
-                {
-                    return "Standby";
-                }
-            }
-        }
 
         public bool GridActive
         {
@@ -375,12 +223,27 @@ namespace PowerwallCompanion.ViewModels
 
         public decimal CostPerHour
         {
-            get { return TariffSellRate * (decimal)(HomeFromGrid / 1000); }
+            get 
+            {
+                if (InstantaneousPower == null)
+                {
+                    return 0;
+                }
+                return TariffSellRate * (decimal)(InstantaneousPower.HomeFromGrid / 1000); 
+            }
         }
 
         public decimal FeedInPerHour
         {
-            get { return TariffBuyRate * (decimal)(SolarToGrid / 1000); }
+            get 
+            {
+                if (InstantaneousPower == null)
+                {
+                    return 0;
+                }
+                return TariffBuyRate * (decimal)(InstantaneousPower.SolarToGrid / 1000); 
+            }
+
         }
 
 
@@ -390,52 +253,57 @@ namespace PowerwallCompanion.ViewModels
         }
         public Visibility TariffFeedInVisibility
         {
-            get => (TariffBuyRate > 0) && (SolarToGrid > 50D) ? Visibility.Visible : Visibility.Collapsed;
+            get
+            {
+                if (InstantaneousPower == null)
+                {
+                    return Visibility.Collapsed;
+                }
+                return (TariffBuyRate > 0) && (InstantaneousPower.SolarToGrid > 50D) ? Visibility.Visible : Visibility.Collapsed;
+
+            }
         }
 
         public Visibility TariffCostVisibility
         {
-            get => HomeFromGrid > 50D ? Visibility.Visible : Visibility.Collapsed;
+            get
+            {
+                if (InstantaneousPower == null)
+                {
+                    return Visibility.Collapsed;
+                }    
+                return InstantaneousPower.HomeFromGrid > 50D ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
+
         public Visibility TariffBadgeVisibility
         {
             get; set; 
         }
 
-        public decimal EnergyCostToday
-        {
-            get; set;
-        }
-
-        public decimal EnergyFeedInToday
-        {
-            get; set;
-        }
-        public decimal EnergyNetCostToday
-        {
-            get { return EnergyCostToday - EnergyFeedInToday; }
-        }
+        
         public string EnergyCostTooltipToday
         {
-            get { return $"Estimated net cost of today's energy based on Tesla app rate plan.\nEnergy cost: {EnergyCostToday.ToString("c")}, Feed in: {EnergyFeedInToday.ToString("c")}"; }
+            get
+            {
+                if (EnergyTotalsToday == null)
+                {
+                    return null;
+                }
+                return $"Estimated net cost of today's energy based on Tesla app rate plan.\nEnergy cost: {EnergyTotalsToday.EnergyCost.ToString("c")}, Feed in: {EnergyTotalsToday.EnergyFeedIn.ToString("c")}";
+            }
         }
 
-        public decimal EnergyCostYesterday
-        {
-            get; set;
-        }
-
-        public decimal EnergyFeedInYesterday
-        {
-            get; set;
-        }
-        public decimal EnergyNetCostYesterday
-        {
-            get { return EnergyCostYesterday - EnergyFeedInYesterday; }
-        }
         public string EnergyCostTooltipYesterday
         {
-            get { return $"Estimated net cost of yesterday's energy based on Tesla app rate plan.\nEnergy cost: {EnergyCostYesterday.ToString("c")}, Feed in: {EnergyFeedInYesterday.ToString("c")}"; }
+            get
+            {
+                if (EnergyTotalsYesterday == null)
+                {
+                    return null;
+                }
+                return $"Estimated net cost of yesterday's energy based on Tesla app rate plan.\nEnergy cost: {EnergyTotalsYesterday.EnergyCost.ToString("c")}, Feed in: {EnergyTotalsYesterday.EnergyFeedIn.ToString("c")}";
+            }
         }
 
         public void NotifyTariffProperties()
@@ -462,63 +330,13 @@ namespace PowerwallCompanion.ViewModels
             get { return DateTime.Today; }
         }
 
-        private async void UpdateMinMaxPercentToday()
-        {
-            if (_batteryDay == DateTime.MinValue)
-            {
-                await GetInitialBatteryMinMaxToday();
-                NotifyPropertyChanged(nameof(MinBatteryPercentToday));
-                NotifyPropertyChanged(nameof(MaxBatteryPercentToday));
-            }
-            else if (_batteryDay != DateUtils.ConvertToPowerwallDate(DateTime.Now).Date)
-            {
-                _batteryDay = DateTime.Today;
-                _minPercentToday = BatteryPercent;
-                _maxPercentToday = BatteryPercent;
-                NotifyPropertyChanged(nameof(MinBatteryPercentToday));
-                NotifyPropertyChanged(nameof(MaxBatteryPercentToday));
-            }
-            else if (BatteryPercent < _minPercentToday)
-            {
-                _minPercentToday = BatteryPercent;
-                NotifyPropertyChanged(nameof(MinBatteryPercentToday));
-            }
-            else if (BatteryPercent > _maxPercentToday)
-            {
-                _maxPercentToday = BatteryPercent;
-                NotifyPropertyChanged(nameof(MaxBatteryPercentToday));
-            }
+        // Specifies the current day for the min/max battery charge level 
+        public DateTime BatteryDay
+        { 
+            get; set;  
         }
-
-        private async Task GetInitialBatteryMinMaxToday()
-        {
-            try
-            {
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/calendar_history?kind=soe", "SOE");
-                int min = 100;
-                int max = 0;
-                foreach (var datapoint in (JArray)json["response"]["time_series"])
-                {
-                    var timestamp = DateUtils.ConvertToPowerwallDate(datapoint["timestamp"].Value<DateTime>());
-                    if (timestamp.Date == DateUtils.ConvertToPowerwallDate(DateTime.Now).Date)
-                    {
-                        var soe = datapoint["soe"].Value<int>();
-                        if (soe < min) min = soe;
-                        if (soe > max) max = soe;
-
-                    }
-                }
-                _batteryDay = DateTime.Now.Date;
-                _minPercentToday = (double)min;
-                _maxPercentToday = (double)max;
-            }
-            catch (Exception ex)
-            {
-                // Don't worry, NBD
-                Crashes.TrackError(ex);
-            }
-        }
-
+        
+        
         private double _gridLowCarbonPercent;
         public double GridLowCarbonPercent
         {

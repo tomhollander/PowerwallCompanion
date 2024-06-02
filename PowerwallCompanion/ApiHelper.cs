@@ -122,7 +122,7 @@ namespace PowerwallCompanion
                     return; // Token was likely refreshed while waiting for the semaphore
                 }
                 var helper = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl,
-                Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
+                Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VehicleDeviceData }));
                 var tokens = await helper.RefreshTokenAsync(Settings.RefreshToken);
                 Analytics.TrackEvent("RefreshToken");
                 Settings.AccessToken = tokens.AccessToken;

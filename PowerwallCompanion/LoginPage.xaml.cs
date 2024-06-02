@@ -23,7 +23,7 @@ namespace PowerwallCompanion
     public sealed partial class LoginPage : Page
     {
         private TeslaAuthHelper teslaAuth = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl,
-                    Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VechicleDeviceData }));
+                    Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VehicleDeviceData }));
 
         public LoginPage()
         {
