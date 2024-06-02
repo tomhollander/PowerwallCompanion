@@ -211,7 +211,29 @@ namespace PowerwallCompanion.Lib
             }
             return powerChartSeries;
         }
-            
+
+        public async Task<List<ChartDataPoint>> GetBatteryHistoricalChargeLevel(DateTime startDate, DateTime endDate)
+        {
+            string timeZone = await GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "soe", "day", startDate, endDate);
+            var json = await apiHelper.CallGetApiWithTokenRefresh(url);
+
+            var batteryDailySoeGraphData = new List<ChartDataPoint>();
+
+            foreach (var data in json["response"]["time_series"].AsArray())
+            {
+                var date = data["timestamp"].GetValue<DateTime>();
+                if (date <= DateTime.Now)
+                {
+                    // The date may be in a different time zone to the local time, we want to use the install time
+                    date = await ConvertToPowerwallDate(date);
+
+                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetValueOrDefault<double>(data["soe"])));
+                }
+            }
+            return batteryDailySoeGraphData;
+        }
+
         public async Task<DateTime> ConvertToPowerwallDate(DateTime date)
         {
             try

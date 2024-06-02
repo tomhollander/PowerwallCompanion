@@ -2,6 +2,7 @@
 using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
 using PowerwallCompanion.Lib;
+using PowerwallCompanion.Lib.Models;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -136,7 +137,6 @@ namespace PowerwallCompanion
                     foreach (var serial in ViewModel.BatteryHistoryChartData.Keys)
                     {
                         var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
-                        //series.Stroke = new SolidColorBrush(Colors.Blue);
                         series.StrokeThickness = 1;
                         series.ItemsSource = ViewModel.BatteryHistoryChartData[serial];
                         series.Label = serial.Substring(0, 5) + "***" + serial.Substring(serial.Length - 2, 2); ;

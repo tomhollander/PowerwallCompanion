@@ -181,7 +181,6 @@
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\BatteryDetails.cs" />
     <Compile Include="ViewModels\BatteryInfoViewModel.cs" />
-    <Compile Include="ViewModels\ChartDataPoint.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
     <Compile Include="ViewModels\EnergyViewModel.cs" />
     <Compile Include="ViewModels\GridEnergySources.cs" />

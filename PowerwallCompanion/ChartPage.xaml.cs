@@ -19,7 +19,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using ChartDataPoint = PowerwallCompanion.ViewModels.ChartDataPoint;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -537,26 +536,8 @@ namespace PowerwallCompanion
         {
             try
             {
-                var url = Utils.GetCalendarHistoryUrl("soe", ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
-                var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "SoeHistory");
-
-                var batteryDailySoeGraphData = new List<ChartDataPoint>();
-
-                var windowsTimeZone = TZConvert.IanaToWindows(Settings.InstallationTimeZone);
-                var offset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(ViewModel.PeriodStart);
-
-                foreach (var data in json["response"]["time_series"])
-                {
-                    var date = data["timestamp"].Value<DateTime>();
-                    if (date <= DateTime.Now)
-                    {
-                        // The date may be in a different time zone to the local time, we want to use the install time
-                        date = DateUtils.ConvertToPowerwallDate(date);
-
-                        batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetJsonDoubleValue(data["soe"])));
-                    }
-                }
-                ViewModel.BatteryDailySoeGraphData = batteryDailySoeGraphData;
+                
+                ViewModel.BatteryDailySoeGraphData = await powerwallApi.GetBatteryHistoricalChargeLevel(ViewModel.PeriodStart, ViewModel.PeriodEnd);
                 ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = null;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
