@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PowerwallCompanion.Lib.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -15,25 +16,23 @@ namespace PowerwallCompanion.ViewModels
         public BatteryInfoViewModel()
         {
             EnoughDataToShowChart = true; // Prevent flicker
-            SiteName = "⌛ Data Loading...";
         }
-        public string SiteName { get; set; }
-        public int NumberOfBatteries { get; set; }
-        public DateTime InstallDate { get; set; }
-        public string InstallDateString { get { return InstallDate.ToString("d"); } }
 
         public bool CachedData { get; set; }
         public List<BatteryDetails> BatteryDetails { get; set; }
 
         public string GatewayError { get; set; }
 
-        public string GatewayId { get; set; }
         public double WarrantedCapacity
         {
             get
             {
+                if (EnergySiteInfo == null)
+                {
+                    return 0;
+                }
                 int capacity = 13500;
-                return capacity * NumberOfBatteries;
+                return capacity * EnergySiteInfo.NumberOfBatteries;
             }
         }
 
@@ -106,11 +105,11 @@ namespace PowerwallCompanion.ViewModels
                 Settings.StoreBatteryHistory = value;
             }
         }
+
+        public EnergySiteInfo EnergySiteInfo { get; set; }
         public void NotifyAllProperties()
         {
-            NotifyPropertyChanged(nameof(SiteName));
-            NotifyPropertyChanged(nameof(InstallDateString));
-            NotifyPropertyChanged(nameof(NumberOfBatteries));
+            NotifyPropertyChanged(nameof(EnergySiteInfo));
             NotifyPropertyChanged(nameof(BatteryDetails));
         }
 

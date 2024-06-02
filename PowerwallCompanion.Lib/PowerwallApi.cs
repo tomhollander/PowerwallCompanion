@@ -121,6 +121,96 @@ namespace PowerwallCompanion.Lib
             }
             return powerChartSeries;
         }
+
+        public enum PowerChartType
+        {
+            AllData,
+            Home,
+            Solar,
+            Grid, 
+            Battery
+        }
+        public async Task<PowerChartSeries> GetPowerChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, PowerChartType chartType)
+        {
+            string timeZone = await GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "power", period, startDate, endDate);
+            var json = await apiHelper.CallGetApiWithTokenRefresh(url);
+
+            var powerChartSeries = new PowerChartSeries();
+            powerChartSeries.Solar = new List<ChartDataPoint>();
+            powerChartSeries.Grid = new List<ChartDataPoint>();
+            powerChartSeries.Battery = new List<ChartDataPoint>();
+            powerChartSeries.Home = new List<ChartDataPoint>();
+
+            foreach (var data in json["response"]["time_series"].AsArray())
+            {
+                var date = data["timestamp"].GetValue<DateTime>();
+                if (date > DateTime.Now) continue;
+
+                // The date may be in a different time zone to the local time, we want to use the install time
+                date = await ConvertToPowerwallDate(date);
+
+                var solarPower = GetValueOrDefault<double>(data["solar_power"]);
+                var gridPower = GetValueOrDefault<double>(data["grid_power"]);
+                var batteryPower = GetValueOrDefault<double>(data["battery_power"]);
+                var homePower = solarPower + gridPower + batteryPower;
+
+                if (solarPower == 0 && gridPower == 0 && batteryPower == 0 && homePower == 0)
+                    continue; // Likely a future date, but checking dates is tricky due to potential time zone differences.
+
+                // Calcs somewhat dervied from https://raw.githubusercontent.com/reptilex/tesla-style-solar-power-card/master/README.md
+                var gridImport = gridPower >= 0 ? gridPower : 0;
+                var gridExport = gridPower < 0 ? -gridPower : 0;
+                var batteryDischarge = batteryPower >= 0 ? batteryPower : 0;
+                var batteryCharge = batteryPower < 0 ? -batteryPower : 0;
+
+                var gridToHome = gridImport > homePower ? homePower : gridImport;
+                var gridToBattery = gridImport > homePower ? (gridImport - homePower) : 0;
+                var batteryToHome = batteryDischarge > 0 ?
+                    (batteryDischarge > homePower ? homePower : batteryDischarge) :
+                    0;
+                var batteryToGrid = batteryDischarge < 0 ?
+                    (batteryDischarge > homePower ? (batteryDischarge - homePower) : 0) :
+                    0;
+                var solarToGrid = gridExport > batteryToGrid ? gridExport - batteryToGrid : 0;
+                var solarToBattery = solarPower > 100 ? batteryCharge - gridToBattery : 0;
+                var solarToHome = solarPower - gridExport - solarToBattery;
+
+                if (chartType == PowerChartType.AllData)
+                {
+                    powerChartSeries.Solar.Add(new ChartDataPoint(date, solarPower / 1000));
+                    powerChartSeries.Grid.Add(new ChartDataPoint(date, gridPower / 1000));
+                    powerChartSeries.Battery.Add(new ChartDataPoint(date, batteryPower / 1000));
+                    powerChartSeries.Home.Add(new ChartDataPoint(date, homePower / 1000));
+                }
+                else if (chartType == PowerChartType.Home)
+                {
+                    powerChartSeries.Solar.Add(new ChartDataPoint(date, solarToHome / 1000));
+                    powerChartSeries.Grid.Add(new ChartDataPoint(date, gridToHome / 1000));
+                    powerChartSeries.Battery.Add(new ChartDataPoint(date, batteryToHome / 1000));
+
+                }
+                else if (chartType == PowerChartType.Solar)
+                {
+                    powerChartSeries.Grid.Add(new ChartDataPoint(date, solarToGrid / 1000));
+                    powerChartSeries.Battery.Add(new ChartDataPoint(date, solarToBattery / 1000));
+                    powerChartSeries.Home.Add(new ChartDataPoint(date, solarToHome / 1000));
+                }
+                else if (chartType == PowerChartType.Grid)
+                {
+                    powerChartSeries.Solar.Add(new ChartDataPoint(date, -solarToGrid / 1000));
+                    powerChartSeries.Battery.Add(new ChartDataPoint(date, gridToBattery / 1000));
+                    powerChartSeries.Home.Add(new ChartDataPoint(date, (gridToHome) / 1000));
+                }
+                else if (chartType == PowerChartType.Battery)
+                {
+                    powerChartSeries.Solar.Add(new ChartDataPoint(date, -solarToBattery / 1000));
+                    powerChartSeries.Grid.Add(new ChartDataPoint(date, -gridToBattery / 1000));
+                    powerChartSeries.Home.Add(new ChartDataPoint(date, (batteryToHome) / 1000));
+                }
+            }
+            return powerChartSeries;
+        }
             
         public async Task<DateTime> ConvertToPowerwallDate(DateTime date)
         {
@@ -140,6 +230,21 @@ namespace PowerwallCompanion.Lib
             }
         }
 
+        public async Task<EnergySiteInfo> GetEnergySiteInfo()
+        {
+            var energySiteStatus = new EnergySiteInfo();
+            var tasks = new List<Task<JsonObject>>();
+            tasks.Add(apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_status"));
+            tasks.Add(apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info"));
+            await Task.WhenAll(tasks);
+            var siteStatusJson = tasks[0].Result;
+            energySiteStatus.SiteName = siteStatusJson["response"]["site_name"].GetValue<string>();
+            energySiteStatus.GatewayId = siteStatusJson["response"]["gateway_id"].GetValue<string>();
+            var siteInfoJson = tasks[1].Result;
+            energySiteStatus.NumberOfBatteries = siteInfoJson["response"]["battery_count"].GetValue<int>();
+            energySiteStatus.InstallDate = siteInfoJson["response"]["installation_date"].GetValue<DateTime>();
+            return energySiteStatus;
+        }
 
         private async Task<string> GetInstallationTimeZone()
         {

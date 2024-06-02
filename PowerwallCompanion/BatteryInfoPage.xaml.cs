@@ -1,6 +1,7 @@
 ﻿using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.Lib;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,6 @@ namespace PowerwallCompanion
             this.InitializeComponent();
             Analytics.TrackEvent("BatteryInfoPage opened");
             this.ViewModel = new BatteryInfoViewModel();
-            ViewModel.NumberOfBatteries = 1;
-
             GetData();
         }
 
@@ -44,17 +43,17 @@ namespace PowerwallCompanion
         {
             try
             {
-                var tasks = new List<Task> { GetSiteStatus(), GetBatteryInfo() };
+                var powerwallApi = new PowerwallApi(Settings.SiteId, new TokenStore());
+                ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                 if (String.IsNullOrEmpty(Settings.LocalGatewayIP) || String.IsNullOrEmpty(Settings.LocalGatewayPassword))
                 {
                     noGatewayBanner.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    tasks.Add(GetBatteryDetailsFromLocalGateway());
+                    await GetBatteryDetailsFromLocalGateway();
                 }
 
-                await Task.WhenAll(tasks);
                 ViewModel.NotifyAllProperties();
 
                 await ProcessBatteryHistoryData();
@@ -181,27 +180,6 @@ namespace PowerwallCompanion
             
         }
 
-        private async Task GetSiteStatus()
-        {
-            try
-            {
-                var siteStatusJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_status", "SiteStatus");
-                ViewModel.SiteName = siteStatusJson["response"]["site_name"].Value<string>();
-                ViewModel.GatewayId = siteStatusJson["response"]["gateway_id"].Value<string>();
-            }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex);
-            }
-
-        }
-
-        private async Task GetBatteryInfo()
-        {
-            var siteInfoJson = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/site_info", "SiteInfo");
-            ViewModel.NumberOfBatteries = siteInfoJson["response"]["battery_count"].Value<int>();
-            ViewModel.InstallDate = siteInfoJson["response"]["installation_date"].Value<DateTime>();
-        }
 
         private async Task SaveBatteryHistoryData()
         {
@@ -223,7 +201,7 @@ namespace PowerwallCompanion
                     {
                         sb.Remove(sb.Length - 2, 2);
                     }
-                    var body = $"{{\"siteId\": \"{Settings.SiteId}\", \"gatewayId\": \"{ViewModel.GatewayId}\", \"batteryData\": {{ {sb.ToString()} }}}}";
+                    var body = $"{{\"siteId\": \"{Settings.SiteId}\", \"gatewayId\": \"{ViewModel.EnergySiteInfo.GatewayId}\", \"batteryData\": {{ {sb.ToString()} }}}}";
                     var response = await client.PostAsync(url, new StringContent(body, Encoding.UTF8, "application/json"));
                 }
 
@@ -242,7 +220,7 @@ namespace PowerwallCompanion
             try
             {
                 var client = new HttpClient();
-                var url = $"https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory?siteId={Settings.SiteId}&gatewayId={ViewModel.GatewayId}";
+                var url = $"https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory?siteId={Settings.SiteId}&gatewayId={ViewModel.EnergySiteInfo.GatewayId}";
                 client.DefaultRequestHeaders.Add("apiKey", Keys.AppServicesKey);
                 var response = await client.GetAsync(url);
                 var responseMessage = await response.Content.ReadAsStringAsync();

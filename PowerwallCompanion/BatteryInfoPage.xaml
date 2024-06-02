@@ -83,13 +83,13 @@
             <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
             <TextBlock VerticalAlignment="Center" FontSize="20" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.SiteName, Mode=OneWay}" Grid.Row="0" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergySiteInfo.SiteName, Mode=OneWay, FallbackValue='⌛ Data Loading...'}" Grid.Row="0" Grid.Column="2"></TextBlock>
 
             <TextBlock VerticalAlignment="Center" FontSize="20" Text="Install Date"  Grid.Row="1" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergySiteInfo.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
 
             <TextBlock VerticalAlignment="Center" FontSize="20" Text="Number of Powerwalls" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergySiteInfo.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
 
 
 

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.Lib.Models;
 using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
@@ -181,39 +182,9 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-
-        public List<ChartDataPoint> HomeDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> SolarDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> GridDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> BatteryDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> HomeStackedDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> SolarStackedDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> GridStackedDailyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> BatteryStackedDailyGraphData
-        {
-            get; set;
-        }
+        public PowerChartSeries PowerChartSeries { get; set;  }
+        public PowerChartSeries PowerChartStackingSeries { get; set; }
+  
 
         public List<ChartDataPoint> BatteryDailySoeGraphData
         {

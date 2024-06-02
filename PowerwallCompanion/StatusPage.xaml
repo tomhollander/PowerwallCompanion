@@ -106,16 +106,16 @@
 
                 <gauge:SfCircularGauge.Annotations>
                     <gauge:GaugeAnnotation Angle="225" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation Angle="315" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation Angle="45" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation Angle="135" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharing battery" />
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharing battery" />
                     </gauge:GaugeAnnotation>
                 </gauge:SfCircularGauge.Annotations>
                 <gauge:SfCircularGauge.Scales>

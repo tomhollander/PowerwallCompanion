@@ -2,12 +2,14 @@
 using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
 using PowerwallCompanion.Lib;
+using PowerwallCompanion.Lib.Models;
 using PowerwallCompanion.ViewModels;
 using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TimeZoneConverter;
 using Windows.Storage;
@@ -15,8 +17,9 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+using ChartDataPoint = PowerwallCompanion.ViewModels.ChartDataPoint;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -29,7 +32,8 @@ namespace PowerwallCompanion
         public ChartViewModel ViewModel { get; set; }
         private Task ratePlanTask;
         private DispatcherTimer timer;
-        private TariffHelperX tariffHelper;
+        private PowerwallApi powerwallApi;
+        private TariffHelper tariffHelper;
 
         public ChartPage()
         {
@@ -40,6 +44,7 @@ namespace PowerwallCompanion
             ViewModel.Period = "Day";
             ViewModel.CalendarDate = DateTime.Now;
 
+            powerwallApi = new PowerwallApi(Settings.SiteId, new TokenStore());
             ratePlanTask = FetchRatePlan();
 
             timer = new DispatcherTimer();
@@ -173,7 +178,7 @@ namespace PowerwallCompanion
             tasks.Add(FetchEnergyData());
             if (ViewModel.Period == "Day")
             {
-                tasks.Add(FetchPowerData());
+                tasks.Add(UpdatePowerGraph());
                 tasks.Add(FetchBatterySoeData());
             }
             await Task.WhenAll(tasks);
@@ -323,14 +328,14 @@ namespace PowerwallCompanion
                     dailyData[ts.Date].Add(data as JObject);
                 }
 
-                // Calculate costs per date
-                foreach (var date in dailyData.Keys)
-                {
-                    var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(JArray.FromObject(dailyData[date]));
-                    ViewModel.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
-                    ViewModel.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
-                    ViewModel.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
-                }
+                // Calculate costs per date  // TODO: FIX
+                //foreach (var date in dailyData.Keys)
+                //{
+                //    var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
+                //    ViewModel.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
+                //    ViewModel.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
+                //    ViewModel.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
+                //}
 
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyCostGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyFeedInGraphData));
@@ -434,186 +439,48 @@ namespace PowerwallCompanion
             return result;
         }
 
-        private async Task FetchPowerData()
+      
+
+        private async Task UpdatePowerGraph()
         {
-            try
-            {
-                var url = Utils.GetCalendarHistoryUrl("power", ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
-                var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "PowerHistory");
+            PowerwallApi.PowerChartType powerChartType = (PowerwallApi.PowerChartType)powerGraphOptionsCombo.SelectedIndex;
+            var powerChartSeries = await powerwallApi.GetPowerChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, powerChartType);
 
-                ViewModel.PowerDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
-
-                foreach (var data in json["response"]["time_series"])
-                {
-                    var date = data["timestamp"].Value<DateTime>();
-                    if (date > DateTime.Now) continue;
-
-                    // The date may be in a different time zone to the local time, we want to use the install time
-                    date = DateUtils.ConvertToPowerwallDate(date);
-                    
-                    var solarPower = GetJsonDoubleValue(data["solar_power"]);
-                    var gridPower = GetJsonDoubleValue(data["grid_power"]);
-                    var batteryPower = GetJsonDoubleValue(data["battery_power"]);
-                    var homePower = solarPower + gridPower + batteryPower;
-
-                    // Save for export and charts
-                    data["load_power"] = homePower;
-                    ViewModel.PowerDataForExport.TryAdd(date, data.ToObject<Dictionary<string, object>>());
-                    ViewModel.PowerDataForExport[date].Remove("timestamp");
-                }
-
-                UpdatePowerGraph();
-            }
-
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex);
-                ViewModel.Status = StatusViewModel.StatusEnum.Error;
-                ViewModel.LastExceptionMessage = ex.Message;
-                ViewModel.LastExceptionDate = DateTime.Now;
-            }
-        }
-
-        private void UpdatePowerGraph()
-        {
-            var solarDailyGraphData = new List<ChartDataPoint>();
-            var gridDailyGraphData = new List<ChartDataPoint>();
-            var batteryDailyGraphData = new List<ChartDataPoint>();
-            var homeDailyGraphData = new List<ChartDataPoint>();
-
-            foreach (var data in ViewModel.PowerDataForExport)
-            {
-                var date = data.Key;
-
-                var solarPower = Convert.ToDouble(data.Value["solar_power"]);
-                var gridPower = Convert.ToDouble(data.Value["grid_power"]);
-                var batteryPower = Convert.ToDouble(data.Value["battery_power"]);
-                var homePower = Convert.ToDouble(data.Value["load_power"]);
-
-                if (solarPower == 0 && gridPower == 0 && batteryPower == 0 && homePower == 0)
-                    continue; // Likely a future date, but checking dates is tricky due to potential time zone differences.
-
-                // Calcs somewhat dervied from https://raw.githubusercontent.com/reptilex/tesla-style-solar-power-card/master/README.md
-                var gridImport = gridPower >= 0 ? gridPower : 0;
-                var gridExport = gridPower < 0 ? -gridPower : 0;
-                var batteryDischarge = batteryPower >= 0 ? batteryPower : 0;
-                var batteryCharge = batteryPower < 0 ? -batteryPower : 0;
-
-                var gridToHome = gridImport > homePower ? homePower : gridImport;
-                var gridToBattery = gridImport > homePower ? (gridImport - homePower) : 0;
-                var batteryToHome = batteryDischarge > 0 ?
-                    (batteryDischarge > homePower ? homePower : batteryDischarge) :
-                    0;
-                var batteryToGrid = batteryDischarge < 0 ?
-                    (batteryDischarge > homePower ? (batteryDischarge - homePower) : 0) :
-                    0;
-                var solarToGrid = gridExport > batteryToGrid ? gridExport - batteryToGrid : 0;
-                var solarToBattery = solarPower > 100 ? batteryCharge - gridToBattery : 0;
-                var solarToHome = solarPower - gridExport - solarToBattery;
-
-                if (powerGraphOptionsCombo.SelectedIndex == 0) // All data
-                {
-                    solarDailyGraphData.Add(new ChartDataPoint(date, solarPower / 1000));
-                    gridDailyGraphData.Add(new ChartDataPoint(date, gridPower / 1000));
-                    batteryDailyGraphData.Add(new ChartDataPoint(date, batteryPower / 1000));
-                    homeDailyGraphData.Add(new ChartDataPoint(date, homePower / 1000));
-                }
-                else if (powerGraphOptionsCombo.SelectedIndex == 1) // Home
-                {
-                    solarDailyGraphData.Add(new ChartDataPoint(date, solarToHome / 1000));
-                    gridDailyGraphData.Add(new ChartDataPoint(date, gridToHome / 1000));
-                    batteryDailyGraphData.Add(new ChartDataPoint(date, batteryToHome / 1000));
-
-                }
-                else if (powerGraphOptionsCombo.SelectedIndex == 2) // Solar
-                {
-                    gridDailyGraphData.Add(new ChartDataPoint(date, solarToGrid / 1000));
-                    batteryDailyGraphData.Add(new ChartDataPoint(date, solarToBattery / 1000));
-                    homeDailyGraphData.Add(new ChartDataPoint(date, solarToHome / 1000));
-                }
-                else if (powerGraphOptionsCombo.SelectedIndex == 3) // Grid
-                {
-                    solarDailyGraphData.Add(new ChartDataPoint(date, -solarToGrid / 1000));
-                    batteryDailyGraphData.Add(new ChartDataPoint(date, gridToBattery / 1000));
-                    homeDailyGraphData.Add(new ChartDataPoint(date, (gridToHome) / 1000));
-                }
-                else if (powerGraphOptionsCombo.SelectedIndex == 4) // Battery
-                {
-                    solarDailyGraphData.Add(new ChartDataPoint(date, -solarToBattery / 1000));
-                    gridDailyGraphData.Add(new ChartDataPoint(date, -gridToBattery / 1000));
-                    homeDailyGraphData.Add(new ChartDataPoint(date, (batteryToHome) / 1000));
-                }
-            }
-
-            // Clear old chart data
-            ViewModel.SolarDailyGraphData = null;
-            ViewModel.GridDailyGraphData = null;
-            ViewModel.BatteryDailyGraphData = null;
-            ViewModel.HomeDailyGraphData = null;
-            ViewModel.SolarStackedDailyGraphData = null;
-            ViewModel.GridStackedDailyGraphData = null;
-            ViewModel.BatteryStackedDailyGraphData = null;
-            ViewModel.HomeStackedDailyGraphData = null;
+            ViewModel.PowerChartSeries = new PowerChartSeries();
+            ViewModel.PowerChartStackingSeries = new PowerChartSeries(); 
 
             if (powerGraphOptionsCombo.SelectedIndex == 0) // All data
             {
-
-                ViewModel.SolarDailyGraphData = solarDailyGraphData;
-                ViewModel.GridDailyGraphData = gridDailyGraphData;
-                ViewModel.BatteryDailyGraphData = batteryDailyGraphData;
-                ViewModel.HomeDailyGraphData = homeDailyGraphData;
-
+                ViewModel.PowerChartSeries = powerChartSeries;
                 ConfigureLegend(null);
-
             }
             else if (powerGraphOptionsCombo.SelectedIndex == 1) // Home
             {
-
-                ViewModel.SolarStackedDailyGraphData = solarDailyGraphData;
-                ViewModel.GridStackedDailyGraphData = gridDailyGraphData;
-                ViewModel.BatteryStackedDailyGraphData = batteryDailyGraphData;
-
+                ViewModel.PowerChartStackingSeries = powerChartSeries;
                 ConfigureLegend(homeStackingSeries);
             }
             else if (powerGraphOptionsCombo.SelectedIndex == 2) // Solar
             {
-
-                ViewModel.GridStackedDailyGraphData = gridDailyGraphData;
-                ViewModel.BatteryStackedDailyGraphData = batteryDailyGraphData;
-                ViewModel.HomeStackedDailyGraphData = homeDailyGraphData;
-
+                ViewModel.PowerChartStackingSeries = powerChartSeries;
                 ConfigureLegend(solarStackingSeries);
             }
             else if (powerGraphOptionsCombo.SelectedIndex == 3) // Grid
             {
-
-                ViewModel.SolarStackedDailyGraphData = solarDailyGraphData;
-                ViewModel.BatteryStackedDailyGraphData = batteryDailyGraphData;
-                ViewModel.HomeStackedDailyGraphData = homeDailyGraphData;
-
+                ViewModel.PowerChartStackingSeries = powerChartSeries;
                 ConfigureLegend(gridStackingSeries);
             }
             else if (powerGraphOptionsCombo.SelectedIndex == 4) // Battery
             {
-                ViewModel.SolarStackedDailyGraphData = solarDailyGraphData;
-                ViewModel.GridStackedDailyGraphData = gridDailyGraphData;
-                ViewModel.HomeStackedDailyGraphData = homeDailyGraphData;
-
+                ViewModel.PowerChartStackingSeries = powerChartSeries;
                 ConfigureLegend(batteryStackingSeries);
             }
-
             
-
+            
             ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
             ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = null;
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.SolarDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.HomeDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.SolarStackedDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridStackedDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryStackedDailyGraphData));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.HomeStackedDailyGraphData));
+
+            ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartSeries));
+            ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartStackingSeries));
 
             ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
         }
@@ -622,6 +489,7 @@ namespace PowerwallCompanion
         {
             if (seriesToHide == null)
             {
+
                 // Show non-stacking series on legend
                 homeSeries.VisibilityOnLegend = Visibility.Visible;
                 solarSeries.VisibilityOnLegend = Visibility.Visible;
@@ -636,6 +504,7 @@ namespace PowerwallCompanion
             }
             else
             {
+                // Set legend
                 homeSeries.VisibilityOnLegend = Visibility.Collapsed;
                 solarSeries.VisibilityOnLegend = Visibility.Collapsed;
                 batterySeries.VisibilityOnLegend = Visibility.Collapsed;
@@ -655,12 +524,12 @@ namespace PowerwallCompanion
         {
             try
             {
-                var ratePlan = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/tariff_rate", "TariffRate");
-                tariffHelper = new TariffHelperX(ratePlan);
+                var ratePlan = await powerwallApi.GetRatePlan();
+                tariffHelper = new TariffHelper(ratePlan);
             }
-            catch
+            catch (Exception ex)
             {
-
+                Crashes.TrackError(ex);
             }
         }
 
@@ -870,7 +739,7 @@ namespace PowerwallCompanion
                         Start = tariff.StartDate,
                         End = tariff.EndDate,
                         Text = tariff.DisplayName,
-                        Foreground = tariff.Color,
+                        Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
                         FontSize = 14,
                     };
                     dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
@@ -883,12 +752,18 @@ namespace PowerwallCompanion
 
         }
 
-        private void powerGraphOptionsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private Windows.UI.Color WindowsColorFromDrawingColor(System.Drawing.Color c)
         {
-            if (ViewModel?.PowerDataForExport != null)
+            return new Windows.UI.Color() { A = c.A, R = c.R, G = c.G, B = c.B };
+        }
+
+        private async void powerGraphOptionsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel != null)
             {
-                UpdatePowerGraph();
+                await UpdatePowerGraph();
             }
+            
         }
 
 
