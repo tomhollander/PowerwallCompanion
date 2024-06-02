@@ -194,12 +194,6 @@ namespace PowerwallCompanion
         }
 
 
-        private async Task<JObject> GetCalendarHistoryData(DateTime date)
-        {
-            var url = Utils.GetCalendarHistoryUrl("energy", "day", date, date.AddDays(1).AddSeconds(-1));
-            return await ApiHelper.CallGetApiWithTokenRefresh(url, "CalendarHistory");
-        }
-
         public async Task GetPowerHistoryData()
         {
             try
@@ -209,30 +203,7 @@ namespace PowerwallCompanion
                     return;
                 }
 
-                var json = await ApiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{Settings.SiteId}/history?kind=power", "PowerHistory");
-
-                var homeGraphData = new List<ChartDataPoint>();
-                var solarGraphData = new List<ChartDataPoint>();
-                var gridGraphData = new List<ChartDataPoint>();
-                var batteryGraphData = new List<ChartDataPoint>();
-
-                foreach (var datapoint in (JArray)json["response"]["time_series"])
-                {
-                    var timestamp = DateUtils.ConvertToPowerwallDate(datapoint["timestamp"].Value<DateTime>());
-                    var solarPower = datapoint["solar_power"].Value<double>() / 1000;
-                    var batteryPower = datapoint["battery_power"].Value<double>() / 1000;
-                    var gridPower = datapoint["grid_power"].Value<double>() / 1000;
-                    var homePower = solarPower + batteryPower + gridPower;
-                    homeGraphData.Add(new ChartDataPoint(timestamp, homePower));
-                    solarGraphData.Add(new ChartDataPoint(timestamp, solarPower));
-                    gridGraphData.Add(new ChartDataPoint(timestamp, gridPower));
-                    batteryGraphData.Add(new ChartDataPoint(timestamp, batteryPower));
-
-                    viewModel.HomeGraphData = homeGraphData;
-                    viewModel.SolarGraphData = solarGraphData;
-                    viewModel.BatteryGraphData = batteryGraphData;
-                    viewModel.GridGraphData = gridGraphData;
-                }
+                viewModel.PowerChartSeries = await powerwallApi.GetPowerChartSeriesForLastTwoDays();
 
                 viewModel.PowerHistoryLastRefreshed = DateTime.Now;
                 viewModel.NotifyGraphProperties();
@@ -435,7 +406,7 @@ namespace PowerwallCompanion
                 }
 
                 var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("auth-token", Licenses.ElectricityMapsApiKey);
+                client.DefaultRequestHeaders.Add("auth-token", Keys.ElectricityMapsApiKey);
                 var url = $"https://api.electricitymap.org/v3/power-breakdown/latest?{locationQueryString}&xx={new Random().Next()}";
                 var response = await client.GetAsync(url);
                 var responseContent = await response.Content.ReadAsStringAsync();

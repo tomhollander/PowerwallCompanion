@@ -1,5 +1,6 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Runtime;
 using System.Runtime.CompilerServices;
@@ -95,7 +96,31 @@ namespace PowerwallCompanion.Lib
         {
             return await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/tariff_rate");
         }
-                   
+                  
+        public async Task<PowerChartSeries> GetPowerChartSeriesForLastTwoDays()
+        {
+            var json = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/history?kind=power");
+
+            var powerChartSeries = new PowerChartSeries();
+            powerChartSeries.Home = new List<ChartDataPoint>();
+            powerChartSeries.Solar = new List<ChartDataPoint>();
+            powerChartSeries.Grid =  new List<ChartDataPoint>();
+            powerChartSeries.Battery = new List<ChartDataPoint>();
+
+            foreach (var datapoint in (JsonArray)json["response"]["time_series"])
+            {
+                var timestamp = await ConvertToPowerwallDate(datapoint["timestamp"].GetValue<DateTime>());
+                var solarPower = datapoint["solar_power"].GetValue<double>() / 1000;
+                var batteryPower = datapoint["battery_power"].GetValue<double>() / 1000;
+                var gridPower = datapoint["grid_power"].GetValue<double>() / 1000;
+                var homePower = solarPower + batteryPower + gridPower;
+                powerChartSeries.Home.Add(new ChartDataPoint(timestamp, homePower));
+                powerChartSeries.Solar.Add(new ChartDataPoint(timestamp, solarPower));
+                powerChartSeries.Grid.Add(new ChartDataPoint(timestamp, gridPower));
+                powerChartSeries.Battery.Add(new ChartDataPoint(timestamp, batteryPower));
+            }
+            return powerChartSeries;
+        }
             
         public async Task<DateTime> ConvertToPowerwallDate(DateTime date)
         {

@@ -9,12 +9,12 @@
 /PowerwallCompanion/obj
 /PowerwallCompanion/PowerwallCompanion_StoreKey.pfx
 /.vs/PowerwallCompanion/v17
-/PowerwallCompanion/Licenses.cs
+/PowerwallCompanion/KeysSecret.cs
 /PowerwallCompanion.Tests/bin/x64/Debug
 /PowerwallCompanion.Tests/obj
 /PowerwallCompanion.Tests/bin/ARM64/Debug/ilc
 /PowerwallCompanion.Tests/bin/ARM64/Debug
-/PowerwallCompanion.Lib/Keys.cs
+/PowerwallCompanion.Lib/KeysSecret.cs
 /PowerwallCompanion.Lib/bin
 /PowerwallCompanion.Lib/obj
 /PowerwallCompanion.Lib.Tests/bin

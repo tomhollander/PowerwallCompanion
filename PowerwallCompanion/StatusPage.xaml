@@ -392,16 +392,13 @@
                 </chart:SfChart.SecondaryAxis>
                 <chart:SfChart.Legend>
                     <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
-                        <!--<chart:ChartLegend.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
-                        </chart:ChartLegend.LabelStyle>-->
                     </chart:ChartLegend>
                 </chart:SfChart.Legend>
 
-                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.HomeGraphData, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" ListenPropertyChange="True"/>
-                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.SolarGraphData, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
-                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.GridGraphData, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryGraphData, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" ListenPropertyChange="True"/>
+                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
+                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
                 <chart:SfChart.Annotations>
                     <chart:VerticalLineAnnotation X1="{x:Bind ViewModel.GraphDayBoundary}" Stroke="LightGray" StrokeThickness="2" />

@@ -23,8 +23,8 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Licenses.SyncFusionLicenseKey);
-            AppCenter.Start(Licenses.AppCenterKey, typeof(Analytics), typeof(Crashes));
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Keys.SyncFusionLicenseKey);
+            AppCenter.Start(Keys.AppCenterKey, typeof(Analytics), typeof(Crashes));
         }
 
 

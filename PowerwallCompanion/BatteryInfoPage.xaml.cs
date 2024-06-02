@@ -211,7 +211,7 @@ namespace PowerwallCompanion
                 {
                     var client = new HttpClient();
                     var url = "https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/granularBatteryHistory";
-                    client.DefaultRequestHeaders.Add("apiKey", Licenses.AppServicesKey);
+                    client.DefaultRequestHeaders.Add("apiKey", Keys.AppServicesKey);
                     var sb = new StringBuilder();
                     foreach (var battery in ViewModel.BatteryDetails)
                     {
@@ -243,7 +243,7 @@ namespace PowerwallCompanion
             {
                 var client = new HttpClient();
                 var url = $"https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory?siteId={Settings.SiteId}&gatewayId={ViewModel.GatewayId}";
-                client.DefaultRequestHeaders.Add("apiKey", Licenses.AppServicesKey);
+                client.DefaultRequestHeaders.Add("apiKey", Keys.AppServicesKey);
                 var response = await client.GetAsync(url);
                 var responseMessage = await response.Content.ReadAsStringAsync();
                 if (!String.IsNullOrEmpty(responseMessage) && responseMessage != "null")

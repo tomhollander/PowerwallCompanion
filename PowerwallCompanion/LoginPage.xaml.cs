@@ -22,7 +22,7 @@ namespace PowerwallCompanion
     /// </summary>
     public sealed partial class LoginPage : Page
     {
-        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Licenses.TeslaAppClientId, Licenses.TeslaAppClientSecret, Licenses.TeslaAppRedirectUrl,
+        private TeslaAuthHelper teslaAuth = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Keys.TeslaAppClientId, Keys.TeslaAppClientSecret, Keys.TeslaAppRedirectUrl,
                     Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VehicleDeviceData }));
 
         public LoginPage()
@@ -51,7 +51,7 @@ namespace PowerwallCompanion
         {
             var url = args.Uri.ToString();
 
-            if (url.Contains(Licenses.TeslaAppRedirectUrl))
+            if (url.Contains(Keys.TeslaAppRedirectUrl))
             {
                 warningBanner.Visibility = Visibility.Collapsed;
                 webView.Visibility = Visibility.Collapsed;

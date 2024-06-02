@@ -76,10 +76,7 @@ namespace PowerwallCompanion.ViewModels
 
         public void NotifyGraphProperties()
         {
-            NotifyPropertyChanged(nameof(HomeGraphData));
-            NotifyPropertyChanged(nameof(SolarGraphData));
-            NotifyPropertyChanged(nameof(BatteryGraphData));
-            NotifyPropertyChanged(nameof(GridGraphData));
+            NotifyPropertyChanged(nameof(PowerChartSeries));
             NotifyPropertyChanged(nameof(GraphDayBoundary));
             NotifyPropertyChanged(nameof(ChartMaxDate));
         }
@@ -137,24 +134,12 @@ namespace PowerwallCompanion.ViewModels
             }
         }
         
-
-        public List<ChartDataPoint> HomeGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> SolarGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> GridGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> BatteryGraphData
+        public PowerChartSeries PowerChartSeries
         {
             get; set;
         }
 
+       
         public DateTime ChartMaxDate
         {
             get

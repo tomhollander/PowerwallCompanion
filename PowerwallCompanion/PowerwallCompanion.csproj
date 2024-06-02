@@ -161,7 +161,8 @@
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="GatewayApiHelper.cs" />
-    <Compile Include="Licenses.cs" />
+    <Compile Include="Keys.cs" />
+    <Compile Include="KeysSecret.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
