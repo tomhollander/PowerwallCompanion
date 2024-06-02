@@ -3,15 +3,20 @@
 ################################################################################
 
 /PowerwallCompanion/AppPackages
-/.vs/PowerwallCompanion/v17
-/.vs/PowerwallCompanion/FileContentIndex
+/.vs
 /PowerwallCompanion/bin
 /PowerwallCompanion/BundleArtifacts
 /PowerwallCompanion/obj
 /PowerwallCompanion/PowerwallCompanion_StoreKey.pfx
-/.vs/PowerwallCompanion/v16
+/.vs/PowerwallCompanion/v17
 /PowerwallCompanion/Licenses.cs
 /PowerwallCompanion.Tests/bin/x64/Debug
 /PowerwallCompanion.Tests/obj
 /PowerwallCompanion.Tests/bin/ARM64/Debug/ilc
 /PowerwallCompanion.Tests/bin/ARM64/Debug
+/PowerwallCompanion.Lib/Keys.cs
+/PowerwallCompanion.Lib/bin
+/PowerwallCompanion.Lib/obj
+/PowerwallCompanion.Lib.Tests/bin
+/PowerwallCompanion.Lib.Tests/obj
+
