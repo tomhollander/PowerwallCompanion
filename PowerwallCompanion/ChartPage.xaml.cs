@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TimeZoneConverter;
+using Windows.Devices.AllJoyn;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -174,133 +175,19 @@ namespace PowerwallCompanion
             ViewModel.Status = StatusViewModel.StatusEnum.Online;
             
             var tasks = new List<Task>();
-            tasks.Add(FetchEnergyData());
+            //tasks.Add(FetchEnergyData());
             if (ViewModel.Period == "Day")
             {
                 tasks.Add(UpdatePowerGraph());
                 tasks.Add(FetchBatterySoeData());
             }
+            else
+            {
+                tasks.Add(UpdateEnergyGraph());
+            }
             await Task.WhenAll(tasks);
         }
 
-        private async Task FetchEnergyData()
-        {
-            try
-            {
-                var url = Utils.GetCalendarHistoryUrl("energy", ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
-                var json = await ApiHelper.CallGetApiWithTokenRefresh(url, "EnergyHistory");
-                
-                double totalHomeEnergy = 0;
-                double totalSolarEnergy = 0;
-                double totalGridExportedEnergy = 0;
-                double totalGridImportedEnergy = 0;
-                double totalBatteryExportedEnergy = 0;
-                double totalBatteryImportedEnergy = 0;
-                double totalHomeFromGrid = 0;
-                double totalHomeFromSolar = 0;
-                double totalHomeFromBattery = 0;
-
-                var homeEnergyGraphData = new List<ChartDataPoint>();
-                var solarEnergyGraphData = new List<ChartDataPoint>();
-                var gridExportedEnergyGraphData = new List<ChartDataPoint>();
-                var gridImportedEnergyGraphData = new List<ChartDataPoint>();
-                var batteryExportedEnergyGraphData = new List<ChartDataPoint>();
-                var batteryImportedEnergyGraphData = new List<ChartDataPoint>();
-                ViewModel.EnergyDataForExport = new Dictionary<DateTime, Dictionary<string, object>>();
-
-                foreach (var data in json["response"]["time_series"])
-                {
-                    var date = data["timestamp"].Value<DateTime>();
-                    var homeEnergy = GetJsonDoubleValue(data["consumer_energy_imported_from_grid"]) +
-                                       GetJsonDoubleValue(data["consumer_energy_imported_from_solar"]) +
-                                       GetJsonDoubleValue(data["consumer_energy_imported_from_battery"]) +
-                                       GetJsonDoubleValue(data["consumer_energy_imported_from_generator"]);
-                    totalHomeEnergy += homeEnergy;
-                    homeEnergyGraphData.Add(new ChartDataPoint(date, homeEnergy / 1000));
- 
-                    var solarEnergy = GetJsonDoubleValue(data["solar_energy_exported"]);
-                    totalSolarEnergy += solarEnergy;
-                    solarEnergyGraphData.Add(new ChartDataPoint(date, solarEnergy / 1000));
-
-                    var gridExportedEnergy = GetJsonDoubleValue(data["grid_energy_exported_from_solar"]) +
-                                             GetJsonDoubleValue(data["grid_energy_exported_from_generator"]) +
-                                             GetJsonDoubleValue(data["grid_energy_exported_from_battery"]);
-                    totalGridExportedEnergy += gridExportedEnergy;
-                    gridExportedEnergyGraphData.Add(new ChartDataPoint(date, -gridExportedEnergy / 1000));
-
-                    var gridImportedEnergy = GetJsonDoubleValue(data["battery_energy_imported_from_grid"]) +
-                                             GetJsonDoubleValue(data["consumer_energy_imported_from_grid"]);
-                    totalGridImportedEnergy += gridImportedEnergy;
-                    gridImportedEnergyGraphData.Add(new ChartDataPoint(date, gridImportedEnergy / 1000));
-
-                    var batteryExportedEnergy = GetJsonDoubleValue(data["battery_energy_exported"]);
-                    totalBatteryExportedEnergy += batteryExportedEnergy;
-                    batteryExportedEnergyGraphData.Add(new ChartDataPoint(date, batteryExportedEnergy / 1000));
-
-                    var batteryImportedEnergy = GetJsonDoubleValue(data["battery_energy_imported_from_grid"]) +
-                                             GetJsonDoubleValue(data["battery_energy_imported_from_solar"]) +
-                                             GetJsonDoubleValue(data["battery_energy_imported_from_generator"]);
-                    totalBatteryImportedEnergy += batteryImportedEnergy;
-                    batteryImportedEnergyGraphData.Add(new ChartDataPoint(date, -batteryImportedEnergy / 1000));
-
-                    // Totals for self consumption calcs
-                    totalHomeFromGrid += GetJsonDoubleValue(data["consumer_energy_imported_from_grid"]) + GetJsonDoubleValue(data["consumer_energy_imported_from_generator"]);
-                    totalHomeFromSolar += GetJsonDoubleValue(data["consumer_energy_imported_from_solar"]);
-                    totalHomeFromBattery += GetJsonDoubleValue(data["consumer_energy_imported_from_battery"]);
-
-                    // Save for export
-                    if (!ViewModel.EnergyDataForExport.ContainsKey(date)) // Apparently duplicates can occur
-                    {
-                        ViewModel.EnergyDataForExport.Add(date, data.ToObject<Dictionary<string, object>>());
-                        ViewModel.EnergyDataForExport[date].Remove("timestamp");
-                        ViewModel.EnergyDataForExport[date].Remove("raw_timestamp");
-                        ViewModel.EnergyDataForExport[date].Remove("test");
-                    }
-
-                }
-
-                if (ViewModel.Period != "Day")
-                {
-                    ViewModel.HomeEnergyGraphData = NormaliseEnergyData(homeEnergyGraphData, ViewModel.Period);
-                    ViewModel.SolarEnergyGraphData = NormaliseEnergyData(solarEnergyGraphData, ViewModel.Period);
-                    ViewModel.GridExportedEnergyGraphData = NormaliseEnergyData(gridExportedEnergyGraphData, ViewModel.Period);
-                    ViewModel.GridImportedEnergyGraphData = NormaliseEnergyData(gridImportedEnergyGraphData, ViewModel.Period);
-                    ViewModel.BatteryExportedEnergyGraphData = NormaliseEnergyData(batteryExportedEnergyGraphData, ViewModel.Period);
-                    ViewModel.BatteryImportedEnergyGraphData = NormaliseEnergyData(batteryImportedEnergyGraphData, ViewModel.Period);
-
-                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.HomeEnergyGraphData));
-                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.SolarEnergyGraphData));
-                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridExportedEnergyGraphData));
-                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.GridImportedEnergyGraphData));
-                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryExportedEnergyGraphData));
-                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryImportedEnergyGraphData));
-                }
-
-                if (ViewModel.Period == "Week" || ViewModel.Period == "Month")
-                {
-                    CalculateCostData((JArray)json["response"]["time_series"]);
-                }
-
-                ViewModel.HomeEnergy = totalHomeEnergy;
-                ViewModel.SolarEnergy = totalSolarEnergy;
-                ViewModel.GridExportedEnergy = totalGridExportedEnergy;
-                ViewModel.GridImportedEnergy = totalGridImportedEnergy;
-                ViewModel.BatteryExportedEnergy = totalBatteryExportedEnergy;
-                ViewModel.BatteryImportedEnergy = totalBatteryImportedEnergy;
-
-                ViewModel.SolarUsePercent = (totalHomeFromSolar / totalHomeEnergy) * 100;
-                ViewModel.BatteryUsePercent = (totalHomeFromBattery / totalHomeEnergy) * 100;
-                ViewModel.GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100;
-                ViewModel.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100;
-            }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex);
-                ViewModel.Status = StatusViewModel.StatusEnum.Error;
-                ViewModel.LastExceptionMessage = ex.Message;
-                ViewModel.LastExceptionDate = DateTime.Now;
-            }
-        }
         
         private void CalculateCostData(JArray energyTimeSeries)
         {
@@ -363,30 +250,6 @@ namespace PowerwallCompanion
                 dateComparitor = (DateTime d, DateTime c) => d.Date == c.Date;
             }
             return dateComparitor;
-        }
-
-        private List<ChartDataPoint> NormaliseEnergyData(List<ChartDataPoint> energyGraphData, string period)
-        {
-            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
-            var result = new List<ChartDataPoint>();
-            ChartDataPoint lastPoint = null;
-
-            var dateComparitor = GetNormalisationDateComparitor(period);
-
-            foreach (var dataPoint in energyGraphData)
-            {
-                if (lastPoint == null || !dateComparitor(dataPoint.XValue, lastPoint.XValue))
-                {
-                    // New period
-                    result.Add(dataPoint);
-                    lastPoint = dataPoint;
-                }
-                else
-                {
-                    lastPoint.YValue += dataPoint.YValue;
-                }
-            }
-            return result;
         }
 
         private Dictionary<DateTime, Dictionary<string, object>> NormaliseExportData(Dictionary<DateTime, Dictionary<string, object>> exportData, string period)
@@ -519,6 +382,18 @@ namespace PowerwallCompanion
             }
         }
 
+        public async Task UpdateEnergyGraph()
+        {
+            try
+            {
+                ViewModel.EnergyChartSeries = await powerwallApi.GetEnergyChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
+        }
         private async Task FetchRatePlan()
         {
             try

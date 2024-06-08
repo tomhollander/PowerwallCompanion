@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
@@ -232,6 +233,134 @@ namespace PowerwallCompanion.Lib
                 }
             }
             return batteryDailySoeGraphData;
+        }
+
+        public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate)
+        {
+            string timeZone = await GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
+            var json = await apiHelper.CallGetApiWithTokenRefresh(url);
+
+            double totalHomeEnergy = 0;
+            double totalSolarEnergy = 0;
+            double totalGridExportedEnergy = 0;
+            double totalGridImportedEnergy = 0;
+            double totalBatteryExportedEnergy = 0;
+            double totalBatteryImportedEnergy = 0;
+            double totalHomeFromGrid = 0;
+            double totalHomeFromSolar = 0;
+            double totalHomeFromBattery = 0;
+
+            var homeEnergyGraphData = new List<ChartDataPoint>();
+            var solarEnergyGraphData = new List<ChartDataPoint>();
+            var gridExportedEnergyGraphData = new List<ChartDataPoint>();
+            var gridImportedEnergyGraphData = new List<ChartDataPoint>();
+            var batteryDischargedEnergyGraphData = new List<ChartDataPoint>();
+            var batteryChargedEnergyGraphData = new List<ChartDataPoint>();
+
+            foreach (var data in json["response"]["time_series"].AsArray())
+            {
+                var date = data["timestamp"].GetValue<DateTime>();
+                var homeEnergy = GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) +
+                                    GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]) +
+                                    GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]) +
+                                    GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
+                totalHomeEnergy += homeEnergy;
+                homeEnergyGraphData.Add(new ChartDataPoint(date, homeEnergy / 1000));
+
+                var solarEnergy = GetValueOrDefault<double>(data["solar_energy_exported"]);
+                totalSolarEnergy += solarEnergy;
+                solarEnergyGraphData.Add(new ChartDataPoint(date, solarEnergy / 1000));
+
+                var gridExportedEnergy = GetValueOrDefault<double>(data["grid_energy_exported_from_solar"]) +
+                                            GetValueOrDefault<double>(data["grid_energy_exported_from_generator"]) +
+                                            GetValueOrDefault<double>(data["grid_energy_exported_from_battery"]);
+                totalGridExportedEnergy += gridExportedEnergy;
+                gridExportedEnergyGraphData.Add(new ChartDataPoint(date, -gridExportedEnergy / 1000));
+
+                var gridImportedEnergy = GetValueOrDefault<double>(data["battery_energy_imported_from_grid"]) +
+                                            GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]);
+                totalGridImportedEnergy += gridImportedEnergy;
+                gridImportedEnergyGraphData.Add(new ChartDataPoint(date, gridImportedEnergy / 1000));
+
+                var batteryExportedEnergy = GetValueOrDefault<double>(data["battery_energy_exported"]);
+                totalBatteryExportedEnergy += batteryExportedEnergy;
+                batteryDischargedEnergyGraphData.Add(new ChartDataPoint(date, batteryExportedEnergy / 1000));
+
+                var batteryImportedEnergy = GetValueOrDefault<double>(data["battery_energy_imported_from_grid"]) +
+                                            GetValueOrDefault<double>(data["battery_energy_imported_from_solar"]) +
+                                            GetValueOrDefault<double>(data["battery_energy_imported_from_generator"]);
+                totalBatteryImportedEnergy += batteryImportedEnergy;
+                batteryChargedEnergyGraphData.Add(new ChartDataPoint(date, -batteryImportedEnergy / 1000));
+
+                // Totals for self consumption calcs
+                totalHomeFromGrid += GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) + GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
+                totalHomeFromSolar += GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]);
+                totalHomeFromBattery += GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]);
+            }
+
+            EnergyChartSeries energyChartSeries = new EnergyChartSeries();
+            energyChartSeries.Home = NormaliseEnergyData(homeEnergyGraphData, period);
+            energyChartSeries.Solar = NormaliseEnergyData(solarEnergyGraphData, period);
+            energyChartSeries.GridExport = NormaliseEnergyData(gridExportedEnergyGraphData, period);
+            energyChartSeries.GridImport = NormaliseEnergyData(gridImportedEnergyGraphData, period);
+            energyChartSeries.BatteryDischarge = NormaliseEnergyData(batteryDischargedEnergyGraphData, period);
+            energyChartSeries.BatteryCharge = NormaliseEnergyData(batteryChargedEnergyGraphData, period);
+
+
+            energyChartSeries.SolarUsePercent = (totalHomeFromSolar / totalHomeEnergy) * 100;
+            energyChartSeries.BatteryUsePercent = (totalHomeFromBattery / totalHomeEnergy) * 100;
+            energyChartSeries.GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100;
+            energyChartSeries.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100;
+
+            //if (ViewModel.Period == "Week" || ViewModel.Period == "Month")
+            //{
+            //    CalculateCostData((JArray)json["response"]["time_series"]);
+            //}
+
+            return energyChartSeries;
+        }
+
+        private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
+        {
+            Func<DateTime, DateTime, bool> dateComparitor;
+            if (period == "Year")
+            {
+                dateComparitor = (DateTime d, DateTime c) => d.Year == c.Year && d.Month == c.Month;
+            }
+            else if (period == "Lifetime")
+            {
+                dateComparitor = (DateTime d, DateTime c) => d.Year == c.Year;
+            }
+            else // Day, Week, Month
+            {
+                dateComparitor = (DateTime d, DateTime c) => d.Date == c.Date;
+            }
+            return dateComparitor;
+        }
+
+        private List<ChartDataPoint> NormaliseEnergyData(List<ChartDataPoint> energyGraphData, string period)
+        {
+            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
+            var result = new List<ChartDataPoint>();
+            ChartDataPoint lastPoint = null;
+
+            var dateComparitor = GetNormalisationDateComparitor(period);
+
+            foreach (var dataPoint in energyGraphData)
+            {
+                if (lastPoint == null || !dateComparitor(dataPoint.XValue, lastPoint.XValue))
+                {
+                    // New period
+                    result.Add(dataPoint);
+                    lastPoint = dataPoint;
+                }
+                else
+                {
+                    lastPoint.YValue += dataPoint.YValue;
+                }
+            }
+            return result;
         }
 
         public async Task<DateTime> ConvertToPowerwallDate(DateTime date)

@@ -12,5 +12,10 @@ namespace PowerwallCompanion.Lib.Models
         public List<ChartDataPoint> GridExport { get; set; }
         public List<ChartDataPoint> BatteryCharge { get; set; }
         public List<ChartDataPoint> BatteryDischarge { get; set; }
+
+        public double SolarUsePercent { get; set; }
+        public double BatteryUsePercent { get; set; }
+        public double GridUsePercent { get; set; }
+        public double SelfConsumption { get; set; }
     }
 }

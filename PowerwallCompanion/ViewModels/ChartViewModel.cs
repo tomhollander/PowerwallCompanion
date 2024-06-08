@@ -38,7 +38,7 @@ namespace PowerwallCompanion.ViewModels
 
         public IEnumerable<string> PeriodNames
         {
-            get => new string[] { "Day", "Week", "Month", "Year", "Lifetime" };
+            get => new string[] { "Day", "Week", "Month", "Year" };
         }
 
         public DateTimeOffset? CalendarDate
@@ -228,6 +228,8 @@ namespace PowerwallCompanion.ViewModels
         {
             get; set;
         }
+
+        public EnergyChartSeries EnergyChartSeries { get; set; }
 
         public double SelfConsumption
         {
