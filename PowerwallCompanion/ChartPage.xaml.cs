@@ -175,11 +175,11 @@ namespace PowerwallCompanion
             ViewModel.Status = StatusViewModel.StatusEnum.Online;
             
             var tasks = new List<Task>();
-            //tasks.Add(FetchEnergyData());
             if (ViewModel.Period == "Day")
             {
                 tasks.Add(UpdatePowerGraph());
                 tasks.Add(FetchBatterySoeData());
+                tasks.Add(FetchDailyEnergyData());
             }
             else
             {
@@ -347,6 +347,21 @@ namespace PowerwallCompanion
             ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
         }
 
+        private async Task FetchDailyEnergyData()
+        {
+            try
+            {
+                ViewModel.EnergyTotals = await powerwallApi.GetEnergyTotalsForPeriod(ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, null);
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
+            }
+            catch (Exception ex)
+            { 
+                Crashes.TrackError(ex);
+                ViewModel.Status = StatusViewModel.StatusEnum.Error;
+                ViewModel.LastExceptionMessage = ex.Message;
+                ViewModel.LastExceptionDate = DateTime.Now;
+            }
+        }
         private void ConfigureLegend(StackingAreaSeries seriesToHide)
         {
             if (seriesToHide == null)
@@ -387,7 +402,9 @@ namespace PowerwallCompanion
             try
             {
                 ViewModel.EnergyChartSeries = await powerwallApi.GetEnergyChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
+                ViewModel.EnergyTotals = ViewModel.EnergyChartSeries.EnergyTotals;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
             }
             catch (Exception ex)
             {

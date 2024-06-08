@@ -86,29 +86,29 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="0">
                     <Image Source="ms-appx:///Assets/icon_home.png" VerticalAlignment="Center" ToolTipService.ToolTip="Home Use" Width="30" Margin="5,0,5,0"></Image>
-                    <TextBlock Foreground="Cyan" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.HomeEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy used in the home during this period'}"/>
+                    <TextBlock Foreground="Cyan" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.EnergyTotals.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.HomeEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy used in the home during this period'}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Grid.Column="1">
                     <Image Source="ms-appx:///Assets/icon_solar.png" VerticalAlignment="Center" ToolTipService.ToolTip="Solar Generated" Width="30"></Image>
-                    <TextBlock Foreground="Gold" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.SolarEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.SolarEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar energy generated during this period'}"/>
+                    <TextBlock Foreground="Gold" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.EnergyTotals.SolarEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.SolarEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of solar energy generated during this period'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center"  Spacing="-20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_grid_import.png" ToolTipService.ToolTip="Imported from Grid" Width="30" VerticalAlignment="Center" Margin="5" />
-                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridImportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid during this period'}"></TextBlock>
+                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.EnergyTotals.GridEnergyImported, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.GridEnergyImported, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid during this period'}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.GridExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.GridExportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy exported to the grid during this period'}"></TextBlock>
+                        <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.EnergyTotals.GridEnergyExported, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.GridEnergyExported, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy exported to the grid during this period'}"></TextBlock>
                         <Image Source="ms-appx:///Assets/icon_grid_export.png" ToolTipService.ToolTip="Exported to Grid" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center"  Spacing="-20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="ms-appx:///Assets/icon_battery_export.png" ToolTipService.ToolTip="Discharge from Battery" Width="30" VerticalAlignment="Center" Margin="5" />
-                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryExportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryExportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged from the battery during this period'}"></TextBlock>
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.EnergyTotals.BatteryEnergyDischarged, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.BatteryEnergyDischarged, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy discharged from the battery during this period'}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.BatteryImportedEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.BatteryImportedEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy charged to the battery during this period'}"></TextBlock>
+                        <TextBlock Foreground="LimeGreen" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.EnergyTotals.BatteryEnergyCharged, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.BatteryEnergyCharged, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy charged to the battery during this period'}"></TextBlock>
                         <Image Source="ms-appx:///Assets/icon_battery_import.png" ToolTipService.ToolTip="Charge to Battery" Width="30" VerticalAlignment="Center" Margin="5" />
                     </StackPanel>
                 </StackPanel>
@@ -293,34 +293,34 @@
             <StackPanel Grid.Row="4">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock FontSize="20" Margin="5">Self Consumption:</TextBlock>
-                    <TextBlock FontSize="20" Margin="10 5 5 5" Text="{x:Bind ViewModel.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"></TextBlock>
+                    <TextBlock FontSize="20" Margin="10 5 5 5" Text="{x:Bind ViewModel.EnergyTotals.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"></TextBlock>
                 </StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
                     </Grid.ColumnDefinitions>
                     <Rectangle Fill="Green" Grid.Column="0" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Battery:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
-                                   Visibility="{x:Bind ViewModel.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
+                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Battery:</TextBlock>
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                                   Visibility="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                     <Rectangle Fill="Gold" Grid.Column="1" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
-                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Solar:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
-                                   Visibility="{x:Bind ViewModel.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
+                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Solar:</TextBlock>
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                                   Visibility="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                     <Rectangle Fill="SlateGray" Grid.Column="2" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="2">
-                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Grid:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
-                                   Visibility="{x:Bind ViewModel.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
+                        <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Grid:</TextBlock>
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                                   Visibility="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                 </Grid>
             </StackPanel>

@@ -15,5 +15,9 @@ namespace PowerwallCompanion.Lib.Models
         public decimal EnergyCost { get; set; }
         public decimal EnergyFeedIn { get; set; }
         public decimal EnergyNetCost { get => EnergyCost - EnergyFeedIn; }
+        public double SelfConsumption { get; set; }
+        public double SolarUsePercent { get; set; }
+        public double GridUsePercent { get; set; }
+        public double BatteryUsePercent { get; set; }
     }
 }

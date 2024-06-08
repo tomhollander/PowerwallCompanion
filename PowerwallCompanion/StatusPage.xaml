@@ -312,8 +312,8 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition MinWidth="150" Width="Auto"/>
+                    <ColumnDefinition MinWidth="159" Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock HorizontalTextAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="DarkGray" Grid.Row="0" Grid.Column="2">Today ∙ kWh</TextBlock>

@@ -121,66 +121,11 @@ namespace PowerwallCompanion.ViewModels
             CalendarDate = PeriodStart;    
         }
 
-        public double HomeEnergy
+        public EnergyTotals EnergyTotals
         {
-            get { return _homeEnergy; }
-            set
-            {
-                _homeEnergy = value;
-                NotifyPropertyChanged(nameof(HomeEnergy));  
-            }
+            get; set;
         }
-
-        public double SolarEnergy
-        {
-            get { return _solarEnergy; }
-            set
-            {
-                _solarEnergy = value;
-                NotifyPropertyChanged(nameof(SolarEnergy));
-            }
-        }
-
-
-        public double GridExportedEnergy
-        {
-            get { return _gridExportedEnergy; }
-            set
-            {
-                _gridExportedEnergy = value;
-                NotifyPropertyChanged(nameof(GridExportedEnergy));
-            }
-        }
-
-        public double GridImportedEnergy
-        {
-            get { return _gridImportedEnergy; }
-            set
-            {
-                _gridImportedEnergy = value;
-                NotifyPropertyChanged(nameof(GridImportedEnergy));
-            }
-        }
-
-        public double BatteryImportedEnergy
-        {
-            get { return _batteryImportedEnergy; }
-            set
-            {
-                _batteryImportedEnergy = value;
-                NotifyPropertyChanged(nameof(BatteryImportedEnergy));
-            }
-        }
-
-        public double BatteryExportedEnergy
-        {
-            get { return _batteryExportedEnergy; }
-            set
-            {
-                _batteryExportedEnergy = value;
-                NotifyPropertyChanged(nameof(BatteryExportedEnergy));
-            }
-        }
+       
 
         public PowerChartSeries PowerChartSeries { get; set;  }
         public PowerChartSeries PowerChartStackingSeries { get; set; }
@@ -231,44 +176,6 @@ namespace PowerwallCompanion.ViewModels
 
         public EnergyChartSeries EnergyChartSeries { get; set; }
 
-        public double SelfConsumption
-        {
-            get { return _selfConsumption; }
-            set
-            {
-                _selfConsumption = value;
-                NotifyPropertyChanged(nameof(SelfConsumption));
-            }
-        }
-        public double SolarUsePercent
-        {
-            get { return _solarUsePercent; }
-            set
-            {
-                _solarUsePercent = value;
-                NotifyPropertyChanged(nameof(SolarUsePercent));
-            }
-        }
-
-        public double GridUsePercent
-        {
-            get { return _gridUsePercent; }
-            set
-            {
-                _gridUsePercent = value;
-                NotifyPropertyChanged(nameof(GridUsePercent));
-            }
-        }
-
-        public double BatteryUsePercent
-        {
-            get { return _batteryUsePercent; }
-            set
-            {
-                _batteryUsePercent = value;
-                NotifyPropertyChanged(nameof(BatteryUsePercent));
-            }
-        }
 
         public Dictionary<DateTime, Dictionary<string, object>> PowerDataForExport
         { 

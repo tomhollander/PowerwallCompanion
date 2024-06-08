@@ -71,6 +71,9 @@ namespace PowerwallCompanion.Lib
             var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
 
             var energyHistory = await apiHelper.CallGetApiWithTokenRefresh(url);
+            double totalHomeFromGrid = 0;
+            double totalHomeFromSolar = 0;
+            double totalHomeFromBattery = 0;
 
             var energyTotals = new EnergyTotals();
 
@@ -82,7 +85,17 @@ namespace PowerwallCompanion.Lib
                 energyTotals.GridEnergyExported += GetValueOrDefault<double>(item["grid_energy_exported_from_solar"]) + GetValueOrDefault<double>(item["grid_energy_exported_from_generator"]) + GetValueOrDefault<double>(item["grid_energy_exported_from_battery"]);
                 energyTotals.BatteryEnergyCharged += GetValueOrDefault<double>(item["battery_energy_imported_from_grid"]) + GetValueOrDefault<double>(item["battery_energy_imported_from_solar"]) + GetValueOrDefault<double>(item["battery_energy_imported_from_generator"]);
                 energyTotals.BatteryEnergyDischarged += GetValueOrDefault<double>(item["battery_energy_exported"]);
+
+                // Totals for self consumption calcs
+                totalHomeFromGrid += GetValueOrDefault<double>(item["consumer_energy_imported_from_grid"]) + GetValueOrDefault<double>(item["consumer_energy_imported_from_generator"]);
+                totalHomeFromSolar += GetValueOrDefault<double>(item["consumer_energy_imported_from_solar"]);
+                totalHomeFromBattery += GetValueOrDefault<double>(item["consumer_energy_imported_from_battery"]);
             }
+
+            energyTotals.SolarUsePercent = (totalHomeFromSolar / energyTotals.HomeEnergy) * 100;
+            energyTotals.BatteryUsePercent = (totalHomeFromBattery / energyTotals.HomeEnergy) * 100;
+            energyTotals.GridUsePercent = (totalHomeFromGrid / energyTotals.HomeEnergy) * 100;
+            energyTotals.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / energyTotals.HomeEnergy) * 100;
 
             if (tariffHelper != null)
             {
@@ -308,10 +321,19 @@ namespace PowerwallCompanion.Lib
             energyChartSeries.BatteryCharge = NormaliseEnergyData(batteryChargedEnergyGraphData, period);
 
 
-            energyChartSeries.SolarUsePercent = (totalHomeFromSolar / totalHomeEnergy) * 100;
-            energyChartSeries.BatteryUsePercent = (totalHomeFromBattery / totalHomeEnergy) * 100;
-            energyChartSeries.GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100;
-            energyChartSeries.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100;
+            energyChartSeries.EnergyTotals = new EnergyTotals()
+            {
+                HomeEnergy = totalHomeEnergy,
+                SolarEnergy = totalSolarEnergy,
+                GridEnergyImported = totalGridImportedEnergy,
+                GridEnergyExported = totalGridExportedEnergy,
+                BatteryEnergyDischarged = totalBatteryExportedEnergy,
+                BatteryEnergyCharged = totalBatteryImportedEnergy,
+                SolarUsePercent = (totalHomeFromSolar / totalHomeEnergy) * 100,
+                BatteryUsePercent = (totalHomeFromBattery / totalHomeEnergy) * 100,
+                GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100,
+                SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100
+            };
 
             //if (ViewModel.Period == "Week" || ViewModel.Period == "Month")
             //{
