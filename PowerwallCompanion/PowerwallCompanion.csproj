@@ -113,7 +113,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ApiHelper.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -156,7 +155,6 @@
     <Compile Include="Converters\VisibilityCollapsedLessThan5Converter.cs" />
     <Compile Include="Converters\VisibilityCollapsedLessThan10Converter.cs" />
     <Compile Include="CustomEnergySourceProviders\AustraliaNemEnergySourceProvider.cs" />
-    <Compile Include="DateUtils.cs" />
     <Compile Include="DownloadWebViewPage.xaml.cs">
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>
     </Compile>

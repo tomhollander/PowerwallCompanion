@@ -1,5 +1,6 @@
 ﻿using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
@@ -142,14 +143,7 @@ namespace PowerwallCompanion.ViewModels
        
         public DateTime ChartMaxDate
         {
-            get
-            {
-                if (Settings.AccessToken == "DEMO")
-                {
-                    return new DateTime(2021, 04, 17); // Match the dummy data
-                }
-                return DateUtils.ConvertToPowerwallDate(DateTime.Now).Date.AddDays(1);
-            }
+            get; set;
         }
         public StatusEnum Status
         {

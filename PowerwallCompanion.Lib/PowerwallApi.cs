@@ -1,12 +1,14 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TimeZoneConverter;
 
 namespace PowerwallCompanion.Lib
@@ -17,12 +19,55 @@ namespace PowerwallCompanion.Lib
         private ITokenStore tokenStore;
         private ApiHelper apiHelper;
         private string installationTimeZone;
+        private JsonObject productResponse;
 
         public PowerwallApi(string siteId, ITokenStore tokenStore)
         {
             this.siteId = siteId;
             this.tokenStore = tokenStore;
             this.apiHelper = new ApiHelper(tokenStore);
+        }
+
+        private async Task<JsonObject> GetProductResponse()
+        {
+            if (productResponse == null)
+            {
+                productResponse = await apiHelper.CallGetApiWithTokenRefresh("/api/1/products");
+            }
+            return productResponse;
+        }
+        public async Task<string> GetSiteId()
+        {
+            var productsResponse = await GetProductResponse();
+            var availableSites = new Dictionary<string, string>();
+            foreach (var product in productsResponse["response"].AsArray())
+            {
+                if (product["resource_type"]?.GetValue<string>() == "battery" && product["energy_site_id"] != null)
+                {
+                    var id = product["energy_site_id"].GetValue<long>();
+                    return id.ToString();
+                }
+            }
+
+            throw new Exception("Powerwall site not found");
+        }
+
+        public async Task<Dictionary<string, string>> GetEnergySites()
+        {
+            var productsResponse = await GetProductResponse();
+            var availableSites = new Dictionary<string, string>();
+            bool foundSite = false;
+            foreach (var product in productsResponse["response"].AsArray())
+            {
+                if (product["resource_type"]?.GetValue<string>() == "battery" && product["energy_site_id"] != null)
+                {
+                    var siteName = product["site_name"].GetValue<string>();
+                    var id = product["energy_site_id"].GetValue<long>();
+                    availableSites.Add(id.ToString(), siteName);
+
+                }
+            }
+            return availableSites;
         }
 
         public async Task<InstantaneousPower> GetInstantaneousPower()
@@ -99,7 +144,7 @@ namespace PowerwallCompanion.Lib
 
             if (tariffHelper != null)
             {
-                var dailyCosts = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory["response"]["time_series"].AsArray());
+                var dailyCosts = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory["response"]["time_series"].AsArray().ToList());
                 energyTotals.EnergyCost = dailyCosts.Item1;
                 energyTotals.EnergyFeedIn = dailyCosts.Item2;
             }
@@ -248,7 +293,7 @@ namespace PowerwallCompanion.Lib
             return batteryDailySoeGraphData;
         }
 
-        public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate)
+        public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, TariffHelper tariffHelper)
         {
             string timeZone = await GetInstallationTimeZone();
             var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
@@ -335,14 +380,51 @@ namespace PowerwallCompanion.Lib
                 SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100
             };
 
-            //if (ViewModel.Period == "Week" || ViewModel.Period == "Month")
-            //{
-            //    CalculateCostData((JArray)json["response"]["time_series"]);
-            //}
+            if (tariffHelper != null && (period == "Week" || period == "Month"))
+            {
+                CalculateCostData((JsonArray)json["response"]["time_series"].AsArray(), tariffHelper, energyChartSeries);
+            }
 
             return energyChartSeries;
         }
 
+        private void CalculateCostData(JsonArray energyTimeSeries, TariffHelper tariffHelper, EnergyChartSeries energyChartSeries)
+        {
+            try
+            {
+
+                energyChartSeries.EnergyCostGraphData = new List<ChartDataPoint>();
+                energyChartSeries.EnergyFeedInGraphData = new List<ChartDataPoint>();
+                energyChartSeries.EnergyNetCostGraphData = new List<ChartDataPoint>();
+
+                var dailyData = new Dictionary<DateTime, List<JsonNode>>();
+                // Split array by date
+                foreach (var data in energyTimeSeries)
+                {
+                    var ts = data["timestamp"].GetValue<DateTime>();
+                    if (!dailyData.ContainsKey(ts.Date))
+                    {
+                        dailyData[ts.Date] = new List<JsonNode>();
+                    }
+                    dailyData[ts.Date].Add(data.AsObject());
+                }
+
+                // Calculate costs per date  // TODO: FIX
+                foreach (var date in dailyData.Keys)
+                {
+                    var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
+                    energyChartSeries.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
+                    energyChartSeries.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
+                    energyChartSeries.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //Crashes.TrackError(ex);
+            }
+
+        }
         private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
         {
             Func<DateTime, DateTime, bool> dateComparitor;

@@ -114,11 +114,12 @@ namespace PowerwallCompanion
             await RefreshDataAndCharts();
         }
 
-        private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        private async void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
-            if (args.NewDate > DateUtils.ConvertToPowerwallDate(DateTime.Now).Date)
+            var date = await powerwallApi.ConvertToPowerwallDate(DateTime.Now);
+            if (args.NewDate > date.Date)
             {
-                datePicker.Date = DateUtils.ConvertToPowerwallDate(DateTime.Now).Date;
+                datePicker.Date = date.Date;
             }
         }
         private async void CalendarDatePicker_Closed(object sender, object e)
@@ -144,7 +145,8 @@ namespace PowerwallCompanion
                 energyChart.Visibility = Visibility.Collapsed;
                 energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
-                await GetTariffsForDay(DateUtils.ConvertToPowerwallDate(ViewModel.PeriodStart).Date);
+                DateTime date = await powerwallApi.ConvertToPowerwallDate(ViewModel.PeriodStart);
+                await GetTariffsForDay(date.Date);
             }
             else
             {
@@ -189,50 +191,7 @@ namespace PowerwallCompanion
         }
 
         
-        private void CalculateCostData(JArray energyTimeSeries)
-        {
-            try
-            {
-                if (!Settings.ShowEnergyRates)
-                {
-                    return;
-                }
-
-                ViewModel.EnergyCostGraphData = new List<ChartDataPoint>();
-                ViewModel.EnergyFeedInGraphData = new List<ChartDataPoint>();
-                ViewModel.EnergyNetCostGraphData = new List<ChartDataPoint>();
-
-                var dailyData = new Dictionary<DateTime, List<JObject>>();
-                // Split array by date
-                foreach (var data in energyTimeSeries)
-                {
-                    var ts = data["timestamp"].Value<DateTime>();
-                    if (!dailyData.ContainsKey(ts.Date))
-                    {
-                        dailyData[ts.Date] = new List<JObject>();
-                    }
-                    dailyData[ts.Date].Add(data as JObject);
-                }
-
-                // Calculate costs per date  // TODO: FIX
-                //foreach (var date in dailyData.Keys)
-                //{
-                //    var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
-                //    ViewModel.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
-                //    ViewModel.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
-                //    ViewModel.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
-                //}
-
-                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyCostGraphData));
-                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyFeedInGraphData));
-                ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyNetCostGraphData));
-            }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex);
-            }
-
-        }
+        
 
         private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
         {
@@ -401,7 +360,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                ViewModel.EnergyChartSeries = await powerwallApi.GetEnergyChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd);
+                ViewModel.EnergyChartSeries = await powerwallApi.GetEnergyChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, Settings.ShowEnergyRates ? tariffHelper : null);
                 ViewModel.EnergyTotals = ViewModel.EnergyChartSeries.EnergyTotals;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
@@ -536,51 +495,51 @@ namespace PowerwallCompanion
 
         private async Task SaveEnergyInfo(StorageFile file)
         {
-            var sb = new StringBuilder();
-            var keys = new List<string>();
-            var normalisedExportData = NormaliseExportData(ViewModel.EnergyDataForExport, ViewModel.Period);
-            if (normalisedExportData.Count > 0)
-            {
+            //var sb = new StringBuilder();
+            //var keys = new List<string>();
+            //var normalisedExportData = NormaliseExportData(ViewModel.EnergyDataForExport, ViewModel.Period);
+            //if (normalisedExportData.Count > 0)
+            //{
                 
-                sb.Append("timestamp,");
-                foreach (var key in normalisedExportData.First().Value.Keys)
-                {
-                    keys.Add(key);
-                    sb.Append($"{key},");
-                }
-                if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
-                {
-                    sb.Append("Cost,");
-                    sb.Append("FeedIn,");
-                    sb.Append("NetCost,");
-                }
-            }
-            sb.Append("\r\n");
+            //    sb.Append("timestamp,");
+            //    foreach (var key in normalisedExportData.First().Value.Keys)
+            //    {
+            //        keys.Add(key);
+            //        sb.Append($"{key},");
+            //    }
+            //    if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
+            //    {
+            //        sb.Append("Cost,");
+            //        sb.Append("FeedIn,");
+            //        sb.Append("NetCost,");
+            //    }
+            //}
+            //sb.Append("\r\n");
 
 
-            foreach (var kvp in normalisedExportData)
-            {
-                sb.Append($"{(kvp.Key):yyyy-MM-dd},");
-                foreach (var key in keys)
-                {
-                    if (kvp.Value.ContainsKey(key))
-                    {
-                        sb.Append($"{kvp.Value[key]},");
-                    }
-                    else
-                    {
-                        sb.Append(",");
-                    }
-                }
-                if (Settings.ShowEnergyRates && ViewModel.EnergyCostGraphData != null && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
-                {
-                    sb.Append($"{ViewModel.EnergyCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
-                    sb.Append($"{ViewModel.EnergyFeedInGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
-                    sb.Append($"{ViewModel.EnergyNetCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
-                }
-                sb.Append("\r\n");
-            }
-            await Windows.Storage.FileIO.WriteTextAsync(file, sb.ToString());
+            //foreach (var kvp in normalisedExportData)
+            //{
+            //    sb.Append($"{(kvp.Key):yyyy-MM-dd},");
+            //    foreach (var key in keys)
+            //    {
+            //        if (kvp.Value.ContainsKey(key))
+            //        {
+            //            sb.Append($"{kvp.Value[key]},");
+            //        }
+            //        else
+            //        {
+            //            sb.Append(",");
+            //        }
+            //    }
+            //    if (Settings.ShowEnergyRates && ViewModel.EnergyCostGraphData != null && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
+            //    {
+            //        sb.Append($"{ViewModel.EnergyCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
+            //        sb.Append($"{ViewModel.EnergyFeedInGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
+            //        sb.Append($"{ViewModel.EnergyNetCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
+            //    }
+            //    sb.Append("\r\n");
+            //}
+            //await Windows.Storage.FileIO.WriteTextAsync(file, sb.ToString());
         }
 
 

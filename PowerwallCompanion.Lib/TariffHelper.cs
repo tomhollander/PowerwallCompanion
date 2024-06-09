@@ -194,7 +194,7 @@ namespace PowerwallCompanion.Lib
             return new Tuple<decimal, decimal>(buyRate, sellRate);
         }
 
-        public Tuple<decimal, decimal>GetEnergyCostAndFeedInFromEnergyHistory(JsonArray energyHistoryTimeSeries)
+        public Tuple<decimal, decimal>GetEnergyCostAndFeedInFromEnergyHistory(List<JsonNode> energyHistoryTimeSeries)
         {
             // This currently assumes the history is for a single day
 

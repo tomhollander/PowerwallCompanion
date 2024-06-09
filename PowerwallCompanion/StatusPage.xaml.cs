@@ -81,10 +81,6 @@ namespace PowerwallCompanion
 
         private async Task RefreshDataFromTeslaOwnerApi()
         {
-            if (Settings.InstallationTimeZone == null)
-            {
-                await DateUtils.GetInstallationTimeZone();
-            }
             await RefreshTariffData(); // Refresh tariff data first, as it's used in other data refreshes
             var tasks = new List<Task>()
             {
@@ -204,6 +200,9 @@ namespace PowerwallCompanion
                 }
 
                 viewModel.PowerChartSeries = await powerwallApi.GetPowerChartSeriesForLastTwoDays();
+
+                DateTime d = await powerwallApi.ConvertToPowerwallDate(DateTime.Now);
+                viewModel.ChartMaxDate = d.Date.AddDays(1);
 
                 viewModel.PowerHistoryLastRefreshed = DateTime.Now;
                 viewModel.NotifyGraphProperties();

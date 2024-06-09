@@ -2,6 +2,7 @@
 using Microsoft.AppCenter.Crashes;
 using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json.Linq;
+using PowerwallCompanion.Lib;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -83,6 +84,7 @@ namespace PowerwallCompanion
         {
             try
             {
+                var powerwallApi = new PowerwallApi(null, new TokenStore());
                 var tokens = await teslaAuth.GetTokenAfterLoginAsync(url);
 
                 if (CheckTokenScopes(tokens.AccessToken))
@@ -91,7 +93,8 @@ namespace PowerwallCompanion
                     Settings.RefreshToken = tokens.RefreshToken;
                     Settings.SignInName = "Tesla User";
                     Settings.UseLocalGateway = false;
-                    await GetSiteId();
+                    Settings.SiteId = await powerwallApi.GetSiteId();
+                    Settings.AvailableSites = await powerwallApi.GetEnergySites();
                     Analytics.TrackEvent("Login succeeded");
                     return true;
                 }
@@ -118,36 +121,7 @@ namespace PowerwallCompanion
             return (scopes.Contains("energy_device_data"));
         }
 
-        private async Task GetSiteId()
-        {
-            var productsResponse = await ApiHelper.CallGetApiWithTokenRefresh("/api/1/products", "Products");
-            var availableSites = new Dictionary<string, string>();
-            bool foundSite = false;
-            foreach (var product in productsResponse["response"])
-            {
-                if (product["resource_type"]?.Value<string>() == "battery" && product["energy_site_id"] != null)
-                {
-                    var siteName = product["site_name"].Value<string>();
-                    var id = product["energy_site_id"].Value<long>();
-                    if (!foundSite)
-                    {
-                        Settings.SiteId = id.ToString();
-                        foundSite = true;
-                    }
-                    availableSites.Add(id.ToString(), siteName);
-
-                }
-            }
-            if (foundSite)
-            {
-                Settings.AvailableSites = availableSites;
-            }
-            else
-            {
-                throw new Exception("Powerwall site not found");
-            }
-
-        }
+        
 
 
         
@@ -165,7 +139,7 @@ namespace PowerwallCompanion
             Settings.RefreshToken = "DEMO";
             Settings.SignInName = "Demo User";
             Settings.UseLocalGateway = false;
-            await GetSiteId();
+            Settings.SiteId = "DEMO";
             this.Frame.Navigate(typeof(StatusPage), true);
         }
 

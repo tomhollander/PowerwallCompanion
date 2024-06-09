@@ -746,7 +746,7 @@ namespace PowerwallCompanion.Lib.Tests
         {
             var tariffHelper = new TariffHelper((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
             var energyHistory = (JsonArray)JsonArray.Parse(energyHistoryJson);
-            var rates = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory);
+            var rates = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory.ToList());
             Assert.AreEqual(0.08m * 0.5m + 0.3m * 0.7m + 0.3m * 0.2m, rates.Item1);
             Assert.AreEqual(0.07m * 0.6m, rates.Item2);
         }

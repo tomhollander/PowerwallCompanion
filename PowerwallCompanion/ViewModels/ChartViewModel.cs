@@ -136,43 +136,6 @@ namespace PowerwallCompanion.ViewModels
             get; set;
         }
 
-        public List<ChartDataPoint> HomeEnergyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> SolarEnergyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> GridImportedEnergyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> GridExportedEnergyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> BatteryImportedEnergyGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> BatteryExportedEnergyGraphData
-        {
-            get; set;
-        }
-
-        public List<ChartDataPoint> EnergyCostGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> EnergyFeedInGraphData
-        {
-            get; set;
-        }
-        public List<ChartDataPoint> EnergyNetCostGraphData
-        {
-            get; set;
-        }
 
         public EnergyChartSeries EnergyChartSeries { get; set; }
 

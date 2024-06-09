@@ -12,11 +12,14 @@ namespace PowerwallCompanion.Lib
         {
             var sb = new StringBuilder();
 
+            DateTime periodStartUnspecifiedTZ = new DateTime(periodStart.Ticks, DateTimeKind.Unspecified);
+            DateTime periodEndUnspecifiedTZ = new DateTime(periodEnd.Ticks, DateTimeKind.Unspecified);
+
             var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
             var startOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(periodStart);
             var endOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(periodEnd);
-            var startDate = new DateTimeOffset(periodStart, startOffset);
-            var endDate = new DateTimeOffset(periodEnd, endOffset).AddSeconds(-1);
+            var startDate = new DateTimeOffset(periodStartUnspecifiedTZ, startOffset);
+            var endDate = new DateTimeOffset(periodEndUnspecifiedTZ, endOffset).AddSeconds(-1);
 
             sb.Append($"/api/1/energy_sites/{siteId}/calendar_history?");
             sb.Append("kind=" + kind);
