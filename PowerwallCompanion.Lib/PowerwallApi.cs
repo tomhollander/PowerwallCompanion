@@ -1,6 +1,7 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -465,14 +466,78 @@ namespace PowerwallCompanion.Lib
                     await tw.WriteLineAsync(homePower.ToString());
                 }
                 await tw.FlushAsync();
+            }            
+        }
+        public async Task ExportEnergyDataToCsv(Stream stream, DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
+        {
+            string timeZone = await GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
+            var json = await apiHelper.CallGetApiWithTokenRefresh(url);
+
+            // Save data from API into dictionary
+            var energyData = new Dictionary<DateTime, Dictionary<string, double>>();
+            var keyNames = new List<string>();
+            foreach (var data in json["response"]["time_series"].AsArray())
+            {
+                var date = data["timestamp"].GetValue<DateTime>();
+                if (!energyData.ContainsKey(date)) // Apparently duplicates can occur
+                {
+                    var dict = new Dictionary<string, double>();
+                    foreach (var prop in (JsonObject)data)
+                    {
+                        if (prop.Value.GetValueKind() == System.Text.Json.JsonValueKind.Number)
+                        {
+                            dict.Add(prop.Key, (double)prop.Value);
+                            if (!keyNames.Contains(prop.Key))
+                            {
+                                keyNames.Add(prop.Key);
+                            }
+                        }
+                    }
+                    energyData.Add(date, dict);
+                }
             }
 
+            var normalisedExportData = NormaliseExportData(energyData, period);
 
-            
-        }
-        public async Task<string> GetEnergyDataForCsvDownload(DateTime startDate, DateTime endDate, string period)
-        {
-            throw new NotImplementedException();
+            // Header line
+            var tw = new StreamWriter(stream);
+            await tw.WriteAsync("timestamp,");
+            foreach (var key in keyNames)
+            {
+                await tw.WriteAsync(key + ",");
+            }
+            if (tariffHelper != null && (period == "Week" || period == "Month"))
+            {
+                await tw.WriteAsync("Cost,FeedIn,NetCost,");
+            }
+            await tw.WriteLineAsync();
+   
+
+            // Write out normalised data
+            foreach (var data in normalisedExportData)
+            {
+                await tw.WriteAsync($"{data.Key:yyyy-MM-dd},");
+                foreach (var key in keyNames)
+                {
+                    if (data.Value.ContainsKey(key))
+                    {
+                        await tw.WriteAsync($"{data.Value[key]},");
+                    }
+                    else
+                    {
+                        await tw.WriteAsync(",");
+                    }
+                }
+                if (tariffHelper != null && (period == "Week" || period == "Month"))
+                {
+                    var dataForDay = json["response"]["time_series"].AsArray().Where(ts => ts["timestamp"].GetValue<DateTime>().Date == data.Key).ToList();
+                    var energyCosts = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dataForDay);
+                    await tw.WriteAsync($"{energyCosts.Item1},{energyCosts.Item2},{energyCosts.Item1 - energyCosts.Item2}");
+                }
+                await tw.WriteLineAsync();
+            }
+            await tw.FlushAsync();
         }
 
         private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
@@ -517,12 +582,12 @@ namespace PowerwallCompanion.Lib
             return result;
         }
 
-        private Dictionary<DateTime, Dictionary<string, object>> NormaliseExportData(Dictionary<DateTime, Dictionary<string, object>> exportData, string period)
+        private Dictionary<DateTime, Dictionary<string, double>> NormaliseExportData(Dictionary<DateTime, Dictionary<string, double>> exportData, string period)
         {
             // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
-            var result = new Dictionary<DateTime, Dictionary<string, object>>();
+            var result = new Dictionary<DateTime, Dictionary<string, double>>();
             DateTime lastDate = DateTime.MinValue;
-            Dictionary<string, object> lastValue = null;
+            Dictionary<string, double> lastValue = null;
 
             var dateComparitor = GetNormalisationDateComparitor(period);
 

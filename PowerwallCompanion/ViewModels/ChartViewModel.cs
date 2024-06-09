@@ -140,16 +140,6 @@ namespace PowerwallCompanion.ViewModels
         public EnergyChartSeries EnergyChartSeries { get; set; }
 
 
-        public Dictionary<DateTime, Dictionary<string, object>> PowerDataForExport
-        { 
-            get; set;  
-        }
-
-        public Dictionary<DateTime, Dictionary<string, object>> EnergyDataForExport
-        {
-            get; set;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propertyName)

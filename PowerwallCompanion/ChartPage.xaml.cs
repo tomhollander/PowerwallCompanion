@@ -392,7 +392,8 @@ namespace PowerwallCompanion
                     }
                     else
                     {
-                        await SaveEnergyInfo(file);
+                        await powerwallApi.ExportEnergyDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, 
+                            Settings.ShowEnergyRates ? tariffHelper : null);
                     }
 
                     await stream.FlushAsync();
@@ -407,58 +408,6 @@ namespace PowerwallCompanion
             }
             exportButton.Content = "Export Data";
             exportButton.IsEnabled = true;
-        }
-
-
-
-        
-        private async Task SaveEnergyInfo(StorageFile file)
-        {
-            //var sb = new StringBuilder();
-            //var keys = new List<string>();
-            //var normalisedExportData = NormaliseExportData(ViewModel.EnergyDataForExport, ViewModel.Period);
-            //if (normalisedExportData.Count > 0)
-            //{
-                
-            //    sb.Append("timestamp,");
-            //    foreach (var key in normalisedExportData.First().Value.Keys)
-            //    {
-            //        keys.Add(key);
-            //        sb.Append($"{key},");
-            //    }
-            //    if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
-            //    {
-            //        sb.Append("Cost,");
-            //        sb.Append("FeedIn,");
-            //        sb.Append("NetCost,");
-            //    }
-            //}
-            //sb.Append("\r\n");
-
-
-            //foreach (var kvp in normalisedExportData)
-            //{
-            //    sb.Append($"{(kvp.Key):yyyy-MM-dd},");
-            //    foreach (var key in keys)
-            //    {
-            //        if (kvp.Value.ContainsKey(key))
-            //        {
-            //            sb.Append($"{kvp.Value[key]},");
-            //        }
-            //        else
-            //        {
-            //            sb.Append(",");
-            //        }
-            //    }
-            //    if (Settings.ShowEnergyRates && ViewModel.EnergyCostGraphData != null && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
-            //    {
-            //        sb.Append($"{ViewModel.EnergyCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
-            //        sb.Append($"{ViewModel.EnergyFeedInGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
-            //        sb.Append($"{ViewModel.EnergyNetCostGraphData.Where(x => x.XValue == kvp.Key).FirstOrDefault()?.YValue},");
-            //    }
-            //    sb.Append("\r\n");
-            //}
-            //await Windows.Storage.FileIO.WriteTextAsync(file, sb.ToString());
         }
 
 
