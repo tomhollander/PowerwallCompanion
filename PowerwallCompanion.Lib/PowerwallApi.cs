@@ -1,11 +1,13 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Runtime;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -409,7 +411,7 @@ namespace PowerwallCompanion.Lib
                     dailyData[ts.Date].Add(data.AsObject());
                 }
 
-                // Calculate costs per date  // TODO: FIX
+                // Calculate costs per date  
                 foreach (var date in dailyData.Keys)
                 {
                     var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
@@ -425,6 +427,54 @@ namespace PowerwallCompanion.Lib
             }
 
         }
+
+        public async Task ExportPowerDataToCsv(Stream stream, DateTime startDate, DateTime endDate)
+        {
+            string timeZone = await GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "power", "day", startDate, endDate);
+            var json = await apiHelper.CallGetApiWithTokenRefresh(url);
+            var data = json["response"]["time_series"].AsArray();
+
+            if (data.Count > 0)
+            {
+                var tw = new StreamWriter(stream);
+                var first = (JsonObject) data[0].AsObject();
+                foreach (var prop in first)
+                {
+                    await tw.WriteAsync(prop.Key + ",");
+                }
+                await tw.WriteLineAsync("load_power");
+
+                foreach (var entry in data.AsArray())
+                {
+                    foreach (var prop in (JsonObject)entry)
+                    {
+                        if (prop.Key == "timestamp")
+                        {
+                            await tw.WriteAsync($"{(prop.Value):yyyy-MM-dd HH\\:mm\\:ss},");
+                        }
+                        else
+                        {
+                            await tw.WriteAsync(prop.Value + ",");
+                        }
+                    }
+                    var solarPower = GetValueOrDefault<double>(entry["solar_power"]);
+                    var gridPower = GetValueOrDefault<double>(entry["grid_power"]);
+                    var batteryPower = GetValueOrDefault<double>(entry["battery_power"]);
+                    var homePower = solarPower + gridPower + batteryPower;
+                    await tw.WriteLineAsync(homePower.ToString());
+                }
+                await tw.FlushAsync();
+            }
+
+
+            
+        }
+        public async Task<string> GetEnergyDataForCsvDownload(DateTime startDate, DateTime endDate, string period)
+        {
+            throw new NotImplementedException();
+        }
+
         private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
         {
             Func<DateTime, DateTime, bool> dateComparitor;
@@ -467,6 +517,54 @@ namespace PowerwallCompanion.Lib
             return result;
         }
 
+        private Dictionary<DateTime, Dictionary<string, object>> NormaliseExportData(Dictionary<DateTime, Dictionary<string, object>> exportData, string period)
+        {
+            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
+            var result = new Dictionary<DateTime, Dictionary<string, object>>();
+            DateTime lastDate = DateTime.MinValue;
+            Dictionary<string, object> lastValue = null;
+
+            var dateComparitor = GetNormalisationDateComparitor(period);
+
+            foreach (var currentDate in exportData.Keys)
+            {
+                if (lastValue == null || !dateComparitor(currentDate, lastDate))
+                {
+                    // New period
+                    result.Add(currentDate, exportData[currentDate]);
+                    lastDate = currentDate;
+                    lastValue = exportData[currentDate];
+                }
+                else
+                {
+                    // Add the values from the current point to the last one
+                    foreach (var key in exportData[currentDate].Keys)
+                    {
+                        if (key == "timestamp")
+                        {
+                            continue;
+                        }
+                        if (exportData[currentDate][key].GetType() != typeof(DateTime))
+                        {
+                            try
+                            {
+                                if (!lastValue.ContainsKey(key))
+                                {
+                                    lastValue[key] = 0;
+                                }
+                                lastValue[key] = Convert.ToInt64(lastValue[key]) + Convert.ToInt64(exportData[currentDate][key]);
+                            }
+                            catch
+                            {
+                                // Unlikely but they could add string values...
+                            }
+                        }
+
+                    }
+                }
+            }
+            return result;
+        }
         public async Task<DateTime> ConvertToPowerwallDate(DateTime date)
         {
             try

@@ -9,10 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using TimeZoneConverter;
-using Windows.Devices.AllJoyn;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -20,6 +17,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.IO;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -138,6 +136,7 @@ namespace PowerwallCompanion
         private async Task RefreshDataAndCharts()
         {
 
+            progressRing.IsActive = true;
             if (ViewModel.Period == "Day")
             {
                 dailyChart.Visibility = Visibility.Visible;
@@ -169,96 +168,38 @@ namespace PowerwallCompanion
 
             }
             await FetchData();
+            progressRing.IsActive = false;
     
         }
 
         private async Task FetchData()
         {
-            ViewModel.Status = StatusViewModel.StatusEnum.Online;
-            
-            var tasks = new List<Task>();
-            if (ViewModel.Period == "Day")
+            try
             {
-                tasks.Add(UpdatePowerGraph());
-                tasks.Add(FetchBatterySoeData());
-                tasks.Add(FetchDailyEnergyData());
-            }
-            else
-            {
-                tasks.Add(UpdateEnergyGraph());
-            }
-            await Task.WhenAll(tasks);
-        }
+                ViewModel.Status = StatusViewModel.StatusEnum.Online;
 
-        
-        
-
-        private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
-        {
-            Func<DateTime, DateTime, bool> dateComparitor;
-            if (period == "Year")
-            {
-                dateComparitor = (DateTime d, DateTime c) => d.Year == c.Year && d.Month == c.Month;
-            }
-            else if (period == "Lifetime")
-            {
-                dateComparitor = (DateTime d, DateTime c) => d.Year == c.Year;
-            }
-            else // Day, Week, Month
-            {
-                dateComparitor = (DateTime d, DateTime c) => d.Date == c.Date;
-            }
-            return dateComparitor;
-        }
-
-        private Dictionary<DateTime, Dictionary<string, object>> NormaliseExportData(Dictionary<DateTime, Dictionary<string, object>> exportData, string period)
-        {
-            // The API has started returning super granular data,. Let's normalise it to a more sensible granularity 
-            var result = new Dictionary <DateTime, Dictionary< string, object>>();
-            DateTime lastDate = DateTime.MinValue;
-            Dictionary<string, object> lastValue = null;
-
-            var dateComparitor = GetNormalisationDateComparitor(period);
-
-            foreach (var currentDate in exportData.Keys)
-            {
-                if (lastValue == null || !dateComparitor(currentDate, lastDate))
+                var tasks = new List<Task>();
+                if (ViewModel.Period == "Day")
                 {
-                    // New period
-                    result.Add(currentDate, exportData[currentDate]);
-                    lastDate = currentDate;
-                    lastValue = exportData[currentDate];
+                    tasks.Add(UpdatePowerGraph());
+                    tasks.Add(FetchBatterySoeData());
+                    tasks.Add(FetchDailyEnergyData());
                 }
                 else
                 {
-                    // Add the values from the current point to the last one
-                    foreach (var key in exportData[currentDate].Keys)
-                    {
-                        if (key == "timestamp")
-                        {
-                            continue;
-                        }
-                        if (exportData[currentDate][key].GetType() != typeof(DateTime))
-                        {
-                            try
-                            {
-                                if (!lastValue.ContainsKey(key))
-                                {
-                                    lastValue[key] = 0;
-                                }
-                                lastValue[key] = Convert.ToInt64(lastValue[key]) + Convert.ToInt64(exportData[currentDate][key]);
-                            }
-                            catch
-                            {
-                                // Unlikely but they could add string values...
-                            }
-                        }
-
-                    }
+                    tasks.Add(UpdateEnergyGraph());
                 }
+                await Task.WhenAll(tasks);
             }
-            return result;
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+                ViewModel.Status = StatusViewModel.StatusEnum.Error;
+                ViewModel.LastExceptionMessage = ex.Message;
+                ViewModel.LastExceptionDate = DateTime.Now;
+            }
         }
+      
 
       
 
@@ -443,15 +384,19 @@ namespace PowerwallCompanion
                 {
                     exportButton.Content = "Saving...";
                     exportButton.IsEnabled = false;
+                    var stream = await file.OpenStreamForWriteAsync();
 
                     if (ViewModel.Period == "Day")
                     {
-                        await SavePowerInfo(file);
+                        await powerwallApi.ExportPowerDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd);
                     }
                     else
                     {
                         await SaveEnergyInfo(file);
                     }
+
+                    await stream.FlushAsync();
+                    stream.Close();
                 }
             }
             catch (Exception ex)
@@ -466,33 +411,7 @@ namespace PowerwallCompanion
 
 
 
-        private async Task SavePowerInfo(StorageFile file)
-        {
-            var sb = new StringBuilder();
-            if (ViewModel.PowerDataForExport.Count > 0)
-            {
-                sb.Append("timestamp,");
-                foreach (var key in ViewModel.PowerDataForExport.First().Value.Keys)
-                {
-                    sb.Append( $"{key},");
-                }
-            }
-            sb.Append("\r\n");
-
-
-            foreach (var kvp in ViewModel.PowerDataForExport)
-            {
-                sb.Append($"{(kvp.Key):yyyy-MM-dd HH\\:mm\\:ss},");
-                foreach (var v in kvp.Value.Values)
-                {
-                    sb.Append($"{v},");
-                }
-                sb.Append("\r\n");
-            }
-            await Windows.Storage.FileIO.WriteTextAsync(file, sb.ToString());
-        }
-
-
+        
         private async Task SaveEnergyInfo(StorageFile file)
         {
             //var sb = new StringBuilder();
