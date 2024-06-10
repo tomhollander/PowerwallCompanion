@@ -21,16 +21,6 @@ namespace PowerwallCompanion.ViewModels
         private DateTime _periodStart;
         private DateTime _periodEnd;
         private string _period;
-        private double _homeEnergy;
-        private double _solarEnergy;
-        private double _gridImportedEnergy;
-        private double _gridExportedEnergy;
-        private double _batteryImportedEnergy;
-        private double _batteryExportedEnergy;
-        private double _selfConsumption;
-        private double _solarUsePercent;
-        private double _gridUsePercent;
-        private double _batteryUsePercent;
 
         public ChartViewModel()
         {

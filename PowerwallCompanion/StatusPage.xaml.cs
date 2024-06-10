@@ -88,8 +88,25 @@ namespace PowerwallCompanion
                 GetEnergyHistoryData(),
                 GetPowerHistoryData(),
                 RefreshGridEnergyUsageData(),
+                GetEnergySiteInfo(),
             };
             await Task.WhenAll(tasks);
+        }
+
+        private async Task GetEnergySiteInfo()
+        {
+            try
+            {
+                if (ViewModel.EnergySiteInfo == null)
+                {
+                    ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
+                    ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergySiteInfo));
+                }
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
 
         private async Task GetCurrentPowerData()

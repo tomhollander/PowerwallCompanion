@@ -677,6 +677,7 @@ namespace PowerwallCompanion.Lib
             var siteInfoJson = tasks[1].Result;
             energySiteStatus.NumberOfBatteries = siteInfoJson["response"]["battery_count"].GetValue<int>();
             energySiteStatus.InstallDate = siteInfoJson["response"]["installation_date"].GetValue<DateTime>();
+            energySiteStatus.ReservePercent = siteInfoJson["response"]["backup_reserve_percent"].GetValue<int>();
             return energySiteStatus;
         }
 

@@ -11,5 +11,6 @@ namespace PowerwallCompanion.Lib.Models
         public int NumberOfBatteries { get; set; }
         public DateTime InstallDate { get; set; }
         public string InstallDateString { get { return InstallDate.ToString("d"); } }
+        public int ReservePercent { get; set; }
     }
 }

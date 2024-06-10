@@ -196,6 +196,7 @@
     <Content Include="Assets\battery-empty.wav" />
     <Content Include="Assets\battery-full.wav" />
     <Content Include="Assets\BatteryGraphBlur.png" />
+    <Content Include="Assets\diagonal_lines.png" />
     <Content Include="Assets\EnergyIcon.png" />
     <Content Include="Assets\energysource_biomass.png" />
     <Content Include="Assets\energysource_coal.png" />

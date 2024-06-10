@@ -145,6 +145,11 @@ namespace PowerwallCompanion.ViewModels
         {
             get; set;
         }
+
+        public EnergySiteInfo EnergySiteInfo
+        {
+            get; set; 
+        }
         public StatusEnum Status
         {
             get { return _status; }
@@ -385,7 +390,7 @@ namespace PowerwallCompanion.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(string propertyName)
+        public void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {
