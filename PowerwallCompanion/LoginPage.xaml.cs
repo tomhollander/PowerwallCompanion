@@ -93,7 +93,7 @@ namespace PowerwallCompanion
                     Settings.RefreshToken = tokens.RefreshToken;
                     Settings.SignInName = "Tesla User";
                     Settings.UseLocalGateway = false;
-                    Settings.SiteId = await powerwallApi.GetSiteId();
+                    Settings.SiteId = await powerwallApi.GetFirstSiteId();
                     Settings.AvailableSites = await powerwallApi.GetEnergySites();
                     Analytics.TrackEvent("Login succeeded");
                     return true;

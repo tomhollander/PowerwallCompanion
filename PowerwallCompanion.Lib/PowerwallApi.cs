@@ -1,5 +1,6 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
@@ -24,6 +25,13 @@ namespace PowerwallCompanion.Lib
         private string installationTimeZone;
         private JsonObject productResponse;
 
+        public PowerwallApi(string siteId, IPlatformAdapter platformAdapter, IApiHelper apiHelper)
+        {
+            this.siteId = siteId;
+            this.platformAdapter = platformAdapter;
+            this.apiHelper = apiHelper;
+        }
+
         public PowerwallApi(string siteId, IPlatformAdapter platformAdapter)
         {
             this.siteId = siteId;
@@ -37,6 +45,7 @@ namespace PowerwallCompanion.Lib
                 this.apiHelper = new ApiHelper(platformAdapter);
             }
         }
+   
 
         private async Task<JsonObject> GetProductResponse()
         {
@@ -46,7 +55,7 @@ namespace PowerwallCompanion.Lib
             }
             return productResponse;
         }
-        public async Task<string> GetSiteId()
+        public async Task<string> GetFirstSiteId()
         {
             var productsResponse = await GetProductResponse();
             var availableSites = new Dictionary<string, string>();

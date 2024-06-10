@@ -304,9 +304,6 @@
     <PackageReference Include="Microsoft.Web.WebView2">
       <Version>1.0.2420.47</Version>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.3</Version>
-    </PackageReference>
     <PackageReference Include="Syncfusion.SfChart.UWP">
       <Version>25.1.35</Version>
     </PackageReference>
