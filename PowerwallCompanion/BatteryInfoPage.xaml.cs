@@ -44,7 +44,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var powerwallApi = new PowerwallApi(Settings.SiteId, new TokenStore());
+                var powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
                 ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                 if (String.IsNullOrEmpty(Settings.LocalGatewayIP) || String.IsNullOrEmpty(Settings.LocalGatewayPassword))
                 {

@@ -1,0 +1,109 @@
+﻿{
+  "response": {
+    "id": "1111111-01-F--T17G0000000",
+    "site_name": "Powerwall",
+    "backup_reserve_percent": 0,
+    "default_real_mode": "autonomous",
+    "installation_date": "2017-09-04T16:49:44+10:00",
+    "installation_time_zone": "Australia/Sydney",
+    "user_settings": {
+      "go_off_grid_test_banner_enabled": false,
+      "storm_mode_enabled": true,
+      "powerwall_onboarding_settings_set": true,
+      "powerwall_tesla_electric_interested_in": false,
+      "vpp_tour_enabled": true,
+      "sync_grid_alert_enabled": true,
+      "breaker_alert_enabled": false
+    },
+    "components": {
+      "solar": true,
+      "solar_type": "pv_panel",
+      "battery": true,
+      "grid": true,
+      "backup": true,
+      "gateway": "hec",
+      "load_meter": true,
+      "tou_capable": true,
+      "storm_mode_capable": true,
+      "flex_energy_request_capable": false,
+      "car_charging_data_supported": false,
+      "off_grid_vehicle_charging_reserve_supported": false,
+      "vehicle_charging_performance_view_enabled": false,
+      "vehicle_charging_solar_offset_view_enabled": false,
+      "battery_solar_offset_view_enabled": true,
+      "solar_value_enabled": true,
+      "energy_value_header": "Energy Value",
+      "energy_value_subheader": "Estimated Value",
+      "energy_service_self_scheduling_enabled": true,
+      "show_grid_import_battery_source_cards": true,
+      "set_islanding_mode_enabled": true,
+      "wifi_commissioning_enabled": true,
+      "backup_time_remaining_enabled": true,
+      "battery_type": "ac_powerwall",
+      "configurable": true,
+      "grid_services_enabled": false,
+      "disallow_charge_from_grid_with_solar_installed": true,
+      "edit_setting_permission_to_export": true,
+      "edit_setting_grid_charging": true,
+      "edit_setting_energy_exports": true
+    },
+    "version": "23.36.3 aa269d35",
+    "battery_count": 1,
+    "tou_settings": {
+      "optimization_strategy": "economics",
+      "schedule": [
+        {
+          "target": "off_peak",
+          "week_days": [
+            6,
+            0
+          ],
+          "start_seconds": 21600,
+          "end_seconds": 0
+        },
+        {
+          "target": "off_peak",
+          "week_days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_seconds": 75600,
+          "end_seconds": 0
+        },
+        {
+          "target": "peak",
+          "week_days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start_seconds": 57600,
+          "end_seconds": 75600
+        }
+      ]
+    },
+    "nameplate_power": 5000,
+    "nameplate_energy": 13500,
+    "installationintime_zone": "Australia/Sydney",
+    "max_site_meter_power_ac": 1000000000,
+    "min_site_meter_power_ac": -1000000000,
+    "geolocation": {
+      "latitude": -33.78296750000001,
+      "longitude": 151.0736791,
+      "source": "Site Address Preference"
+    },
+    "address": {
+      "address_line1": "1 Foo Street",
+      "city": "Fooville",
+      "state": "XX",
+      "zip": "2222",
+      "country": "AU"
+    },
+    "vpp_backup_reserve_percent": 0
+  }
+}

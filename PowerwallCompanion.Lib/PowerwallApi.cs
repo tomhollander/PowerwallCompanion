@@ -19,16 +19,23 @@ namespace PowerwallCompanion.Lib
     public class PowerwallApi
     {
         private string siteId;
-        private ITokenStore tokenStore;
-        private ApiHelper apiHelper;
+        private IPlatformAdapter platformAdapter;
+        private IApiHelper apiHelper;
         private string installationTimeZone;
         private JsonObject productResponse;
 
-        public PowerwallApi(string siteId, ITokenStore tokenStore)
+        public PowerwallApi(string siteId, IPlatformAdapter platformAdapter)
         {
             this.siteId = siteId;
-            this.tokenStore = tokenStore;
-            this.apiHelper = new ApiHelper(tokenStore);
+            this.platformAdapter = platformAdapter;
+            if (platformAdapter.AccessToken == "DEMO")
+            {
+                this.apiHelper = new DemoApiHelper(platformAdapter);
+            }
+            else
+            {
+                this.apiHelper = new ApiHelper(platformAdapter);
+            }
         }
 
         private async Task<JsonObject> GetProductResponse()
@@ -90,7 +97,7 @@ namespace PowerwallCompanion.Lib
         public async Task<Tuple<double, double>> GetBatteryMinMaxToday()
         {
   
-            var json = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/calendar_history?kind=soe");
+            var json = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/calendar_history?kind=soe&period=day");
             int min = 100;
             int max = 0;
             foreach (var datapoint in (JsonArray)json["response"]["time_series"])

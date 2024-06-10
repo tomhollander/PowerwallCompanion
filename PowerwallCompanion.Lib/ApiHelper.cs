@@ -11,14 +11,14 @@ using TeslaAuth;
 
 namespace PowerwallCompanion
 {
-    internal class ApiHelper
+    internal class ApiHelper : IApiHelper
     {
         private string _baseUrl;
-        private ITokenStore _tokenStore;
+        private IPlatformAdapter _platformAdatper;
 
-        public ApiHelper(ITokenStore tokenStore)
+        public ApiHelper(IPlatformAdapter platformAdapter)
         {
-            _tokenStore = tokenStore;
+            _platformAdatper = platformAdapter;
         }
 
         public async Task<JsonObject> CallGetApiWithTokenRefresh(string url)
@@ -29,7 +29,7 @@ namespace PowerwallCompanion
                 fullUrl = await GetBaseUrl() + fullUrl;
             }
 
-            if (_tokenStore.AccessToken == null)
+            if (_platformAdatper.AccessToken == null)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -50,7 +50,7 @@ namespace PowerwallCompanion
         {
     
             var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenStore.AccessToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _platformAdatper.AccessToken);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("X-Tesla-User-Agent");
             var response = await client.GetAsync(url);
             var responseMessage = await response.Content.ReadAsStringAsync();
@@ -82,9 +82,9 @@ namespace PowerwallCompanion
                 }
                 var helper = new TeslaAuthHelper(TeslaAccountRegion.Unknown, Keys.TeslaAppClientId, Keys.TeslaAppClientSecret, Keys.TeslaAppRedirectUrl,
                 Scopes.BuildScopeString(new[] { Scopes.EnergyDeviceData, Scopes.VehicleDeviceData }));
-                var tokens = await helper.RefreshTokenAsync(_tokenStore.RefreshToken);
-                _tokenStore.AccessToken = tokens.AccessToken;
-                _tokenStore.RefreshToken = tokens.RefreshToken;
+                var tokens = await helper.RefreshTokenAsync(_platformAdatper.RefreshToken);
+                _platformAdatper.AccessToken = tokens.AccessToken;
+                _platformAdatper.RefreshToken = tokens.RefreshToken;
                 _tokenLastRefreshed = DateTime.Now;
 
             }

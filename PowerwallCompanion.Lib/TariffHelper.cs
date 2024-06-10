@@ -210,10 +210,10 @@ namespace PowerwallCompanion.Lib
             foreach (var energyHistory in energyHistoryTimeSeries)
             {
                 var timestamp = energyHistory["timestamp"].GetValue<DateTime>();
-                var energyImported = energyHistory["grid_energy_imported"].GetValue<double>() / 1000; // Convert to kWh
-                var energyExported = (energyHistory["grid_energy_exported_from_solar"].GetValue<double>() +
-                    energyHistory["grid_energy_exported_from_battery"].GetValue<double>() +
-                    energyHistory["grid_energy_exported_from_generator"].GetValue<double>()) / 1000; // Convert to kWh
+                var energyImported = Utils.GetValueOrDefault<double>(energyHistory["grid_energy_imported"]) / 1000; // Convert to kWh
+                var energyExported = (Utils.GetValueOrDefault<double>(energyHistory["grid_energy_exported_from_solar"]) +
+                    Utils.GetValueOrDefault<double>(energyHistory["grid_energy_exported_from_battery"]) +
+                    Utils.GetValueOrDefault<double>(energyHistory["grid_energy_exported_from_generator"])) / 1000; // Convert to kWh
                 var tariff = GetTariffForInstant(timestamp, tariffs);
                 if (tariff == null)
                 {

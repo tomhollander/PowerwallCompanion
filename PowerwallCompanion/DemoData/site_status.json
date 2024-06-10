@@ -1,0 +1,20 @@
+﻿{
+  "response": {
+    "resource_type": "battery",
+    "site_name": "Powerwall",
+    "gateway_id": "1111111-01-F--T17G0000000",
+    "energy_left": 248.36842105263162,
+    "total_pack_energy": 12761,
+    "percentage_charged": 1.9463084480262645,
+    "battery_type": "ac_powerwall",
+    "backup_capable": true,
+    "battery_power": -2530,
+    "go_off_grid_test_banner_enabled": null,
+    "storm_mode_enabled": true,
+    "powerwall_onboarding_settings_set": true,
+    "powerwall_tesla_electric_interested_in": null,
+    "vpp_tour_enabled": null,
+    "sync_grid_alert_enabled": true,
+    "breaker_alert_enabled": true
+  }
+}

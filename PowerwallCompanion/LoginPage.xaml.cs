@@ -84,7 +84,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var powerwallApi = new PowerwallApi(null, new TokenStore());
+                var powerwallApi = new PowerwallApi(null, new UwpPlatformAdapter());
                 var tokens = await teslaAuth.GetTokenAfterLoginAsync(url);
 
                 if (CheckTokenScopes(tokens.AccessToken))

@@ -42,7 +42,7 @@ namespace PowerwallCompanion
             ViewModel.Period = "Day";
             ViewModel.CalendarDate = DateTime.Now;
 
-            powerwallApi = new PowerwallApi(Settings.SiteId, new TokenStore());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
             ratePlanTask = FetchRatePlan();
 
             timer = new DispatcherTimer();
@@ -244,7 +244,11 @@ namespace PowerwallCompanion
             ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartSeries));
             ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartStackingSeries));
 
-            ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+            if (Settings.AccessToken != "DEMO")
+            {
+                ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+            }
+            
         }
 
         private async Task FetchDailyEnergyData()
@@ -334,7 +338,10 @@ namespace PowerwallCompanion
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
 
-                ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                if (Settings.AccessToken != "DEMO")
+                {
+                    ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                }
 
             }
 

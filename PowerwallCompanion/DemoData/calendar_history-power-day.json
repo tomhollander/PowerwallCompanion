@@ -1,0 +1,2024 @@
+﻿{
+  "response": {
+    "serial_number": "1111111-01-F--T17G0000000",
+    "installation_time_zone": "Australia/Sydney",
+    "time_series": [
+      {
+        "timestamp": "2019-08-25T00:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3609.204488658905,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3585.4354988098144,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3579.784003067017,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3571.731506252289,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3561.0279965400696,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3417.2480257034304,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3433.3180119514464,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2932.5514945030213,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3414.851965999603,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3587.707500553131,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3512.5880110740663,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T00:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3493.801991271973,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3502.7089771270753,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3559.1064807891844,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3643.1760325431824,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3636.770964717865,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3596.5634989738464,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3611.8164862632752,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3606.0439670562746,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3607.160515499115,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3566.9850001335144,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3615.621996212006,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3543.904998588562,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T01:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3549.494516944885,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3594.138501358032,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3742.1239952087403,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2901.14249420166,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3560.023021221161,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 4018.743510055542,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3866.373500919342,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3811.252509021759,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3803.120998954773,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3773.7939876556397,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3773.916018104553,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3776.233482456207,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T02:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3853.2265001296996,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3861.2825315475466,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3836.418006324768,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3844.8709738731386,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3825.039465141296,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3569.0960173606873,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3382.870983791351,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3331.511978530884,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3218.4635305404663,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3154.4030084609985,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3120.7115067481996,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3046.4950164794923,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T03:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3053.233510494232,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2928.0615114212037,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3029.808523750305,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3215.5659932136537,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3149.4100268363954,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3136.006003379822,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3152.8495049476624,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3133.4725123405456,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3145.663467216492,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": -339.5,
+        "grid_power": 3496.8529752731324,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": -1665.5,
+        "grid_power": 4964.738507843018,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": -1669.5,
+        "grid_power": 4937.856486129761,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T04:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3004.35649394989,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2607.5845041275024,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3005.228532409668,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2985.741484642029,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2993.25901927948,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3066.8910331726074,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3199.0754812240602,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3083.247011947632,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3087.463500213623,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3154.5045026779176,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3157.4904905319213,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3134.162522697449,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T05:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3084.0204597473144,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2751.8585119247437,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3227.5759925842285,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3139.3095108032226,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3005.4435081481934,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3023.2380195617675,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2939.261484527588,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3072.761510467529,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3036.6884857177733,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3173.9080081939696,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3257.8554985046385,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3163.100496673584,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T06:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3286.4045082092284,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2939.472988128662,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:05:00+10:00",
+        "solar_power": 150.2479995727539,
+        "battery_power": 0,
+        "grid_power": 3431.4035148620605,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:10:00+10:00",
+        "solar_power": 392.8414993286133,
+        "battery_power": 0,
+        "grid_power": 3206.8389907836913,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:15:00+10:00",
+        "solar_power": 484.5400024414063,
+        "battery_power": 0,
+        "grid_power": 2985.264490109682,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:20:00+10:00",
+        "solar_power": 579.981005859375,
+        "battery_power": 0,
+        "grid_power": 2716.1654838562013,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:25:00+10:00",
+        "solar_power": 667.6304931640625,
+        "battery_power": 0,
+        "grid_power": 2795.394999694824,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:30:00+10:00",
+        "solar_power": 743.55400390625,
+        "battery_power": 0,
+        "grid_power": 3692.107978820801,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:35:00+10:00",
+        "solar_power": 838.8489959716796,
+        "battery_power": 0,
+        "grid_power": 3674.112991333008,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:40:00+10:00",
+        "solar_power": 934.8404937744141,
+        "battery_power": 181,
+        "grid_power": 3406.374978637695,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:45:00+10:00",
+        "solar_power": 1028.1389953613282,
+        "battery_power": 0,
+        "grid_power": 3439.78698425293,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:50:00+10:00",
+        "solar_power": 1124.2744934082032,
+        "battery_power": 0,
+        "grid_power": 3341.444994354248,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T07:55:00+10:00",
+        "solar_power": 1218.5035034179687,
+        "battery_power": 0,
+        "grid_power": 2784.725987625122,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:00:00+10:00",
+        "solar_power": 1310.44150390625,
+        "battery_power": 0,
+        "grid_power": 3210.4539913654326,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:05:00+10:00",
+        "solar_power": 1411.8664916992188,
+        "battery_power": 0,
+        "grid_power": 2781.0144922971726,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:10:00+10:00",
+        "solar_power": 1509.1119995117188,
+        "battery_power": 0,
+        "grid_power": 2280.4009971618652,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:15:00+10:00",
+        "solar_power": 1602.169989013672,
+        "battery_power": 0,
+        "grid_power": 2117.0470184326173,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:20:00+10:00",
+        "solar_power": 1684.4130004882813,
+        "battery_power": 0,
+        "grid_power": 2035.0255088806152,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:25:00+10:00",
+        "solar_power": 1772.3695007324218,
+        "battery_power": 0,
+        "grid_power": 2295.681982803345,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:30:00+10:00",
+        "solar_power": 1854.5,
+        "battery_power": 0,
+        "grid_power": 2979.2794868469236,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:35:00+10:00",
+        "solar_power": 1945.5065002441406,
+        "battery_power": 0,
+        "grid_power": 3190.5329986572265,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:40:00+10:00",
+        "solar_power": 1998.4995056152343,
+        "battery_power": 0,
+        "grid_power": 5458.796017837524,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:45:00+10:00",
+        "solar_power": 2107.0015197753905,
+        "battery_power": 0,
+        "grid_power": 3190.7774913787844,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:50:00+10:00",
+        "solar_power": 2187.1234741210938,
+        "battery_power": 0,
+        "grid_power": 3669.248509597778,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T08:55:00+10:00",
+        "solar_power": 2272.4340209960938,
+        "battery_power": 0,
+        "grid_power": 3957.109010696411,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:00:00+10:00",
+        "solar_power": 2358.0524780273436,
+        "battery_power": 0,
+        "grid_power": 3866.425454330444,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:05:00+10:00",
+        "solar_power": 2449.33349609375,
+        "battery_power": 0,
+        "grid_power": 3155.5655101776124,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:10:00+10:00",
+        "solar_power": 2547.924523925781,
+        "battery_power": 0,
+        "grid_power": 2255.9395282745363,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:15:00+10:00",
+        "solar_power": 2637.5479736328125,
+        "battery_power": 0,
+        "grid_power": 2211.596987962723,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:20:00+10:00",
+        "solar_power": 2732.94150390625,
+        "battery_power": 0,
+        "grid_power": 1897.494490814209,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:25:00+10:00",
+        "solar_power": 2795.5354736328127,
+        "battery_power": 0,
+        "grid_power": 1750.6249591827393,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:30:00+10:00",
+        "solar_power": 2869.651989746094,
+        "battery_power": 0,
+        "grid_power": 1358.731982421875,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:35:00+10:00",
+        "solar_power": 2941.7420166015627,
+        "battery_power": 0,
+        "grid_power": 1303.747989654541,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:40:00+10:00",
+        "solar_power": 2958.980993652344,
+        "battery_power": 0,
+        "grid_power": 1135.1814682006836,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:45:00+10:00",
+        "solar_power": 1837.0075134277345,
+        "battery_power": 0,
+        "grid_power": 2250.5764923095703,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:50:00+10:00",
+        "solar_power": 1891.7825012207031,
+        "battery_power": 0,
+        "grid_power": 2186.555467605591,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T09:55:00+10:00",
+        "solar_power": 3029.3269775390627,
+        "battery_power": 0,
+        "grid_power": 1099.136001586914,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:00:00+10:00",
+        "solar_power": 3301.1054931640624,
+        "battery_power": 0,
+        "grid_power": 816.4695045471192,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:05:00+10:00",
+        "solar_power": 3350.7880126953123,
+        "battery_power": -148,
+        "grid_power": 419.9189792633057,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:10:00+10:00",
+        "solar_power": 3434.224475097656,
+        "battery_power": 0,
+        "grid_power": 586.2234878540039,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:15:00+10:00",
+        "solar_power": 3508.787976074219,
+        "battery_power": 0,
+        "grid_power": 700.6200271606446,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:20:00+10:00",
+        "solar_power": 3555.8419799804688,
+        "battery_power": 0,
+        "grid_power": 943.7854988098145,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:25:00+10:00",
+        "solar_power": 2521.068005371094,
+        "battery_power": 0,
+        "grid_power": 1623.8519844055177,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:30:00+10:00",
+        "solar_power": 2071.8949951171876,
+        "battery_power": 0,
+        "grid_power": 2195.205485534668,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:35:00+10:00",
+        "solar_power": 2081.731481933594,
+        "battery_power": 0,
+        "grid_power": 2876.0239921569823,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:40:00+10:00",
+        "solar_power": 2103.355505371094,
+        "battery_power": 0,
+        "grid_power": 2227.311979675293,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:45:00+10:00",
+        "solar_power": 2109.48798828125,
+        "battery_power": 0,
+        "grid_power": 2449.6149753570558,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:50:00+10:00",
+        "solar_power": 2124.9594970703124,
+        "battery_power": 0,
+        "grid_power": 2436.4575012207033,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T10:55:00+10:00",
+        "solar_power": 2150.3800048828125,
+        "battery_power": 0,
+        "grid_power": 2473.681512069702,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:00:00+10:00",
+        "solar_power": 2146.738488769531,
+        "battery_power": 0,
+        "grid_power": 2588.1280204772947,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:05:00+10:00",
+        "solar_power": 2164.0375244140623,
+        "battery_power": 0,
+        "grid_power": 2266.8934951782226,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:10:00+10:00",
+        "solar_power": 2178.214501953125,
+        "battery_power": 0,
+        "grid_power": 1989.0694747924804,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:15:00+10:00",
+        "solar_power": 2185.473522949219,
+        "battery_power": 0,
+        "grid_power": 2033.3159957885741,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:20:00+10:00",
+        "solar_power": 2196.2614868164064,
+        "battery_power": 0,
+        "grid_power": 2086.908473205566,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:25:00+10:00",
+        "solar_power": 2210.9585083007814,
+        "battery_power": 0,
+        "grid_power": 2053.0089881896974,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:30:00+10:00",
+        "solar_power": 2417.7959838867187,
+        "battery_power": 0,
+        "grid_power": 1881.3045013427734,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:35:00+10:00",
+        "solar_power": 3910.248498535156,
+        "battery_power": 0,
+        "grid_power": 2041.502970123291,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:40:00+10:00",
+        "solar_power": 4084.7000244140627,
+        "battery_power": 0,
+        "grid_power": 1272.1284729003905,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:45:00+10:00",
+        "solar_power": 3439.1614990234375,
+        "battery_power": 0,
+        "grid_power": 2270.7870098114013,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:50:00+10:00",
+        "solar_power": 3420.078479003906,
+        "battery_power": 0,
+        "grid_power": 2402.602523851395,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T11:55:00+10:00",
+        "solar_power": 2664.4224853515625,
+        "battery_power": 0,
+        "grid_power": 1873.0459884643556,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:00:00+10:00",
+        "solar_power": 3719.9764892578123,
+        "battery_power": 0,
+        "grid_power": 568.2880111694336,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:05:00+10:00",
+        "solar_power": 2349.7262535095215,
+        "battery_power": 139.21875,
+        "grid_power": 1645.4051575660706,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:10:00+10:00",
+        "solar_power": 2274.0109924316407,
+        "battery_power": 0,
+        "grid_power": 2152.583014678955,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:15:00+10:00",
+        "solar_power": 2283.678503417969,
+        "battery_power": 0,
+        "grid_power": 1925.9129776000977,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:20:00+10:00",
+        "solar_power": 2918.79951171875,
+        "battery_power": 0,
+        "grid_power": 1456.542010498047,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:25:00+10:00",
+        "solar_power": 4239.779516601562,
+        "battery_power": 0,
+        "grid_power": 1081.9910041809082,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:30:00+10:00",
+        "solar_power": 4309.565014648438,
+        "battery_power": 0,
+        "grid_power": 1105.4465293884277,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:35:00+10:00",
+        "solar_power": 3387.9775146484376,
+        "battery_power": 0,
+        "grid_power": 1068.5534973144531,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:40:00+10:00",
+        "solar_power": 2328.465466308594,
+        "battery_power": 0,
+        "grid_power": 1545.9409675598145,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:45:00+10:00",
+        "solar_power": 2756.718994140625,
+        "battery_power": 0,
+        "grid_power": 992.6825050354004,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:50:00+10:00",
+        "solar_power": 2305.8930053710938,
+        "battery_power": 0,
+        "grid_power": 1495.3854690551757,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T12:55:00+10:00",
+        "solar_power": 2301.627978515625,
+        "battery_power": 0,
+        "grid_power": 1192.0254646301269,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:00:00+10:00",
+        "solar_power": 2558.4600219726562,
+        "battery_power": 0,
+        "grid_power": 1884.480015850067,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:05:00+10:00",
+        "solar_power": 2915.425500488281,
+        "battery_power": 0,
+        "grid_power": 2565.029475402832,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:10:00+10:00",
+        "solar_power": 3528.4010009765625,
+        "battery_power": -126,
+        "grid_power": 1700.736499786377,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:15:00+10:00",
+        "solar_power": 3433.4965087890623,
+        "battery_power": 0,
+        "grid_power": 1151.7010063171388,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:20:00+10:00",
+        "solar_power": 3018.8969848632814,
+        "battery_power": 0,
+        "grid_power": 3179.148956298828,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:25:00+10:00",
+        "solar_power": 4192.085498046875,
+        "battery_power": -243,
+        "grid_power": 571.8014808654785,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:30:00+10:00",
+        "solar_power": 4141.822509765625,
+        "battery_power": 0,
+        "grid_power": 2517.6374534606935,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:35:00+10:00",
+        "solar_power": 3734.632531738281,
+        "battery_power": 0,
+        "grid_power": 1101.4819953918457,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:40:00+10:00",
+        "solar_power": 2877.825,
+        "battery_power": 0,
+        "grid_power": 1358.7939804077148,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:45:00+10:00",
+        "solar_power": 3992.2775024414063,
+        "battery_power": 0,
+        "grid_power": 2127.3229904174805,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:50:00+10:00",
+        "solar_power": 3971.456494140625,
+        "battery_power": 0,
+        "grid_power": 1680.218458557129,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T13:55:00+10:00",
+        "solar_power": 3949.647985839844,
+        "battery_power": 0,
+        "grid_power": 681.8214256286622,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:00:00+10:00",
+        "solar_power": 3839.9655029296873,
+        "battery_power": 0,
+        "grid_power": 512.224535369873,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:05:00+10:00",
+        "solar_power": 2144.3955078125,
+        "battery_power": 215.5,
+        "grid_power": 2130.272053527832,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:10:00+10:00",
+        "solar_power": 2752.2305114746096,
+        "battery_power": 0,
+        "grid_power": 1661.3239959716798,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:15:00+10:00",
+        "solar_power": 3337.7510040283205,
+        "battery_power": -206,
+        "grid_power": 395.8205062866211,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:20:00+10:00",
+        "solar_power": 3308.4340209960938,
+        "battery_power": -312,
+        "grid_power": 324.2540023803711,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:25:00+10:00",
+        "solar_power": 2431.3944915771485,
+        "battery_power": 238,
+        "grid_power": 617.4564933776855,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:30:00+10:00",
+        "solar_power": 2214.756497192383,
+        "battery_power": 0,
+        "grid_power": 1077.753958129883,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:35:00+10:00",
+        "solar_power": 2032.9504821777343,
+        "battery_power": 0,
+        "grid_power": 1782.5135301589967,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:40:00+10:00",
+        "solar_power": 3360.1594970703127,
+        "battery_power": 0,
+        "grid_power": 2144.6375106811524,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:45:00+10:00",
+        "solar_power": 3190.6574890136717,
+        "battery_power": 0,
+        "grid_power": 2223.07349319458,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:50:00+10:00",
+        "solar_power": 2848.751501464844,
+        "battery_power": 0,
+        "grid_power": 2530.91750831604,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T14:55:00+10:00",
+        "solar_power": 3040.7209899902346,
+        "battery_power": 0,
+        "grid_power": 2591.5655391693117,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:00:00+10:00",
+        "solar_power": 3326.7214904785155,
+        "battery_power": -318,
+        "grid_power": 0,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:05:00+10:00",
+        "solar_power": 2315.639501953125,
+        "battery_power": 113.5,
+        "grid_power": 512.0750106811523,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:10:00+10:00",
+        "solar_power": 1004.4105087280274,
+        "battery_power": 0,
+        "grid_power": 1887.8814933776855,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:15:00+10:00",
+        "solar_power": 2694.7304443359376,
+        "battery_power": -242,
+        "grid_power": 413.1850112915039,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:20:00+10:00",
+        "solar_power": 3258.352990722656,
+        "battery_power": -391,
+        "grid_power": 0,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:25:00+10:00",
+        "solar_power": 2393.408493041992,
+        "battery_power": 457.5,
+        "grid_power": 0,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:30:00+10:00",
+        "solar_power": 1649.670004272461,
+        "battery_power": 0,
+        "grid_power": 1248.3489868164063,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:35:00+10:00",
+        "solar_power": 1889.8375,
+        "battery_power": 0,
+        "grid_power": 989.4614921569824,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:40:00+10:00",
+        "solar_power": 1417.6994995117188,
+        "battery_power": 0,
+        "grid_power": 1281.3975048065186,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:45:00+10:00",
+        "solar_power": 1867.0580169677735,
+        "battery_power": 0,
+        "grid_power": 708.8875259399414,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:50:00+10:00",
+        "solar_power": 1501.7205078125,
+        "battery_power": 0,
+        "grid_power": 1129.5369659423827,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T15:55:00+10:00",
+        "solar_power": 2376.7879943847656,
+        "battery_power": 0,
+        "grid_power": 390.5955039978027,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:00:00+10:00",
+        "solar_power": 2137.6214904785156,
+        "battery_power": 0,
+        "grid_power": 755.0474952697754,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:05:00+10:00",
+        "solar_power": 1807.8719909667968,
+        "battery_power": 0,
+        "grid_power": 950.1320014953614,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:10:00+10:00",
+        "solar_power": 1316.252001953125,
+        "battery_power": 0,
+        "grid_power": 1848.9569837331771,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:15:00+10:00",
+        "solar_power": 799.6665023803711,
+        "battery_power": 0,
+        "grid_power": 1852.5274753570557,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:20:00+10:00",
+        "solar_power": 666.889501953125,
+        "battery_power": 0,
+        "grid_power": 1786.4474891662599,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:25:00+10:00",
+        "solar_power": 1062.8279937744142,
+        "battery_power": 0,
+        "grid_power": 1223.539510345459,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:30:00+10:00",
+        "solar_power": 1142.1820068359375,
+        "battery_power": 0,
+        "grid_power": 1063.1984813690185,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:35:00+10:00",
+        "solar_power": 926.7155029296875,
+        "battery_power": 0,
+        "grid_power": 1355.6199981689454,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:40:00+10:00",
+        "solar_power": 591.8229934692383,
+        "battery_power": 0,
+        "grid_power": 1670.0429901123048,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:45:00+10:00",
+        "solar_power": 421.64150085449216,
+        "battery_power": 0,
+        "grid_power": 1176.0379993438721,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:50:00+10:00",
+        "solar_power": 306.343000793457,
+        "battery_power": 0,
+        "grid_power": 679.3724983558059,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T16:55:00+10:00",
+        "solar_power": 191.920499420166,
+        "battery_power": 0,
+        "grid_power": 1116.5514983177186,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 718.7139980316163,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1036.8105026245116,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1184.0624984741212,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 703.131502532959,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 690.6305000305176,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 758.063500213623,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 708.735001373291,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 855.6284973144532,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1431.0275016784667,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 913.4300003051758,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 913.2464981079102,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T17:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1185.4405044555665,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3649.5849884033205,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3103.288469696045,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2671.7295082092287,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2442.079995727539,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2636.1164939880373,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1080.3245025634765,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 886.2255004882812,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 892.0445030212402,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 875.7139976501464,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 929.6769201816657,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 918.2684764032779,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T18:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 802.2650001525878,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 865.1510009765625,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 877.8595001220704,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 889.1780006408692,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 861.785112508138,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 823.9035496865549,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 999.5594970703125,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 706.9949958801269,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1223.0539909362792,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1840.087501525879,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1868.6380027770997,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1829.4634971618652,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T19:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1964.0035034179687,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1847.288998413086,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1833.7969940185546,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1834.9204895019532,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1874.1470138549805,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1189.9744888305663,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1156.4070045471192,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1531.5300064086914,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3407.908515167236,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3297.353022003174,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3223.863982009888,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3289.4070068359374,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T20:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1594.8454936981202,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3195.100020980835,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3450.6315196990968,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 678.8255016326905,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2945.4455284118653,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3228.777448272705,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2022.509980392456,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 646.8745040893555,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 2607.0050075531008,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3031.587022781372,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1016.1020030975342,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1140.2909923553466,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T21:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 3228.681536102295,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1231.8405042648315,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 1230.6004897117614,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 769.9535010337829,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 368.933500957489,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 271.03949918746946,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 353.60850048065186,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 325.09699964523315,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 270.9829996109009,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 338.9515014648438,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 262.4055018424988,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 259.6629988670349,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T22:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 256.2794997215271,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:00:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 259.99049987792966,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:05:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 256.30949993133544,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:10:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 318.89449682235715,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:15:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 257.6834999084473,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:20:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 205.8364990234375,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:25:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 206.48099937438965,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:30:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 205.81649780273438,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:35:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 204.31499910354614,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:40:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 267.3229977607727,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:45:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 403.0404984474182,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:50:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 273.1500015258789,
+        "grid_services_power": 0
+      },
+      {
+        "timestamp": "2019-08-25T23:55:00+10:00",
+        "solar_power": 0,
+        "battery_power": 0,
+        "grid_power": 265.8094988822937,
+        "grid_services_power": 0
+      }
+    ]
+  }
+}

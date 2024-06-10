@@ -48,7 +48,7 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             Analytics.TrackEvent("StatusPage opened");
-            powerwallApi = new PowerwallApi(Settings.SiteId, new TokenStore());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
             viewModel = new StatusViewModel();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
@@ -202,7 +202,15 @@ namespace PowerwallCompanion
                 viewModel.PowerChartSeries = await powerwallApi.GetPowerChartSeriesForLastTwoDays();
 
                 DateTime d = await powerwallApi.ConvertToPowerwallDate(DateTime.Now);
-                viewModel.ChartMaxDate = d.Date.AddDays(1);
+                if (Settings.AccessToken == "DEMO")
+                {
+                    viewModel.ChartMaxDate = new DateTime(2018, 3, 1);
+                }
+                else
+                {
+                    viewModel.ChartMaxDate = d.Date.AddDays(1);
+                }
+                
 
                 viewModel.PowerHistoryLastRefreshed = DateTime.Now;
                 viewModel.NotifyGraphProperties();
@@ -264,22 +272,7 @@ namespace PowerwallCompanion
             return new Windows.UI.Color() { A = c.A, R = c.R, G = c.G, B = c.B };
         }
 
-        private static double GetJsonDoubleValue(JToken jtoken)
-        {
-            if (jtoken == null)
-            {
-                return 0;
-            }
-            try
-            {
-                return jtoken.Value<double>();
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
+      
         private void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (ViewModel.LastExceptionMessage != null)

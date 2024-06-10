@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime;
 using System.Text;
+using System.Text.Json.Nodes;
 using TimeZoneConverter;
 
 namespace PowerwallCompanion.Lib
@@ -32,6 +33,22 @@ namespace PowerwallCompanion.Lib
             sb.Append("&time_zone=" + Uri.EscapeDataString(timeZone));
             sb.Append("&fill_telemetry=0");
             return sb.ToString();
+        }
+
+        public static T GetValueOrDefault<T>(JsonNode obj)
+        {
+            if (obj == null)
+            {
+                return default(T);
+            }
+            try
+            {
+                return obj.GetValue<T>();
+            }
+            catch
+            {
+                return default(T);
+            }
         }
     }
 }
