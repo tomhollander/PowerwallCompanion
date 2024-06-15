@@ -1,18 +1,10 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.NetworkInformation;
-using System.Runtime;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using TimeZoneConverter;
 
 namespace PowerwallCompanion.Lib
@@ -75,7 +67,6 @@ namespace PowerwallCompanion.Lib
         {
             var productsResponse = await GetProductResponse();
             var availableSites = new Dictionary<string, string>();
-            bool foundSite = false;
             foreach (var product in productsResponse["response"].AsArray())
             {
                 if (product["resource_type"]?.GetValue<string>() == "battery" && product["energy_site_id"] != null)

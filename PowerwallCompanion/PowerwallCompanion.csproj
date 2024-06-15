@@ -122,9 +122,9 @@
     <Compile Include="ChartPage.xaml.cs">
       <DependentUpon>ChartPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BatteryCapacityToBrushConverter.cs" />
     <Compile Include="Converters\BatteryExportingToVisibilityConverter.cs" />
     <Compile Include="Converters\BatteryImportingToVisibilityConverter.cs" />
-    <Compile Include="Converters\BatteryCapacityToBrushConverter.cs" />
     <Compile Include="Converters\BatteryPercentageConverter.cs" />
     <Compile Include="Converters\IntegerConverter.cs" />
     <Compile Include="Converters\EnergySourceIconVisibilityConverter.cs" />
@@ -158,7 +158,6 @@
     <Compile Include="DownloadWebViewPage.xaml.cs">
       <DependentUpon>DownloadWebViewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GatewayApiHelper.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="KeysSecret.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -177,7 +176,6 @@
     </Compile>
     <Compile Include="UwpPlatformAdapter.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="ViewModels\BatteryDetails.cs" />
     <Compile Include="ViewModels\BatteryInfoViewModel.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
     <Compile Include="ViewModels\EnergyViewModel.cs" />

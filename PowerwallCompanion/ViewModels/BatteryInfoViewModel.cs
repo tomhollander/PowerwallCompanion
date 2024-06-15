@@ -18,7 +18,6 @@ namespace PowerwallCompanion.ViewModels
             EnoughDataToShowChart = true; // Prevent flicker
         }
 
-        public bool CachedData { get; set; }
         public List<BatteryDetails> BatteryDetails { get; set; }
 
         public string GatewayError { get; set; }

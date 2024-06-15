@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TeslaAuth;
 
-namespace PowerwallCompanion
+namespace PowerwallCompanion.Lib
 {
     internal class ApiHelper : IApiHelper
     {

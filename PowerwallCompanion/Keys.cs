@@ -13,7 +13,6 @@ namespace PowerwallCompanion
         public static string TeslaAppClientSecret; // Register at developer.tesla.com
         public static string TeslaAppRedirectUrl; // Register at developer.tesla.com
         public static string AppCenterKey; // Get a key at appcenter.ms
-        public static string AppServicesKey; // Get a key at appcenter.ms
         public static string ElectricityMapsApiKey; // Get a key at electricitymaps.com
     }
 }

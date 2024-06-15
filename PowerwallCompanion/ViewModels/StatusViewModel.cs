@@ -14,6 +14,7 @@ namespace PowerwallCompanion.ViewModels
 {
     public class StatusViewModel : INotifyPropertyChanged
     {
+        private StatusEnum _status;
         public enum StatusEnum
         {
             Online,
@@ -21,16 +22,6 @@ namespace PowerwallCompanion.ViewModels
             Error
         }
 
-        private double _batteryPercent;
-        private double _minPercentToday;
-        private double _maxPercentToday;
-        private DateTime _batteryDay = DateTime.MinValue;
-        private double _homeValue;
-        private double _solarValue;
-        private double _batteryValue;
-        private double _gridValue;
-        private bool _gridActive;
-        private StatusEnum _status;
 
         public StatusViewModel()
         {
@@ -41,7 +32,6 @@ namespace PowerwallCompanion.ViewModels
             EnergyHistoryLastRefreshed = DateTime.MinValue;
             PowerHistoryLastRefreshed = DateTime.MinValue;
             LiveStatusLastRefreshed = DateTime.MinValue;
-            _batteryDay = DateTime.MinValue;
 
         }
 
@@ -60,7 +50,6 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(FeedInPerHour));
             NotifyPropertyChanged(nameof(TariffFeedInVisibility));
             NotifyPropertyChanged(nameof(TariffCostVisibility));
-            NotifyPropertyChanged(nameof(GridActive));
             NotifyPropertyChanged(nameof(Time));
         }
 
@@ -159,18 +148,7 @@ namespace PowerwallCompanion.ViewModels
                 NotifyPropertyChanged(nameof(Status));
             }
         }
-
-
-        public bool GridActive
-        {
-            get { return _gridActive; }
-            set
-            {
-                _gridActive = value;
-            }
-        }
-
-  
+ 
 
         public string Time
         {

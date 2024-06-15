@@ -6,13 +6,13 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace PowerwallCompanion
+namespace PowerwallCompanion.Lib
 {
     internal class GatewayApiHelper
     {
-        public async static Task<JsonObject> CallGetApi(string uriPath)
+        public async Task<JsonObject> CallGetApi(string localGatwayIP, string localGatewayPassword, string uriPath)
         {
-            if (Settings.LocalGatewayIP == null || Settings.LocalGatewayPassword == null)
+            if (String.IsNullOrEmpty(localGatwayIP) || String.IsNullOrEmpty(localGatewayPassword))
             {
                 throw new InvalidOperationException("Gateway details not configured");
             }
@@ -23,9 +23,9 @@ namespace PowerwallCompanion
             };
 
             var client = new HttpClient(handler);
-            var payload = $"{{\"username\":\"customer\",\"password\":\"{Settings.LocalGatewayPassword}\", \"email\":\"me@example.com\",\"clientInfo\":{{\"timezone\":\"Australia/Sydney\"}}}}";
+            var payload = $"{{\"username\":\"customer\",\"password\":\"{localGatewayPassword}\", \"email\":\"me@example.com\",\"clientInfo\":{{\"timezone\":\"Australia/Sydney\"}}}}";
             var content = new StringContent(payload, new UTF8Encoding(), "application/json");
-            var response = await client.PostAsync($"https://{Settings.LocalGatewayIP.Trim()}/api/login/Basic", content);
+            var response = await client.PostAsync($"https://{localGatwayIP.Trim()}/api/login/Basic", content);
             if (response.IsSuccessStatusCode == false)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
@@ -33,7 +33,7 @@ namespace PowerwallCompanion
             }
             var cookies = response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Settings.LocalGatewayIP.Trim()}{uriPath}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{localGatwayIP.Trim()}{uriPath}");
             foreach (var cookie in cookies)
             {
                 request.Headers.Add("Cookie", cookie);

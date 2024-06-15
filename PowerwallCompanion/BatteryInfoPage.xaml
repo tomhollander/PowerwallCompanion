@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:converters="using:PowerwallCompanion.Converters"
-    xmlns:viewmodels="using:PowerwallCompanion.ViewModels"
+    xmlns:libmodels="using:PowerwallCompanion.Lib.Models"
     xmlns:chart="using:Syncfusion.UI.Xaml.Charts" 
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
@@ -105,7 +105,7 @@
                     <toolkit:DataGridTextColumn Header="Capacity &#x0a;(kWh)" IsReadOnly="True" Width="SizeToHeader" Binding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" FontSize="30" />
                     <toolkit:DataGridTemplateColumn Header="Vs Baseline" IsReadOnly="True" Width="SizeToHeader">
                         <toolkit:DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate x:DataType="viewmodels:BatteryDetails">
+                            <DataTemplate x:DataType="libmodels:BatteryDetails">
                                 <StackPanel>
                                     <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
                                 </StackPanel>
@@ -114,7 +114,7 @@
                     </toolkit:DataGridTemplateColumn>
                     <toolkit:DataGridTemplateColumn Header="Degradation" Width="SizeToHeader">
                         <toolkit:DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate x:DataType="viewmodels:BatteryDetails">
+                            <DataTemplate x:DataType="libmodels:BatteryDetails">
                                 <StackPanel>
                                     <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
                                 </StackPanel>

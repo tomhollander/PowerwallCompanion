@@ -50,5 +50,15 @@ namespace PowerwallCompanion.Lib
                 return default(T);
             }
         }
+
+        public static string FormatException(Exception ex)
+        {
+            string message = ex.GetType() + ": " + ex.Message;
+            if (ex.InnerException != null)
+            {
+                message += "\n" + FormatException(ex.InnerException);
+            }
+            return message;
+        }
     }
 }

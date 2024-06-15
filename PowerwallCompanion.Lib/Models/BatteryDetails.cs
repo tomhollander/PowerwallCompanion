@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PowerwallCompanion.ViewModels
+namespace PowerwallCompanion.Lib.Models
 {
     public class BatteryDetails
     {

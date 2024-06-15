@@ -33,5 +33,41 @@ namespace PowerwallCompanion.Lib.Tests
             CollectionAssert.Contains(sites, new KeyValuePair<string, string>("22222", "Site Two"));
         }
 
+        [TestMethod]
+        public async Task CanGetInstantaneousPower()
+        {
+            var mockApiHelper = new MockApiHelper();
+            mockApiHelper.SetResponse("/api/1/energy_sites/11111/live_status",
+                @"{
+   ""response"":{
+      ""solar_power"":44,
+      ""energy_left"":0,
+      ""percentage_charged"":53,
+      ""backup_capable"":true,
+      ""battery_power"":550,
+      ""load_power"":1930.2943267822266,
+      ""grid_status"":""Active"",
+      ""grid_services_active"":false,
+      ""grid_power"":1336.2943267822266,
+      ""grid_services_power"":0,
+      ""generator_power"":0,
+      ""storm_mode_active"":false,
+      ""timestamp"":""2020-07-26T16:37:27+10:00""}}");
+            var api = new PowerwallApi("11111", new TestPlatformAdapter(), mockApiHelper);
+            var power = await api.GetInstantaneousPower();
+            Assert.AreEqual(1930.2943267822266, power.HomePower);
+            Assert.AreEqual(550, power.BatteryPower);
+            Assert.AreEqual(1336.2943267822266, power.GridPower);
+            Assert.AreEqual(44, power.SolarPower);
+            Assert.AreEqual(1336.2943267822266, power.HomeFromGrid);
+            Assert.AreEqual(550, power.HomeFromBattery);
+            Assert.AreEqual(44, power.HomeFromSolar);
+            Assert.AreEqual(0, power.SolarToGrid);
+            Assert.AreEqual(0, power.SolarToBattery);
+            Assert.AreEqual(44, power.SolarToHome);
+            Assert.AreEqual(53, power.BatteryStoragePercent);
+            Assert.IsTrue(power.GridActive);
+        }
+
     }
 }
