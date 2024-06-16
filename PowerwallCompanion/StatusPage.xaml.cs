@@ -36,6 +36,7 @@ namespace PowerwallCompanion
         private readonly TimeSpan liveStatusRefreshInterval = new TimeSpan(0, 0, 30);
         private readonly TimeSpan energyHistoryRefreshInterval = new TimeSpan(0, 5, 0);
         private readonly TimeSpan powerHistoryRefreshInterval = new TimeSpan(0, 5, 0);
+        private readonly TimeSpan energySiteInfoRefreshInterval = new TimeSpan(1, 0, 0);
 
         private double minPercentSinceNotification = 0D;
         private double maxPercentSinceNotification = 100D;
@@ -97,9 +98,10 @@ namespace PowerwallCompanion
         {
             try
             {
-                if (ViewModel.EnergySiteInfo == null)
+                if (ViewModel.EnergySiteInfo == null ||  (DateTime.Now - viewModel.EnergySiteInfoLastRefreshed > energySiteInfoRefreshInterval))
                 {
                     ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
+                    ViewModel.EnergySiteInfoLastRefreshed = DateTime.Now;
                     ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergySiteInfo));
                 }
             }

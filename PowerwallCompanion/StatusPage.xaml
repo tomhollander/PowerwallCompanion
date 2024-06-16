@@ -125,7 +125,7 @@
                         <gauge:CircularScale.Ranges>
                             <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" 
                                                     StrokeThickness="30" Stroke="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}" />
-                            <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StrokeThickness="30">
+                            <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StrokeThickness="30" ToolTipService.ToolTip="Backup reserve">
                                 <gauge:CircularRange.Stroke>
                                     <ImageBrush ImageSource="ms-appx:///Assets/diagonal_lines.png" Stretch="None" />
                                 </gauge:CircularRange.Stroke>

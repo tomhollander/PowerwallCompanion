@@ -11,6 +11,9 @@ namespace PowerwallCompanion.Lib.Tests
     {
         private Dictionary<string, string> responses = new Dictionary<string, string>();
 
+        public MockApiHelper()
+        {
+        }
 
         public void SetResponse(string url, string response)
         {
@@ -22,7 +25,7 @@ namespace PowerwallCompanion.Lib.Tests
                 return (JsonObject)JsonNode.Parse(responses[url]);
             }
             throw new HttpRequestException("Bad things happened");
-
         }
+
     }
 }

@@ -285,6 +285,7 @@ namespace PowerwallCompanion.ViewModels
         public DateTime LastExceptionDate { get; set; }
         public DateTime LiveStatusLastRefreshed { get; set; }
         public DateTime EnergyHistoryLastRefreshed { get; set; }
+        public DateTime EnergySiteInfoLastRefreshed { get; set; }
 
         public DateTime PowerHistoryLastRefreshed { get; set; }
         public DateTime GraphDayBoundary
