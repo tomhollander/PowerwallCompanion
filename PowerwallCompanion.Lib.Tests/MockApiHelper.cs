@@ -24,7 +24,7 @@ namespace PowerwallCompanion.Lib.Tests
             if (responses.ContainsKey(url)) {
                 return (JsonObject)JsonNode.Parse(responses[url]);
             }
-            throw new HttpRequestException("Bad things happened");
+            throw new HttpRequestException("No response configured for " + url);
         }
 
     }

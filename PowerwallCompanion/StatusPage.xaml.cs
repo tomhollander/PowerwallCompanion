@@ -1,14 +1,12 @@
 ﻿using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Notifications;
-using Newtonsoft.Json.Linq;
 using PowerwallCompanion.CustomEnergySourceProviders;
 using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -191,8 +189,8 @@ namespace PowerwallCompanion
 
                 var tasks = new List<Task<EnergyTotals>>()
                 {
-                    powerwallApi.GetEnergyTotalsForDay(DateTime.Now.Date.AddDays(-1), tariffHelper),
-                    powerwallApi.GetEnergyTotalsForDay(DateTime.Now.Date, tariffHelper)
+                    powerwallApi.GetEnergyTotalsForDay(-1, tariffHelper),
+                    powerwallApi.GetEnergyTotalsForDay(0, tariffHelper)
                 };
                 var results = await Task.WhenAll(tasks);
                 viewModel.EnergyTotalsYesterday = results[0];

@@ -7,7 +7,7 @@ using TimeZoneConverter;
 
 namespace PowerwallCompanion.Lib
 {
-    internal static class Utils
+    public static class Utils
     {
         public static string GetCalendarHistoryUrl(string siteId, string timeZone, string kind, string period, DateTime periodStart, DateTime periodEnd)
         {

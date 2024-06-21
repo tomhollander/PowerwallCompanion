@@ -85,12 +85,12 @@ namespace PowerwallCompanion.Lib
             var powerInfo = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/live_status");
             var instantaneousPower = new InstantaneousPower();
 
-            instantaneousPower.BatteryStoragePercent = GetValueOrDefault<double>(powerInfo["response"]["percentage_charged"]);
-            instantaneousPower.HomePower = GetValueOrDefault<double>(powerInfo["response"]["load_power"]);
-            instantaneousPower.SolarPower = GetValueOrDefault<double>(powerInfo["response"]["solar_power"]);
-            instantaneousPower.BatteryPower = GetValueOrDefault<double>(powerInfo["response"]["battery_power"]);
-            instantaneousPower.GridPower = GetValueOrDefault<double>(powerInfo["response"]["grid_power"]);
-            instantaneousPower.GridActive = powerInfo["response"]["grid_status"].GetValue<string>() != "Inactive";
+            instantaneousPower.BatteryStoragePercent = Utils.GetValueOrDefault<double>(powerInfo["response"]["percentage_charged"]);
+            instantaneousPower.HomePower = Utils.GetValueOrDefault<double>(powerInfo["response"]["load_power"]);
+            instantaneousPower.SolarPower = Utils.GetValueOrDefault<double>(powerInfo["response"]["solar_power"]);
+            instantaneousPower.BatteryPower = Utils.GetValueOrDefault<double>(powerInfo["response"]["battery_power"]);
+            instantaneousPower.GridPower = Utils.GetValueOrDefault<double>(powerInfo["response"]["grid_power"]);
+            instantaneousPower.GridActive = Utils.GetValueOrDefault<string>(powerInfo["response"]["grid_status"]) != "Inactive";
             return instantaneousPower;
         }
 
@@ -115,9 +115,15 @@ namespace PowerwallCompanion.Lib
             
         }
 
-        public async Task<EnergyTotals> GetEnergyTotalsForDay(DateTime date, TariffHelper tariffHelper)
+        public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, TariffHelper tariffHelper)
         {
-            return await GetEnergyTotalsForPeriod(date, date.AddDays(1).AddSeconds(-1), "day", tariffHelper);
+            var timeZone = await GetInstallationTimeZone();
+            var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
+            var tzInfo = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone);
+            var nowDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzInfo);
+            var offsetDate = nowDate.Date.AddDays(dateOffset);
+
+            return await GetEnergyTotalsForPeriod(offsetDate, offsetDate.AddDays(1).AddSeconds(-1), "day", tariffHelper);
         }
 
         public async Task<EnergyTotals> GetEnergyTotalsForPeriod(DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
@@ -134,17 +140,17 @@ namespace PowerwallCompanion.Lib
 
             foreach (var item in energyHistory["response"]["time_series"].AsArray())
             {
-                energyTotals.HomeEnergy += GetValueOrDefault<double>(item["total_home_usage"]);
-                energyTotals.SolarEnergy += GetValueOrDefault<double>(item["total_solar_generation"]);
-                energyTotals.GridEnergyImported += GetValueOrDefault<double>(item["grid_energy_imported"]);
-                energyTotals.GridEnergyExported += GetValueOrDefault<double>(item["grid_energy_exported_from_solar"]) + GetValueOrDefault<double>(item["grid_energy_exported_from_generator"]) + GetValueOrDefault<double>(item["grid_energy_exported_from_battery"]);
-                energyTotals.BatteryEnergyCharged += GetValueOrDefault<double>(item["battery_energy_imported_from_grid"]) + GetValueOrDefault<double>(item["battery_energy_imported_from_solar"]) + GetValueOrDefault<double>(item["battery_energy_imported_from_generator"]);
-                energyTotals.BatteryEnergyDischarged += GetValueOrDefault<double>(item["battery_energy_exported"]);
+                energyTotals.HomeEnergy += Utils.GetValueOrDefault<double>(item["total_home_usage"]);
+                energyTotals.SolarEnergy += Utils.GetValueOrDefault<double>(item["total_solar_generation"]);
+                energyTotals.GridEnergyImported += Utils.GetValueOrDefault<double>(item["grid_energy_imported"]);
+                energyTotals.GridEnergyExported += Utils.GetValueOrDefault<double>(item["grid_energy_exported_from_solar"]) + Utils.GetValueOrDefault<double>(item["grid_energy_exported_from_generator"]) + Utils.GetValueOrDefault<double>(item["grid_energy_exported_from_battery"]);
+                energyTotals.BatteryEnergyCharged += Utils.GetValueOrDefault<double>(item["battery_energy_imported_from_grid"]) + Utils.GetValueOrDefault<double>(item["battery_energy_imported_from_solar"]) + Utils.GetValueOrDefault<double>(item["battery_energy_imported_from_generator"]);
+                energyTotals.BatteryEnergyDischarged += Utils.GetValueOrDefault<double>(item["battery_energy_exported"]);
 
-                // Totals for self consumption calcs
-                totalHomeFromGrid += GetValueOrDefault<double>(item["consumer_energy_imported_from_grid"]) + GetValueOrDefault<double>(item["consumer_energy_imported_from_generator"]);
-                totalHomeFromSolar += GetValueOrDefault<double>(item["consumer_energy_imported_from_solar"]);
-                totalHomeFromBattery += GetValueOrDefault<double>(item["consumer_energy_imported_from_battery"]);
+                // Totals for self consumption calcs 
+                totalHomeFromGrid += Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_grid"]) + Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_generator"]);
+                totalHomeFromSolar += Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_solar"]);
+                totalHomeFromBattery += Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_battery"]);
             }
 
             energyTotals.SolarUsePercent = (totalHomeFromSolar / energyTotals.HomeEnergy) * 100;
@@ -219,9 +225,9 @@ namespace PowerwallCompanion.Lib
                 // The date may be in a different time zone to the local time, we want to use the install time
                 date = await ConvertToPowerwallDate(date);
 
-                var solarPower = GetValueOrDefault<double>(data["solar_power"]);
-                var gridPower = GetValueOrDefault<double>(data["grid_power"]);
-                var batteryPower = GetValueOrDefault<double>(data["battery_power"]);
+                var solarPower = Utils.GetValueOrDefault<double>(data["solar_power"]);
+                var gridPower = Utils.GetValueOrDefault<double>(data["grid_power"]);
+                var batteryPower = Utils.GetValueOrDefault<double>(data["battery_power"]);
                 var homePower = solarPower + gridPower + batteryPower;
 
                 if (solarPower == 0 && gridPower == 0 && batteryPower == 0 && homePower == 0)
@@ -297,7 +303,7 @@ namespace PowerwallCompanion.Lib
                     // The date may be in a different time zone to the local time, we want to use the install time
                     date = await ConvertToPowerwallDate(date);
 
-                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, GetValueOrDefault<double>(data["soe"])));
+                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, Utils.GetValueOrDefault<double>(data["soe"])));
                 }
             }
             return batteryDailySoeGraphData;
@@ -329,42 +335,42 @@ namespace PowerwallCompanion.Lib
             foreach (var data in json["response"]["time_series"].AsArray())
             {
                 var date = data["timestamp"].GetValue<DateTime>();
-                var homeEnergy = GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) +
-                                    GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]) +
-                                    GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]) +
-                                    GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
+                var homeEnergy = Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) +
+                                    Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]) +
+                                    Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]) +
+                                    Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
                 totalHomeEnergy += homeEnergy;
                 homeEnergyGraphData.Add(new ChartDataPoint(date, homeEnergy / 1000));
 
-                var solarEnergy = GetValueOrDefault<double>(data["solar_energy_exported"]);
+                var solarEnergy = Utils.GetValueOrDefault<double>(data["solar_energy_exported"]);
                 totalSolarEnergy += solarEnergy;
                 solarEnergyGraphData.Add(new ChartDataPoint(date, solarEnergy / 1000));
 
-                var gridExportedEnergy = GetValueOrDefault<double>(data["grid_energy_exported_from_solar"]) +
-                                            GetValueOrDefault<double>(data["grid_energy_exported_from_generator"]) +
-                                            GetValueOrDefault<double>(data["grid_energy_exported_from_battery"]);
+                var gridExportedEnergy = Utils.GetValueOrDefault<double>(data["grid_energy_exported_from_solar"]) +
+                                            Utils.GetValueOrDefault<double>(data["grid_energy_exported_from_generator"]) +
+                                            Utils.GetValueOrDefault<double>(data["grid_energy_exported_from_battery"]);
                 totalGridExportedEnergy += gridExportedEnergy;
                 gridExportedEnergyGraphData.Add(new ChartDataPoint(date, -gridExportedEnergy / 1000));
 
-                var gridImportedEnergy = GetValueOrDefault<double>(data["battery_energy_imported_from_grid"]) +
-                                            GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]);
+                var gridImportedEnergy = Utils.GetValueOrDefault<double>(data["battery_energy_imported_from_grid"]) +
+                                            Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]);
                 totalGridImportedEnergy += gridImportedEnergy;
                 gridImportedEnergyGraphData.Add(new ChartDataPoint(date, gridImportedEnergy / 1000));
 
-                var batteryExportedEnergy = GetValueOrDefault<double>(data["battery_energy_exported"]);
+                var batteryExportedEnergy = Utils.GetValueOrDefault<double>(data["battery_energy_exported"]);
                 totalBatteryExportedEnergy += batteryExportedEnergy;
                 batteryDischargedEnergyGraphData.Add(new ChartDataPoint(date, batteryExportedEnergy / 1000));
 
-                var batteryImportedEnergy = GetValueOrDefault<double>(data["battery_energy_imported_from_grid"]) +
-                                            GetValueOrDefault<double>(data["battery_energy_imported_from_solar"]) +
-                                            GetValueOrDefault<double>(data["battery_energy_imported_from_generator"]);
+                var batteryImportedEnergy = Utils.GetValueOrDefault<double>(data["battery_energy_imported_from_grid"]) +
+                                            Utils.GetValueOrDefault<double>(data["battery_energy_imported_from_solar"]) +
+                                            Utils.GetValueOrDefault<double>(data["battery_energy_imported_from_generator"]);
                 totalBatteryImportedEnergy += batteryImportedEnergy;
                 batteryChargedEnergyGraphData.Add(new ChartDataPoint(date, -batteryImportedEnergy / 1000));
 
                 // Totals for self consumption calcs
-                totalHomeFromGrid += GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) + GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
-                totalHomeFromSolar += GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]);
-                totalHomeFromBattery += GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]);
+                totalHomeFromGrid += Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) + Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
+                totalHomeFromSolar += Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]);
+                totalHomeFromBattery += Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]);
             }
 
             EnergyChartSeries energyChartSeries = new EnergyChartSeries();
@@ -459,16 +465,16 @@ namespace PowerwallCompanion.Lib
                     {
                         if (prop.Key == "timestamp")
                         {
-                            await tw.WriteAsync($"{(prop.Value):yyyy-MM-dd HH\\:mm\\:ss},");
+                            await tw.WriteAsync($"{(prop.Value.GetValue<DateTime>()):yyyy-MM-dd HH\\:mm\\:ss},");
                         }
                         else
                         {
                             await tw.WriteAsync(prop.Value + ",");
                         }
                     }
-                    var solarPower = GetValueOrDefault<double>(entry["solar_power"]);
-                    var gridPower = GetValueOrDefault<double>(entry["grid_power"]);
-                    var batteryPower = GetValueOrDefault<double>(entry["battery_power"]);
+                    var solarPower = Utils.GetValueOrDefault<double>(entry["solar_power"]);
+                    var gridPower = Utils.GetValueOrDefault<double>(entry["grid_power"]);
+                    var batteryPower = Utils.GetValueOrDefault<double>(entry["battery_power"]);
                     var homePower = solarPower + gridPower + batteryPower;
                     await tw.WriteLineAsync(homePower.ToString());
                 }
@@ -663,12 +669,12 @@ namespace PowerwallCompanion.Lib
             tasks.Add(apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info"));
             await Task.WhenAll(tasks);
             var siteStatusJson = tasks[0].Result;
-            energySiteStatus.SiteName = siteStatusJson["response"]["site_name"].GetValue<string>();
-            energySiteStatus.GatewayId = siteStatusJson["response"]["gateway_id"].GetValue<string>();
+            energySiteStatus.SiteName = Utils.GetValueOrDefault<string>(siteStatusJson["response"]["site_name"]);
+            energySiteStatus.GatewayId = Utils.GetValueOrDefault<string>(siteStatusJson["response"]["gateway_id"]);
             var siteInfoJson = tasks[1].Result;
-            energySiteStatus.NumberOfBatteries = siteInfoJson["response"]["battery_count"].GetValue<int>();
-            energySiteStatus.InstallDate = siteInfoJson["response"]["installation_date"].GetValue<DateTime>();
-            energySiteStatus.ReservePercent = siteInfoJson["response"]["backup_reserve_percent"].GetValue<int>();
+            energySiteStatus.NumberOfBatteries = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["battery_count"]);
+            energySiteStatus.InstallDate = Utils.GetValueOrDefault<DateTime>(siteInfoJson["response"]["installation_date"]);
+            energySiteStatus.ReservePercent = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["backup_reserve_percent"]);
             return energySiteStatus;
         }
 
@@ -689,20 +695,5 @@ namespace PowerwallCompanion.Lib
             return installationTimeZone;
         }
 
-        private T GetValueOrDefault<T>(JsonNode obj)
-        {
-            if (obj == null)
-            {
-                return default(T);
-            }
-            try
-            {
-                return obj.GetValue<T>();
-            }
-            catch
-            {
-                return default(T);
-            }
-        }
     }
 }
