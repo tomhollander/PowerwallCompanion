@@ -680,12 +680,15 @@ namespace PowerwallCompanion.Lib
 
         private async Task<string> GetInstallationTimeZone()
         {
+            const string timeZoneKey = "InstallationTimeZone";
+            string installationTimeZone = platformAdapter.GetPersistedData(timeZoneKey);
             if (installationTimeZone == null)
             {
                 try
                 {
                     var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
                     installationTimeZone = siteInfoJson["response"]["installation_time_zone"].GetValue<string>();
+                    platformAdapter.PersistData(timeZoneKey, installationTimeZone);
                 }
                 catch
                 {

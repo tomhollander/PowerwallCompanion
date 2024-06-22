@@ -13,8 +13,21 @@ namespace PowerwallCompanion
 {
     public class UwpPlatformAdapter : IPlatformAdapter
     {
+        private Windows.Storage.ApplicationDataContainer _localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+        public string GetPersistedData(string key)
+        {
+           return _localSettings.Values[key] as string;
+        }
+
+        public void PersistData(string key, string value)
+        {
+            _localSettings.Values[key] = value;
+        }
+
         public string AccessToken { get => Settings.AccessToken; set => Settings.AccessToken = value; }
         public string RefreshToken { get => Settings.RefreshToken; set => Settings.RefreshToken = value; }
+
 
         public async Task<string> ReadFileContents(string filename)
         {
@@ -48,5 +61,7 @@ namespace PowerwallCompanion
                 return null;
             }
         }
+
+
     }
 }

@@ -9,8 +9,20 @@ namespace PowerwallCompanion.Lib.Tests
 {
     internal class TestPlatformAdapter : IPlatformAdapter
     {
+        private Dictionary<string, string> _data = new Dictionary<string, string>();
+
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+
+        public string GetPersistedData(string key)
+        {
+            return _data.ContainsKey(key) ? _data[key] : null;
+        }
+
+        public void PersistData(string key, string value)
+        {
+            _data[key] = value;
+        }
 
         public Task<string> ReadFileContents(string filename)
         {

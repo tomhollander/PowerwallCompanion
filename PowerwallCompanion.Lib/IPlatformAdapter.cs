@@ -8,6 +8,8 @@ namespace PowerwallCompanion.Lib
 {
     public interface IPlatformAdapter
     {
+        string GetPersistedData(string key);
+        void PersistData(string key, string value);
         string AccessToken { get; set; }
         string RefreshToken { get; set; }
 

@@ -28,7 +28,7 @@ namespace PowerwallCompanion.ViewModels
 
         public IEnumerable<string> PeriodNames
         {
-            get => new string[] { "Day", "Week", "Month", "Year" };
+            get => new string[] { "Day", "Week", "Month", "Year", "Lifetime" };
         }
 
         public DateTimeOffset? CalendarDate
