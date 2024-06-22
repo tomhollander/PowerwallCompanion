@@ -26,19 +26,14 @@ namespace PowerwallCompanion.Lib.Models
                 {
                     case "SUPER_OFF_PEAK":
                         return Color.Blue;
-                        break;
                     case "OFF_PEAK":
                         return Color.Green;
-                        break;
                     case "PARTIAL_PEAK":
                         return Color.DarkOrange;
-                        break;
                     case "ON_PEAK":
                         return Color.Red;
-                        break;
                     default:
                         return Color.DarkGray;
-                        break;
                 }
             }
         }
@@ -49,6 +44,11 @@ namespace PowerwallCompanion.Lib.Models
             if (t == null)
                 return false;
             return t.Name == Name && t.StartDate == StartDate && t.EndDate == EndDate;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() ^ StartDate.GetHashCode() ^ EndDate.GetHashCode();
         }
 
     }

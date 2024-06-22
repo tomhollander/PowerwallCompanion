@@ -40,7 +40,12 @@ namespace PowerwallCompanion
             this.InitializeComponent();
             Analytics.TrackEvent("SettingsPage opened");
             this.ViewModel = new SettingsViewModel();
-            LoadEnergySourceZones();
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            await LoadEnergySourceZones();
+            base.OnNavigatedTo(e);
         }
 
         private async Task LoadEnergySourceZones()

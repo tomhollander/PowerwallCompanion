@@ -107,7 +107,7 @@
                         <toolkit:DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate x:DataType="libmodels:BatteryDetails">
                                 <StackPanel>
-                                    <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
+                                    <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
                                 </StackPanel>
                             </DataTemplate>
                         </toolkit:DataGridTemplateColumn.CellEditingTemplate>
@@ -116,7 +116,7 @@
                         <toolkit:DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate x:DataType="libmodels:BatteryDetails">
                                 <StackPanel>
-                                    <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
+                                    <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
                                 </StackPanel>
                             </DataTemplate>
                         </toolkit:DataGridTemplateColumn.CellEditingTemplate>

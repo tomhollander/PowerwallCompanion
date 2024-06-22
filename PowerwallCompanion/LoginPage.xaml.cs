@@ -132,7 +132,7 @@ namespace PowerwallCompanion
         }
 
 
-        private async void TextBlock_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private void TextBlock_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             // Sign in as demo user
             Settings.AccessToken = "DEMO";

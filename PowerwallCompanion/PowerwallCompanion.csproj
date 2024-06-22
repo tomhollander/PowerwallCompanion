@@ -182,7 +182,6 @@
     <Compile Include="ViewModels\GridEnergySources.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
-    <Compile Include="ViewModels\Tariff.cs" />
     <Compile Include="WebView2Install.cs" />
   </ItemGroup>
   <ItemGroup>

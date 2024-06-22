@@ -14,7 +14,6 @@ namespace PowerwallCompanion.Lib
         private string siteId;
         private IPlatformAdapter platformAdapter;
         private IApiHelper apiHelper;
-        private string installationTimeZone;
         private JsonObject productResponse;
 
         public PowerwallApi(string siteId, IPlatformAdapter platformAdapter, IApiHelper apiHelper)
@@ -135,6 +134,7 @@ namespace PowerwallCompanion.Lib
             double totalHomeFromGrid = 0;
             double totalHomeFromSolar = 0;
             double totalHomeFromBattery = 0;
+            double totalBatteryFromSolar = 0;
 
             var energyTotals = new EnergyTotals();
 
@@ -151,12 +151,14 @@ namespace PowerwallCompanion.Lib
                 totalHomeFromGrid += Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_grid"]) + Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_generator"]);
                 totalHomeFromSolar += Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_solar"]);
                 totalHomeFromBattery += Utils.GetValueOrDefault<double>(item["consumer_energy_imported_from_battery"]);
+                totalBatteryFromSolar += Utils.GetValueOrDefault<double>(item["battery_energy_imported_from_solar"]);
             }
 
             energyTotals.SolarUsePercent = (totalHomeFromSolar / energyTotals.HomeEnergy) * 100;
             energyTotals.BatteryUsePercent = (totalHomeFromBattery / energyTotals.HomeEnergy) * 100;
             energyTotals.GridUsePercent = (totalHomeFromGrid / energyTotals.HomeEnergy) * 100;
-            energyTotals.SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / energyTotals.HomeEnergy) * 100;
+            var homeFromBatterySolar = Math.Min(totalHomeFromBattery, totalBatteryFromSolar); // Don't count battery energy if it came from the grid
+            energyTotals.SelfConsumption = ((totalHomeFromSolar + homeFromBatterySolar) / energyTotals.HomeEnergy) * 100;
 
             if (tariffHelper != null)
             {
@@ -324,6 +326,7 @@ namespace PowerwallCompanion.Lib
             double totalHomeFromGrid = 0;
             double totalHomeFromSolar = 0;
             double totalHomeFromBattery = 0;
+            double totalBatteryFromSolar = 0;
 
             var homeEnergyGraphData = new List<ChartDataPoint>();
             var solarEnergyGraphData = new List<ChartDataPoint>();
@@ -371,6 +374,7 @@ namespace PowerwallCompanion.Lib
                 totalHomeFromGrid += Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_grid"]) + Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_generator"]);
                 totalHomeFromSolar += Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_solar"]);
                 totalHomeFromBattery += Utils.GetValueOrDefault<double>(data["consumer_energy_imported_from_battery"]);
+                totalBatteryFromSolar += Utils.GetValueOrDefault<double>(data["battery_energy_imported_from_solar"]);
             }
 
             EnergyChartSeries energyChartSeries = new EnergyChartSeries();
@@ -381,7 +385,7 @@ namespace PowerwallCompanion.Lib
             energyChartSeries.BatteryDischarge = NormaliseEnergyData(batteryDischargedEnergyGraphData, period);
             energyChartSeries.BatteryCharge = NormaliseEnergyData(batteryChargedEnergyGraphData, period);
 
-
+            var homeFromBatterySolar = Math.Min(totalHomeFromBattery, totalBatteryFromSolar); // Don't count battery energy if it came from the grid
             energyChartSeries.EnergyTotals = new EnergyTotals()
             {
                 HomeEnergy = totalHomeEnergy,
@@ -393,7 +397,7 @@ namespace PowerwallCompanion.Lib
                 SolarUsePercent = (totalHomeFromSolar / totalHomeEnergy) * 100,
                 BatteryUsePercent = (totalHomeFromBattery / totalHomeEnergy) * 100,
                 GridUsePercent = (totalHomeFromGrid / totalHomeEnergy) * 100,
-                SelfConsumption = ((totalHomeFromSolar + totalHomeFromBattery) / totalHomeEnergy) * 100
+                SelfConsumption = ((totalHomeFromSolar + homeFromBatterySolar) / totalHomeEnergy) * 100
             };
 
             if (tariffHelper != null && (period == "Week" || period == "Month"))
@@ -435,7 +439,7 @@ namespace PowerwallCompanion.Lib
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Crashes.TrackError(ex);
             }

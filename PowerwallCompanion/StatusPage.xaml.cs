@@ -60,9 +60,9 @@ namespace PowerwallCompanion
             get => viewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            RefreshDataFromTeslaOwnerApi();
+            await RefreshDataFromTeslaOwnerApi();
             base.OnNavigatedTo(e);
         }
 
@@ -72,9 +72,9 @@ namespace PowerwallCompanion
             base.OnNavigatedFrom(e);
         }
 
-        private void Timer_Tick(object sender, object e)
+        private async void Timer_Tick(object sender, object e)
         {
-            RefreshDataFromTeslaOwnerApi();
+            await RefreshDataFromTeslaOwnerApi();
         }
 
 
@@ -292,12 +292,12 @@ namespace PowerwallCompanion
         }
 
       
-        private void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (ViewModel.LastExceptionMessage != null)
             {
                 var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
-                md.ShowAsync();
+                await md.ShowAsync();
             }
         }
 

@@ -187,11 +187,11 @@ namespace PowerwallCompanion
 
        
 
-        private void HyperlinkButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private async void HyperlinkButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             var md = new MessageDialog(ViewModel.GatewayError);
             md.Title = "Unable to connect to Powerwall Gateway";
-            md.ShowAsync();
+            await md.ShowAsync();
         }
     }
 }

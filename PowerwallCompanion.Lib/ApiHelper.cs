@@ -88,7 +88,7 @@ namespace PowerwallCompanion.Lib
                 _tokenLastRefreshed = DateTime.Now;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new UnauthorizedAccessException();
             }

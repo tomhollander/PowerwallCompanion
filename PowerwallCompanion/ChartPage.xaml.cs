@@ -51,9 +51,9 @@ namespace PowerwallCompanion
             timer.Start();
         }
 
-        private void Timer_Tick(object sender, object e)
+        private async void Timer_Tick(object sender, object e)
         {
-            RefreshDataAndCharts();
+            await RefreshDataAndCharts();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -144,6 +144,7 @@ namespace PowerwallCompanion
                 energyChart.Visibility = Visibility.Collapsed;
                 energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
+                dailyCost.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
                 DateTime date = await powerwallApi.ConvertToPowerwallDate(ViewModel.PeriodStart);
                 await GetTariffsForDay(date.Date);
             }
@@ -153,6 +154,7 @@ namespace PowerwallCompanion
                 batteryChart.Visibility = Visibility.Collapsed;
                 energyChart.Visibility = Visibility.Visible;
                 powerGraphOptionsCombo.Visibility = Visibility.Collapsed;
+                dailyCost.Visibility = Visibility.Collapsed;
 
                 if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
                 {
@@ -255,7 +257,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                ViewModel.EnergyTotals = await powerwallApi.GetEnergyTotalsForPeriod(ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, null);
+                ViewModel.EnergyTotals = await powerwallApi.GetEnergyTotalsForPeriod(ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, tariffHelper);
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
             }
             catch (Exception ex)
@@ -418,12 +420,12 @@ namespace PowerwallCompanion
         }
 
 
-        private void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (ViewModel.LastExceptionMessage != null)
             {
                 var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
-                md.ShowAsync();
+                await md.ShowAsync();
             }
         }
 
