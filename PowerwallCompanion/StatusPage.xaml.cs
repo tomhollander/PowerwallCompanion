@@ -121,7 +121,7 @@ namespace PowerwallCompanion
                 viewModel.InstantaneousPower = await powerwallApi.GetInstantaneousPower();
                 await UpdateMinMaxPercentToday(); 
                 viewModel.LiveStatusLastRefreshed = DateTime.Now;
-                viewModel.Status = viewModel.InstantaneousPower.GridActive ? StatusViewModel.StatusEnum.Online : StatusViewModel.StatusEnum.Error;
+                viewModel.Status = viewModel.InstantaneousPower.GridActive ? StatusViewModel.StatusEnum.Online : StatusViewModel.StatusEnum.GridOutage;
                 
                 viewModel.NotifyPowerProperties();
 

@@ -28,6 +28,7 @@
         <converters:KilowattHourConverter x:Key="KilowattHourConverter" />
         <converters:NegateVisiblityConverter x:Key="NegateVisiblityConverter" />
         <converters:StatusToBrushConverter x:Key="StatusToBrushConverter" />
+        <converters:StatusToBackgroundBrushConverter x:Key="StatusToBackgroundBrushConverter" />
         <converters:TooltipMessageConverter x:Key="TooltipMessageConverter"/>
         <converters:EnergySourceIconVisibilityConverter x:Key="EnergySourceIconVisibilityConverter"/>
         <converters:EnergySourcePercentageConverter x:Key="EnergySourcePercentageConverter"/>
@@ -121,7 +122,7 @@
                 <gauge:SfCircularGauge.Scales>
                     <gauge:CircularScale  StartAngle="95" SweepAngle="350" SmallTickLength="0" SmallTickStrokeThickness="0" Radius="280" RadiusFactor="1.12"
                                             TickStroke="Black" TickLength="30" TickStrokeThickness="5"  TickPosition="Custom" 
-                                            ShowLabels="False" ShowRim="True" RimStrokeThickness="30" RimStroke="DimGray">
+                                            ShowLabels="False" ShowRim="True" RimStrokeThickness="30" RimStroke="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBackgroundBrushConverter}, Mode=OneWay}">
                         <gauge:CircularScale.Ranges>
                             <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" 
                                                     StrokeThickness="30" Stroke="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}" />

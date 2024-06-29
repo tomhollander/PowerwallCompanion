@@ -146,6 +146,7 @@
     <Compile Include="Converters\ShortDateAxisConverter.cs" />
     <Compile Include="Converters\GridStatusBrushSizeConverter.cs" />
     <Compile Include="Converters\StatusMessageConverter.cs" />
+    <Compile Include="Converters\StatusToBackgroundBrushConverter.cs" />
     <Compile Include="Converters\StatusToBrushConverter.cs" />
     <Compile Include="Converters\TooltipMessageConverter.cs" />
     <Compile Include="Converters\TrueToVisibilityCollapsedConverter.cs" />
