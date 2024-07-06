@@ -43,7 +43,7 @@ namespace PowerwallCompanion.Lib
             {
                 if (p["vehicle_id"] != null)
                 {
-                    var id = p["id"].GetValue<string>();
+                    var id = p["id"].GetValue<long>().ToString();
                     vehicles[id].IsAwake = p["state"].GetValue<string>() == "online";
                 }
             }
