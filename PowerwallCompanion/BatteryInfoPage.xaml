@@ -151,8 +151,8 @@
             </chart:SfChart.Legend>
 
             <chart:SfChart.Annotations>
-                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="100% baseline capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneTime}" Stroke="Green" StrokeThickness="1" />
-                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="{x:Bind ViewModel.MinimumWarrantedCapacityPercentageMessage}" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneTime}" Stroke="Red" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="100% baseline capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
+                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="{x:Bind ViewModel.MinimumWarrantedCapacityPercentageMessage}" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
             </chart:SfChart.Annotations>
             
         </chart:SfChart>

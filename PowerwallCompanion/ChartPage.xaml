@@ -300,8 +300,8 @@
             <!-- Self consumption -->
             <StackPanel Grid.Row="4">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock FontSize="16" Margin="5">Self Consumption:</TextBlock>
-                    <TextBlock FontSize="16" Margin="10 5 5 5" Text="{x:Bind ViewModel.EnergyTotals.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" ToolTipService.ToolTip="Percentage of home energy coming from solar, directly or via battery. Excludes grid-charged battery energy."></TextBlock>
+                    <TextBlock FontSize="16" Margin="5">Grid independence:</TextBlock>
+                    <TextBlock FontSize="16" Margin="10 5 5 5" Text="{x:Bind ViewModel.EnergyTotals.SelfConsumption, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}" ToolTipService.ToolTip="Calculated from the ratio of net grid energy import to home energy usage."></TextBlock>
                 </StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -312,22 +312,22 @@
                         <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
                         <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
                     </Grid.ColumnDefinitions>
-                    <Rectangle Fill="Green" Grid.Column="0" />
+                    <Rectangle Fill="Green" Grid.Column="0"  ToolTipService.ToolTip="Percentage of home use coming from battery" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Battery:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"  ToolTipService.ToolTip="Percentage of home use coming from battery"
                                    Visibility="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
-                    <Rectangle Fill="Gold" Grid.Column="1" />
+                    <Rectangle Fill="Gold" Grid.Column="1" ToolTipService.ToolTip="Percentage of home use coming from solar"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
                         <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Solar:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"  ToolTipService.ToolTip="Percentage of home use coming from solar"
                                    Visibility="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
-                    <Rectangle Fill="SlateGray" Grid.Column="2" />
+                    <Rectangle Fill="SlateGray" Grid.Column="2" ToolTipService.ToolTip="Percentage of home use coming from grid" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="2">
                         <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Grid:</TextBlock>
-                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"
+                        <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"  ToolTipService.ToolTip="Percentage of home use coming from grid"
                                    Visibility="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan5Converter}}"></TextBlock>
                     </StackPanel>
                 </Grid>

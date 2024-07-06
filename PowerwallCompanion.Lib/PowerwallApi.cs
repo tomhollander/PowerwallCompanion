@@ -157,8 +157,7 @@ namespace PowerwallCompanion.Lib
             energyTotals.SolarUsePercent = (totalHomeFromSolar / energyTotals.HomeEnergy) * 100;
             energyTotals.BatteryUsePercent = (totalHomeFromBattery / energyTotals.HomeEnergy) * 100;
             energyTotals.GridUsePercent = (totalHomeFromGrid / energyTotals.HomeEnergy) * 100;
-            var homeFromBatterySolar = Math.Min(totalHomeFromBattery, totalBatteryFromSolar); // Don't count battery energy if it came from the grid
-            energyTotals.SelfConsumption = ((totalHomeFromSolar + homeFromBatterySolar) / energyTotals.HomeEnergy) * 100;
+            energyTotals.SelfConsumption = energyTotals.HomeEnergy == 0 ? 0 : (1 - ((energyTotals.GridEnergyImported - energyTotals.GridEnergyExported) / energyTotals.HomeEnergy)) * 100;
 
             if (tariffHelper != null)
             {
@@ -696,7 +695,17 @@ namespace PowerwallCompanion.Lib
                 }
                 catch
                 {
-                    installationTimeZone = TZConvert.WindowsToIana(TimeZoneInfo.Local.Id);
+                    var systemTimeZone = TimeZoneInfo.Local.Id;
+                    if (systemTimeZone.Contains("/"))
+                    {
+                        // On Android it will already be Iana
+                        installationTimeZone = systemTimeZone;
+                    }
+                    else
+                    {
+                        installationTimeZone = TZConvert.WindowsToIana(systemTimeZone);
+                    }
+                    
                 }
             }
             return installationTimeZone;
