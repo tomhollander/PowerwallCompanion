@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
 using PowerwallCompanion.CustomEnergySourceProviders;
 using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
@@ -46,7 +44,7 @@ namespace PowerwallCompanion
         public StatusPage()
         {
             this.InitializeComponent();
-            Analytics.TrackEvent("StatusPage opened");
+            Telemetry.TrackEvent("StatusPage opened");
             powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
             viewModel = new StatusViewModel();
             timer = new DispatcherTimer();
@@ -105,7 +103,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
         }
 
@@ -143,7 +141,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 viewModel.LastExceptionMessage = ex.Message;
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyPowerProperties();
@@ -201,7 +199,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 viewModel.LastExceptionMessage = ex.Message;
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyDailyEnergyProperties();
@@ -236,7 +234,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.LastExceptionMessage = ex.Message;
             }
@@ -254,7 +252,7 @@ namespace PowerwallCompanion
                 }
                 catch (Exception ex)
                 {
-                    Crashes.TrackError(ex);
+                    Telemetry.TrackException(ex);
                     viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
                     viewModel.TariffBadgeVisibility = Visibility.Visible;
@@ -271,11 +269,10 @@ namespace PowerwallCompanion
                     viewModel.TariffSellRate = prices.Item1;
                     viewModel.TariffBuyRate = prices.Item2;
                     viewModel.TariffColor = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color));
-                    Analytics.TrackEvent("Tariff data refreshed");
                 }
                 catch (Exception ex)
                 {
-                    Crashes.TrackError(ex);
+                    Telemetry.TrackException(ex);
                     viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
                     viewModel.TariffBadgeVisibility = Visibility.Visible;
@@ -381,7 +378,7 @@ namespace PowerwallCompanion
                     Settings.EnergySourcesZoneOverride.Substring(3);
                 var provider = new AustraliaNemEnergySourceProvider(zone);
                 await provider.Refresh();
-                Analytics.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", Settings.EnergySourcesZoneOverride }, { "Provider", "OpenNEM" } });
+                Telemetry.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", Settings.EnergySourcesZoneOverride }, { "Provider", "OpenNEM" } });
                 ViewModel.GridEnergySources = provider.CurrentGenerationMix;
                 ViewModel.GridLowCarbonPercent = provider.RenewablePercent;
                 viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{Settings.EnergySourcesZoneOverride}', OpenNEM data from {provider.UpdatedDate.ToString("g")}";
@@ -389,7 +386,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
 
         }
@@ -399,7 +396,6 @@ namespace PowerwallCompanion
         { 
             try
             {
-
                 string locationQueryString = "";
                 if (Settings.EnergySourcesZoneOverride != null)
                 {
@@ -457,11 +453,11 @@ namespace PowerwallCompanion
                 viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{zone}', data from {date.ToString("g")}";
                 ViewModel.GridEnergySources = energyUsage;
                 ViewModel.GridLowCarbonPercent = json["fossilFreePercentage"].GetValue<int>();
-                Analytics.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", zone }, { "Provider", "ElectricityMaps.com" } });
+                Telemetry.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", zone }, { "Provider", "ElectricityMaps.com" } });
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
 
         }

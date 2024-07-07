@@ -1,23 +1,17 @@
-﻿using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Newtonsoft.Json.Linq;
-using PowerwallCompanion.Lib;
+﻿using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
 using PowerwallCompanion.ViewModels;
 using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.IO;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -36,7 +30,7 @@ namespace PowerwallCompanion
         public ChartPage()
         {
             this.InitializeComponent();
-            Analytics.TrackEvent("ChartPage opened");
+            Telemetry.TrackEvent("ChartPage opened");
 
             this.ViewModel = new ChartViewModel();
             ViewModel.Period = "Day";
@@ -195,7 +189,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 ViewModel.Status = StatusViewModel.StatusEnum.Error;
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
@@ -261,8 +255,8 @@ namespace PowerwallCompanion
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
             }
             catch (Exception ex)
-            { 
-                Crashes.TrackError(ex);
+            {
+                Telemetry.TrackException(ex);
                 ViewModel.Status = StatusViewModel.StatusEnum.Error;
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
@@ -314,7 +308,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
         }
         private async Task FetchRatePlan()
@@ -326,7 +320,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
         }
 
@@ -349,36 +343,20 @@ namespace PowerwallCompanion
 
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 ViewModel.Status = StatusViewModel.StatusEnum.Error;
                 ViewModel.LastExceptionMessage = ex.Message;
                 ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
 
-        private static double GetJsonDoubleValue(JToken jtoken)
-        {
-            if (jtoken == null)
-            {
-                return 0;
-            }
-            try
-            {
-                return jtoken.Value<double>();
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-       
+      
 
         private async void exportButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             try
             {
-                Analytics.TrackEvent("Chart data exported", new Dictionary<string, string> { { "Period", ViewModel.Period} });
+                Telemetry.TrackEvent("Chart data exported", new Dictionary<string, string> { { "Period", ViewModel.Period} });
 
                 var savePicker = new Windows.Storage.Pickers.FileSavePicker();
                 savePicker.SuggestedStartLocation =
@@ -411,7 +389,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 var md = new MessageDialog("Error while saving data: " + ex.Message);
                 await md.ShowAsync();
             }
@@ -456,7 +434,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
 
         }

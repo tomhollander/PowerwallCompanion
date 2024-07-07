@@ -1,12 +1,6 @@
-﻿using Microsoft.AppCenter.Crashes;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 
 namespace PowerwallCompanion.ViewModels

@@ -10,6 +10,8 @@ namespace PowerwallCompanion.Lib
         public static string TeslaAppClientId;
         public static string TeslaAppClientSecret;
         public static string TeslaAppRedirectUrl;
-        public static string AppServicesKey; 
+        public static string AppServicesKey;
+        public static string MongoDBDataEndpoint;
+        public static string MongoDBDataApiKey;
     }
 }

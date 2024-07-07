@@ -1,24 +1,14 @@
-﻿using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using PowerwallCompanion.ViewModels;
+﻿using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -38,7 +28,7 @@ namespace PowerwallCompanion
         public SettingsPage()
         {
             this.InitializeComponent();
-            Analytics.TrackEvent("SettingsPage opened");
+            Telemetry.TrackEvent("SettingsPage opened");
             this.ViewModel = new SettingsViewModel();
         }
 
@@ -80,7 +70,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 ViewModel.EnergySourceZones = new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>(null, String.Empty) } ;
             }
         }

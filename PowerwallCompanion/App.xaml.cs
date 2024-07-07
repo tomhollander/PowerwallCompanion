@@ -4,9 +4,6 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
 
 namespace PowerwallCompanion
 {
@@ -23,8 +20,14 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Keys.SyncFusionLicenseKey);
-            AppCenter.Start(Keys.AppCenterKey, typeof(Analytics), typeof(Crashes));
+            Telemetry.TrackEvent("SessionStart");
+        }
+
+        private async void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            await Telemetry.TrackUnhandledException(e.Exception);
         }
 
 

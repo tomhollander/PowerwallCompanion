@@ -1,12 +1,8 @@
-﻿using Microsoft.AppCenter.Crashes;
-using Newtonsoft.Json.Linq;
-using PowerwallCompanion.Lib;
-using PowerwallCompanion.Lib.Models;
+﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 

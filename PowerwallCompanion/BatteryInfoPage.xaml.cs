@@ -1,27 +1,16 @@
-﻿using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Newtonsoft.Json.Linq;
-using PowerwallCompanion.Lib;
+﻿using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Windows.Devices.Geolocation;
-using Windows.Storage;
-using Windows.Storage.AccessCache;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,7 +24,7 @@ namespace PowerwallCompanion
         public BatteryInfoPage()
         {
             this.InitializeComponent();
-            Analytics.TrackEvent("BatteryInfoPage opened");
+            Telemetry.TrackEvent("BatteryInfoPage opened");
             this.ViewModel = new BatteryInfoViewModel();
         }
 
@@ -68,7 +57,7 @@ namespace PowerwallCompanion
             }
             catch (System.Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
         }
 
@@ -104,7 +93,7 @@ namespace PowerwallCompanion
             catch (Exception ex)
             {
                 // Shouldn't happen as we catch all exceptions in the LocalGatewayApi
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
         }
 
@@ -151,7 +140,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
             }
             
         }
@@ -180,7 +169,7 @@ namespace PowerwallCompanion
         
         private async void enableBatteryHistory_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            Analytics.TrackEvent("Battery history enabled");
+            Telemetry.TrackEvent("Battery history enabled");
             ViewModel.StoreBatteryHistory = true;
             await ProcessBatteryHistoryData();
         }

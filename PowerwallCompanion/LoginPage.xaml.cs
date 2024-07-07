@@ -1,7 +1,4 @@
-﻿using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.UI.Xaml.Controls;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.UI.Xaml.Controls;
 using PowerwallCompanion.Lib;
 using System;
 using System.Collections.Generic;
@@ -29,7 +26,7 @@ namespace PowerwallCompanion
         public LoginPage()
         {
             this.InitializeComponent();
-            Analytics.TrackEvent("LoginPage opened");
+            Telemetry.TrackEvent("LoginPage opened");
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
             authFailureMessage.Visibility = Visibility.Collapsed;
             errorBanner.Visibility = Visibility.Collapsed;
@@ -95,18 +92,18 @@ namespace PowerwallCompanion
                     Settings.UseLocalGateway = false;
                     Settings.SiteId = await powerwallApi.GetFirstSiteId();
                     Settings.AvailableSites = await powerwallApi.GetEnergySites();
-                    Analytics.TrackEvent("Login succeeded");
+                    Telemetry.TrackEvent("Login succeeded");
                     return true;
                 }
                 else
                 {
-                    Analytics.TrackEvent("Login failed", new Dictionary<string, string> { { "Cause", "Incorrect scopes" } });
+                    Telemetry.TrackEvent("Login failed", new Dictionary<string, string> { { "Cause", "Incorrect scopes" } });
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 return false;
             }
  

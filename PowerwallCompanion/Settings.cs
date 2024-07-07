@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace PowerwallCompanion
 {
@@ -217,11 +215,11 @@ namespace PowerwallCompanion
             get
             {
                 var json = _localSettings.Values["AvailableSites"] as string;
-                return json == null ? null : JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                return json == null ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(json);
             }
             set
             {
-                var json = JsonConvert.SerializeObject(value);
+                var json = JsonSerializer.Serialize(value);
                 _localSettings.Values["AvailableSites"] = json;
             }
         }

@@ -1,10 +1,5 @@
-﻿using Microsoft.AppCenter.Crashes;
-using Microsoft.Web.WebView2.Core;
+﻿using Microsoft.Web.WebView2.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PowerwallCompanion
 {
@@ -24,7 +19,7 @@ namespace PowerwallCompanion
                 return CoreWebView2Environment.GetAvailableBrowserVersionString();
             }
             catch (Exception ex) {
-                Crashes.TrackError(ex);
+                Telemetry.TrackException(ex);
                 return ""; 
             }
         }
