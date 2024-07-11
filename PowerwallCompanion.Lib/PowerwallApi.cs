@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TimeZoneConverter;
@@ -117,8 +118,7 @@ namespace PowerwallCompanion.Lib
         public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, TariffHelper tariffHelper)
         {
             var timeZone = await GetInstallationTimeZone();
-            var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
-            var tzInfo = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone);
+            var tzInfo = TZConvert.GetTimeZoneInfo(timeZone);
             var nowDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzInfo);
             var offsetDate = nowDate.Date.AddDays(dateOffset);
 
@@ -137,6 +137,11 @@ namespace PowerwallCompanion.Lib
             double totalBatteryFromSolar = 0;
 
             var energyTotals = new EnergyTotals();
+
+            if (energyHistory["response"]["time_series"] == null)
+            {
+                return energyTotals;
+            }
 
             foreach (var item in energyHistory["response"]["time_series"].AsArray())
             {
@@ -218,6 +223,11 @@ namespace PowerwallCompanion.Lib
             powerChartSeries.Battery = new List<ChartDataPoint>();
             powerChartSeries.Home = new List<ChartDataPoint>();
 
+            if (json["response"].GetValueKind() == JsonValueKind.String || json["response"]["time_series"] == null)
+            {
+                return powerChartSeries;
+            }
+
             foreach (var data in json["response"]["time_series"].AsArray())
             {
                 var date = data["timestamp"].GetValue<DateTime>();
@@ -295,6 +305,11 @@ namespace PowerwallCompanion.Lib
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             var batteryDailySoeGraphData = new List<ChartDataPoint>();
+
+            if (json["response"].GetValueKind() == JsonValueKind.String || json["response"]["time_series"] == null)
+            {
+                return batteryDailySoeGraphData;
+            }
 
             foreach (var data in json["response"]["time_series"].AsArray())
             {
@@ -651,8 +666,7 @@ namespace PowerwallCompanion.Lib
             try
             {
                 string timeZone = await GetInstallationTimeZone();
-                var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
-                var powerwallTimeZone = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone);
+                var powerwallTimeZone = TZConvert.GetTimeZoneInfo(timeZone);
                 var offset = powerwallTimeZone.GetUtcOffset(date);
                 var dto = new DateTimeOffset(date);
                 return dto.ToOffset(offset).DateTime;

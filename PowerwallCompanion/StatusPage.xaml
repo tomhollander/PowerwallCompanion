@@ -116,7 +116,7 @@
                         <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation Angle="135" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharing battery" />
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharging battery" />
                     </gauge:GaugeAnnotation>
                 </gauge:SfCircularGauge.Annotations>
                 <gauge:SfCircularGauge.Scales>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -16,9 +17,10 @@ namespace PowerwallCompanion.Lib
             DateTime periodStartUnspecifiedTZ = new DateTime(periodStart.Ticks, DateTimeKind.Unspecified);
             DateTime periodEndUnspecifiedTZ = new DateTime(periodEnd.Ticks, DateTimeKind.Unspecified);
 
-            var windowsTimeZone = TZConvert.IanaToWindows(timeZone);
-            var startOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(periodStart);
-            var endOffset = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZone).GetUtcOffset(periodEnd);
+            var timeZoneOffset = TZConvert.GetTimeZoneInfo(timeZone); 
+            var startOffset = timeZoneOffset.GetUtcOffset(periodStart);
+            var endOffset = timeZoneOffset.GetUtcOffset(periodEnd);
+
             var startDate = new DateTimeOffset(periodStartUnspecifiedTZ, startOffset);
             var endDate = new DateTimeOffset(periodEndUnspecifiedTZ, endOffset).AddSeconds(-1);
 
