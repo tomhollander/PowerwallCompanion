@@ -10,16 +10,15 @@ namespace PowerwallCompanion.Lib
 {
     public static class Utils
     {
-        public static string GetCalendarHistoryUrl(string siteId, string timeZone, string kind, string period, DateTime periodStart, DateTime periodEnd)
+        public static string GetCalendarHistoryUrl(string siteId, TimeZoneInfo tzInfo, string kind, string period, DateTime periodStart, DateTime periodEnd)
         {
             var sb = new StringBuilder();
-
+            string timeZone = TZConvert.WindowsToIana(tzInfo.Id);
             DateTime periodStartUnspecifiedTZ = new DateTime(periodStart.Ticks, DateTimeKind.Unspecified);
             DateTime periodEndUnspecifiedTZ = new DateTime(periodEnd.Ticks, DateTimeKind.Unspecified);
 
-            var timeZoneOffset = TZConvert.GetTimeZoneInfo(timeZone); 
-            var startOffset = timeZoneOffset.GetUtcOffset(periodStart);
-            var endOffset = timeZoneOffset.GetUtcOffset(periodEnd);
+            var startOffset = tzInfo.GetUtcOffset(periodStart);
+            var endOffset = tzInfo.GetUtcOffset(periodEnd);
 
             var startDate = new DateTimeOffset(periodStartUnspecifiedTZ, startOffset);
             var endDate = new DateTimeOffset(periodEndUnspecifiedTZ, endOffset).AddSeconds(-1);
@@ -51,6 +50,14 @@ namespace PowerwallCompanion.Lib
             {
                 return default(T);
             }
+        }
+
+        public static DateTime GetUnspecifiedDateTime(JsonNode obj)
+        {
+            var localDate = obj.GetValue<DateTimeOffset>();
+            DateTime unspecifiedDate = new DateTime(localDate.Year, localDate.Month, localDate.Day,
+                localDate.Hour, localDate.Minute, localDate.Second, DateTimeKind.Unspecified);
+            return unspecifiedDate;
         }
 
         public static string FormatException(Exception ex)

@@ -13,6 +13,8 @@ namespace PowerwallCompanion.Lib
         string AccessToken { get; set; }
         string RefreshToken { get; set; }
 
+        string InstallationTimeZone { get; set; }
+
         Task<string> ReadFileContents(string filename);
         Task SaveGatewayDetailsToCache(JsonObject json);
         Task<JsonObject> ReadGatewayDetailsFromCache();

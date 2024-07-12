@@ -92,6 +92,7 @@ namespace PowerwallCompanion
                     Settings.UseLocalGateway = false;
                     Settings.SiteId = await powerwallApi.GetFirstSiteId();
                     Settings.AvailableSites = await powerwallApi.GetEnergySites();
+                    await powerwallApi.StoreInstallationTimeZone();
                     Telemetry.TrackEvent("Login succeeded");
                     return true;
                 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -115,10 +116,14 @@ namespace PowerwallCompanion.Lib
             
         }
 
+        private TimeZoneInfo GetInstallationTimeZone()
+        {
+            return TZConvert.GetTimeZoneInfo(platformAdapter.InstallationTimeZone);
+        }
+
         public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, TariffHelper tariffHelper)
         {
-            var timeZone = await GetInstallationTimeZone();
-            var tzInfo = TZConvert.GetTimeZoneInfo(timeZone);
+            var tzInfo = GetInstallationTimeZone();
             var nowDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzInfo);
             var offsetDate = nowDate.Date.AddDays(dateOffset);
 
@@ -127,8 +132,8 @@ namespace PowerwallCompanion.Lib
 
         public async Task<EnergyTotals> GetEnergyTotalsForPeriod(DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
         {
-            var timeZone = await GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
+            var tzInfo = GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "energy", period, startDate, endDate);
 
             var energyHistory = await apiHelper.CallGetApiWithTokenRefresh(url);
             double totalHomeFromGrid = 0;
@@ -190,7 +195,7 @@ namespace PowerwallCompanion.Lib
 
             foreach (var datapoint in (JsonArray)json["response"]["time_series"])
             {
-                var timestamp = await ConvertToPowerwallDate(datapoint["timestamp"].GetValue<DateTime>());
+                var timestamp = Utils.GetUnspecifiedDateTime(datapoint["timestamp"]);
                 var solarPower = datapoint["solar_power"].GetValue<double>() / 1000;
                 var batteryPower = datapoint["battery_power"].GetValue<double>() / 1000;
                 var gridPower = datapoint["grid_power"].GetValue<double>() / 1000;
@@ -213,8 +218,8 @@ namespace PowerwallCompanion.Lib
         }
         public async Task<PowerChartSeries> GetPowerChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, PowerChartType chartType)
         {
-            string timeZone = await GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "power", period, startDate, endDate);
+            var tzInfo = GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "power", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             var powerChartSeries = new PowerChartSeries();
@@ -230,11 +235,7 @@ namespace PowerwallCompanion.Lib
 
             foreach (var data in json["response"]["time_series"].AsArray())
             {
-                var date = data["timestamp"].GetValue<DateTime>();
-                if (date > DateTime.Now) continue;
-
-                // The date may be in a different time zone to the local time, we want to use the install time
-                date = await ConvertToPowerwallDate(date);
+                var date = Utils.GetUnspecifiedDateTime(data["timestamp"]);
 
                 var solarPower = Utils.GetValueOrDefault<double>(data["solar_power"]);
                 var gridPower = Utils.GetValueOrDefault<double>(data["grid_power"]);
@@ -300,8 +301,8 @@ namespace PowerwallCompanion.Lib
 
         public async Task<List<ChartDataPoint>> GetBatteryHistoricalChargeLevel(DateTime startDate, DateTime endDate)
         {
-            string timeZone = await GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "soe", "day", startDate, endDate);
+            var tzInfo = GetInstallationTimeZone(); 
+            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "soe", "day", startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             var batteryDailySoeGraphData = new List<ChartDataPoint>();
@@ -313,22 +314,16 @@ namespace PowerwallCompanion.Lib
 
             foreach (var data in json["response"]["time_series"].AsArray())
             {
-                var date = data["timestamp"].GetValue<DateTime>();
-                if (date <= DateTime.Now)
-                {
-                    // The date may be in a different time zone to the local time, we want to use the install time
-                    date = await ConvertToPowerwallDate(date);
-
-                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, Utils.GetValueOrDefault<double>(data["soe"])));
-                }
+                var date = Utils.GetUnspecifiedDateTime(data["timestamp"]);
+                batteryDailySoeGraphData.Add(new ChartDataPoint(date, Utils.GetValueOrDefault<double>(data["soe"])));
             }
             return batteryDailySoeGraphData;
         }
 
         public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, TariffHelper tariffHelper)
         {
-            string timeZone = await GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
+            var tzInfo = GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "energy", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             double totalHomeEnergy = 0;
@@ -462,8 +457,8 @@ namespace PowerwallCompanion.Lib
 
         public async Task ExportPowerDataToCsv(Stream stream, DateTime startDate, DateTime endDate)
         {
-            string timeZone = await GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "power", "day", startDate, endDate);
+            var tzInfo = GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "power", "day", startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
             var data = json["response"]["time_series"].AsArray();
 
@@ -483,7 +478,7 @@ namespace PowerwallCompanion.Lib
                     {
                         if (prop.Key == "timestamp")
                         {
-                            await tw.WriteAsync($"{(prop.Value.GetValue<DateTime>()):yyyy-MM-dd HH\\:mm\\:ss},");
+                            await tw.WriteAsync($"{(Utils.GetUnspecifiedDateTime(prop.Value)):yyyy-MM-dd HH\\:mm\\:ss},");
                         }
                         else
                         {
@@ -501,8 +496,8 @@ namespace PowerwallCompanion.Lib
         }
         public async Task ExportEnergyDataToCsv(Stream stream, DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
         {
-            string timeZone = await GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, timeZone, "energy", period, startDate, endDate);
+            var tzInfo = GetInstallationTimeZone();
+            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "energy", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             // Save data from API into dictionary
@@ -665,9 +660,8 @@ namespace PowerwallCompanion.Lib
         {
             try
             {
-                string timeZone = await GetInstallationTimeZone();
-                var powerwallTimeZone = TZConvert.GetTimeZoneInfo(timeZone);
-                var offset = powerwallTimeZone.GetUtcOffset(date);
+                var tzInfo = GetInstallationTimeZone();
+                var offset = tzInfo.GetUtcOffset(date);
                 var dto = new DateTimeOffset(date);
                 return dto.ToOffset(offset).DateTime;
             }
@@ -695,34 +689,29 @@ namespace PowerwallCompanion.Lib
             return energySiteStatus;
         }
 
-        private async Task<string> GetInstallationTimeZone()
+        public async Task StoreInstallationTimeZone()
         {
-            const string timeZoneKey = "InstallationTimeZone";
-            string installationTimeZone = platformAdapter.GetPersistedData(timeZoneKey);
-            if (installationTimeZone == null)
+
+            try
             {
-                try
-                {
-                    var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
-                    installationTimeZone = siteInfoJson["response"]["installation_time_zone"].GetValue<string>();
-                    platformAdapter.PersistData(timeZoneKey, installationTimeZone);
-                }
-                catch
-                {
-                    var systemTimeZone = TimeZoneInfo.Local.Id;
-                    if (systemTimeZone.Contains("/"))
-                    {
-                        // On Android it will already be Iana
-                        installationTimeZone = systemTimeZone;
-                    }
-                    else
-                    {
-                        installationTimeZone = TZConvert.WindowsToIana(systemTimeZone);
-                    }
-                    
-                }
+                var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
+                platformAdapter.InstallationTimeZone = siteInfoJson["response"]["installation_time_zone"].GetValue<string>();
+
             }
-            return installationTimeZone;
+            catch
+            {
+                var systemTimeZone = TimeZoneInfo.Local.Id;
+                if (systemTimeZone.Contains("/"))
+                {
+                    // On Android it will already be Iana
+                    platformAdapter.InstallationTimeZone = systemTimeZone;
+                }
+                else
+                {
+                    platformAdapter.InstallationTimeZone = TZConvert.WindowsToIana(systemTimeZone);
+                }
+
+            }
         }
 
     }

@@ -23,7 +23,7 @@ namespace PowerwallCompanion
 
         public string AccessToken { get => Settings.AccessToken; set => Settings.AccessToken = value; }
         public string RefreshToken { get => Settings.RefreshToken; set => Settings.RefreshToken = value; }
-
+        public string InstallationTimeZone { get => Settings.InstallationTimeZone; set => Settings.InstallationTimeZone = value; }
 
         public async Task<string> ReadFileContents(string filename)
         {

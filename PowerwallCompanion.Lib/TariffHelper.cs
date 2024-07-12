@@ -198,7 +198,7 @@ namespace PowerwallCompanion.Lib
         {
             // This currently assumes the history is for a single day
 
-            var startDate = energyHistoryTimeSeries.First()["timestamp"].GetValue<DateTime>();
+            var startDate = Utils.GetUnspecifiedDateTime(energyHistoryTimeSeries.First()["timestamp"]);
             var tariffs = GetTariffsForDay(startDate.Date);
             var rates = new Dictionary<string, Tuple<decimal, decimal>>();
             foreach (var tariff in tariffs)
@@ -209,7 +209,7 @@ namespace PowerwallCompanion.Lib
             decimal totalFeedIn = 0M;
             foreach (var energyHistory in energyHistoryTimeSeries)
             {
-                var timestamp = energyHistory["timestamp"].GetValue<DateTime>();
+                var timestamp = Utils.GetUnspecifiedDateTime(energyHistory["timestamp"]);
                 var energyImported = Utils.GetValueOrDefault<double>(energyHistory["grid_energy_imported"]) / 1000; // Convert to kWh
                 var energyExported = (Utils.GetValueOrDefault<double>(energyHistory["grid_energy_exported_from_solar"]) +
                     Utils.GetValueOrDefault<double>(energyHistory["grid_energy_exported_from_battery"]) +

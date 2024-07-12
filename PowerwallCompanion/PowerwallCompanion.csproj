@@ -177,7 +177,6 @@
     </Compile>
     <Compile Include="Telemetry.cs" />
     <Compile Include="UwpPlatformAdapter.cs" />
-    <Compile Include="Utils.cs" />
     <Compile Include="UwpTelemetryPlatformAdapter.cs" />
     <Compile Include="ViewModels\BatteryInfoViewModel.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />

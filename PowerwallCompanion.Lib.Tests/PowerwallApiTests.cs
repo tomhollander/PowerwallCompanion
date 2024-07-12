@@ -75,6 +75,10 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task CanExportDailyPowerData()
         {
+            var testPlatformAdapter = new TestPlatformAdapter()
+            {
+                InstallationTimeZone = "Australia/Sydney"
+            };
             var mockApiHelper = new MockApiHelper();
             mockApiHelper.SetResponse("/api/1/energy_sites/11111/site_info", siteInfoDoc);
             mockApiHelper.SetResponse("/api/1/energy_sites/11111/calendar_history?kind=power&period=day&start_date=2019-08-25T00%3A00%3A00.0000000%2B10%3A00&end_date=2019-08-25T23%3A59%3A58.0000000%2B10%3A00&time_zone=Australia%2FSydney&fill_telemetry=0",
@@ -104,7 +108,7 @@ namespace PowerwallCompanion.Lib.Tests
         ""grid_power"": 3579.784003067017,
         ""grid_services_power"": 0
       }]}}");
-            var api = new PowerwallApi("11111", new TestPlatformAdapter(), mockApiHelper);
+            var api = new PowerwallApi("11111", testPlatformAdapter, mockApiHelper);
             var stream = new MemoryStream();
             await api.ExportPowerDataToCsv(stream, new DateTime(2019, 8, 25), new DateTime(2019, 8, 25, 23, 59, 59));
             var sr = new StreamReader(stream);
