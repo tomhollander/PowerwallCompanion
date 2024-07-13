@@ -122,7 +122,7 @@
             
             <!-- Charts-->
             <!-- Daily power chart -->
-            <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0">
+            <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" >
                 <chart:SfChart.Behaviors>
                     <chart:ChartTrackBallBehavior x:Name="powerTrackBall"  />
                 </chart:SfChart.Behaviors>

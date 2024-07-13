@@ -145,6 +145,8 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public DateTime ChartsLastUpdated { get; set; }
+
     }
 
 }

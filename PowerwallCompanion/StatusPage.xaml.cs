@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Media.Core;
@@ -40,7 +41,6 @@ namespace PowerwallCompanion
         private PowerwallApi powerwallApi;
         private TariffHelper tariffHelper;
 
-
         public StatusPage()
         {
             this.InitializeComponent();
@@ -64,9 +64,15 @@ namespace PowerwallCompanion
             base.OnNavigatedTo(e);
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             timer.Stop();
+            if ((DateTime.Now - ViewModel.PowerHistoryLastRefreshed).TotalSeconds < 5)
+            {
+                // Ugly but necessary hack to stop charts crashing on unload
+                await Task.Delay(1000);
+            }
+            
             base.OnNavigatedFrom(e);
         }
 
@@ -205,7 +211,6 @@ namespace PowerwallCompanion
                 viewModel.NotifyDailyEnergyProperties();
             }
         }
-
 
         public async Task GetPowerHistoryData()
         {

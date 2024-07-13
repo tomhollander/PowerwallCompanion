@@ -101,7 +101,7 @@ namespace PowerwallCompanion
         {
             // Copy the Access Token to the clipboard
             var dp = new DataPackage();
-            dp.SetText(Settings.AccessToken);
+            dp.SetText($"SiteId: {Settings.SiteId}\nAccess Token: {Settings.AccessToken}");
             Clipboard.SetContent(dp);
         }
     }

@@ -5,6 +5,7 @@ using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -50,11 +51,19 @@ namespace PowerwallCompanion
             await RefreshDataAndCharts();
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             timer.Stop();
+
+            if ((DateTime.Now - ViewModel.ChartsLastUpdated).TotalSeconds < 5)
+            {
+                // Ugly but necessary hack to stop charts crashing on unload
+                await Task.Delay(2000);
+            }
+
             base.OnNavigatedFrom(e);
         }
+
 
         private async void prevPeriodButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -164,6 +173,7 @@ namespace PowerwallCompanion
 
             }
             await FetchData();
+            ViewModel.ChartsLastUpdated = DateTime.Now;
             progressRing.IsActive = false;
     
         }
@@ -195,55 +205,61 @@ namespace PowerwallCompanion
                 ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
-      
 
-      
+
 
         private async Task UpdatePowerGraph()
         {
-            PowerwallApi.PowerChartType powerChartType = (PowerwallApi.PowerChartType)powerGraphOptionsCombo.SelectedIndex;
-            var powerChartSeries = await powerwallApi.GetPowerChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, powerChartType);
+            try
+            {
+                PowerwallApi.PowerChartType powerChartType = (PowerwallApi.PowerChartType)powerGraphOptionsCombo.SelectedIndex;
+                var powerChartSeries = await powerwallApi.GetPowerChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, powerChartType);
 
-            ViewModel.PowerChartSeries = new PowerChartSeries();
-            ViewModel.PowerChartStackingSeries = new PowerChartSeries(); 
+                ViewModel.PowerChartSeries = new PowerChartSeries();
+                ViewModel.PowerChartStackingSeries = new PowerChartSeries();
 
-            if (powerGraphOptionsCombo.SelectedIndex == 0) // All data
-            {
-                ViewModel.PowerChartSeries = powerChartSeries;
-                ConfigureLegend(null);
-            }
-            else if (powerGraphOptionsCombo.SelectedIndex == 1) // Home
-            {
-                ViewModel.PowerChartStackingSeries = powerChartSeries;
-                ConfigureLegend(homeStackingSeries);
-            }
-            else if (powerGraphOptionsCombo.SelectedIndex == 2) // Solar
-            {
-                ViewModel.PowerChartStackingSeries = powerChartSeries;
-                ConfigureLegend(solarStackingSeries);
-            }
-            else if (powerGraphOptionsCombo.SelectedIndex == 3) // Grid
-            {
-                ViewModel.PowerChartStackingSeries = powerChartSeries;
-                ConfigureLegend(gridStackingSeries);
-            }
-            else if (powerGraphOptionsCombo.SelectedIndex == 4) // Battery
-            {
-                ViewModel.PowerChartStackingSeries = powerChartSeries;
-                ConfigureLegend(batteryStackingSeries);
-            }
-            
-            
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
-            ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = null;
+                if (powerGraphOptionsCombo.SelectedIndex == 0) // All data
+                {
+                    ViewModel.PowerChartSeries = powerChartSeries;
+                    ConfigureLegend(null);
+                }
+                else if (powerGraphOptionsCombo.SelectedIndex == 1) // Home
+                {
+                    ViewModel.PowerChartStackingSeries = powerChartSeries;
+                    ConfigureLegend(homeStackingSeries);
+                }
+                else if (powerGraphOptionsCombo.SelectedIndex == 2) // Solar
+                {
+                    ViewModel.PowerChartStackingSeries = powerChartSeries;
+                    ConfigureLegend(solarStackingSeries);
+                }
+                else if (powerGraphOptionsCombo.SelectedIndex == 3) // Grid
+                {
+                    ViewModel.PowerChartStackingSeries = powerChartSeries;
+                    ConfigureLegend(gridStackingSeries);
+                }
+                else if (powerGraphOptionsCombo.SelectedIndex == 4) // Battery
+                {
+                    ViewModel.PowerChartStackingSeries = powerChartSeries;
+                    ConfigureLegend(batteryStackingSeries);
+                }
 
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartSeries));
-            ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartStackingSeries));
 
-            if (Settings.AccessToken != "DEMO")
-            {
-                ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
+                ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = null;
+
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartSeries));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartStackingSeries));
+
+                if (Settings.AccessToken != "DEMO")
+                {
+                    ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                }
             }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+            }          
             
         }
 
@@ -324,11 +340,11 @@ namespace PowerwallCompanion
             }
         }
 
+
         private async Task FetchBatterySoeData()
         {
             try
             {
-                
                 ViewModel.BatteryDailySoeGraphData = await powerwallApi.GetBatteryHistoricalChargeLevel(ViewModel.PeriodStart, ViewModel.PeriodEnd);
                 ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = null;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
@@ -349,8 +365,6 @@ namespace PowerwallCompanion
                 ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
-
-      
 
         private async void exportButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -449,6 +463,7 @@ namespace PowerwallCompanion
             if (ViewModel != null)
             {
                 await UpdatePowerGraph();
+                ViewModel.ChartsLastUpdated = DateTime.Now;
             }
             
         }
