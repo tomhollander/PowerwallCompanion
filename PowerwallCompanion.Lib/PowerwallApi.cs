@@ -132,8 +132,7 @@ namespace PowerwallCompanion.Lib
 
         public async Task<EnergyTotals> GetEnergyTotalsForPeriod(DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
         {
-            var tzInfo = GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "energy", period, startDate, endDate);
+            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", period, startDate, endDate);
 
             var energyHistory = await apiHelper.CallGetApiWithTokenRefresh(url);
             double totalHomeFromGrid = 0;
@@ -218,8 +217,7 @@ namespace PowerwallCompanion.Lib
         }
         public async Task<PowerChartSeries> GetPowerChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, PowerChartType chartType)
         {
-            var tzInfo = GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "power", period, startDate, endDate);
+            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             var powerChartSeries = new PowerChartSeries();
@@ -301,8 +299,7 @@ namespace PowerwallCompanion.Lib
 
         public async Task<List<ChartDataPoint>> GetBatteryHistoricalChargeLevel(DateTime startDate, DateTime endDate)
         {
-            var tzInfo = GetInstallationTimeZone(); 
-            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "soe", "day", startDate, endDate);
+            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "soe", "day", startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             var batteryDailySoeGraphData = new List<ChartDataPoint>();
@@ -322,8 +319,7 @@ namespace PowerwallCompanion.Lib
 
         public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, TariffHelper tariffHelper)
         {
-            var tzInfo = GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "energy", period, startDate, endDate);
+            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             double totalHomeEnergy = 0;
@@ -457,8 +453,7 @@ namespace PowerwallCompanion.Lib
 
         public async Task ExportPowerDataToCsv(Stream stream, DateTime startDate, DateTime endDate)
         {
-            var tzInfo = GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "power", "day", startDate, endDate);
+            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
             var data = json["response"]["time_series"].AsArray();
 
@@ -495,9 +490,8 @@ namespace PowerwallCompanion.Lib
             }            
         }
         public async Task ExportEnergyDataToCsv(Stream stream, DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
-        {
-            var tzInfo = GetInstallationTimeZone();
-            var url = Utils.GetCalendarHistoryUrl(siteId, tzInfo, "energy", period, startDate, endDate);
+        { 
+            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
 
             // Save data from API into dictionary

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -96,6 +97,9 @@ namespace PowerwallCompanion.Lib
 
         private async Task WriteDocumentToMongoDB(JsonObject document)
         {
+#if DEBUG
+            Debug.WriteLine("Debug telemetry event: " + document.ToJsonString(new JsonSerializerOptions() {  WriteIndented = true }));
+#else
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("api-key", Keys.MongoDBDataApiKey);
             var request = new HttpRequestMessage(HttpMethod.Post, Keys.MongoDBDataEndpoint);
@@ -116,7 +120,8 @@ namespace PowerwallCompanion.Lib
                 var contentString = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Failed to write telemetry data to MongoDB. Status code: {response.StatusCode}, content: {contentString}");
             }
-
+#endif
         }
+
     }
 }

@@ -14,8 +14,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public void CalendarHistoryUrlTest()
         {
-            var tzInfo = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            var url = Utils.GetCalendarHistoryUrl("12345", tzInfo, "energy","day", new DateTime(2024, 2, 1), new DateTime(2024, 2, 2));
+            var url = Utils.GetCalendarHistoryUrl("12345", "America/New_York", "energy","day", new DateTime(2024, 2, 1), new DateTime(2024, 2, 2));
             StringAssert.Contains(url, "/api/1/energy_sites/12345/calendar_history?");
             StringAssert.Contains(url, "kind=energy");
             StringAssert.Contains(url, "period=day");

@@ -10,10 +10,10 @@ namespace PowerwallCompanion.Lib
 {
     public static class Utils
     {
-        public static string GetCalendarHistoryUrl(string siteId, TimeZoneInfo tzInfo, string kind, string period, DateTime periodStart, DateTime periodEnd)
+        public static string GetCalendarHistoryUrl(string siteId, string timeZone, string kind, string period, DateTime periodStart, DateTime periodEnd)
         {
             var sb = new StringBuilder();
-            string timeZone = TZConvert.WindowsToIana(tzInfo.Id);
+            var tzInfo = TZConvert.GetTimeZoneInfo(timeZone);
             DateTime periodStartUnspecifiedTZ = new DateTime(periodStart.Ticks, DateTimeKind.Unspecified);
             DateTime periodEndUnspecifiedTZ = new DateTime(periodEnd.Ticks, DateTimeKind.Unspecified);
 
