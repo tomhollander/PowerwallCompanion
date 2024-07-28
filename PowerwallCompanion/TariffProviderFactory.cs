@@ -11,6 +11,7 @@ namespace PowerwallCompanion
     {
         public static async Task<ITariffProvider> Create(PowerwallApi powerwallApi)
         {
+            Telemetry.TrackEvent("Initialising tariff provider", new Dictionary<string, string> { { "provider", Settings.TariffProvider } });
             if (Settings.TariffProvider == "Tesla")
             {
                 var ratePlan = await powerwallApi.GetRatePlan();

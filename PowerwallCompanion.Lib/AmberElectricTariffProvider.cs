@@ -19,6 +19,7 @@ namespace PowerwallCompanion.Lib
             this.apiKey = apiKey;
         }
 
+        public string ProviderName => "Amber";
         private async Task<string> GetSiteId()
         { 
             if (siteId == null)
@@ -83,6 +84,8 @@ namespace PowerwallCompanion.Lib
                 tariff.IsDynamic = true;
                 tariff.DynamicSellAndFeedInRate = new Tuple<decimal, decimal>(json[0]["perKwh"].GetValue<decimal>() / 100, json[1]["perKwh"].GetValue<decimal>() / -100);
                 tariff.Name = "Dynamic";
+                tariff.DisplayName = GetDisplayName(tariff.DynamicSellAndFeedInRate.Item1);
+                tariff.Color = GetColor(tariff.DynamicSellAndFeedInRate.Item1);
                 return tariff;
             }
             return null;
@@ -117,6 +120,8 @@ namespace PowerwallCompanion.Lib
                         tariff.IsDynamic = true;
                         tariff.DynamicSellAndFeedInRate = new Tuple<decimal, decimal>(item["perKwh"].GetValue<decimal>() / 100, 0);
                         tariff.Name = "Dynamic";
+                        tariff.DisplayName = GetDisplayName(tariff.DynamicSellAndFeedInRate.Item1);
+                        tariff.Color = GetColor(tariff.DynamicSellAndFeedInRate.Item1);
                         tariffs.Add(tariff);
                     }
                     else if (item["channelType"].GetValue<string>() == "feedIn")
@@ -134,6 +139,33 @@ namespace PowerwallCompanion.Lib
             return tariffCache[date];
         }
 
+        private string GetDisplayName(decimal price)
+        {
+            if (price < 0)
+                return "Negative";
+            else if (price < 0.10M)
+                return "Very Cheap";
+            else if (price < 0.20M)
+                return "Cheap";
+            else if (price < 0.30M)
+                return "Moderate";
+            else
+                return "Expensive";
+        }
+
+        private System.Drawing.Color GetColor(decimal price)
+        {
+            if (price < 0)
+                return System.Drawing.Color.Magenta;
+            else if (price < 0.10M)
+                return System.Drawing.Color.Blue;
+            else if (price < 0.20M)
+                return System.Drawing.Color.Green;
+            else if (price < 0.30M)
+                return System.Drawing.Color.DarkOrange;
+            else
+                return System.Drawing.Color.Red;
+        }
 
     }
 }

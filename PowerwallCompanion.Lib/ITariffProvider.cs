@@ -9,6 +9,7 @@ namespace PowerwallCompanion.Lib
 {
     public interface ITariffProvider
     {
+        string ProviderName { get; }
         Task<List<Tariff>> GetTariffsForDay(DateTime date);
         bool IsSingleRatePlan { get; }
         Task<Tariff> GetInstantaneousTariff();

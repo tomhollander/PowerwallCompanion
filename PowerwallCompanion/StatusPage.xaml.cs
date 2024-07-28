@@ -67,11 +67,6 @@ namespace PowerwallCompanion
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             timer.Stop();
-            if ((DateTime.Now - ViewModel.PowerHistoryLastRefreshed).TotalSeconds < 5)
-            {
-                // Ugly but necessary hack to stop charts crashing on unload
-                await Task.Delay(1000);
-            }
             
             base.OnNavigatedFrom(e);
         }

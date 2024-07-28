@@ -32,6 +32,7 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             Telemetry.TrackEvent("ChartPage opened");
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             this.ViewModel = new ChartViewModel();
             ViewModel.Period = "Day";
@@ -51,16 +52,19 @@ namespace PowerwallCompanion
             await RefreshDataAndCharts();
         }
 
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            // Reset the tariffProvider if it was changed in settings
+            if (tariffHelper != null && tariffHelper.ProviderName != Settings.TariffProvider)
+            {
+                await CreateTariffProvider();
+                await RefreshDataAndCharts();
+            }
+            base.OnNavigatedTo(e);
+        }
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             timer.Stop();
-
-            if ((DateTime.Now - ViewModel.ChartsLastUpdated).TotalSeconds < 5)
-            {
-                // Ugly but necessary hack to stop charts crashing on unload
-                await Task.Delay(2000);
-            }
-
             base.OnNavigatedFrom(e);
         }
 
@@ -253,7 +257,7 @@ namespace PowerwallCompanion
 
                 if (Settings.AccessToken != "DEMO")
                 {
-                    ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                   ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
                 }
             }
             catch (Exception ex)
@@ -292,8 +296,8 @@ namespace PowerwallCompanion
                 solarStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
                 batteryStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
                 gridStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                ((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Visible;
-                ((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = true;
+                //((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Visible;
+                //((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = true;
             }
             else
             {
@@ -307,8 +311,8 @@ namespace PowerwallCompanion
                 batteryStackingSeries.VisibilityOnLegend = Visibility.Visible;
                 gridStackingSeries.VisibilityOnLegend = Visibility.Visible;
                 seriesToHide.VisibilityOnLegend = Visibility.Collapsed;
-                ((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Collapsed;
-                ((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = false;
+                //((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Collapsed;
+                //((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = false;
 
             }
         }

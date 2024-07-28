@@ -1,10 +1,13 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PowerwallCompanion.Lib
 {
@@ -22,6 +25,7 @@ namespace PowerwallCompanion.Lib
             this.ratePlan = ratePlan;
         }
 
+        public string ProviderName => "Tesla";
 
         private JsonNode GetSeasonForDate(DateTime date)
         {
@@ -93,6 +97,8 @@ namespace PowerwallCompanion.Lib
                                 Season = season.GetPropertyName(),
                                 StartDate = date,
                                 EndDate = date.AddDays(1),
+                                DisplayName = GetDisplayName(rateName),
+                                Color = GetColor(rateName),
                             };
                             tariffs.Add(tariff);
                         }
@@ -104,6 +110,8 @@ namespace PowerwallCompanion.Lib
                                 Season = season.GetPropertyName(),
                                 StartDate = date.AddHours(fromHour).AddMinutes(fromMinute),
                                 EndDate = date.AddHours(toHour).AddMinutes(toMinute),
+                                DisplayName = GetDisplayName(rateName),
+                                Color = GetColor(rateName),
                             };
                             tariffs.Add(tariff);
                         }
@@ -117,6 +125,8 @@ namespace PowerwallCompanion.Lib
                                     Season = season.GetPropertyName(),
                                     StartDate = date,
                                     EndDate = date.AddHours(toHour).AddMinutes(toMinute),
+                                    DisplayName = GetDisplayName(rateName),
+                                    Color = GetColor(rateName),
                                 };
                                 tariffs.Add(morningTariff);
                             }
@@ -128,7 +138,9 @@ namespace PowerwallCompanion.Lib
                                     Name = rateName,
                                     Season = season.GetPropertyName(),
                                     StartDate = date.AddHours(fromHour).AddMinutes(fromMinute),
-                                    EndDate = date.AddDays(1)
+                                    EndDate = date.AddDays(1),
+                                    DisplayName = GetDisplayName(rateName),
+                                    Color = GetColor(rateName),
                                 };
                                 tariffs.Add(eveningTariff);
                             }
@@ -232,6 +244,29 @@ namespace PowerwallCompanion.Lib
             return new Tuple<decimal, decimal>(totalCost, totalFeedIn);
             
 
+        }
+
+        private string GetDisplayName(string tariffName)
+        {
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            return textInfo.ToTitleCase(tariffName.ToLower().Replace("_", " "));
+        }
+
+        private Color GetColor(string tariffName)
+        {
+            switch (tariffName)
+            {
+                case "SUPER_OFF_PEAK":
+                    return Color.Blue;
+                case "OFF_PEAK":
+                    return Color.Green;
+                case "PARTIAL_PEAK":
+                    return Color.DarkOrange;
+                case "ON_PEAK":
+                    return Color.Red;
+                default:
+                    return Color.DarkGray;
+            }
         }
     }
 }

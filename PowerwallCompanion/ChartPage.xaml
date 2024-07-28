@@ -126,13 +126,12 @@
                 <chart:SfChart.Behaviors>
                     <chart:ChartTrackBallBehavior x:Name="powerTrackBall"  />
                 </chart:SfChart.Behaviors>
-                
+
                 <chart:SfChart.PrimaryAxis>
                     <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2" ShowTrackBallInfo="True"  LabelFormat="t"  LabelBorderBrush="#202020">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
                         </chart:DateTimeAxis.LabelStyle>
- 
                     </chart:DateTimeAxis>
                 </chart:SfChart.PrimaryAxis>
 
