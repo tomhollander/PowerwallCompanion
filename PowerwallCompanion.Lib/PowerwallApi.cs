@@ -103,8 +103,8 @@ namespace PowerwallCompanion.Lib
             int max = 0;
             foreach (var datapoint in (JsonArray)json["response"]["time_series"])
             {
-                var timestamp = await ConvertToPowerwallDate(datapoint["timestamp"].GetValue<DateTime>());
-                if (timestamp.Date == (await ConvertToPowerwallDate(DateTime.Now)).Date)
+                var timestamp = ConvertToPowerwallDate(datapoint["timestamp"].GetValue<DateTime>());
+                if (timestamp.Date == (ConvertToPowerwallDate(DateTime.Now)).Date)
                 {
                     var soe = datapoint["soe"].GetValue<int>();
                     if (soe < min) min = soe;
@@ -121,7 +121,7 @@ namespace PowerwallCompanion.Lib
             return TZConvert.GetTimeZoneInfo(platformAdapter.InstallationTimeZone);
         }
 
-        public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, TariffHelper tariffHelper)
+        public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, ITariffProvider tariffHelper)
         {
             var tzInfo = GetInstallationTimeZone();
             var nowDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzInfo);
@@ -130,7 +130,7 @@ namespace PowerwallCompanion.Lib
             return await GetEnergyTotalsForPeriod(offsetDate, offsetDate.AddDays(1).AddSeconds(-1), "day", tariffHelper);
         }
 
-        public async Task<EnergyTotals> GetEnergyTotalsForPeriod(DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
+        public async Task<EnergyTotals> GetEnergyTotalsForPeriod(DateTime startDate, DateTime endDate, string period, ITariffProvider tariffHelper)
         {
             var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", period, startDate, endDate);
 
@@ -170,9 +170,16 @@ namespace PowerwallCompanion.Lib
 
             if (tariffHelper != null)
             {
-                var dailyCosts = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory["response"]["time_series"].AsArray().ToList());
-                energyTotals.EnergyCost = dailyCosts.Item1;
-                energyTotals.EnergyFeedIn = dailyCosts.Item2;
+                try
+                {
+                    var dailyCosts = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory["response"]["time_series"].AsArray().ToList());
+                    energyTotals.EnergyCost = dailyCosts.Item1;
+                    energyTotals.EnergyFeedIn = dailyCosts.Item2;
+                }
+                catch
+                { 
+                    // TODO: Telemetry
+                }
             }
 
             return energyTotals;
@@ -317,7 +324,7 @@ namespace PowerwallCompanion.Lib
             return batteryDailySoeGraphData;
         }
 
-        public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, TariffHelper tariffHelper)
+        public async Task<EnergyChartSeries> GetEnergyChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, ITariffProvider tariffHelper)
         {
             var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
@@ -407,13 +414,13 @@ namespace PowerwallCompanion.Lib
 
             if (tariffHelper != null && (period == "Week" || period == "Month"))
             {
-                CalculateCostData((JsonArray)json["response"]["time_series"].AsArray(), tariffHelper, energyChartSeries);
+                await CalculateCostData((JsonArray)json["response"]["time_series"].AsArray(), tariffHelper, energyChartSeries);
             }
 
             return energyChartSeries;
         }
 
-        private void CalculateCostData(JsonArray energyTimeSeries, TariffHelper tariffHelper, EnergyChartSeries energyChartSeries)
+        private async Task CalculateCostData(JsonArray energyTimeSeries, ITariffProvider tariffHelper, EnergyChartSeries energyChartSeries)
         {
             try
             {
@@ -437,7 +444,7 @@ namespace PowerwallCompanion.Lib
                 // Calculate costs per date  
                 foreach (var date in dailyData.Keys)
                 {
-                    var energyCost = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
+                    var energyCost = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
                     energyChartSeries.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
                     energyChartSeries.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
                     energyChartSeries.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
@@ -489,7 +496,7 @@ namespace PowerwallCompanion.Lib
                 await tw.FlushAsync();
             }            
         }
-        public async Task ExportEnergyDataToCsv(Stream stream, DateTime startDate, DateTime endDate, string period, TariffHelper tariffHelper)
+        public async Task ExportEnergyDataToCsv(Stream stream, DateTime startDate, DateTime endDate, string period, ITariffProvider tariffHelper)
         { 
             var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", period, startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
@@ -552,7 +559,7 @@ namespace PowerwallCompanion.Lib
                 if (tariffHelper != null && (period == "Week" || period == "Month"))
                 {
                     var dataForDay = json["response"]["time_series"].AsArray().Where(ts => ts["timestamp"].GetValue<DateTime>().Date == data.Key).ToList();
-                    var energyCosts = tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dataForDay);
+                    var energyCosts = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dataForDay);
                     await tw.WriteAsync($"{energyCosts.Item1},{energyCosts.Item2},{energyCosts.Item1 - energyCosts.Item2}");
                 }
                 await tw.WriteLineAsync();
@@ -650,7 +657,7 @@ namespace PowerwallCompanion.Lib
             }
             return result;
         }
-        public async Task<DateTime> ConvertToPowerwallDate(DateTime date)
+        public DateTime ConvertToPowerwallDate(DateTime date)
         {
             try
             {

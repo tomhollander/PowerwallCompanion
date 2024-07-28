@@ -26,7 +26,7 @@ namespace PowerwallCompanion
         private Task ratePlanTask;
         private DispatcherTimer timer;
         private PowerwallApi powerwallApi;
-        private TariffHelper tariffHelper;
+        private ITariffProvider tariffHelper;
 
         public ChartPage()
         {
@@ -38,7 +38,7 @@ namespace PowerwallCompanion
             ViewModel.CalendarDate = DateTime.Now;
 
             powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
-            ratePlanTask = FetchRatePlan();
+            ratePlanTask = CreateTariffProvider();
 
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMinutes(5);
@@ -115,9 +115,9 @@ namespace PowerwallCompanion
             await RefreshDataAndCharts();
         }
 
-        private async void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
-            var date = await powerwallApi.ConvertToPowerwallDate(DateTime.Now);
+            var date = powerwallApi.ConvertToPowerwallDate(DateTime.Now);
             if (args.NewDate > date.Date)
             {
                 datePicker.Date = date.Date;
@@ -148,7 +148,7 @@ namespace PowerwallCompanion
                 energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
                 dailyCost.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
-                DateTime date = await powerwallApi.ConvertToPowerwallDate(ViewModel.PeriodStart);
+                DateTime date = powerwallApi.ConvertToPowerwallDate(ViewModel.PeriodStart);
                 await GetTariffsForDay(date.Date);
             }
             else
@@ -327,12 +327,11 @@ namespace PowerwallCompanion
                 Telemetry.TrackException(ex);
             }
         }
-        private async Task FetchRatePlan()
+        private async Task CreateTariffProvider()
         {
             try
             {
-                var ratePlan = await powerwallApi.GetRatePlan();
-                tariffHelper = new TariffHelper(ratePlan);
+                tariffHelper = await TariffProviderFactory.Create(powerwallApi);
             }
             catch (Exception ex)
             {
@@ -430,11 +429,17 @@ namespace PowerwallCompanion
             }
             try
             {
-                var tariffs = tariffHelper.GetTariffsForDay(date);
+                var tariffs = await tariffHelper.GetTariffsForDay(date);
 
                 dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
+                ChartMultiLevelLabel lastMultiLabel = null;
                 foreach (var tariff in tariffs)
                 {
+                    if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
+                    {
+                        lastMultiLabel.End = tariff.EndDate;
+                        continue;
+                    }
                     var multiLabel = new ChartMultiLevelLabel()
                     {
                         Start = tariff.StartDate,
@@ -443,6 +448,7 @@ namespace PowerwallCompanion
                         Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
                         FontSize = 14,
                     };
+                    lastMultiLabel = multiLabel; 
                     dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
                 }
             }

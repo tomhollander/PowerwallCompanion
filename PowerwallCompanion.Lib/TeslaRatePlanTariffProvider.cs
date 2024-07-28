@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 namespace PowerwallCompanion.Lib
 {
-    public class TariffHelper
+    public class TeslaRatePlanTariffProvider : ITariffProvider
     {
 
         private JsonObject ratePlan;
 
-        public TariffHelper(JsonObject ratePlan)
+        public TeslaRatePlanTariffProvider(JsonObject ratePlan)
         {
             if (ratePlan == null)
             {
@@ -56,7 +57,7 @@ namespace PowerwallCompanion.Lib
             return null;
         }
 
-        public List<Tariff> GetTariffsForDay(DateTime date)
+        public async Task<List<Tariff>> GetTariffsForDay(DateTime date)
         {
             var tariffs = new List<Tariff>();
             var season = GetSeasonForDate(date);
@@ -152,13 +153,18 @@ namespace PowerwallCompanion.Lib
             }
         }
 
-        public Tariff GetTariffForInstant(DateTime date)
+        public async Task<Tariff> GetInstantaneousTariff()
         {
-            var tariffs = GetTariffsForDay(date.Date);
+            return await GetTariffForInstant(DateTime.Now);
+        }
+        // Not part of interface, pubilc for testing
+        public async Task<Tariff> GetTariffForInstant(DateTime date)
+        {
+            var tariffs = await GetTariffsForDay(date.Date);
             return GetTariffForInstant(date, tariffs);
         }
 
-        public Tariff GetTariffForInstant(DateTime date, List<Tariff> tariffs)
+        private Tariff GetTariffForInstant(DateTime date, List<Tariff> tariffs)
         {
             // This version is more efficient if you already have the tariffs for the day
             foreach (var tariff in tariffs)
@@ -194,12 +200,12 @@ namespace PowerwallCompanion.Lib
             return new Tuple<decimal, decimal>(buyRate, sellRate);
         }
 
-        public Tuple<decimal, decimal>GetEnergyCostAndFeedInFromEnergyHistory(List<JsonNode> energyHistoryTimeSeries)
+        public async Task<Tuple<decimal, decimal>>GetEnergyCostAndFeedInFromEnergyHistory(List<JsonNode> energyHistoryTimeSeries)
         {
             // This currently assumes the history is for a single day
 
             var startDate = Utils.GetUnspecifiedDateTime(energyHistoryTimeSeries.First()["timestamp"]);
-            var tariffs = GetTariffsForDay(startDate.Date);
+            var tariffs = await GetTariffsForDay(startDate.Date);
             var rates = new Dictionary<string, Tuple<decimal, decimal>>();
             foreach (var tariff in tariffs)
             {

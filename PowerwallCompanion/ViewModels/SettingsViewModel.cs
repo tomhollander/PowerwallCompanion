@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Windows.ApplicationModel;
+using Windows.UI.Xaml;
 
 namespace PowerwallCompanion.ViewModels
 {
@@ -11,7 +12,7 @@ namespace PowerwallCompanion.ViewModels
 
         public bool SignedIn
         {
-            get {  return Settings.AccessToken != null || Settings.LocalGatewayIP != null;  }
+            get { return Settings.AccessToken != null || Settings.LocalGatewayIP != null; }
         }
 
         public string SignInName
@@ -46,7 +47,7 @@ namespace PowerwallCompanion.ViewModels
 
         public bool? ShowClock
         {
-            get {  return Settings.ShowClock;}
+            get { return Settings.ShowClock; }
             set
             {
                 Settings.ShowClock = value.Value;
@@ -60,6 +61,36 @@ namespace PowerwallCompanion.ViewModels
             {
                 Settings.ShowEnergyRates = value.Value;
             }
+        }
+
+        public List<KeyValuePair<string, string>> TariffProviders
+        {
+            get => new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Tesla", "Tesla custom rate plan"),
+                new KeyValuePair<string, string>("Amber", "Amber Electric (AU)"),
+            };
+        }
+
+        public KeyValuePair<string, string> SelectedTariffProvider
+        {
+            get => TariffProviders.Where(s => s.Key == Settings.TariffProvider).FirstOrDefault();
+            set
+            {
+                Settings.TariffProvider = value.Key;
+                NotifyPropertyChanged(nameof(AmberApiKeyVisibility));
+            }
+        }
+
+        public Visibility AmberApiKeyVisibility
+        {
+            get => SelectedTariffProvider.Key == "Amber" ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public string AmberElectricApiKey
+        {
+            get => Settings.AmberElectricApiKey;
+            set => Settings.AmberElectricApiKey = value;
         }
 
         public bool? ShowEnergySources

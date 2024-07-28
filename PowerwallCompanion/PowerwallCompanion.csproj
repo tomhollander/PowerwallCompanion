@@ -175,6 +175,7 @@
     <Compile Include="StatusPage.xaml.cs">
       <DependentUpon>StatusPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TariffProviderFactory.cs" />
     <Compile Include="Telemetry.cs" />
     <Compile Include="UwpPlatformAdapter.cs" />
     <Compile Include="UwpTelemetryPlatformAdapter.cs" />

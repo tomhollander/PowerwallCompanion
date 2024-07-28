@@ -115,6 +115,46 @@ namespace PowerwallCompanion
                 _localSettings.Values["ShowEnergyRates"] = value.ToString();
             }
         }
+
+        public static string TariffProvider
+        {
+            get
+            {
+                if (_localSettings.Values["TariffProvider"] == null)
+                {
+                    return "Tesla";
+                }
+                else
+                {
+                    return (string)_localSettings.Values["TariffProvider"];
+                }
+            }
+            set
+            {
+                _localSettings.Values["TariffProvider"] = value;
+            }
+        }
+
+        public static string AmberElectricApiKey
+        {
+            get
+            {
+                if (_localSettings.Values["AmberElectricApiKey"] == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return (string)_localSettings.Values["AmberElectricApiKey"];
+                }
+            }
+            set
+            {
+                _localSettings.Values["AmberElectricApiKey"] = value;
+            }
+        }
+
+
         public static bool ShowEnergySources
         {
             get

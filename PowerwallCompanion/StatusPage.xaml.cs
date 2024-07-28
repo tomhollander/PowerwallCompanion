@@ -39,7 +39,7 @@ namespace PowerwallCompanion
         private double maxPercentSinceNotification = 100D;
         private DispatcherTimer timer;
         private PowerwallApi powerwallApi;
-        private TariffHelper tariffHelper;
+        private ITariffProvider tariffHelper;
 
         public StatusPage()
         {
@@ -167,7 +167,7 @@ namespace PowerwallCompanion
                 viewModel.MinBatteryPercentToday = minMax.Item1;
                 viewModel.MaxBatteryPercentToday = minMax.Item2;
             }
-            else if (viewModel.BatteryDay != (await powerwallApi.ConvertToPowerwallDate(DateTime.Now)).Date) 
+            else if (viewModel.BatteryDay != (powerwallApi.ConvertToPowerwallDate(DateTime.Now)).Date) 
             {
                 viewModel.BatteryDay = DateTime.Today;
                 viewModel.MinBatteryPercentToday = viewModel.InstantaneousPower.BatteryStoragePercent;
@@ -223,7 +223,7 @@ namespace PowerwallCompanion
 
                 viewModel.PowerChartSeries = await powerwallApi.GetPowerChartSeriesForLastTwoDays();
 
-                DateTime d = await powerwallApi.ConvertToPowerwallDate(DateTime.Now);
+                DateTime d = powerwallApi.ConvertToPowerwallDate(DateTime.Now);
                 if (Settings.AccessToken == "DEMO")
                 {
                     viewModel.ChartMaxDate = new DateTime(2018, 3, 1);
@@ -251,8 +251,7 @@ namespace PowerwallCompanion
             {
                 try
                 {
-                    var ratePlan = await powerwallApi.GetRatePlan();
-                    tariffHelper = new TariffHelper(ratePlan);
+                    tariffHelper = await TariffProviderFactory.Create(powerwallApi);
                     viewModel.TariffBadgeVisibility = tariffHelper.IsSingleRatePlan ? Visibility.Collapsed : Visibility.Visible;
                 }
                 catch (Exception ex)
@@ -268,7 +267,7 @@ namespace PowerwallCompanion
             {
                 try
                 {
-                    var tariff = tariffHelper.GetTariffForInstant(DateTime.Now);
+                    var tariff = await tariffHelper.GetInstantaneousTariff();
                     var prices = tariffHelper.GetRatesForTariff(tariff);
                     viewModel.TariffName = tariff.DisplayName;
                     viewModel.TariffSellRate = prices.Item1;

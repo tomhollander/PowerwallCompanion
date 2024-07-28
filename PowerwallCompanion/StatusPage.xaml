@@ -244,7 +244,7 @@
                         </StackPanel>
                         <Grid Grid.Column="0" Visibility="{x:Bind ViewModel.TariffBadgeVisibility, Mode=OneWay}" Margin="10,0,0,0">
                             <Rectangle Fill="{x:Bind ViewModel.TariffColor, Mode=OneWay}" Height="30" RadiusX="10" RadiusY="10"/>
-                            <TextBlock Text="{x:Bind ViewModel.TariffName,Mode=OneWay}" VerticalAlignment="Center" FontSize="16" Margin="5"/>
+                            <TextBlock Text="{x:Bind ViewModel.TariffName,Mode=OneWay}" VerticalAlignment="Center" FontSize="16" Margin="5"  ToolTipService.ToolTip="{x:Bind ViewModel.EnergyCostsTooltip, Mode=OneWay}" />
                         </Grid>
                     </StackPanel>
 

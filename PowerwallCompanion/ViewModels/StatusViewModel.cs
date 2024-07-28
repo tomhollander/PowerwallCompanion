@@ -204,6 +204,11 @@ namespace PowerwallCompanion.ViewModels
 
         }
 
+        public string EnergyCostsTooltip
+        {
+            get => $"Sell rate: {TariffSellRate.ToString("c")}/kWh\nBuy rate: {TariffBuyRate.ToString("c")}/kWh";
+        }
+
 
         public Brush TariffColor
         {
@@ -275,6 +280,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(CostPerHour));
             NotifyPropertyChanged(nameof(FeedInPerHour));
             NotifyPropertyChanged(nameof(TariffBadgeVisibility));
+            NotifyPropertyChanged(nameof(EnergyCostsTooltip));
         }
 
         public string LastExceptionMessage { get; set; }
