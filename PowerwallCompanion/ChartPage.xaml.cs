@@ -44,7 +44,6 @@ namespace PowerwallCompanion
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMinutes(5);
             timer.Tick += Timer_Tick;
-            timer.Start();
         }
 
         private async void Timer_Tick(object sender, object e)
@@ -60,6 +59,7 @@ namespace PowerwallCompanion
                 await CreateTariffProvider();
                 await RefreshDataAndCharts();
             }
+            timer.Start();
             base.OnNavigatedTo(e);
         }
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
