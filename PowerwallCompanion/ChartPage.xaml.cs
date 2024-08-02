@@ -5,6 +5,7 @@ using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
@@ -437,7 +438,7 @@ namespace PowerwallCompanion
 
                 dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
                 ChartMultiLevelLabel lastMultiLabel = null;
-                foreach (var tariff in tariffs)
+                foreach (var tariff in tariffs.OrderBy(t => t.StartDate).AsEnumerable())
                 {
                     if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
                     {

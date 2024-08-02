@@ -1,6 +1,7 @@
 ﻿using PowerwallCompanion.Lib;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -55,6 +56,6 @@ namespace PowerwallCompanion
             }
         }
 
-        public string Region => Windows.System.UserProfile.GlobalizationPreferences.HomeGeographicRegion;
+        public string Region => CultureInfo.CurrentCulture.Name;
     }
 }
