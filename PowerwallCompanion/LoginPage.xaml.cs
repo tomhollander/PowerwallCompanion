@@ -49,7 +49,7 @@ namespace PowerwallCompanion
         {
             var url = args.Uri.ToString();
 
-            if (url.Contains(Keys.TeslaAppRedirectUrl))
+            if (url.StartsWith(Keys.TeslaAppRedirectUrl))
             {
                 warningBanner.Visibility = Visibility.Collapsed;
                 webView.Visibility = Visibility.Collapsed;

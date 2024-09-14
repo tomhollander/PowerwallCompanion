@@ -85,6 +85,7 @@ namespace PowerwallCompanion
         {
             Settings.AccessToken = null;
             Settings.RefreshToken = null;
+            Settings.SiteId = null;
             Settings.SignInName = null;
             Settings.InstallationTimeZone = null;
             this.Frame.Navigate(typeof(LoginPage));

@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using TimeZoneConverter;
 using Windows.Storage;
 
 namespace PowerwallCompanion
@@ -23,7 +24,11 @@ namespace PowerwallCompanion
 
         public string AccessToken { get => Settings.AccessToken; set => Settings.AccessToken = value; }
         public string RefreshToken { get => Settings.RefreshToken; set => Settings.RefreshToken = value; }
-        public string InstallationTimeZone { get => Settings.InstallationTimeZone; set => Settings.InstallationTimeZone = value; }
+        public string InstallationTimeZone 
+        { 
+            get => Settings.InstallationTimeZone ?? TZConvert.WindowsToIana(TimeZoneInfo.Local.Id); 
+            set => Settings.InstallationTimeZone = value; 
+        }
 
         public async Task<string> ReadFileContents(string filename)
         {

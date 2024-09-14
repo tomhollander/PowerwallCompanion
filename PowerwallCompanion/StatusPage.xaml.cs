@@ -79,6 +79,8 @@ namespace PowerwallCompanion
 
         private async Task RefreshDataFromTeslaOwnerApi()
         {
+
+            await GetInstallationTimeZoneIfNeeded(); // Usually a no-op
             await RefreshTariffData(); // Refresh tariff data first, as it's used in other data refreshes
             var tasks = new List<Task>()
             {
@@ -89,6 +91,21 @@ namespace PowerwallCompanion
                 GetEnergySiteInfo(),
             };
             await Task.WhenAll(tasks);
+        }
+
+        private async Task GetInstallationTimeZoneIfNeeded()
+        {
+            if (Settings.InstallationTimeZone == null)
+            {
+                try
+                {
+                    await powerwallApi.StoreInstallationTimeZone();
+                }
+                catch (Exception ex)
+                {
+                    Telemetry.TrackException(ex);
+                }
+            }
         }
 
         private async Task GetEnergySiteInfo()
