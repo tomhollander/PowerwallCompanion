@@ -20,7 +20,6 @@ namespace PowerwallCompanion.Lib.Tests
             StringAssert.Contains(url, "period=day");
             StringAssert.Contains(url, "start_date=" + WebUtility.UrlEncode("2024-02-01T00:00:00.0000000-05:00"));
             StringAssert.Contains(url, "end_date=" + WebUtility.UrlEncode("2024-02-01T23:59:59.0000000-05:00"));
-            StringAssert.Contains(url, "time_zone=America%2FNew_York");
         }
 
         [TestMethod]

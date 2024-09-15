@@ -60,6 +60,9 @@ namespace PowerwallCompanion
                 await CreateTariffProvider();
                 await RefreshDataAndCharts();
             }
+
+            // Reset the API helper in case we've signed out and back in
+            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
             timer.Start();
             base.OnNavigatedTo(e);
         }
@@ -145,6 +148,7 @@ namespace PowerwallCompanion
         {
 
             progressRing.IsActive = true;
+            
             if (ViewModel.Period == "Day")
             {
                 dailyChart.Visibility = Visibility.Visible;
@@ -153,8 +157,8 @@ namespace PowerwallCompanion
                 energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
                 dailyCost.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
-                DateTime date = powerwallApi.ConvertToPowerwallDate(ViewModel.PeriodStart);
-                await GetTariffsForDay(date.Date);
+
+                await GetTariffsForDay(ViewModel.PeriodStart);
             }
             else
             {

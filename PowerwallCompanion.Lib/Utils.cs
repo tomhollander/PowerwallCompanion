@@ -31,7 +31,7 @@ namespace PowerwallCompanion.Lib
                 sb.Append("&start_date=" + Uri.EscapeDataString(startDate.ToString("o")));
                 sb.Append("&end_date=" + Uri.EscapeDataString(endDate.ToString("o")));
             }
-            sb.Append("&time_zone=" + Uri.EscapeDataString(timeZone));
+            //sb.Append("&time_zone=" + Uri.EscapeDataString(timeZone));
             sb.Append("&fill_telemetry=0");
             return sb.ToString();
         }

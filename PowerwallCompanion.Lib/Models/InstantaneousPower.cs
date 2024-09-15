@@ -13,6 +13,8 @@ namespace PowerwallCompanion.Lib.Models
         public double GridPower { get; set; }
         public double BatteryPower { get; set; }
 
+        public bool StormWatchActive { get; set; }
+
         // Derived values
         public double HomeFromGrid
         {

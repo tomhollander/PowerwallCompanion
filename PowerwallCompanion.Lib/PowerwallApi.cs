@@ -92,6 +92,7 @@ namespace PowerwallCompanion.Lib
             instantaneousPower.BatteryPower = Utils.GetValueOrDefault<double>(powerInfo["response"]["battery_power"]);
             instantaneousPower.GridPower = Utils.GetValueOrDefault<double>(powerInfo["response"]["grid_power"]);
             instantaneousPower.GridActive = Utils.GetValueOrDefault<string>(powerInfo["response"]["grid_status"]) != "Inactive";
+            instantaneousPower.StormWatchActive = Utils.GetValueOrDefault<bool>(powerInfo["response"]["storm_mode_active"]);
             return instantaneousPower;
         }
 

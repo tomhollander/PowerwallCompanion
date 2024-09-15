@@ -19,6 +19,7 @@
         <converters:HideGridRowConverter x:Key="HideGridRowConverter" />
         <converters:BatteryPercentageConverter x:Key="BatteryPercentageConverter" />
         <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter" />
+        <converters:TrueToVisibilityCollapsedConverter x:Key="TrueToVisibilityCollapsedConverter"/>
         <converters:GridStatusBrushSizeConverter x:Key="GridStatusBrushSizeConverter" />
         <converters:GridExportingToVisibilityConverter x:Key="GridExportingToVisibilityConverter" />
         <converters:GridImportingToVisibilityConverter x:Key="GridImportingToVisibilityConverter" />
@@ -117,6 +118,12 @@
                     </gauge:GaugeAnnotation>
                     <gauge:GaugeAnnotation Angle="135" Offset="1.2">
                         <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharging battery" />
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation Angle="270" Offset="0.35">
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.StormWatchActive, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/storm_watch.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Storm watch active" />
+                    </gauge:GaugeAnnotation>
+                    <gauge:GaugeAnnotation Angle="270" Offset="0.35">
+                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridActive, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/grid_disconnected.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Grid power unavailable" />
                     </gauge:GaugeAnnotation>
                 </gauge:SfCircularGauge.Annotations>
                 <gauge:SfCircularGauge.Scales>

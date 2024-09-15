@@ -208,6 +208,7 @@
     <Content Include="Assets\energysource_renewable.png" />
     <Content Include="Assets\energysource_solar.png" />
     <Content Include="Assets\energysource_wind.png" />
+    <Content Include="Assets\grid_disconnected.png" />
     <Content Include="Assets\icon_battery.png" />
     <Content Include="Assets\icon_battery_export.png" />
     <Content Include="Assets\icon_battery_import.png" />
@@ -219,6 +220,7 @@
     <Content Include="Assets\icon_solar.png" />
     <Content Include="Assets\Square44x44Logo.scale-100.png" />
     <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\storm_watch.png" />
     <Content Include="DemoData\live_status.json" />
     <Content Include="DemoData\history-power.json" />
     <Content Include="DemoData\calendar_history-energy-month.json" />
