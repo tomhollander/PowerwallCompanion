@@ -696,9 +696,11 @@ namespace PowerwallCompanion.Lib
 
             try
             {
-                var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
-                platformAdapter.InstallationTimeZone = siteInfoJson["response"]["installation_time_zone"].GetValue<string>();
-
+                if (siteId != null)
+                {
+                    var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
+                    platformAdapter.InstallationTimeZone = siteInfoJson["response"]["installation_time_zone"].GetValue<string>();
+                }
             }
             catch
             {
