@@ -56,7 +56,12 @@ namespace PowerwallCompanion.Lib
             var responseMessage = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return (JsonObject)JsonNode.Parse(responseMessage);
+                var responseJson = (JsonObject)JsonNode.Parse(responseMessage);
+                if (responseJson["response"].GetType() == typeof(string) && responseJson["response"].GetValue<string>() == "")
+                {
+                    throw new HttpRequestException("API returned no data");
+                }
+                return responseJson;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
