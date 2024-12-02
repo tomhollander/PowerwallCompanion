@@ -108,19 +108,34 @@ namespace PowerwallCompanion.Lib.Tests
         ""grid_power"": 3579.784003067017,
         ""grid_services_power"": 0
       }]}}");
+
+            mockApiHelper.SetResponse("/api/1/energy_sites/11111/calendar_history?kind=soe&period=day&start_date=2019-08-25T00%3A00%3A00.0000000%2B10%3A00&end_date=2019-08-25T23%3A59%3A58.0000000%2B10%3A00&fill_telemetry=0",
+@"{
+  ""response"": {
+    ""serial_number"": ""1111111-01-F--T17G0000000"",
+    ""installation_time_zone"": ""Australia/Sydney"",
+    ""time_series"": [
+      {
+        ""timestamp"": ""2019-08-25T00:00:00+10:00"",
+        ""soe"": 11
+      },
+      {
+        ""timestamp"": ""2019-08-25T00:10:00+10:00"",
+        ""soe"": 17
+      }]}}");
             var api = new PowerwallApi("11111", testPlatformAdapter, mockApiHelper);
             var stream = new MemoryStream();
             await api.ExportPowerDataToCsv(stream, new DateTime(2019, 8, 25), new DateTime(2019, 8, 25, 23, 59, 59));
             var sr = new StreamReader(stream);
             stream.Position = 0;
             var line = sr.ReadLine();
-            Assert.AreEqual("timestamp,solar_power,battery_power,grid_power,grid_services_power,load_power", line);
+            Assert.AreEqual("timestamp,solar_power,battery_power,grid_power,grid_services_power,load_power,battery_soe", line);
             line = sr.ReadLine();
-            Assert.AreEqual("2019-08-25 00:00:00,10,0,3609.204488658905,0,3619.204488658905", line);
+            Assert.AreEqual("2019-08-25 00:00:00,10,0,3609.204488658905,0,3619.204488658905,11", line);
             line = sr.ReadLine();
-            Assert.AreEqual("2019-08-25 00:05:00,20,0,3585.4354988098144,0,3605.4354988098144", line);
+            Assert.AreEqual("2019-08-25 00:05:00,20,0,3585.4354988098144,0,3605.4354988098144,11", line);
             line = sr.ReadLine();
-            Assert.AreEqual("2019-08-25 00:10:00,30,0,3579.784003067017,0,3609.784003067017", line);
+            Assert.AreEqual("2019-08-25 00:10:00,30,0,3579.784003067017,0,3609.784003067017,17", line);
             Assert.IsTrue(sr.EndOfStream);
         }
     }

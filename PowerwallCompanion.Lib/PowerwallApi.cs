@@ -464,6 +464,7 @@ namespace PowerwallCompanion.Lib
             var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", startDate, endDate);
             var json = await apiHelper.CallGetApiWithTokenRefresh(url);
             var data = json["response"]["time_series"].AsArray();
+            var batteryChargeData = await GetBatteryHistoricalChargeLevel(startDate, endDate);
 
             if (data.Count > 0)
             {
@@ -473,15 +474,17 @@ namespace PowerwallCompanion.Lib
                 {
                     await tw.WriteAsync(prop.Key + ",");
                 }
-                await tw.WriteLineAsync("load_power");
+                await tw.WriteLineAsync("load_power,battery_soe");
 
                 foreach (var entry in data.AsArray())
                 {
+                    DateTime date = DateTime.MinValue;
                     foreach (var prop in (JsonObject)entry)
                     {
                         if (prop.Key == "timestamp")
                         {
-                            await tw.WriteAsync($"{(Utils.GetUnspecifiedDateTime(prop.Value)):yyyy-MM-dd HH\\:mm\\:ss},");
+                            date = Utils.GetUnspecifiedDateTime(prop.Value);
+                            await tw.WriteAsync($"{date:yyyy-MM-dd HH\\:mm\\:ss},");
                         }
                         else
                         {
@@ -492,7 +495,11 @@ namespace PowerwallCompanion.Lib
                     var gridPower = Utils.GetValueOrDefault<double>(entry["grid_power"]);
                     var batteryPower = Utils.GetValueOrDefault<double>(entry["battery_power"]);
                     var homePower = solarPower + gridPower + batteryPower;
-                    await tw.WriteLineAsync(homePower.ToString());
+                    await tw.WriteAsync(homePower.ToString() + ",");
+
+                    // Battery charge level is less granular than power data
+                    var batteryCharge = batteryChargeData.LastOrDefault(d => d.XValue <= date)?.YValue;
+                    await tw.WriteLineAsync(batteryCharge.HasValue ? batteryCharge.ToString() : "");
                 }
                 await tw.FlushAsync();
             }            

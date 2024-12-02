@@ -262,7 +262,8 @@ namespace PowerwallCompanion
 
                 if (Settings.AccessToken != "DEMO")
                 {
-                   ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                    ((DateTimeAxis)dailyChart.PrimaryAxis).Minimum = ViewModel.PeriodStart;
+                    ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
                 }
             }
             catch (Exception ex)
@@ -360,6 +361,7 @@ namespace PowerwallCompanion
 
                 if (Settings.AccessToken != "DEMO")
                 {
+                    ((DateTimeAxis)batteryChart.PrimaryAxis).Minimum = ViewModel.PeriodStart;
                     ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
                 }
 
