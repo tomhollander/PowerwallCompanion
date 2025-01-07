@@ -9,11 +9,11 @@ namespace PowerwallCompanion
 {
     internal static class Telemetry
     {
-        private static MongoDBTelemetry mongoDbTelemetry;
+        private static MongoDBDirectTelemetry mongoDbTelemetry;
 
         static Telemetry()
         {
-            mongoDbTelemetry = new MongoDBTelemetry(new UwpTelemetryPlatformAdapter());
+            mongoDbTelemetry = new MongoDBDirectTelemetry(new UwpTelemetryPlatformAdapter());
         }
 
         public static void TrackException(Exception ex)

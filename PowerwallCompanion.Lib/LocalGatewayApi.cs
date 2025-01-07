@@ -65,8 +65,7 @@ namespace PowerwallCompanion.Lib
             var batteryHistoryChartDictionary = new Dictionary<string, List<ChartDataPoint>>();
 
             var client = new HttpClient();
-            var url = $"https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/batteryHistory?siteId={siteId}&gatewayId={gatewayId}";
-            client.DefaultRequestHeaders.Add("apiKey", Keys.AppServicesKey);
+            var url = $"https://pwcfunctions.azurewebsites.net/api/getBatteryHistory?siteId={siteId}&gatewayId={gatewayId}&code={Keys.AzureFunctionsApiKey}";
             var response = await client.GetAsync(url);
             var responseMessage = await response.Content.ReadAsStringAsync();
             if (!String.IsNullOrEmpty(responseMessage) && responseMessage != "null")
@@ -95,8 +94,7 @@ namespace PowerwallCompanion.Lib
             if (batteryDetails != null)
             {
                 var client = new HttpClient();
-                var url = "https://us-east-1.aws.data.mongodb-api.com/app/powerwallcompanion-prter/endpoint/granularBatteryHistory";
-                client.DefaultRequestHeaders.Add("apiKey", Keys.AppServicesKey);
+                var url = $"https://pwcfunctions.azurewebsites.net/api/saveGranularBatteryHistory?code={Keys.AzureFunctionsApiKey}";
                 var sb = new StringBuilder();
                 foreach (var battery in batteryDetails)
                 {

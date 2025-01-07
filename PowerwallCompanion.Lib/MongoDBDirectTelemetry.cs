@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
@@ -12,15 +14,14 @@ using System.Xml.Linq;
 
 namespace PowerwallCompanion.Lib
 {
-    public class MongoDBTelemetry
+    public class MongoDBDirectTelemetry
     {
         ITelemetryPlatformAdapter platformAdapter;
         Guid sessionId;
-        public const string dataSource = "Cluster0";
-        public const string database = "powerwallCompanion";
-        public const string collection = "telemetry";
+        public const string databaseName = "powerwallCompanion";
+        public const string collectionName = "telemetry";
 
-        public MongoDBTelemetry(ITelemetryPlatformAdapter platformAdapter)
+        public MongoDBDirectTelemetry(ITelemetryPlatformAdapter platformAdapter)
         {
             this.platformAdapter = platformAdapter;
             sessionId = Guid.NewGuid();
@@ -100,26 +101,12 @@ namespace PowerwallCompanion.Lib
 #if DEBUG
             Debug.WriteLine("Debug telemetry event: " + document.ToJsonString(new JsonSerializerOptions() {  WriteIndented = true }));
 #else
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("api-key", Keys.MongoDBDataApiKey);
-            var request = new HttpRequestMessage(HttpMethod.Post, Keys.MongoDBDataEndpoint);
+            var client = new MongoClient(Keys.MongoDBTelemetryUri);
+            var database = client.GetDatabase(databaseName);
+            var collection = database.GetCollection<BsonDocument>(collectionName);
 
-            var insertDocument = new JsonObject();
-            insertDocument.Add("dataSource", dataSource);
-            insertDocument.Add("database", database);
-            insertDocument.Add("collection", collection);
-            insertDocument.Add("document", document);
-
-            var content = new StringContent(insertDocument.ToString());
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            request.Content = content;
-            var response = await client.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                var contentString = await response.Content.ReadAsStringAsync();
-                throw new Exception($"Failed to write telemetry data to MongoDB. Status code: {response.StatusCode}, content: {contentString}");
-            }
+            var bsonDocument = BsonDocument.Parse(document.ToJsonString());
+            collection.InsertOne(bsonDocument);
 #endif
         }
 
