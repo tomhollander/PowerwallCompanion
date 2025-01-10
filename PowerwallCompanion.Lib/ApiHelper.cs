@@ -57,7 +57,7 @@ namespace PowerwallCompanion.Lib
             if (response.IsSuccessStatusCode)
             {
                 var responseJson = (JsonObject)JsonNode.Parse(responseMessage);
-                if (responseJson["response"].GetType() == typeof(string) && responseJson["response"].GetValue<string>() == "")
+                if (responseJson["response"].GetValueKind() == System.Text.Json.JsonValueKind.String && responseJson["response"].GetValue<string>() == "")
                 {
                     throw new HttpRequestException("API returned no data");
                 }
