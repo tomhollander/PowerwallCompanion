@@ -386,6 +386,7 @@ namespace PowerwallCompanion
                 energySourcesZoneOverride == "AU-TAS");
         }
 
+        private bool trackedGridEvent = false;
         private async Task RefreshGridEnergyUsageDataFromOpenNem()
         { 
             try
@@ -394,7 +395,11 @@ namespace PowerwallCompanion
                     Settings.EnergySourcesZoneOverride.Substring(3);
                 var provider = new AustraliaNemEnergySourceProvider(zone);
                 await provider.Refresh();
-                Telemetry.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", Settings.EnergySourcesZoneOverride }, { "Provider", "OpenNEM" } });
+                if (!trackedGridEvent)
+                {
+                    Telemetry.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", Settings.EnergySourcesZoneOverride }, { "Provider", "OpenNEM" } });
+                    trackedGridEvent = true;
+                }
                 ViewModel.GridEnergySources = provider.CurrentGenerationMix;
                 ViewModel.GridLowCarbonPercent = provider.RenewablePercent;
                 viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{Settings.EnergySourcesZoneOverride}', OpenNEM data from {provider.UpdatedDate.ToString("g")}";
@@ -469,7 +474,12 @@ namespace PowerwallCompanion
                 viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{zone}', data from {date.ToString("g")}";
                 ViewModel.GridEnergySources = energyUsage;
                 ViewModel.GridLowCarbonPercent = json["fossilFreePercentage"].GetValue<int>();
-                Telemetry.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", zone }, { "Provider", "ElectricityMaps.com" } });
+                if (!trackedGridEvent)
+                {
+                    Telemetry.TrackEvent("GridEnergyUsage Refreshed", new Dictionary<string, string> { { "Zone", zone }, { "Provider", "ElectricityMaps.com" } });
+                    trackedGridEvent = true;
+                }
+                    
             }
             catch (Exception ex)
             {
