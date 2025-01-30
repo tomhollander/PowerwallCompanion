@@ -9,31 +9,31 @@ namespace PowerwallCompanion
 {
     internal static class Telemetry
     {
-        private static MongoDBDirectTelemetry mongoDbTelemetry;
+        private static AzureFunctionsTelemetry telemetryProvider;
 
         static Telemetry()
         {
-            mongoDbTelemetry = new MongoDBDirectTelemetry(new UwpTelemetryPlatformAdapter());
+            telemetryProvider = new AzureFunctionsTelemetry(new UwpTelemetryPlatformAdapter());
         }
 
         public static void TrackException(Exception ex)
         {
-            mongoDbTelemetry.WriteExceptionSafe(ex, true);
+            telemetryProvider.WriteExceptionSafe(ex, true);
         }
 
         public static async Task TrackUnhandledException(Exception ex)
         {
-            await mongoDbTelemetry.WriteException(ex, false);
+            await telemetryProvider.WriteException(ex, false);
         }
 
         public static void TrackEvent(string eventName, IDictionary<string, string> metadata)
         {
-            mongoDbTelemetry.WriteEventSafe(eventName, metadata);
+            telemetryProvider.WriteEventSafe(eventName, metadata);
         }
 
         public static void TrackEvent(string eventName)
         {
-            mongoDbTelemetry.WriteEventSafe(eventName, null);
+            telemetryProvider.WriteEventSafe(eventName, null);
         }
 
     }
