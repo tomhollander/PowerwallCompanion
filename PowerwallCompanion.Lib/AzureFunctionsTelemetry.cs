@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using PowerwallCompanion.Lib.Models;
+﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
