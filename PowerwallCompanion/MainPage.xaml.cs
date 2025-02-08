@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Foundation.Metadata;
 using Windows.UI;
-using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -40,7 +29,7 @@ namespace PowerwallCompanion
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
-            if (Settings.AccessToken == null)
+            if (Settings.AccessToken == null || Settings.SiteId == null || GetTokenAzp(Settings.AccessToken) != Keys.TeslaAppClientId)
             {
                 var installInfo = WebView2Install.GetInfo();
                 if (installInfo.InstallType == InstallType.NotInstalled)
@@ -58,7 +47,22 @@ namespace PowerwallCompanion
             }
         }
 
-
+        private string GetTokenAzp(string accessToken)
+        {
+            try
+            {
+                // Parse JWT and get azp claim
+                var handler = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = handler.ReadJwtToken(accessToken);
+                var azp = jwtSecurityToken.Claims.FirstOrDefault(claim => claim.Type == "azp").Value;
+                return azp;
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+                return null;
+            }
+        }
 
         public void ToggleMenuPane()
         {
