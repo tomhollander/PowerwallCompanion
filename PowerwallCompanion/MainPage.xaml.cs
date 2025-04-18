@@ -91,7 +91,7 @@ namespace PowerwallCompanion
 
         private void batteryStatusMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            //FIX frame.Navigate(typeof(BatteryInfoPage));
+            frame.Navigate(typeof(BatteryInfoPage));
         }
 
         private void frame_Navigated(object sender, NavigationEventArgs e)
@@ -99,7 +99,7 @@ namespace PowerwallCompanion
             homeMenuButton.IsChecked = (e.SourcePageType == typeof(StatusPage));
             //FIX chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
             settingsMenuButton.IsChecked = (e.SourcePageType == typeof(SettingsPage));
-            //FIX batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
+            batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
             splitView.IsPaneOpen = false;
         }
     }

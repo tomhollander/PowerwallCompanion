@@ -47,7 +47,8 @@ namespace PowerwallCompanion
 
                 titleBar.ButtonForegroundColor = Colors.White;
                 titleBar.ButtonBackgroundColor = Microsoft.UI.ColorHelper.FromArgb(0, 0x17, 0x17, 0x17);
-
+                titleBar.ButtonInactiveForegroundColor = Colors.DarkGray;
+                titleBar.ButtonInactiveBackgroundColor = Microsoft.UI.ColorHelper.FromArgb(0, 0x17, 0x17, 0x17);
 
                 BackButton.Click += OnBackClicked;
                 BackButton.Visibility = Visibility.Collapsed;

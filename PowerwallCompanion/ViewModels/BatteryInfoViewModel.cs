@@ -40,6 +40,24 @@ namespace PowerwallCompanion.ViewModels
             get => WarrantedCapacity / 1000;
         }
 
+        public List<ChartDataPoint> WarrantedCapacityKWhSeries
+        {
+            get
+            {
+                if (BatteryHistoryChartData == null || BatteryHistoryChartData.Values.Count == 0 || BatteryHistoryChartData.First().Value == null)
+                {
+                    return new List<ChartDataPoint>();
+                }
+                var series = new List<ChartDataPoint>();
+                for (int i = 0; i < BatteryHistoryChartData.First().Value.Count; i++)
+                {
+                    series.Add(new ChartDataPoint(BatteryHistoryChartData.First().Value[i].XValue, WarrantedCapacityKWh));
+                }
+                return series;
+            }
+        }
+    
+
         private readonly string[] regionsWith80PercentWarranty = { "AT", "BE", "FR", "DE", "IE", "LU", "NL", "CH", "GB" };
 
         private double WarrantyProportion
@@ -62,6 +80,23 @@ namespace PowerwallCompanion.ViewModels
             get
             {
                 return WarrantedCapacityKWh * WarrantyProportion;
+            }
+        }
+
+        public List<ChartDataPoint> MinimumWarrantedCapacityKWhSeries
+        {
+            get
+            {
+                if (BatteryHistoryChartData == null || BatteryHistoryChartData.Values.Count == 0 || BatteryHistoryChartData.First().Value == null)
+                {
+                    return new List<ChartDataPoint>();
+                }
+                var series = new List<ChartDataPoint>();
+                for (int i = 0; i < BatteryHistoryChartData.First().Value.Count; i++)
+                {
+                    series.Add(new ChartDataPoint(BatteryHistoryChartData.First().Value[i].XValue, MinimumWarrantedCapacityKWh));
+                }
+                return series;
             }
         }
 
@@ -121,6 +156,8 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(ShowNotEnoughDataMessage));
             NotifyPropertyChanged(nameof(WarrantedCapacityKWh));
             NotifyPropertyChanged(nameof(MinimumWarrantedCapacityKWh));
+            NotifyPropertyChanged(nameof(WarrantedCapacityKWhSeries));
+            NotifyPropertyChanged(nameof(MinimumWarrantedCapacityKWhSeries));
         }
 
         private void NotifyPropertyChanged(string propertyName)

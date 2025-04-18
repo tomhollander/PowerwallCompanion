@@ -352,18 +352,18 @@
 
                 <Grid Margin="10" Height="20" MinWidth="400" HorizontalAlignment="Stretch" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Solar, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}"/>
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Wind, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Geothermal, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Hydro, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.HydroStorage, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.BatteryStorage, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Biomass, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Nuclear, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Gas, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Oil, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Coal, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
-                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Unknown, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Solar, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}"/>
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Wind, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Geothermal, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Hydro, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.HydroStorage, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.BatteryStorage, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Biomass, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Nuclear, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Gas, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Oil, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Coal, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Unknown, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
                     </Grid.ColumnDefinitions>
                     <!-- TODO: Tooltips -->
                     <Rectangle Fill="Gold" Grid.Column="0"  />

@@ -83,7 +83,6 @@
     <None Remove="BundleArtifacts\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="BatteryInfoPage.xaml.cs" />
     <Compile Remove="ChartPage.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,7 +90,6 @@
     <None Remove="ChartPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Remove="BatteryInfoPage.xaml" />
     <Page Remove="ChartPage.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +163,7 @@
     </PackageReference>
     <PackageReference Include="Syncfusion.Chart.WinUI" Version="29.1.38" />
     <PackageReference Include="Syncfusion.Gauge.WinUI" Version="29.1.38" />
+    <PackageReference Include="Syncfusion.Grid.WinUI" Version="29.1.38" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>8.8.0</Version>
     </PackageReference>
@@ -191,6 +190,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PowerwallCompanion.Lib\PowerwallCompanion.Lib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="BatteryInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
     <OutputPath>bin\ARM64\Debug\</OutputPath>
