@@ -41,6 +41,19 @@ namespace PowerwallCompanion.Lib
                 int toMonth = seasonData["toMonth"].GetValue<int>();
                 int fromDay = seasonData["fromDay"].GetValue<int>();
                 int toDay = seasonData["toDay"].GetValue<int>();
+
+                // Ensure fromDay/toDay is not outside the valid dates for the month (yes it can happen with the tariff data)
+                int daysInFromMonth = DateTime.DaysInMonth(date.Year, fromMonth);
+                if (fromDay > daysInFromMonth)
+                {
+                    toDay = daysInFromMonth;
+                }
+                int daysInToMonth = DateTime.DaysInMonth(date.Year, toMonth);
+                if (toDay > daysInToMonth)
+                {
+                    toDay = daysInToMonth;
+                }
+
                 DateTime fromDate = new DateTime(date.Year, fromMonth, fromDay);
                 DateTime toDate = new DateTime(date.Year, toMonth, toDay);
 

@@ -653,6 +653,21 @@ namespace PowerwallCompanion.Lib.Tests
         }
 
         [TestMethod]
+        public async Task GetWeekDayTariffsForNonWrappingSeasonWithInvalidEndDate()  // Weird, but telemetry shows this can happen.
+        {
+            var ratePlan = (JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons);
+            ratePlan["response"]["seasons"]["Season3"]["toDay"] = 31;
+            var tariffHelper = new TeslaRatePlanTariffProvider(ratePlan);
+            
+            var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 11, 5, 0, 0, 0));
+            Assert.AreEqual(4, tariffs.Count);
+            CollectionAssert.Contains(tariffs, new Tariff { Season = "Season3", Name = "OFF_PEAK", StartDate = new DateTime(2024, 11, 5, 0, 0, 0), EndDate = new DateTime(2024, 11, 5, 9, 0, 0) });
+            CollectionAssert.Contains(tariffs, new Tariff { Season = "Season3", Name = "PARTIAL_PEAK", StartDate = new DateTime(2024, 11, 5, 9, 0, 0), EndDate = new DateTime(2024, 11, 5, 17, 0, 0) });
+            CollectionAssert.Contains(tariffs, new Tariff { Season = "Season3", Name = "ON_PEAK", StartDate = new DateTime(2024, 11, 5, 17, 0, 0), EndDate = new DateTime(2024, 11, 5, 21, 0, 0) });
+            CollectionAssert.Contains(tariffs, new Tariff { Season = "Season3", Name = "OFF_PEAK", StartDate = new DateTime(2024, 11, 5, 21, 0, 0), EndDate = new DateTime(2024, 11, 6, 0, 0, 0) });
+        }
+
+        [TestMethod]
         public async Task GetWeekendTariffsForNonWrappingSeason()
         {
             var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
