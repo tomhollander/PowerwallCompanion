@@ -9,7 +9,7 @@
     xmlns:converters="using:PowerwallCompanion.Converters"
     xmlns:gauge="using:Syncfusion.UI.Xaml.Gauges"
     xmlns:chart="using:Syncfusion.UI.Xaml.Charts"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="Black">
 
     <Page.Resources>
         <converters:KilowattConverter x:Key="KilowattConverter"/>
@@ -96,7 +96,75 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <gauge:SfCircularGauge Margin="5"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center" Grid.Row="0">
+            <gauge:SfRadialGauge VerticalAlignment="Center" Width="260"  Grid.Row="0">
+                <gauge:SfRadialGauge.Axes>
+                    <gauge:RadialAxis StartAngle="95" EndAngle="85" ShowLabels="False" ShowTicks="False" ShowAxisLine="True" AxisLineWidth="30"  RadiusFactor="1" TickPosition="Cross" TickOffset="30">
+
+                        <!--<gauge:RadialAxis.AxisLineStyle>
+                            <gauge:RadialLineStyle Fill="{Binding Status, Converter={StaticResource StatusToBackgroundColorConverter}}" ThicknessUnit="Pixel" Thickness="30">
+                            </gauge:RadialLineStyle>
+                        </gauge:RadialAxis.AxisLineStyle>-->
+
+                        <gauge:RadialAxis.Ranges>
+                            <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}"  />
+                            <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="#40000000"  />
+                            <gauge:GaugeRange StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StartWidth="5" EndWidth="5" RangeOffset="35" Background="Green" />
+                            <!-- Ticks because the control doesn't let you put normal ticks over the range -->
+                            <gauge:GaugeRange StartValue="9.7"  EndValue="10.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="19.7" EndValue="20.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="29.7" EndValue="30.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="39.7" EndValue="40.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="49.7" EndValue="50.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="59.7" EndValue="60.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="69.7" EndValue="70.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="79.7" EndValue="80.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="89.7" EndValue="90.3" StartWidth="35" EndWidth="35" Background="Black" />
+                        </gauge:RadialAxis.Ranges>
+                        <gauge:RadialAxis.Annotations>
+                            <gauge:GaugeAnnotation>
+                                <gauge:GaugeAnnotation.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,5,-2,0"  VerticalAlignment="Center" />
+                                        <TextBlock  FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"/>
+                                    </StackPanel>
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="270" PositionFactor="0.35">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.StormWatchActive, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/storm_watch.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Storm watch active" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="270" PositionFactor="0.35">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridActive, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/grid_disconnected.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Grid power unavailable" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="225" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="315" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="45" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="135" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharging battery" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                        </gauge:RadialAxis.Annotations>
+                    </gauge:RadialAxis>
+                </gauge:SfRadialGauge.Axes>
+            </gauge:SfRadialGauge>
+            
+            <!--<gauge:SfCircularGauge Margin="5"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center" Grid.Row="0">
                 <gauge:SfCircularGauge.GaugeHeader>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,5,-2,0"  VerticalAlignment="Center" />
@@ -147,7 +215,7 @@
                     </gauge:CircularScale>
 
                 </gauge:SfCircularGauge.Scales>
-            </gauge:SfCircularGauge>
+            </gauge:SfCircularGauge>-->
 
             <!-- Instantaneous Power-->
             <Grid Grid.Column="1"  x:Name="graphGrid" HorizontalAlignment="Center" Margin="10" Grid.Row="1">

@@ -12,7 +12,7 @@
         
         <SplitView x:Name="splitView" DisplayMode="CompactInline" OpenPaneLength="50" Grid.Row="0">
             <SplitView.Pane>
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Width="100">
                     <ToggleButton ToolTipService.ToolTip="Live Stats"  x:Name="homeMenuButton" Background="Transparent" Margin="4" IsChecked="True" Tapped="homeMenuButton_Tapped">
                         <SymbolIcon Symbol="Home"/>
                     </ToggleButton>

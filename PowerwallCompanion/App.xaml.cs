@@ -35,6 +35,7 @@ namespace PowerwallCompanion
         public App()
         {
             this.InitializeComponent();
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Keys.SyncFusionLicenseKey);
         }
 
         /// <summary>
