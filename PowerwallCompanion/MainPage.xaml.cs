@@ -22,14 +22,6 @@ namespace PowerwallCompanion
         public MainPage()
         {
             InitializeComponent();
-            // FIX
-            //var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            //coreTitleBar.ExtendViewIntoTitleBar = true;
-            //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
-            //var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            //titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0x17, 0x17, 0x17);
-            //titleBar.ButtonForegroundColor = Colors.DarkGray;
-            //titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
             //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
             //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
@@ -80,7 +72,7 @@ namespace PowerwallCompanion
 
         private void chartMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            //FIX frame.Navigate(typeof(ChartPage));
+            frame.Navigate(typeof(ChartPage));
         }
 
 
@@ -97,7 +89,7 @@ namespace PowerwallCompanion
         private void frame_Navigated(object sender, NavigationEventArgs e)
         {
             homeMenuButton.IsChecked = (e.SourcePageType == typeof(StatusPage));
-            //FIX chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
+            chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
             settingsMenuButton.IsChecked = (e.SourcePageType == typeof(SettingsPage));
             batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
             splitView.IsPaneOpen = false;

@@ -16,6 +16,11 @@
     <UseEmulator>true</UseEmulator>
   </PropertyGroup>
   <ItemGroup>
+    <Page Update="ChartPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="BatteryInfoPage.xaml">
       <SubType>Designer</SubType>
     </Page>

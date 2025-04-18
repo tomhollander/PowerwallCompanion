@@ -255,15 +255,15 @@ namespace PowerwallCompanion
 
 
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
-                ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = null;
+                ((DateTimeAxis)dailyChart.XAxes[0]).Maximum = DateTime.MaxValue;
 
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartStackingSeries));
 
                 if (Settings.AccessToken != "DEMO")
                 {
-                    ((DateTimeAxis)dailyChart.PrimaryAxis).Minimum = ViewModel.PeriodStart;
-                    ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                    ((DateTimeAxis)dailyChart.XAxes[0]).Minimum = ViewModel.PeriodStart;
+                    ((DateTimeAxis)dailyChart.XAxes[0]).Maximum = ViewModel.PeriodEnd;
                 }
             }
             catch (Exception ex)
@@ -288,38 +288,19 @@ namespace PowerwallCompanion
                 ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
-        private void ConfigureLegend(StackingAreaSeries seriesToHide)
+        private void ConfigureLegend(StackedAreaSeries seriesToHide)
         {
-            if (seriesToHide == null)
+            homeSeries.IsVisibleOnLegend = (seriesToHide == null);
+            solarSeries.IsVisibleOnLegend = (seriesToHide == null);
+            batterySeries.IsVisibleOnLegend = (seriesToHide == null);
+            gridSeries.IsVisibleOnLegend = (seriesToHide == null);
+            homeStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            solarStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            batteryStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            gridStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            if (seriesToHide != null)
             {
-
-                // Show non-stacking series on legend
-                homeSeries.VisibilityOnLegend = Visibility.Visible;
-                solarSeries.VisibilityOnLegend = Visibility.Visible;
-                batterySeries.VisibilityOnLegend = Visibility.Visible;
-                gridSeries.VisibilityOnLegend = Visibility.Visible;
-                homeStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                solarStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                batteryStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                gridStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                //((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Visible;
-                //((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = true;
-            }
-            else
-            {
-                // Set legend
-                homeSeries.VisibilityOnLegend = Visibility.Collapsed;
-                solarSeries.VisibilityOnLegend = Visibility.Collapsed;
-                batterySeries.VisibilityOnLegend = Visibility.Collapsed;
-                gridSeries.VisibilityOnLegend = Visibility.Collapsed;
-                homeStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                solarStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                batteryStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                gridStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                seriesToHide.VisibilityOnLegend = Visibility.Collapsed;
-                //((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Collapsed;
-                //((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = false;
-
+                seriesToHide.IsVisibleOnLegend = false;
             }
         }
 
@@ -331,6 +312,7 @@ namespace PowerwallCompanion
                 ViewModel.EnergyTotals = ViewModel.EnergyChartSeries.EnergyTotals;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.ChartPeriodInterval));
             }
             catch (Exception ex)
             {
@@ -355,14 +337,14 @@ namespace PowerwallCompanion
             try
             {
                 ViewModel.BatteryDailySoeGraphData = await powerwallApi.GetBatteryHistoricalChargeLevel(ViewModel.PeriodStart, ViewModel.PeriodEnd);
-                ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = null;
+                ((DateTimeAxis)batteryChart.XAxes[0]).Maximum = DateTime.MaxValue;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
 
                 if (Settings.AccessToken != "DEMO")
                 {
-                    ((DateTimeAxis)batteryChart.PrimaryAxis).Minimum = ViewModel.PeriodStart;
-                    ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                    ((DateTimeAxis)batteryChart.XAxes[0]).Minimum = ViewModel.PeriodStart;
+                    ((DateTimeAxis)batteryChart.XAxes[0]).Maximum = ViewModel.PeriodEnd;
                 }
 
             }
@@ -440,28 +422,28 @@ namespace PowerwallCompanion
             }
             try
             {
-                var tariffs = await tariffHelper.GetTariffsForDay(date);
+                //var tariffs = await tariffHelper.GetTariffsForDay(date);
 
-                dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
-                ChartMultiLevelLabel lastMultiLabel = null;
-                foreach (var tariff in tariffs.OrderBy(t => t.StartDate).AsEnumerable())
-                {
-                    if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
-                    {
-                        lastMultiLabel.End = tariff.EndDate;
-                        continue;
-                    }
-                    var multiLabel = new ChartMultiLevelLabel()
-                    {
-                        Start = tariff.StartDate,
-                        End = tariff.EndDate,
-                        Text = tariff.DisplayName,
-                        Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
-                        FontSize = 14,
-                    };
-                    lastMultiLabel = multiLabel; 
-                    dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
-                }
+                //dailyChart.XAxes[0].MultiLevelLabels.Clear();
+                //ChartMultiLevelLabel lastMultiLabel = null;
+                //foreach (var tariff in tariffs.OrderBy(t => t.StartDate).AsEnumerable())
+                //{
+                //    if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
+                //    {
+                //        lastMultiLabel.End = tariff.EndDate;
+                //        continue;
+                //    }
+                //    var multiLabel = new ChartMultiLevelLabel()
+                //    {
+                //        Start = tariff.StartDate,
+                //        End = tariff.EndDate,
+                //        Text = tariff.DisplayName,
+                //        Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
+                //        FontSize = 14,
+                //    };
+                //    lastMultiLabel = multiLabel; 
+                //    dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
+                //}
             }
             catch (Exception ex)
             {

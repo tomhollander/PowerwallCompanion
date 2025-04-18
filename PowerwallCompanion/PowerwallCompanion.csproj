@@ -83,14 +83,8 @@
     <None Remove="BundleArtifacts\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ChartPage.xaml.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="BatteryInfoPage.xaml" />
     <None Remove="ChartPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Remove="ChartPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -190,6 +184,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PowerwallCompanion.Lib\PowerwallCompanion.Lib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ChartPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="BatteryInfoPage.xaml">
