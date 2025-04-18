@@ -35,7 +35,7 @@
         <converters:EnergySourcePercentageConverter x:Key="EnergySourcePercentageConverter"/>
         <converters:RateCurrencyConverter x:Key="RateCurrencyConverter"/>
         <converters:PostitiveNegativeCostBrushConverter x:Key="PostitiveNegativeCostBrushConverter"/>
-        <DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:BarSegment">
+        <!--<DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:BarSegment">
             <Grid Background="LightGray">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -51,7 +51,7 @@
                     <TextBlock Foreground="Black" Text="{Binding Converter={StaticResource EnergySourcePercentageConverter}}"/>
                 </StackPanel>
             </Grid>
-        </DataTemplate>
+        </DataTemplate>-->
     </Page.Resources>
 
 
@@ -281,13 +281,13 @@
                 </Grid>
 
 
-                <chart:SfChart Height="30" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
-                    <chart:SfChart.PrimaryAxis >
+                <!--<chart:SfCartesianChart Height="30" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
+                    <chart:SfCartesianChart.PrimaryAxis >
                         <chart:CategoryAxis Visibility="Collapsed" />
-                    </chart:SfChart.PrimaryAxis>
-                    <chart:SfChart.SecondaryAxis>
+                    </chart:SfCartesianChart.PrimaryAxis>
+                    <chart:SfCartesianChart.SecondaryAxis>
                         <chart:NumericalAxis Visibility="Collapsed" />
-                    </chart:SfChart.SecondaryAxis>
+                    </chart:SfCartesianChart.SecondaryAxis>
                     <chart:StackingBar100Series Interior="Gold" Label="Solar" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Solar" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
                     <chart:StackingBar100Series Interior="GreenYellow" Label="Wind" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Wind" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
                     <chart:StackingBar100Series Interior="Orange" Label="Geothermal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Geothermal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
@@ -301,7 +301,7 @@
                     <chart:StackingBar100Series Interior="Gray" Label="Coal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Coal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
                     <chart:StackingBar100Series Interior="MidnightBlue" Label="Unkown" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Unknown" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
 
-                </chart:SfChart>
+                </chart:SfCartesianChart>-->
             </StackPanel>
         </Grid>
 
@@ -387,7 +387,7 @@
             </Grid>
 
             <!-- Power history chart -->
-            <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
+            <!--<chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
                 <chart:SfChart.PrimaryAxis>
                     <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="  htt  " Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}">
                         <chart:DateTimeAxis.LabelStyle>
@@ -416,7 +416,7 @@
                 <chart:SfChart.Annotations>
                     <chart:VerticalLineAnnotation X1="{x:Bind ViewModel.GraphDayBoundary}" Stroke="LightGray" StrokeThickness="2" />
                 </chart:SfChart.Annotations>
-            </chart:SfChart>
+            </chart:SfChart>-->
 
         </Grid>
     </Grid>

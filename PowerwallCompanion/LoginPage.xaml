@@ -17,13 +17,13 @@
         <TextBlock Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}" DoubleTapped="TextBlock_DoubleTapped">Connect to your Tesla account</TextBlock>
         <Grid x:Name="warningBanner" Grid.Row="1" Background="LightGoldenrodYellow">
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="Black">If asked you must allow permissions to at least "Energy Product Information". 
-                <Hyperlink Click="showAuthInfoLink_Clicked">Learn more...</Hyperlink></TextBlock>
+                <Hyperlink Click="Hyperlink_Click">Learn more...</Hyperlink></TextBlock>
         </Grid>
         <Grid x:Name="errorBanner" Grid.Row="1" Visibility="Collapsed" Background="LightPink">
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="Black">This account cannot be used with Powerwall Companion. This could be because you have no Powerwalls in your account, or because you have not granted the required 
                 "Energy Product Information" scope. Please go to your Tesla Account's <Hyperlink NavigateUri="https://accounts.tesla.com/account-settings/security?tab=tpty-apps">Third Party Apps</Hyperlink> page, delete Powerwall Companion, sign in again,
                 and be sure to check the required scope.
-        <Hyperlink Click="showAuthInfoLink_Clicked">Learn more...</Hyperlink></TextBlock>
+        <Hyperlink Click="Hyperlink_Click">Learn more...</Hyperlink></TextBlock>
         </Grid>
 
         <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">Please wait</TextBlock>

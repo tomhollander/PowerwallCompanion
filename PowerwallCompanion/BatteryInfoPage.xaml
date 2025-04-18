@@ -125,7 +125,7 @@
             </toolkit:DataGrid>
 
         </Grid>
-        <chart:SfChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
+        <!--<chart:SfChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
             <chart:SfChart.Behaviors>
                 <chart:ChartTrackBallBehavior x:Name="batteryTrackBall" />
             </chart:SfChart.Behaviors>
@@ -155,7 +155,7 @@
                 <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="{x:Bind ViewModel.MinimumWarrantedCapacityPercentageMessage}" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
             </chart:SfChart.Annotations>
             
-        </chart:SfChart>
+        </chart:SfChart>-->
 
         <StackPanel Grid.Row="2" Visibility="{x:Bind ViewModel.StoreBatteryHistory, Converter={StaticResource TrueToVisibilityCollapsedConverter}, Mode=OneWay}" VerticalAlignment="Bottom">
             <TextBlock FontSize="16" TextWrapping="Wrap" Margin="40,0,40,10" Foreground="LightGray">Powerwall Companion can track how your battery's reported capacity changes over time. 

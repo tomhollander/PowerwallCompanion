@@ -119,7 +119,12 @@ namespace PowerwallCompanion.Lib
 
         private TimeZoneInfo GetInstallationTimeZone()
         {
-            return TZConvert.GetTimeZoneInfo(platformAdapter.InstallationTimeZone);
+            string timezoneName = platformAdapter.InstallationTimeZone;
+            if (timezoneName == "GMT")
+            {
+                timezoneName = "Europe/London";
+            }
+            return TZConvert.GetTimeZoneInfo(timezoneName);
         }
 
         public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, ITariffProvider tariffHelper)

@@ -6,10 +6,10 @@ using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -93,7 +93,7 @@ namespace PowerwallCompanion
 
         private void hamburgerMenu_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var frame = (Frame)Window.Current.Content;
+            var frame = (Frame)App.Window.Content;
             var mainPage = (MainPage)frame.Content;
             mainPage.ToggleMenuPane();
         }

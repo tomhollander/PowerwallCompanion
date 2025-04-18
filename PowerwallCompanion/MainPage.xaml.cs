@@ -5,9 +5,10 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -21,14 +22,17 @@ namespace PowerwallCompanion
         public MainPage()
         {
             InitializeComponent();
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0x17, 0x17, 0x17);
-            titleBar.ButtonForegroundColor = Colors.DarkGray;
-            titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
+            // FIX
+            //var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            //coreTitleBar.ExtendViewIntoTitleBar = true;
+            //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
+            //var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            //titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0x17, 0x17, 0x17);
+            //titleBar.ButtonForegroundColor = Colors.DarkGray;
+            //titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
+            //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
+            //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
             if (Settings.AccessToken == null || Settings.SiteId == null || GetTokenAzp(Settings.AccessToken) != Keys.TeslaAppClientId)
             {
                 var installInfo = WebView2Install.GetInfo();
@@ -76,7 +80,7 @@ namespace PowerwallCompanion
 
         private void chartMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            frame.Navigate(typeof(ChartPage));
+            //FIX frame.Navigate(typeof(ChartPage));
         }
 
 
@@ -87,15 +91,15 @@ namespace PowerwallCompanion
 
         private void batteryStatusMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            frame.Navigate(typeof(BatteryInfoPage));
+            //FIX frame.Navigate(typeof(BatteryInfoPage));
         }
 
         private void frame_Navigated(object sender, NavigationEventArgs e)
         {
             homeMenuButton.IsChecked = (e.SourcePageType == typeof(StatusPage));
-            chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
+            //FIX chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
             settingsMenuButton.IsChecked = (e.SourcePageType == typeof(SettingsPage));
-            batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
+            //FIX batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
             splitView.IsPaneOpen = false;
         }
     }
