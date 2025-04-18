@@ -120,10 +120,6 @@ namespace PowerwallCompanion.Lib
         private TimeZoneInfo GetInstallationTimeZone()
         {
             string timezoneName = platformAdapter.InstallationTimeZone;
-            if (timezoneName == "GMT")
-            {
-                timezoneName = "Europe/London";
-            }
             return TZConvert.GetTimeZoneInfo(timezoneName);
         }
 

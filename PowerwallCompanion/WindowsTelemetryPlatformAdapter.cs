@@ -12,7 +12,7 @@ using Windows.System.Profile;
 
 namespace PowerwallCompanion
 {
-    public class UwpTelemetryPlatformAdapter : ITelemetryPlatformAdapter
+    public class WindowsTelemetryPlatformAdapter : ITelemetryPlatformAdapter
     {
         string userId;
 

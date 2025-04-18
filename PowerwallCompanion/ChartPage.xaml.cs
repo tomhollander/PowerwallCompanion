@@ -39,7 +39,7 @@ namespace PowerwallCompanion
             ViewModel.Period = "Day";
             ViewModel.CalendarDate = DateTime.Now;
 
-            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
             ratePlanTask = CreateTariffProvider();
 
             timer = new DispatcherTimer();
@@ -62,7 +62,7 @@ namespace PowerwallCompanion
             }
 
             // Reset the API helper in case we've signed out and back in
-            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
             timer.Start();
             base.OnNavigatedTo(e);
         }

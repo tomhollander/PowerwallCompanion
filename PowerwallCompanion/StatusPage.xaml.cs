@@ -46,7 +46,7 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             Telemetry.TrackEvent("StatusPage opened");
-            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
             viewModel = new StatusViewModel();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);

@@ -138,6 +138,9 @@ namespace PowerwallCompanion.Lib.Tests
             Assert.AreEqual("2019-08-25 00:10:00,30,0,3579.784003067017,0,3609.784003067017,17", line);
             Assert.IsTrue(sr.EndOfStream);
         }
+
     }
 
 }
+
+    

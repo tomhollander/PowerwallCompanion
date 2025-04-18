@@ -13,7 +13,7 @@ namespace PowerwallCompanion
 
         static Telemetry()
         {
-            telemetryProvider = new AzureFunctionsTelemetry(new UwpTelemetryPlatformAdapter());
+            telemetryProvider = new AzureFunctionsTelemetry(new WindowsTelemetryPlatformAdapter());
         }
 
         public static void TrackException(Exception ex)

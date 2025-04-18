@@ -41,7 +41,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+                var powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
                 ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                 if (String.IsNullOrEmpty(Settings.LocalGatewayIP) || String.IsNullOrEmpty(Settings.LocalGatewayPassword))
                 {
@@ -66,7 +66,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var gatewayApi = new LocalGatewayApi(new UwpPlatformAdapter());
+                var gatewayApi = new LocalGatewayApi(new WindowsPlatformAdapter());
                 var response = await gatewayApi.GetBatteryDetails(Settings.LocalGatewayIP, Settings.LocalGatewayPassword);
                 ViewModel.BatteryDetails = response.BatteryDetails;
 
@@ -102,7 +102,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var localGatewayApi = new LocalGatewayApi(new UwpPlatformAdapter());
+                var localGatewayApi = new LocalGatewayApi(new WindowsPlatformAdapter());
                 if (ViewModel.StoreBatteryHistory)
                 {
                     ViewModel.BatteryHistoryChartData = await localGatewayApi.GetBatteryHistoryDataFromServer(Settings.SiteId, ViewModel.EnergySiteInfo.GatewayId);
