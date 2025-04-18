@@ -35,7 +35,8 @@
         <converters:EnergySourcePercentageConverter x:Key="EnergySourcePercentageConverter"/>
         <converters:RateCurrencyConverter x:Key="RateCurrencyConverter"/>
         <converters:PostitiveNegativeCostBrushConverter x:Key="PostitiveNegativeCostBrushConverter"/>
-        <!--<DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:BarSegment">
+        <converters:NumberToStarConverter x:Key="NumberToStarConverter"/>
+        <DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:ColumnSegment">
             <Grid Background="LightGray">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -51,7 +52,7 @@
                     <TextBlock Foreground="Black" Text="{Binding Converter={StaticResource EnergySourcePercentageConverter}}"/>
                 </StackPanel>
             </Grid>
-        </DataTemplate>-->
+        </DataTemplate>
     </Page.Resources>
 
 
@@ -349,27 +350,49 @@
                 </Grid>
 
 
-                <!--<chart:SfCartesianChart Height="30" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
-                    <chart:SfCartesianChart.PrimaryAxis >
-                        <chart:CategoryAxis Visibility="Collapsed" />
-                    </chart:SfCartesianChart.PrimaryAxis>
-                    <chart:SfCartesianChart.SecondaryAxis>
-                        <chart:NumericalAxis Visibility="Collapsed" />
-                    </chart:SfCartesianChart.SecondaryAxis>
-                    <chart:StackingBar100Series Interior="Gold" Label="Solar" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Solar" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="GreenYellow" Label="Wind" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Wind" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="Orange" Label="Geothermal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Geothermal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="DeepSkyBlue" Label="Hydro" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Hydro" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="DodgerBlue" Label="Hydro Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="HydroStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="LimeGreen" Label="Battery Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="BatteryStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="MediumSpringGreen" Label="Biomass" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Biomass" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="Magenta" Label="Nuclear" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Nuclear" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="DarkRed" Label="Gas" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Gas" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="SaddleBrown" Label="Oil" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Oil" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="Gray" Label="Coal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Coal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="MidnightBlue" Label="Unkown" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Unknown" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                <Grid Margin="10" Height="20" MinWidth="400" HorizontalAlignment="Stretch" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Solar, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}"/>
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Wind, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Geothermal, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Hydro, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.HydroStorage, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.BatteryStorage, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Biomass, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Nuclear, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Gas, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Oil, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Coal, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Unknown, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                    </Grid.ColumnDefinitions>
+                    <!-- TODO: Tooltips -->
+                    <Rectangle Fill="Gold" Grid.Column="0"  />
+                    <Rectangle Fill="GreenYellow" Grid.Column="1" />
+                    <Rectangle Fill="Orange" Grid.Column="2" />
+                    <Rectangle Fill="DeepSkyBlue" Grid.Column="3" />
+                    <Rectangle Fill="DodgerBlue" Grid.Column="4" />
+                    <Rectangle Fill="LimeGreen" Grid.Column="5" />
+                    <Rectangle Fill="MediumSpringGreen" Grid.Column="6" />
+                    <Rectangle Fill="Magenta" Grid.Column="7" />
+                    <Rectangle Fill="DarkRed" Grid.Column="8" />
+                    <Rectangle Fill="SaddleBrown" Grid.Column="9" />
+                    <Rectangle Fill="Gray" Grid.Column="10" />
+                    <Rectangle Fill="MidnightBlue" Grid.Column="11" />
+                    <!--
+                    <chart:StackedColumn100Series Background="Gold" Label="Solar" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Solar" EnableTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.Duration="3000" chart:ChartTooltip.TooltipMargin="10"  />
+                    <chart:StackedColumn100Series Background="GreenYellow" Label="Wind" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Wind" EnableTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.Duration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                   <chart:StackedColumn100Series Foreground="Orange" Label="Geothermal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Geothermal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="DeepSkyBlue" Label="Hydro" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Hydro" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="DodgerBlue" Label="Hydro Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="HydroStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="LimeGreen" Label="Battery Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="BatteryStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="MediumSpringGreen" Label="Biomass" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Biomass" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="Magenta" Label="Nuclear" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Nuclear" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="DarkRed" Label="Gas" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Gas" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="SaddleBrown" Label="Oil" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Oil" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="Gray" Label="Coal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Coal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                    <chart:StackedColumn100Series Foreground="MidnightBlue" Label="Unkown" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Unknown" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />-->
 
-                </chart:SfCartesianChart>-->
+                </Grid>
             </StackPanel>
         </Grid>
 
@@ -455,36 +478,44 @@
             </Grid>
 
             <!-- Power history chart -->
-            <!--<chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
-                <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="  htt  " Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}">
+            <chart:SfCartesianChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
+                <chart:SfCartesianChart.Resources>
+                    <Style TargetType="Line" x:Key="lineStyle">
+                        <Setter Property="StrokeThickness" Value="2"/>
+                        <Setter Property="Stroke" Value="#404040" />
+                    </Style>
+                </chart:SfCartesianChart.Resources>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}" MajorGridLineStyle="{StaticResource lineStyle}">
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            <chart:LabelStyle Foreground="DarkGray" LabelFormat="h tt" FontSize="16"/>
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
-                </chart:SfChart.PrimaryAxis>
+                </chart:SfCartesianChart.XAxes>
 
-                <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="0.# kW">
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis RangePadding="None" MajorGridLineStyle="{StaticResource lineStyle}">
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            <chart:LabelStyle  Foreground="DarkGray" LabelFormat="0 kW" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
-                </chart:SfChart.SecondaryAxis>
-                <chart:SfChart.Legend>
-                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" Placement="Right">
                     </chart:ChartLegend>
-                </chart:SfChart.Legend>
+                </chart:SfCartesianChart.Legend>
 
-                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" ListenPropertyChange="True"/>
-                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
-                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Fill="Cyan" Stroke="Cyan" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Fill="Gold" Stroke="Gold" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:AreaSeries Fill="LightGray" Stroke="LightGray" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Fill="LimeGreen" Stroke="LimeGreen" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
-                <chart:SfChart.Annotations>
-                    <chart:VerticalLineAnnotation X1="{x:Bind ViewModel.GraphDayBoundary}" Stroke="LightGray" StrokeThickness="2" />
-                </chart:SfChart.Annotations>
-            </chart:SfChart>-->
+                <!-- No annotations in WinUI chart :( -->
+                <!--<chart:SfCartesianChart.Annotations>
+                    <chart:VerticalLineAnnotation X1="{Binding GraphDayBoundary}" Stroke="LightGray" StrokeWidth="2" />
+                </chart:SfCartesianChart.Annotations>-->
+            </chart:SfCartesianChart>
 
         </Grid>
     </Grid>
