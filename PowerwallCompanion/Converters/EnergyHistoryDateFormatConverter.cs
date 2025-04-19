@@ -13,7 +13,7 @@ namespace PowerwallCompanion.Converters
         {
             if ((string)value == "Month")
             {
-                return "d MMM";
+                return "d/M";
             }
             else if ((string)value == "Week")
             {

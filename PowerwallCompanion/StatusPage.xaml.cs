@@ -21,6 +21,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Shapes;
 using System.Reflection;
+using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -64,7 +65,30 @@ namespace PowerwallCompanion
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await RefreshDataFromTeslaOwnerApi();
+            ShowBatteryHealthNavForPowerwall2Only();
             base.OnNavigatedTo(e);
+        }
+
+        private void ShowBatteryHealthNavForPowerwall2Only()
+        {
+            try
+            {
+                // Show BatteryInfo nav if it's a Powerwall 2
+                if (ViewModel.EnergySiteInfo.PowerwallVersion.StartsWith("Powerwall 2")) // Not sre if there's a 2+
+                {
+                    var nav = (NavigationView)(this.Parent as Frame).Parent;
+                    var batteryInfoMenu = (NavigationViewItem)nav.MenuItems.Where(m => ((NavigationViewItem)m).Tag.ToString() == "BatteryInfo").FirstOrDefault();
+                    if (batteryInfoMenu != null)
+                    {
+                        batteryInfoMenu.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+            }
+
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -115,7 +139,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                if (ViewModel.EnergySiteInfo == null ||  (DateTime.Now - viewModel.EnergySiteInfoLastRefreshed > energySiteInfoRefreshInterval))
+                if (ViewModel.EnergySiteInfo == null || (DateTime.Now - viewModel.EnergySiteInfoLastRefreshed > energySiteInfoRefreshInterval))
                 {
                     ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                     ViewModel.EnergySiteInfoLastRefreshed = DateTime.Now;
@@ -310,11 +334,15 @@ namespace PowerwallCompanion
       
         private async void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (ViewModel.LastExceptionMessage != null)
+            var dialog = new ContentDialog()
             {
-                var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
-                await md.ShowAsync();
-            }
+                Title = "Error",
+                Content = $"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}",
+                CloseButtonText = "Ok"
+            };
+
+            dialog.XamlRoot = this.Content.XamlRoot;  
+            await dialog.ShowAsync();
         }
 
         bool notifyCheckRunBefore;

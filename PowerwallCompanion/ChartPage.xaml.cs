@@ -14,6 +14,8 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -365,6 +367,10 @@ namespace PowerwallCompanion
                 Telemetry.TrackEvent("Chart data exported", new Dictionary<string, string> { { "Period", ViewModel.Period} });
 
                 var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+                var hwnd = WindowNative.GetWindowHandle(App.Window);
+                InitializeWithWindow.Initialize(savePicker, hwnd);
+                //WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+
                 savePicker.SuggestedStartLocation =
                     Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
                 // Dropdown of file types the user can save the file as
@@ -396,8 +402,15 @@ namespace PowerwallCompanion
             catch (Exception ex)
             {
                 Telemetry.TrackException(ex);
-                var md = new MessageDialog("Error while saving data: " + ex.Message);
-                await md.ShowAsync();
+                var dialog = new ContentDialog()
+                {
+                    Title = "Error",
+                    Content = "Error while saving data: " + ex.Message,
+                    CloseButtonText = "Ok"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+                await dialog.ShowAsync();
             }
             exportButton.Content = "Export Data";
             exportButton.IsEnabled = true;
@@ -408,8 +421,15 @@ namespace PowerwallCompanion
         {
             if (ViewModel.LastExceptionMessage != null)
             {
-                var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
-                await md.ShowAsync();
+                var dialog = new ContentDialog()
+                {
+                    Title = "Error",
+                    Content = $"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}",
+                    CloseButtonText = "Ok"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+                await dialog.ShowAsync();
             }
         }
 

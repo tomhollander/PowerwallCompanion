@@ -19,6 +19,7 @@
         <converters:BatteryCapacityToBrushConverter x:Key="BatteryCapacityToBrushConverter"/>
         <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter"/>
         <converters:TrueToVisibilityCollapsedConverter x:Key="TrueToVisibilityCollapsedConverter"/>
+
     </Page.Resources>
 
     <Grid >
@@ -137,7 +138,7 @@
             </chart:SfCartesianChart.TrackballBehavior>
             
             <chart:SfCartesianChart.XAxes>
-                <chart:DateTimeAxis IntervalType="Months">
+                <chart:DateTimeAxis  >
                     <chart:DateTimeAxis.LabelStyle>
                         <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="d"/>
                     </chart:DateTimeAxis.LabelStyle>

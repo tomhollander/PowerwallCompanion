@@ -46,7 +46,11 @@ namespace PowerwallCompanion.ViewModels
             {
                 if (BatteryHistoryChartData == null || BatteryHistoryChartData.Values.Count == 0 || BatteryHistoryChartData.First().Value == null)
                 {
-                    return new List<ChartDataPoint>();
+                    return new List<ChartDataPoint> // Default values so the chart doesn't look crap
+                    {
+                        new ChartDataPoint( new DateTime(2025, 1, 1), 0),
+                        new ChartDataPoint( new DateTime(2025, 6, 1), 0)
+                    };
                 }
                 var series = new List<ChartDataPoint>();
                 for (int i = 0; i < BatteryHistoryChartData.First().Value.Count; i++)

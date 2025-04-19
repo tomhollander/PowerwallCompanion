@@ -179,9 +179,15 @@ namespace PowerwallCompanion
 
         private async void HyperlinkButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var md = new MessageDialog(ViewModel.GatewayError);
-            md.Title = "Unable to connect to Powerwall Gateway";
-            await md.ShowAsync();
+            var dialog = new ContentDialog()
+            {
+                Title = "Unable to connect to Powerwall Gateway",
+                Content = ViewModel.GatewayError,
+                CloseButtonText = "Ok"
+            };
+
+            dialog.XamlRoot = this.Content.XamlRoot;
+            await dialog.ShowAsync();
         }
     }
 }

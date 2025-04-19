@@ -49,7 +49,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <!-- 0: Button bar -->
-                <RowDefinition Height="50" />
+                <RowDefinition Height="55" />
                 <!-- 1: Energy stats -->
                 <RowDefinition Height="Auto" />
                 <!-- 2: Top Chart -->
@@ -221,7 +221,7 @@
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis IntervalType="{x:Bind ViewModel.ChartPeriodInterval, Mode=OneWay}" Interval="1" >
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}" />
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}"  />
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
                 </chart:SfCartesianChart.XAxes>

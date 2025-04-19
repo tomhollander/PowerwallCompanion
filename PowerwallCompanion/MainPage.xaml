@@ -18,7 +18,7 @@
                         <BitmapIcon UriSource="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem  Content="Battery Health" Tag="BatteryInfo">
+                <NavigationViewItem  Content="Battery Health" Tag="BatteryInfo"  Visibility="Collapsed">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE857;"/>
                     </NavigationViewItem.Icon>
