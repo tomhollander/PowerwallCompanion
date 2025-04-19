@@ -57,7 +57,6 @@ namespace PowerwallCompanion
                 {
                     DispatcherQueue.TryEnqueue(() =>
                     {
-                        UpdateMenuButtons();
                         this.Frame.Navigate(typeof(StatusPage), true);
                     });
                 }
@@ -116,14 +115,6 @@ namespace PowerwallCompanion
         }
 
         
-
-
-        
-        private void UpdateMenuButtons()
-        {
-            var frame = (Frame)App.Window.Content;
-            var mainPage = (MainPage)frame.Content;
-        }
 
 
         private void TextBlock_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

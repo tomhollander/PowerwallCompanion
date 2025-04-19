@@ -369,6 +369,18 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public string SelectedEnergySourceName { get; set; }
+        public int SelectedEnergySourcePower { get; set; }
+        public string SelectedEnergySourcePercentageLabel { get; set; }
+        public Brush SelectedEnergySourceBrush { get; set; }
+        public void NotifySelectedEnergySourceProperties()
+        {
+            NotifyPropertyChanged(nameof(SelectedEnergySourceName));
+            NotifyPropertyChanged(nameof(SelectedEnergySourcePower));
+            NotifyPropertyChanged(nameof(SelectedEnergySourceBrush));
+            NotifyPropertyChanged(nameof(SelectedEnergySourcePercentageLabel));
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propertyName)

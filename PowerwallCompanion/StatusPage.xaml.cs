@@ -19,6 +19,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI;
+using Microsoft.UI.Xaml.Shapes;
+using System.Reflection;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -489,5 +491,38 @@ namespace PowerwallCompanion
 
         }
 
+        private void EnergySource_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Rectangle graphRectangle;
+            if (sender is Rectangle)
+            {
+                graphRectangle = (Rectangle) sender;
+            }
+            else
+            {
+                Image image = sender as Image;
+                string rectName = image.Name.Replace("icon", "rect");
+                graphRectangle = (Rectangle)this.FindName(rectName);
+            }
+
+            ViewModel.SelectedEnergySourceName = graphRectangle.Name.Replace("rect", "");
+            ViewModel.SelectedEnergySourceBrush = graphRectangle.Fill;
+            var powerProperty = typeof(GridEnergySources).GetProperty(ViewModel.SelectedEnergySourceName);
+            if (powerProperty != null)
+            {
+                ViewModel.SelectedEnergySourcePower = (int)powerProperty.GetValue(ViewModel.GridEnergySources);
+                double percent = (double)ViewModel.SelectedEnergySourcePower / ViewModel.GridEnergySources.Total * 100;
+                ViewModel.SelectedEnergySourcePercentageLabel = $"({percent:0}%)";
+            }
+            ViewModel.NotifySelectedEnergySourceProperties();
+
+            popup.HorizontalOffset = graphRectangle.ActualOffset.X;
+            popup.IsOpen = true;
+        }
+
+        private void EnergySource_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            popup.IsOpen = false;
+        }
     }
 }

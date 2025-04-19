@@ -36,23 +36,6 @@
         <converters:RateCurrencyConverter x:Key="RateCurrencyConverter"/>
         <converters:PostitiveNegativeCostBrushConverter x:Key="PostitiveNegativeCostBrushConverter"/>
         <converters:NumberToStarConverter x:Key="NumberToStarConverter"/>
-        <DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:ColumnSegment">
-            <Grid Background="LightGray">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <Rectangle Fill="{Binding Series.Interior}" Stroke="Black" Margin="4" Width="10" Height="10"/>
-                    <TextBlock Foreground="Black" FontWeight="Bold" Text="{Binding Series.Label}" Margin="0,0,10,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="1">
-                    <TextBlock Foreground="Black" Text="{Binding YData}"/>
-                    <TextBlock Foreground="Black" Text=" MW"/>
-                    <TextBlock Foreground="Black" Text="{Binding Converter={StaticResource EnergySourcePercentageConverter}}"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
     </Page.Resources>
 
 
@@ -276,14 +259,14 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
                         <Image ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergySourcesStatusMessage, Mode=OneWay}" Source="ms-appx:///Assets/energysource_grid.png" Height="30" Margin="10,10,20,0"/>
-                        <Image ToolTipService.ToolTip="Solar" Source="ms-appx:///Assets/energysource_solar.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}"/>
-                        <Image ToolTipService.ToolTip="Wind" Source="ms-appx:///Assets/energysource_wind.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}"/>
-                        <Image ToolTipService.ToolTip="Hydro" Source="ms-appx:///Assets/energysource_hydro.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}"/>
-                        <Image ToolTipService.ToolTip="Biomass" Source="ms-appx:///Assets/energysource_biomass.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Biomass'}"/>
-                        <Image ToolTipService.ToolTip="Geothermal" Source="ms-appx:///Assets/energysource_geothermal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Geothermal'}"/>
-                        <Image ToolTipService.ToolTip="Nuclear" Source="ms-appx:///Assets/energysource_nuclear.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Nuclear'}"/>
-                        <Image ToolTipService.ToolTip="Gas" Source="ms-appx:///Assets/energysource_gas.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Gas'}"/>
-                        <Image ToolTipService.ToolTip="Coal" Source="ms-appx:///Assets/energysource_coal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}"/>
+                        <Image x:Name="iconSolar" Source="ms-appx:///Assets/energysource_solar.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                        <Image x:Name="iconWind" Source="ms-appx:///Assets/energysource_wind.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconHydro" Source="ms-appx:///Assets/energysource_hydro.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconBiomass" Source="ms-appx:///Assets/energysource_biomass.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Biomass'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconGeothermal" Source="ms-appx:///Assets/energysource_geothermal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Geothermal'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconNuclear" Source="ms-appx:///Assets/energysource_nuclear.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Nuclear'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconGas" Source="ms-appx:///Assets/energysource_gas.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Gas'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconCoal" Source="ms-appx:///Assets/energysource_coal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                         <Image ToolTipService.ToolTip="Grid energy from renewable and low carbon sources" Source="ms-appx:///Assets/energysource_renewable.png" Width="30" Margin="0,0,0,5" VerticalAlignment="Bottom"/>
@@ -308,34 +291,39 @@
                         <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Unknown, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
                     </Grid.ColumnDefinitions>
                     <!-- TODO: Tooltips -->
-                    <Rectangle Fill="Gold" Grid.Column="0"  />
-                    <Rectangle Fill="GreenYellow" Grid.Column="1" />
-                    <Rectangle Fill="Orange" Grid.Column="2" />
-                    <Rectangle Fill="DeepSkyBlue" Grid.Column="3" />
-                    <Rectangle Fill="DodgerBlue" Grid.Column="4" />
-                    <Rectangle Fill="LimeGreen" Grid.Column="5" />
-                    <Rectangle Fill="MediumSpringGreen" Grid.Column="6" />
-                    <Rectangle Fill="Magenta" Grid.Column="7" />
-                    <Rectangle Fill="DarkRed" Grid.Column="8" />
-                    <Rectangle Fill="SaddleBrown" Grid.Column="9" />
-                    <Rectangle Fill="Gray" Grid.Column="10" />
-                    <Rectangle Fill="MidnightBlue" Grid.Column="11" />
-                    <!--
-                    <chart:StackedColumn100Series Background="Gold" Label="Solar" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Solar" EnableTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.Duration="3000" chart:ChartTooltip.TooltipMargin="10"  />
-                    <chart:StackedColumn100Series Background="GreenYellow" Label="Wind" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Wind" EnableTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.Duration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                   <chart:StackedColumn100Series Foreground="Orange" Label="Geothermal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Geothermal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="DeepSkyBlue" Label="Hydro" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Hydro" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="DodgerBlue" Label="Hydro Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="HydroStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="LimeGreen" Label="Battery Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="BatteryStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="MediumSpringGreen" Label="Biomass" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Biomass" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="Magenta" Label="Nuclear" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Nuclear" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="DarkRed" Label="Gas" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Gas" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="SaddleBrown" Label="Oil" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Oil" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="Gray" Label="Coal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Coal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackedColumn100Series Foreground="MidnightBlue" Label="Unkown" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Unknown" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />-->
-
+                    <Rectangle x:Name="rectSolar" Fill="Gold" Grid.Column="0" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectWind" Fill="GreenYellow" Grid.Column="1" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectGeothermal" Fill="Orange" Grid.Column="2" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectHydro" Fill="DeepSkyBlue" Grid.Column="3" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectHydroStorage" Fill="DodgerBlue" Grid.Column="4" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectBatteryStorage" Fill="LimeGreen" Grid.Column="5" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectBiomass" Fill="MediumSpringGreen" Grid.Column="6" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectNuclear" Fill="Magenta" Grid.Column="7" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectGas" Fill="DarkRed" Grid.Column="8" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectOil" Fill="SaddleBrown" Grid.Column="9" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectCoal" Fill="Gray" Grid.Column="10" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"  />
+                    <Rectangle x:Name="rectOther" Fill="MidnightBlue" Grid.Column="11" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Popup x:Name="popup" VerticalOffset="25" >
+                        <Grid Background="LightGray" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                <Rectangle Fill="{x:Bind ViewModel.SelectedEnergySourceBrush, Mode=OneWay}" Stroke="Black" Margin="4" Width="10" Height="10"/>
+                                <TextBlock Foreground="Black" FontWeight="Bold" Text="{x:Bind ViewModel.SelectedEnergySourceName, Mode=OneWay}" Margin="0,0,10,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                <TextBlock Foreground="Black" Text="{x:Bind ViewModel.SelectedEnergySourcePower, Mode=OneWay}"/>
+                                <TextBlock Foreground="Black" Text=" MW"/>
+                                <TextBlock Foreground="Black" Text="{x:Bind ViewModel.SelectedEnergySourcePercentageLabel, Mode=OneWay}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
                 </Grid>
+
             </StackPanel>
+            
         </Grid>
 
         <!-- Second Column-->
@@ -344,7 +332,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
             <!-- Yesterday / Today energy stats -->
             <Grid Margin="10,10,60,0" ColumnSpacing="20"  HorizontalAlignment="Center" >
 
@@ -460,6 +448,7 @@
             </chart:SfCartesianChart>
 
         </Grid>
+
     </Grid>
 
 
