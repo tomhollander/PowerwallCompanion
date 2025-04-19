@@ -32,7 +32,6 @@
         <converters:StatusToBackgroundBrushConverter x:Key="StatusToBackgroundBrushConverter" />
         <converters:TooltipMessageConverter x:Key="TooltipMessageConverter"/>
         <converters:EnergySourceIconVisibilityConverter x:Key="EnergySourceIconVisibilityConverter"/>
-        <converters:EnergySourcePercentageConverter x:Key="EnergySourcePercentageConverter"/>
         <converters:RateCurrencyConverter x:Key="RateCurrencyConverter"/>
         <converters:PostitiveNegativeCostBrushConverter x:Key="PostitiveNegativeCostBrushConverter"/>
         <converters:NumberToStarConverter x:Key="NumberToStarConverter"/>

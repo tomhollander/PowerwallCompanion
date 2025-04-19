@@ -8,30 +8,24 @@
     RequestedTheme="Dark"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        
-        <SplitView x:Name="splitView" DisplayMode="CompactInline" OpenPaneLength="50" Grid.Row="0">
-            <SplitView.Pane>
-                <StackPanel Orientation="Vertical" Width="100">
-                    <ToggleButton ToolTipService.ToolTip="Live Stats"  x:Name="homeMenuButton" Background="Transparent" Margin="4" IsChecked="True" Tapped="homeMenuButton_Tapped">
-                        <SymbolIcon Symbol="Home"/>
-                    </ToggleButton>
-                    <ToggleButton ToolTipService.ToolTip="Historical Charts"  x:Name="chartMenuButton" Background="Transparent" Margin="4" Tapped="chartMenuButton_Tapped">
-                        <Image Source="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ToggleButton>
-                    <ToggleButton ToolTipService.ToolTip="Battery Stats" x:Name="batteryStauusMenuButton" Background="Transparent" Margin="4" IsChecked="False" Tapped="batteryStatusMenuButton_Tapped">
+    <Grid Background="#171717">
+
+        <NavigationView x:Name="navView" IsBackButtonVisible="Collapsed" ItemInvoked="navView_ItemInvoked" IsPaneOpen="False">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Home" Content="Live Stats" Tag="Status" IsSelected="True" />
+                <NavigationViewItem Content="Historical Charts" Tag="Charts">
+                    <NavigationViewItem.Icon>
+                        <BitmapIcon UriSource="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem  Content="Battery Health" Tag="BatteryInfo">
+                    <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE857;"/>
-                    </ToggleButton>
-                    <ToggleButton ToolTipService.ToolTip="Settings"  x:Name="settingsMenuButton" Background="Transparent" Margin="4" Tapped="settingsMenuButton_Tapped">
-                        <SymbolIcon Symbol="Setting"/>
-                    </ToggleButton>
-                    
-                </StackPanel>
-            </SplitView.Pane>
-            <SplitView.Content>
-                <Frame x:Name="frame" Navigated="frame_Navigated" />
-            </SplitView.Content>
-        </SplitView>
-        
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="frame"  />
+        </NavigationView>
+
     </Grid>
 </Page>

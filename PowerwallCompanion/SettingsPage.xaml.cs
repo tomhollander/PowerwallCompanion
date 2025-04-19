@@ -91,12 +91,6 @@ namespace PowerwallCompanion
             this.Frame.Navigate(typeof(LoginPage));
         }
 
-        private void hamburgerMenu_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var frame = (Frame)App.Window.Content;
-            var mainPage = (MainPage)frame.Content;
-            mainPage.ToggleMenuPane();
-        }
 
         private void signedInLabel_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {

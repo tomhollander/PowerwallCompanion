@@ -60,39 +60,28 @@ namespace PowerwallCompanion
             }
         }
 
-        public void ToggleMenuPane()
-        {
-            splitView.IsPaneOpen = !splitView.IsPaneOpen;
-        }
+       
 
-        private void homeMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
+  
+        private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            frame.Navigate(typeof(StatusPage));
-        }
-
-        private void chartMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            frame.Navigate(typeof(ChartPage));
-        }
-
-
-        private void settingsMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            frame.Navigate(typeof(SettingsPage));
-        }
-
-        private void batteryStatusMenuButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            frame.Navigate(typeof(BatteryInfoPage));
-        }
-
-        private void frame_Navigated(object sender, NavigationEventArgs e)
-        {
-            homeMenuButton.IsChecked = (e.SourcePageType == typeof(StatusPage));
-            chartMenuButton.IsChecked = (e.SourcePageType == typeof(ChartPage));
-            settingsMenuButton.IsChecked = (e.SourcePageType == typeof(SettingsPage));
-            batteryStauusMenuButton.IsChecked = (e.SourcePageType == typeof(BatteryInfoPage));
-            splitView.IsPaneOpen = false;
+            navView.IsPaneOpen = false;
+            if (args.IsSettingsInvoked)
+            {
+                frame.Navigate(typeof(SettingsPage));
+            }
+            else if (args.InvokedItemContainer.Tag.ToString() == "Status")
+            {
+                frame.Navigate(typeof(StatusPage));
+            }
+            else if (args.InvokedItemContainer.Tag.ToString() == "Charts")
+            {
+                frame.Navigate(typeof(ChartPage));
+            }
+            else if (args.InvokedItemContainer.Tag.ToString() == "BatteryInfo")
+            {
+                frame.Navigate(typeof(BatteryInfoPage));
+            }
         }
     }
 }
