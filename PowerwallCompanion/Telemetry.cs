@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -33,12 +35,24 @@ namespace PowerwallCompanion
 
         public static void TrackException(Exception ex)
         {
-            TrackEventToMixpanelSafe(ex.ToString(), new Dictionary<string, string> { { "IsHandled", "true" } });
+
+            TrackEventToMixpanelSafe("Exception", BuildExceptionMetadata(ex, true));
         }
 
-        public static async Task TrackUnhandledException(Exception ex)
+        public static void TrackUnhandledException(Exception ex)
         {
-            await TrackEventToMixpanel(ex.ToString(), new Dictionary<string, string> { { "IsHandled", "false" } });
+            TrackEventToMixpanelSafe("Exception", BuildExceptionMetadata(ex, false));
+        }
+
+        private static Dictionary<string, string> BuildExceptionMetadata(Exception ex, bool handled)
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Type", ex.GetType().ToString() },
+                { "Message", ex.Message },
+                { "FullException", ex.ToString() },
+                { "IsHandled", handled.ToString() }
+            };
         }
 
         public static void TrackEvent(string eventName, IDictionary<string, string> metadata)
@@ -74,6 +88,7 @@ namespace PowerwallCompanion
             dict.Add("AppVersion", telemetryAdapter.AppVersion);
             dict.Add("OSVersion", telemetryAdapter.OSVersion);
             dict.Add("AppName", telemetryAdapter.AppName);
+            dict.Add("Platform", "Windows");
 
             if (metadata != null)
             {
