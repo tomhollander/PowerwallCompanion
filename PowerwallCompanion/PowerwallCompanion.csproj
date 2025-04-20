@@ -155,6 +155,7 @@
     <PackageReference Include="Microsoft.Web.WebView2">
       <Version>1.0.3179.45</Version>
     </PackageReference>
+    <PackageReference Include="mixpanel-csharp" Version="6.0.0" />
     <PackageReference Include="Syncfusion.Chart.WinUI" Version="29.1.38" />
     <PackageReference Include="Syncfusion.Gauge.WinUI" Version="29.1.38" />
     <PackageReference Include="Syncfusion.Grid.WinUI" Version="29.1.38" />

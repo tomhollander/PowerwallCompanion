@@ -22,6 +22,7 @@ namespace PowerwallCompanion
         public MainPage()
         {
             InitializeComponent();
+            Telemetry.TrackUser();
 
             //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
             //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
