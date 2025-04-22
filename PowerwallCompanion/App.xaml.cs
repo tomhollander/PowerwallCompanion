@@ -38,17 +38,14 @@ namespace PowerwallCompanion
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Keys.SyncFusionLicenseKey);
             this.UnhandledException += App_UnhandledException;
             System.AppDomain.CurrentDomain.UnhandledException += AppDomain_UnhandledException;
-            System.AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
-        }
-
-        private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
-        {
-            Telemetry.TrackUnhandledException(e.Exception);
         }
 
         private void AppDomain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
         {
-            Telemetry.TrackUnhandledException(e.ExceptionObject as Exception);
+            if (e != null && e.ExceptionObject is Exception)
+            {
+                Telemetry.TrackUnhandledException((Exception)e.ExceptionObject);
+            }            
         }
 
         private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
