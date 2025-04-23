@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 
 namespace PowerwallCompanion.ViewModels
 {
@@ -367,6 +367,18 @@ namespace PowerwallCompanion.ViewModels
                     return Visibility.Collapsed;
                 }
             }
+        }
+
+        public string SelectedEnergySourceName { get; set; }
+        public int SelectedEnergySourcePower { get; set; }
+        public string SelectedEnergySourcePercentageLabel { get; set; }
+        public Brush SelectedEnergySourceBrush { get; set; }
+        public void NotifySelectedEnergySourceProperties()
+        {
+            NotifyPropertyChanged(nameof(SelectedEnergySourceName));
+            NotifyPropertyChanged(nameof(SelectedEnergySourcePower));
+            NotifyPropertyChanged(nameof(SelectedEnergySourceBrush));
+            NotifyPropertyChanged(nameof(SelectedEnergySourcePercentageLabel));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

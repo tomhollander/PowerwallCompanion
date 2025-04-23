@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Data;
 
 namespace PowerwallCompanion.Converters
 {
@@ -13,7 +13,7 @@ namespace PowerwallCompanion.Converters
         {
             if ((string)value == "Month")
             {
-                return "d MMM";
+                return "d/M";
             }
             else if ((string)value == "Week")
             {

@@ -25,7 +25,7 @@
     </Page.Resources>
 
         
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="Black">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="NarrowView">
@@ -49,7 +49,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <!-- 0: Button bar -->
-                <RowDefinition Height="50" />
+                <RowDefinition Height="55" />
                 <!-- 1: Energy stats -->
                 <RowDefinition Height="Auto" />
                 <!-- 2: Top Chart -->
@@ -122,42 +122,42 @@
             
             <!-- Charts-->
             <!-- Daily power chart -->
-            <chart:SfChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" >
-                <chart:SfChart.Behaviors>
-                    <chart:ChartTrackBallBehavior x:Name="powerTrackBall"  />
-                </chart:SfChart.Behaviors>
+            <chart:SfCartesianChart x:Name="dailyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" >
+                <chart:SfCartesianChart.TrackballBehavior>
+                    <chart:ChartTrackballBehavior/>
+                </chart:SfCartesianChart.TrackballBehavior>
 
-                <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2" ShowTrackBallInfo="True"  LabelFormat="t"  LabelBorderBrush="#202020">
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" MinorTicksPerInterval="2" >
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="t" />
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
-                </chart:SfChart.PrimaryAxis>
+                </chart:SfCartesianChart.XAxes>
 
-                <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="0.## kW">
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis RangePadding="None">
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"  LabelFormat="0.## kW"/>
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
-                </chart:SfChart.SecondaryAxis>
-                <chart:SfChart.Legend>
-                    <chart:ChartLegend x:Name="powerChartLegend" ToggleSeriesVisibility="True" CheckBoxVisibility="Visible" DockPosition="Right" Width="120" FontSize="14" ItemMargin="10,0,0,0">
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend x:Name="powerChartLegend" ToggleSeriesVisibility="True" CheckBoxVisibility="Visible" Placement="Right"  ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
-                </chart:SfChart.Legend>
-                <chart:AreaSeries x:Name="homeSeries" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
-                <chart:AreaSeries x:Name="solarSeries" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries x:Name="gridSeries" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries x:Name="batterySeries" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                </chart:SfCartesianChart.Legend>
+                <chart:AreaSeries x:Name="homeSeries" Stroke="Cyan" StrokeWidth="1" Fill="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:AreaSeries x:Name="solarSeries" Stroke="Gold" StrokeWidth="1" Fill="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries x:Name="gridSeries" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries x:Name="batterySeries" Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
-                <chart:StackingAreaSeries x:Name="homeStackingSeries" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" VisibilityOnLegend="Collapsed" />
-                <chart:StackingAreaSeries x:Name="solarStackingSeries" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"  VisibilityOnLegend="Collapsed" />
-                <chart:StackingAreaSeries x:Name="gridStackingSeries" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue"  VisibilityOnLegend="Collapsed" />
-                <chart:StackingAreaSeries x:Name="batteryStackingSeries" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue"  VisibilityOnLegend="Collapsed"/>
+                <chart:StackedAreaSeries x:Name="homeStackingSeries" Stroke="Cyan" StrokeWidth="1" Fill="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" IsVisibleOnLegend="False" />
+                <chart:StackedAreaSeries x:Name="solarStackingSeries" Stroke="Gold" StrokeWidth="1" Fill="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"  IsVisibleOnLegend="False" />
+                <chart:StackedAreaSeries x:Name="gridStackingSeries" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue"  IsVisibleOnLegend="False" />
+                <chart:StackedAreaSeries x:Name="batteryStackingSeries" Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue"  IsVisibleOnLegend="False"/>
                        
 
-            </chart:SfChart>
+            </chart:SfCartesianChart>
 
             <ComboBox x:Name="powerGraphOptionsCombo" SelectionChanged="powerGraphOptionsCombo_SelectionChanged" Grid.Row="2" SelectedIndex="0" HorizontalAlignment="Right" Margin="0,20,50,0">
                 <ComboBoxItem>All data</ComboBoxItem>
@@ -174,38 +174,38 @@
                        ToolTipService.ToolTip="Estimated net energy cost" Margin="0,10,0,5"/>
             
             <!-- Daily battery chart -->
-            <chart:SfChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20,10,20,10">
-                <chart:SfChart.Behaviors>
-                    <chart:ChartTrackBallBehavior x:Name="batteryTrackBall" />
-                </chart:SfChart.Behaviors>
+            <chart:SfCartesianChart x:Name="batteryChart"  Grid.Row="3" HorizontalAlignment="Center" Margin="20,10,20,10">
+                <chart:SfCartesianChart.TrackballBehavior>
+                    <chart:ChartTrackballBehavior/>
+                </chart:SfCartesianChart.TrackballBehavior>
 
-                <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" SmallTicksPerInterval="2"  ShowTrackBallInfo="True"  LabelFormat="t" >
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" MinorTicksPerInterval="2">
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="t" />
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
-                </chart:SfChart.PrimaryAxis>
+                </chart:SfCartesianChart.XAxes>
 
-                <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" Maximum="100" LabelFormat="0\%">
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis RangePadding="None" Maximum="100">
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="0\%" />
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
-                </chart:SfChart.SecondaryAxis>
-                <chart:SfChart.Legend>
-                    <chart:ChartLegend ToggleSeriesVisibility="False" DockPosition="Right" Width="120" FontSize="14"  ItemMargin="10,0,0,0">
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="False" Placement="Right" ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
-                </chart:SfChart.Legend>
+                </chart:SfCartesianChart.Legend>
 
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData, Mode=OneWay}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.BatteryDailySoeGraphData, Mode=OneWay}" Label="Battery SOC" XBindingPath="XValue" YBindingPath="YValue" />
 
-            </chart:SfChart>
+            </chart:SfCartesianChart>
 
             <!-- Weekly/Monthly/Yearly Energy Chart -->
-            <chart:SfChart x:Name="energyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20">
-                <chart:SfChart.Resources>
+            <chart:SfCartesianChart x:Name="energyChart" Grid.Row="2" HorizontalAlignment="Center" Margin="20">
+                <chart:SfCartesianChart.Resources>
                     <DataTemplate x:Key="tooltipTemplate">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{Binding Series.Label}" FontWeight="Bold" Foreground="Black" />
@@ -216,44 +216,44 @@
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
-                </chart:SfChart.Resources>
+                </chart:SfCartesianChart.Resources>
                 
-                <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
-                        <chart:DateTimeCategoryAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
-                        </chart:DateTimeCategoryAxis.LabelStyle>
-                    </chart:DateTimeCategoryAxis>
-                </chart:SfChart.PrimaryAxis>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="{x:Bind ViewModel.ChartPeriodInterval, Mode=OneWay}" Interval="1" >
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}"  />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
 
-                <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="0.# kWh">
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis RangePadding="None" >
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="0.# kWh"/>
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
-                </chart:SfChart.SecondaryAxis>
-                <chart:SfChart.Legend>
-                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" Placement="Right" ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
-                </chart:SfChart.Legend>
+                </chart:SfCartesianChart.Legend>
 
-                <chart:ColumnSeries ShowTooltip="True" Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:ColumnSeries ShowTooltip="True" Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.GridImport, Mode=OneWay}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.GridExport, Mode=OneWay}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.BatteryDischarge, Mode=OneWay}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Battery" ShowTooltip="True" Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.BatteryCharge, Mode=OneWay}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
+                <chart:ColumnSeries EnableTooltip="True" Stroke="Cyan" StrokeWidth="1" Fill="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
+                <chart:ColumnSeries EnableTooltip="True" Stroke="Gold" StrokeWidth="1" Fill="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
+                <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.GridImport, Mode=OneWay}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
+                <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.GridExport, Mode=OneWay}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
+                <chart:StackedColumnSeries GroupName="Battery" EnableTooltip="True" Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.BatteryDischarge, Mode=OneWay}" Label="Battery Discharge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
+                <chart:StackedColumnSeries GroupName="Battery" EnableTooltip="True" Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.BatteryCharge, Mode=OneWay}" Label="Battery Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
 
-                <chart:SfChart.Annotations>
+                <!--<chart:SfCartesianChart.Annotations>
                     <chart:HorizontalLineAnnotation Y1="0" Stroke="LightGray" StrokeThickness="2" />
-                </chart:SfChart.Annotations>
+                </chart:SfCartesianChart.Annotations>-->
 
-            </chart:SfChart>
+            </chart:SfCartesianChart>
        
             <!-- Weekly Cost Chart -->
-            <chart:SfChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="28,10,20,10" Visibility="Collapsed">
-                <chart:SfChart.Resources>
+            <chart:SfCartesianChart x:Name="energyCostChart" Grid.Row="3" HorizontalAlignment="Center" Margin="28,10,20,10" Visibility="Collapsed">
+                <chart:SfCartesianChart.Resources>
                     <DataTemplate x:Key="tooltipTemplate">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{Binding Series.Label}" FontWeight="Bold" Foreground="Black" />
@@ -261,40 +261,40 @@
                             <TextBlock Text="{Binding Item.YValue,Converter={StaticResource RateCurrencyConverter}}" Foreground="Black"  />
                         </StackPanel>
                     </DataTemplate>
-                </chart:SfChart.Resources>
+                </chart:SfCartesianChart.Resources>
 
-                <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeCategoryAxis IntervalType="Days" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}">
-                        <chart:DateTimeCategoryAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
-                        </chart:DateTimeCategoryAxis.LabelStyle>
-                    </chart:DateTimeCategoryAxis>
-                </chart:SfChart.PrimaryAxis>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Days" Interval="1" >
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="{x:Bind ViewModel.Period, Converter={StaticResource EnergyHistoryDateFormatConverter}, Mode=OneWay}"/>
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
 
-                <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="Auto" LabelFormat="C">
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis RangePadding="Auto" >
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="C"/>
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
-                </chart:SfChart.SecondaryAxis>
-                <chart:SfChart.Legend>
-                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" Placement="Right" ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
-                </chart:SfChart.Legend>
+                </chart:SfCartesianChart.Legend>
 
-                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightCoral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyCostGraphData, Mode=OneWay}" Label="Est. Energy Cost" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.ShowDuration="10000" />
-                <chart:StackingColumnSeries GroupingLabel="Grid" ShowTooltip="True" Stroke="LightGray" StrokeThickness="1" Interior="LightGreen" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyFeedInGraphData, Mode=OneWay}" Label="Est. Feed In Value" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000" />
-                <chart:LineSeries Interior="CornflowerBlue" StrokeThickness="3" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyNetCostGraphData, Mode=OneWay}" Label="Est. Net Cost" XBindingPath="XValue" YBindingPath="YValue" ShowTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.ShowDuration="10000">
-                    <chart:LineSeries.AdornmentsInfo>
+                <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightCoral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyCostGraphData, Mode=OneWay}" Label="Est. Energy Cost" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
+                <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGreen" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyFeedInGraphData, Mode=OneWay}" Label="Est. Feed In Value" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
+                <chart:LineSeries Fill="CornflowerBlue" StrokeWidth="3" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyNetCostGraphData, Mode=OneWay}" Label="Est. Net Cost" XBindingPath="XValue" YBindingPath="YValue" EnableTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000">
+                    <!--<chart:LineSeries.AdornmentsInfo>
                         <chart:ChartAdornmentInfo ShowMarker="True" SymbolInterior="CornflowerBlue" Symbol="Diamond" />
-                    </chart:LineSeries.AdornmentsInfo>
+                    </chart:LineSeries.AdornmentsInfo>-->
                 </chart:LineSeries>
-                <chart:SfChart.Annotations>
+                <!--<chart:SfCartesianChart.Annotations>
                     <chart:HorizontalLineAnnotation Y1="0" Stroke="LightGray" StrokeThickness="2" />
-                </chart:SfChart.Annotations>
+                </chart:SfCartesianChart.Annotations>-->
 
-            </chart:SfChart>
+            </chart:SfCartesianChart>
 
             <!-- Self consumption -->
             <StackPanel Grid.Row="4">

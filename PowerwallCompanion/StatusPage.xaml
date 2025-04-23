@@ -9,7 +9,7 @@
     xmlns:converters="using:PowerwallCompanion.Converters"
     xmlns:gauge="using:Syncfusion.UI.Xaml.Gauges"
     xmlns:chart="using:Syncfusion.UI.Xaml.Charts"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="Black">
 
     <Page.Resources>
         <converters:KilowattConverter x:Key="KilowattConverter"/>
@@ -32,26 +32,9 @@
         <converters:StatusToBackgroundBrushConverter x:Key="StatusToBackgroundBrushConverter" />
         <converters:TooltipMessageConverter x:Key="TooltipMessageConverter"/>
         <converters:EnergySourceIconVisibilityConverter x:Key="EnergySourceIconVisibilityConverter"/>
-        <converters:EnergySourcePercentageConverter x:Key="EnergySourcePercentageConverter"/>
         <converters:RateCurrencyConverter x:Key="RateCurrencyConverter"/>
         <converters:PostitiveNegativeCostBrushConverter x:Key="PostitiveNegativeCostBrushConverter"/>
-        <DataTemplate x:Key="energySourcesChartTooltip" x:DataType="chart:BarSegment">
-            <Grid Background="LightGray">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <Rectangle Fill="{Binding Series.Interior}" Stroke="Black" Margin="4" Width="10" Height="10"/>
-                    <TextBlock Foreground="Black" FontWeight="Bold" Text="{Binding Series.Label}" Margin="0,0,10,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="1">
-                    <TextBlock Foreground="Black" Text="{Binding YData}"/>
-                    <TextBlock Foreground="Black" Text=" MW"/>
-                    <TextBlock Foreground="Black" Text="{Binding Converter={StaticResource EnergySourcePercentageConverter}}"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
+        <converters:NumberToStarConverter x:Key="NumberToStarConverter"/>
     </Page.Resources>
 
 
@@ -96,58 +79,68 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <gauge:SfCircularGauge Margin="5"  VerticalAlignment="Center" Width="260" HeaderAlignment="Center" Grid.Row="0">
-                <gauge:SfCircularGauge.GaugeHeader>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,5,-2,0"  VerticalAlignment="Center" />
-                        <TextBlock  FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"/>
-                    </StackPanel>
-                    
-                </gauge:SfCircularGauge.GaugeHeader>
+            <gauge:SfRadialGauge VerticalAlignment="Center" Width="260"  Grid.Row="0">
+                <gauge:SfRadialGauge.Axes>
+                    <gauge:RadialAxis StartAngle="95" EndAngle="85" ShowLabels="False" ShowTicks="False" ShowAxisLine="True" AxisLineWidth="30"  RadiusFactor="1" TickPosition="Cross" TickOffset="30" AxisLineFill="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBackgroundBrushConverter}, Mode=OneWay}" >
+                        <gauge:RadialAxis.Ranges>
+                            <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}"  />
+                            <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="#80000000"  />
+                            <gauge:GaugeRange StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StartWidth="5" EndWidth="5" RangeOffset="35" Background="Green" />
+                            <!-- Ticks because the control doesn't let you put normal ticks over the range -->
+                            <gauge:GaugeRange StartValue="9.7"  EndValue="10.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="19.7" EndValue="20.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="29.7" EndValue="30.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="39.7" EndValue="40.3" StartWidth="35" EndWidth="35" Background="Black"/>
+                            <gauge:GaugeRange StartValue="49.7" EndValue="50.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="59.7" EndValue="60.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="69.7" EndValue="70.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="79.7" EndValue="80.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="89.7" EndValue="90.3" StartWidth="35" EndWidth="35" Background="Black" />
+                        </gauge:RadialAxis.Ranges>
+                        <gauge:RadialAxis.Annotations>
+                            <gauge:GaugeAnnotation>
+                                <gauge:GaugeAnnotation.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="ms-appx:///Assets/icon_battery.png" Width="40" Margin="0,5,-2,0"  VerticalAlignment="Center" />
+                                        <TextBlock  FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"/>
+                                    </StackPanel>
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="270" PositionFactor="0.35">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.StormWatchActive, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/storm_watch.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Storm watch active" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="270" PositionFactor="0.35">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridActive, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/grid_disconnected.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Grid power unavailable" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="225" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="315" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="45" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                            <gauge:GaugeAnnotation DirectionUnit="Angle" DirectionValue="135" PositionFactor="1.2">
+                                <gauge:GaugeAnnotation.Content>
+                                    <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharging battery" />
+                                </gauge:GaugeAnnotation.Content>
+                            </gauge:GaugeAnnotation>
+                        </gauge:RadialAxis.Annotations>
+                    </gauge:RadialAxis>
+                </gauge:SfRadialGauge.Axes>
+            </gauge:SfRadialGauge>
 
-
-                <gauge:SfCircularGauge.Annotations>
-                    <gauge:GaugeAnnotation Angle="225" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_export_yellow.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,20" ToolTipService.ToolTip="Exporting to grid"/>
-                    </gauge:GaugeAnnotation>
-                    <gauge:GaugeAnnotation Angle="315" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_import.png" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="45,20" ToolTipService.ToolTip="Charging battery"/>
-                    </gauge:GaugeAnnotation>
-                    <gauge:GaugeAnnotation Angle="45" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridImportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_grid_import.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,50" ToolTipService.ToolTip="Importing from grid" />
-                    </gauge:GaugeAnnotation>
-                    <gauge:GaugeAnnotation Angle="135" Offset="1.2">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryExportingToVisibilityConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/icon_battery_export.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Discharging battery" />
-                    </gauge:GaugeAnnotation>
-                    <gauge:GaugeAnnotation Angle="270" Offset="0.35">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.StormWatchActive, Mode=OneWay, Converter={StaticResource FalseToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/storm_watch.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Storm watch active" />
-                    </gauge:GaugeAnnotation>
-                    <gauge:GaugeAnnotation Angle="270" Offset="0.35">
-                        <Image Visibility="{x:Bind ViewModel.InstantaneousPower.GridActive, Mode=OneWay, Converter={StaticResource TrueToVisibilityCollapsedConverter}, FallbackValue='Collapsed'}" Source="ms-appx:///Assets/grid_disconnected.png" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" ToolTipService.ToolTip="Grid power unavailable" />
-                    </gauge:GaugeAnnotation>
-                </gauge:SfCircularGauge.Annotations>
-                <gauge:SfCircularGauge.Scales>
-                    <gauge:CircularScale  StartAngle="95" SweepAngle="350" SmallTickLength="0" SmallTickStrokeThickness="0" Radius="280" RadiusFactor="1.12"
-                                            TickStroke="Black" TickLength="30" TickStrokeThickness="5"  TickPosition="Custom" 
-                                            ShowLabels="False" ShowRim="True" RimStrokeThickness="30" RimStroke="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBackgroundBrushConverter}, Mode=OneWay}">
-                        <gauge:CircularScale.Ranges>
-                            <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" 
-                                                    StrokeThickness="30" Stroke="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}" />
-                            <gauge:CircularRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StrokeThickness="30" ToolTipService.ToolTip="Backup reserve">
-                                <gauge:CircularRange.Stroke>
-                                    <ImageBrush ImageSource="ms-appx:///Assets/diagonal_lines.png" Stretch="None" />
-                                </gauge:CircularRange.Stroke>
-                            </gauge:CircularRange>
-                        </gauge:CircularScale.Ranges>
-                    </gauge:CircularScale>
-                    <gauge:CircularScale RangePosition="Custom" RangeOffset="0.7" StartAngle="95" SweepAngle="350" ShowLabels="False" ShowRim="False" TickLength="0" SmallTickLength="0">
-                        <gauge:CircularScale.Ranges>
-                            <gauge:CircularRange  StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StrokeThickness="5" Stroke="Green" ToolTipService.ToolTip="Range of charge level today"/>
-                        </gauge:CircularScale.Ranges>
-                    </gauge:CircularScale>
-
-                </gauge:SfCircularGauge.Scales>
-            </gauge:SfCircularGauge>
 
             <!-- Instantaneous Power-->
             <Grid Grid.Column="1"  x:Name="graphGrid" HorizontalAlignment="Center" Margin="10" Grid.Row="1">
@@ -265,14 +258,14 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
                         <Image ToolTipService.ToolTip="{x:Bind ViewModel.GridEnergySourcesStatusMessage, Mode=OneWay}" Source="ms-appx:///Assets/energysource_grid.png" Height="30" Margin="10,10,20,0"/>
-                        <Image ToolTipService.ToolTip="Solar" Source="ms-appx:///Assets/energysource_solar.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}"/>
-                        <Image ToolTipService.ToolTip="Wind" Source="ms-appx:///Assets/energysource_wind.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}"/>
-                        <Image ToolTipService.ToolTip="Hydro" Source="ms-appx:///Assets/energysource_hydro.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}"/>
-                        <Image ToolTipService.ToolTip="Biomass" Source="ms-appx:///Assets/energysource_biomass.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Biomass'}"/>
-                        <Image ToolTipService.ToolTip="Geothermal" Source="ms-appx:///Assets/energysource_geothermal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Geothermal'}"/>
-                        <Image ToolTipService.ToolTip="Nuclear" Source="ms-appx:///Assets/energysource_nuclear.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Nuclear'}"/>
-                        <Image ToolTipService.ToolTip="Gas" Source="ms-appx:///Assets/energysource_gas.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Gas'}"/>
-                        <Image ToolTipService.ToolTip="Coal" Source="ms-appx:///Assets/energysource_coal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}"/>
+                        <Image x:Name="iconSolar" Source="ms-appx:///Assets/energysource_solar.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Solar'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                        <Image x:Name="iconWind" Source="ms-appx:///Assets/energysource_wind.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Wind'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconHydro" Source="ms-appx:///Assets/energysource_hydro.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Hydro'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconBiomass" Source="ms-appx:///Assets/energysource_biomass.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Biomass'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconGeothermal" Source="ms-appx:///Assets/energysource_geothermal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Geothermal'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconNuclear" Source="ms-appx:///Assets/energysource_nuclear.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Nuclear'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconGas" Source="ms-appx:///Assets/energysource_gas.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Gas'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
+                        <Image x:Name="iconCoal" Source="ms-appx:///Assets/energysource_coal.png" Height="30" Margin="10,10,0,0" Visibility="{x:Bind ViewModel.GridEnergySources, Mode=OneWay,Converter={StaticResource EnergySourceIconVisibilityConverter}, ConverterParameter='Coal'}" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                         <Image ToolTipService.ToolTip="Grid energy from renewable and low carbon sources" Source="ms-appx:///Assets/energysource_renewable.png" Width="30" Margin="0,0,0,5" VerticalAlignment="Bottom"/>
@@ -281,28 +274,55 @@
                 </Grid>
 
 
-                <chart:SfChart Height="30" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
-                    <chart:SfChart.PrimaryAxis >
-                        <chart:CategoryAxis Visibility="Collapsed" />
-                    </chart:SfChart.PrimaryAxis>
-                    <chart:SfChart.SecondaryAxis>
-                        <chart:NumericalAxis Visibility="Collapsed" />
-                    </chart:SfChart.SecondaryAxis>
-                    <chart:StackingBar100Series Interior="Gold" Label="Solar" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Solar" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="GreenYellow" Label="Wind" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Wind" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="Orange" Label="Geothermal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Geothermal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="DeepSkyBlue" Label="Hydro" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Hydro" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="DodgerBlue" Label="Hydro Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="HydroStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="LimeGreen" Label="Battery Storage" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="BatteryStorage" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="MediumSpringGreen" Label="Biomass" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Biomass" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="Magenta" Label="Nuclear" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Nuclear" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="DarkRed" Label="Gas" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Gas" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="SaddleBrown" Label="Oil" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Oil" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="Gray" Label="Coal" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Coal" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
-                    <chart:StackingBar100Series Interior="MidnightBlue" Label="Unkown" ItemsSource="{x:Bind ViewModel.GridEnergySourcesList, Mode=OneWay}" XBindingPath="Category" YBindingPath="Unknown" ShowTooltip="True" TooltipTemplate="{StaticResource energySourcesChartTooltip}" chart:ChartTooltip.ShowDuration="3000" chart:ChartTooltip.TooltipMargin="10" />
+                <Grid Margin="10" Height="20" MinWidth="400" HorizontalAlignment="Stretch" x:Name="energySourceChart" Visibility="{x:Bind ViewModel.EnergySourcesVisibility}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Solar, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}"/>
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Wind, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Geothermal, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Hydro, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.HydroStorage, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.BatteryStorage, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Biomass, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Nuclear, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Gas, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Oil, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Coal, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                        <ColumnDefinition Width="{x:Bind ViewModel.GridEnergySources.Unknown, FallbackValue=0, Mode=OneWay, Converter={StaticResource NumberToStarConverter}}" />
+                    </Grid.ColumnDefinitions>
+                    <!-- TODO: Tooltips -->
+                    <Rectangle x:Name="rectSolar" Fill="Gold" Grid.Column="0" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectWind" Fill="GreenYellow" Grid.Column="1" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectGeothermal" Fill="Orange" Grid.Column="2" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectHydro" Fill="DeepSkyBlue" Grid.Column="3" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectHydroStorage" Fill="DodgerBlue" Grid.Column="4" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectBatteryStorage" Fill="LimeGreen" Grid.Column="5" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectBiomass" Fill="MediumSpringGreen" Grid.Column="6" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectNuclear" Fill="Magenta" Grid.Column="7" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectGas" Fill="DarkRed" Grid.Column="8" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectOil" Fill="SaddleBrown" Grid.Column="9" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Rectangle x:Name="rectCoal" Fill="Gray" Grid.Column="10" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited"  />
+                    <Rectangle x:Name="rectOther" Fill="MidnightBlue" Grid.Column="11" PointerEntered="EnergySource_PointerEntered" PointerExited="EnergySource_PointerExited" />
+                    <Popup x:Name="popup" VerticalOffset="25" >
+                        <Grid Background="LightGray" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                <Rectangle Fill="{x:Bind ViewModel.SelectedEnergySourceBrush, Mode=OneWay}" Stroke="Black" Margin="4" Width="10" Height="10"/>
+                                <TextBlock Foreground="Black" FontWeight="Bold" Text="{x:Bind ViewModel.SelectedEnergySourceName, Mode=OneWay}" Margin="0,0,10,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                <TextBlock Foreground="Black" Text="{x:Bind ViewModel.SelectedEnergySourcePower, Mode=OneWay}"/>
+                                <TextBlock Foreground="Black" Text=" MW"/>
+                                <TextBlock Foreground="Black" Text="{x:Bind ViewModel.SelectedEnergySourcePercentageLabel, Mode=OneWay}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
+                </Grid>
 
-                </chart:SfChart>
             </StackPanel>
+            
         </Grid>
 
         <!-- Second Column-->
@@ -311,7 +331,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
             <!-- Yesterday / Today energy stats -->
             <Grid Margin="10,10,60,0" ColumnSpacing="20"  HorizontalAlignment="Center" >
 
@@ -387,38 +407,47 @@
             </Grid>
 
             <!-- Power history chart -->
-            <chart:SfChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
-                <chart:SfChart.PrimaryAxis>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" LabelFormat="  htt  " Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}">
+            <chart:SfCartesianChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
+                <chart:SfCartesianChart.Resources>
+                    <Style TargetType="Line" x:Key="lineStyle">
+                        <Setter Property="StrokeThickness" Value="2"/>
+                        <Setter Property="Stroke" Value="#404040" />
+                    </Style>
+                </chart:SfCartesianChart.Resources>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}" MajorGridLineStyle="{StaticResource lineStyle}">
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                            <chart:LabelStyle Foreground="DarkGray" LabelFormat="h tt" FontSize="16"/>
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
-                </chart:SfChart.PrimaryAxis>
+                </chart:SfCartesianChart.XAxes>
 
-                <chart:SfChart.SecondaryAxis>
-                    <chart:NumericalAxis RangePadding="None" LabelFormat="0.# kW">
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis RangePadding="None" MajorGridLineStyle="{StaticResource lineStyle}">
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                            <chart:LabelStyle  Foreground="DarkGray" LabelFormat="0 kW" FontSize="16"/>
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
-                </chart:SfChart.SecondaryAxis>
-                <chart:SfChart.Legend>
-                    <chart:ChartLegend ToggleSeriesVisibility="True" DockPosition="Right" ItemMargin="10,0,0,0">
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" Placement="Right">
                     </chart:ChartLegend>
-                </chart:SfChart.Legend>
+                </chart:SfCartesianChart.Legend>
 
-                <chart:AreaSeries Stroke="Cyan" StrokeThickness="1" Interior="Cyan" BorderBrush="Cyan" Opacity="0.5"  IsClosed="True" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" ListenPropertyChange="True"/>
-                <chart:AreaSeries Stroke="Gold" StrokeThickness="1" Interior="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"/>
-                <chart:AreaSeries Stroke="LightGray" StrokeThickness="1" Interior="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
-                <chart:AreaSeries Stroke="LimeGreen" StrokeThickness="1" Interior="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Fill="Cyan" Stroke="Cyan" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Fill="Gold" Stroke="Gold" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:AreaSeries Fill="LightGray" Stroke="LightGray" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:AreaSeries Fill="LimeGreen" Stroke="LimeGreen" StrokeWidth="0.5" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
-                <chart:SfChart.Annotations>
-                    <chart:VerticalLineAnnotation X1="{x:Bind ViewModel.GraphDayBoundary}" Stroke="LightGray" StrokeThickness="2" />
-                </chart:SfChart.Annotations>
-            </chart:SfChart>
+                <!-- No annotations in WinUI chart :( -->
+                <!--<chart:SfCartesianChart.Annotations>
+                    <chart:VerticalLineAnnotation X1="{Binding GraphDayBoundary}" Stroke="LightGray" StrokeWidth="2" />
+                </chart:SfCartesianChart.Annotations>-->
+            </chart:SfCartesianChart>
 
         </Grid>
+
     </Grid>
 
 

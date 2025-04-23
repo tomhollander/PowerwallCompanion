@@ -7,10 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml.Input;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -40,7 +41,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+                var powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
                 ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                 if (String.IsNullOrEmpty(Settings.LocalGatewayIP) || String.IsNullOrEmpty(Settings.LocalGatewayPassword))
                 {
@@ -65,7 +66,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var gatewayApi = new LocalGatewayApi(new UwpPlatformAdapter());
+                var gatewayApi = new LocalGatewayApi(new WindowsPlatformAdapter());
                 var response = await gatewayApi.GetBatteryDetails(Settings.LocalGatewayIP, Settings.LocalGatewayPassword);
                 ViewModel.BatteryDetails = response.BatteryDetails;
 
@@ -101,7 +102,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                var localGatewayApi = new LocalGatewayApi(new UwpPlatformAdapter());
+                var localGatewayApi = new LocalGatewayApi(new WindowsPlatformAdapter());
                 if (ViewModel.StoreBatteryHistory)
                 {
                     ViewModel.BatteryHistoryChartData = await localGatewayApi.GetBatteryHistoryDataFromServer(Settings.SiteId, ViewModel.EnergySiteInfo.GatewayId);
@@ -114,27 +115,27 @@ namespace PowerwallCompanion
                     foreach (var serial in ViewModel.BatteryHistoryChartData.Keys)
                     {
                         var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
-                        series.StrokeThickness = 1;
+                        series.StrokeWidth = 1;
                         series.ItemsSource = ViewModel.BatteryHistoryChartData[serial];
                         series.Label = serial.Substring(0, 5) + "***" + serial.Substring(serial.Length - 2, 2); ;
                         series.XBindingPath = nameof(ChartDataPoint.XValue);
                         series.YBindingPath = nameof(ChartDataPoint.YValue);
-                        series.AdornmentsInfo = new Syncfusion.UI.Xaml.Charts.ChartAdornmentInfo()
-                        {
-                            SymbolStroke = new SolidColorBrush(Colors.Black),
-                            SymbolInterior = series.Stroke,
-                            SymbolWidth = 10,
-                            SymbolHeight = 10,
-                            Symbol = Syncfusion.UI.Xaml.Charts.ChartSymbol.Ellipse,
-                        };
+                        //series.AdornmentsInfo = new Syncfusion.UI.Xaml.Charts.ChartAdornmentInfo()
+                        //{
+                        //    SymbolStroke = new SolidColorBrush(Colors.Black),
+                        //    SymbolInterior = series.Stroke,
+                        //    SymbolWidth = 10,
+                        //    SymbolHeight = 10,
+                        //    Symbol = Syncfusion.UI.Xaml.Charts.ChartSymbol.Ellipse,
+                        //};
                         batteryHistoryChart.Series.Add(series);
                         double maxValueInSeries = ViewModel.BatteryHistoryChartData[serial].Max(x => x.YValue);
                         double minValueInSeries = ViewModel.BatteryHistoryChartData[serial].Min(x => x.YValue);
                         maxValue = Math.Max(maxValue, maxValueInSeries);
                         minValue = Math.Min(minValue, minValueInSeries);
                     }
-                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.SecondaryAxis).Maximum = Math.Max(maxValue, 14);
-                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.SecondaryAxis).Minimum = Math.Min(minValue, 9);
+                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Maximum = Math.Max(maxValue, 14);
+                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Minimum = Math.Min(minValue, 9);
                     ViewModel.NotifyChartProperties();
                 }
             }
@@ -167,7 +168,7 @@ namespace PowerwallCompanion
         }
 
         
-        private async void enableBatteryHistory_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private async void enableBatteryHistory_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Telemetry.TrackEvent("Battery history enabled");
             ViewModel.StoreBatteryHistory = true;
@@ -176,11 +177,17 @@ namespace PowerwallCompanion
 
        
 
-        private async void HyperlinkButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private async void HyperlinkButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var md = new MessageDialog(ViewModel.GatewayError);
-            md.Title = "Unable to connect to Powerwall Gateway";
-            await md.ShowAsync();
+            var dialog = new ContentDialog()
+            {
+                Title = "Unable to connect to Powerwall Gateway",
+                Content = ViewModel.GatewayError,
+                CloseButtonText = "Ok"
+            };
+
+            dialog.XamlRoot = this.Content.XamlRoot;
+            await dialog.ShowAsync();
         }
     }
 }

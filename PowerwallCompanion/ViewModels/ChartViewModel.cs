@@ -1,4 +1,5 @@
 ﻿using PowerwallCompanion.Lib.Models;
+using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,6 +63,28 @@ namespace PowerwallCompanion.ViewModels
                     _period = value;
                     CalculateStartAndEndDates();
                     NotifyPropertyChanged(nameof(Period));
+                }
+            }
+        }
+
+        public DateTimeIntervalType ChartPeriodInterval
+        {
+            get
+            {
+                switch (Period)
+                {
+                    case "Day":
+                        return DateTimeIntervalType.Hours;
+                    case "Week":
+                        return DateTimeIntervalType.Days;
+                    case "Month":
+                        return DateTimeIntervalType.Days;
+                    case "Year":
+                        return DateTimeIntervalType.Months;
+                    case "Lifetime":
+                        return DateTimeIntervalType.Years;
+                    default:
+                        return DateTimeIntervalType.Days;
                 }
             }
         }

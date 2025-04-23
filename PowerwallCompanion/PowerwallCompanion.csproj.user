@@ -15,4 +15,14 @@
     <DeviceId>30f105c9-681e-420b-a277-7c086ead8a4e</DeviceId>
     <UseEmulator>true</UseEmulator>
   </PropertyGroup>
+  <ItemGroup>
+    <Page Update="ChartPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="BatteryInfoPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>

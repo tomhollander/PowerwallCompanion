@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PowerwallCompanion (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PowerwallCompanion (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -6,10 +6,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using TeslaAuth;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,9 +34,9 @@ namespace PowerwallCompanion
 
         }
 
-        private void webView_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
+        private async void webView_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
         {
-            webView.EnsureCoreWebView2Async().AsTask().GetAwaiter().GetResult();
+            await webView.EnsureCoreWebView2Async();
             webView.CoreWebView2.CookieManager.DeleteAllCookies();
             webView.Visibility = Visibility.Visible;
             //webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
@@ -56,9 +55,8 @@ namespace PowerwallCompanion
 
                 if (await CompleteLogin(url))
                 {
-                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    DispatcherQueue.TryEnqueue(() =>
                     {
-                        UpdateMenuButtons();
                         this.Frame.Navigate(typeof(StatusPage), true);
                     });
                 }
@@ -71,17 +69,14 @@ namespace PowerwallCompanion
                     webView.CoreWebView2.CookieManager.DeleteAllCookies();
                     webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
                 }
-
-
             }
-
         }
 
         private async Task<bool> CompleteLogin(string url)
         {
             try
             {
-                var powerwallApi = new PowerwallApi(null, new UwpPlatformAdapter());
+                var powerwallApi = new PowerwallApi(null, new WindowsPlatformAdapter());
                 var tokens = await teslaAuth.GetTokenAfterLoginAsync(url);
 
                 if (CheckTokenScopes(tokens.AccessToken))
@@ -122,14 +117,6 @@ namespace PowerwallCompanion
         
 
 
-        
-        private void UpdateMenuButtons()
-        {
-            var frame = (Frame)Window.Current.Content;
-            var mainPage = (MainPage)frame.Content;
-        }
-
-
         private void TextBlock_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             // Sign in as demo user
@@ -148,7 +135,8 @@ namespace PowerwallCompanion
             authInfo.Visibility = Visibility.Collapsed;
         }
 
-        private void showAuthInfoLink_Clicked(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+
+        private void Hyperlink_Click(Microsoft.UI.Xaml.Documents.Hyperlink sender, Microsoft.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             authInfo.Visibility = Visibility.Visible;
         }

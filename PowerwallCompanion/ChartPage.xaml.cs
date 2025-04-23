@@ -9,11 +9,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -39,7 +41,7 @@ namespace PowerwallCompanion
             ViewModel.Period = "Day";
             ViewModel.CalendarDate = DateTime.Now;
 
-            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
             ratePlanTask = CreateTariffProvider();
 
             timer = new DispatcherTimer();
@@ -62,7 +64,7 @@ namespace PowerwallCompanion
             }
 
             // Reset the API helper in case we've signed out and back in
-            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
             timer.Start();
             base.OnNavigatedTo(e);
         }
@@ -255,15 +257,15 @@ namespace PowerwallCompanion
 
 
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
-                ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = null;
+                ((DateTimeAxis)dailyChart.XAxes[0]).Maximum = DateTime.MaxValue;
 
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PowerChartStackingSeries));
 
                 if (Settings.AccessToken != "DEMO")
                 {
-                    ((DateTimeAxis)dailyChart.PrimaryAxis).Minimum = ViewModel.PeriodStart;
-                    ((DateTimeAxis)dailyChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                    ((DateTimeAxis)dailyChart.XAxes[0]).Minimum = ViewModel.PeriodStart;
+                    ((DateTimeAxis)dailyChart.XAxes[0]).Maximum = ViewModel.PeriodEnd;
                 }
             }
             catch (Exception ex)
@@ -288,38 +290,19 @@ namespace PowerwallCompanion
                 ViewModel.LastExceptionDate = DateTime.Now;
             }
         }
-        private void ConfigureLegend(StackingAreaSeries seriesToHide)
+        private void ConfigureLegend(StackedAreaSeries seriesToHide)
         {
-            if (seriesToHide == null)
+            homeSeries.IsVisibleOnLegend = (seriesToHide == null);
+            solarSeries.IsVisibleOnLegend = (seriesToHide == null);
+            batterySeries.IsVisibleOnLegend = (seriesToHide == null);
+            gridSeries.IsVisibleOnLegend = (seriesToHide == null);
+            homeStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            solarStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            batteryStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            gridStackingSeries.IsVisibleOnLegend = (seriesToHide != null);
+            if (seriesToHide != null)
             {
-
-                // Show non-stacking series on legend
-                homeSeries.VisibilityOnLegend = Visibility.Visible;
-                solarSeries.VisibilityOnLegend = Visibility.Visible;
-                batterySeries.VisibilityOnLegend = Visibility.Visible;
-                gridSeries.VisibilityOnLegend = Visibility.Visible;
-                homeStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                solarStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                batteryStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                gridStackingSeries.VisibilityOnLegend = Visibility.Collapsed;
-                //((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Visible;
-                //((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = true;
-            }
-            else
-            {
-                // Set legend
-                homeSeries.VisibilityOnLegend = Visibility.Collapsed;
-                solarSeries.VisibilityOnLegend = Visibility.Collapsed;
-                batterySeries.VisibilityOnLegend = Visibility.Collapsed;
-                gridSeries.VisibilityOnLegend = Visibility.Collapsed;
-                homeStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                solarStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                batteryStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                gridStackingSeries.VisibilityOnLegend = Visibility.Visible;
-                seriesToHide.VisibilityOnLegend = Visibility.Collapsed;
-                //((ChartLegend)dailyChart.Legend).CheckBoxVisibility = Visibility.Collapsed;
-                //((ChartLegend)dailyChart.Legend).ToggleSeriesVisibility = false;
-
+                seriesToHide.IsVisibleOnLegend = false;
             }
         }
 
@@ -331,6 +314,7 @@ namespace PowerwallCompanion
                 ViewModel.EnergyTotals = ViewModel.EnergyChartSeries.EnergyTotals;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.ChartPeriodInterval));
             }
             catch (Exception ex)
             {
@@ -355,14 +339,14 @@ namespace PowerwallCompanion
             try
             {
                 ViewModel.BatteryDailySoeGraphData = await powerwallApi.GetBatteryHistoricalChargeLevel(ViewModel.PeriodStart, ViewModel.PeriodEnd);
-                ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = null;
+                ((DateTimeAxis)batteryChart.XAxes[0]).Maximum = DateTime.MaxValue;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
 
                 if (Settings.AccessToken != "DEMO")
                 {
-                    ((DateTimeAxis)batteryChart.PrimaryAxis).Minimum = ViewModel.PeriodStart;
-                    ((DateTimeAxis)batteryChart.PrimaryAxis).Maximum = ViewModel.PeriodEnd;
+                    ((DateTimeAxis)batteryChart.XAxes[0]).Minimum = ViewModel.PeriodStart;
+                    ((DateTimeAxis)batteryChart.XAxes[0]).Maximum = ViewModel.PeriodEnd;
                 }
 
             }
@@ -383,6 +367,10 @@ namespace PowerwallCompanion
                 Telemetry.TrackEvent("Chart data exported", new Dictionary<string, string> { { "Period", ViewModel.Period} });
 
                 var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+                var hwnd = WindowNative.GetWindowHandle(App.Window);
+                InitializeWithWindow.Initialize(savePicker, hwnd);
+                //WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+
                 savePicker.SuggestedStartLocation =
                     Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
                 // Dropdown of file types the user can save the file as
@@ -414,8 +402,15 @@ namespace PowerwallCompanion
             catch (Exception ex)
             {
                 Telemetry.TrackException(ex);
-                var md = new MessageDialog("Error while saving data: " + ex.Message);
-                await md.ShowAsync();
+                var dialog = new ContentDialog()
+                {
+                    Title = "Error",
+                    Content = "Error while saving data: " + ex.Message,
+                    CloseButtonText = "Ok"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+                await dialog.ShowAsync();
             }
             exportButton.Content = "Export Data";
             exportButton.IsEnabled = true;
@@ -426,8 +421,15 @@ namespace PowerwallCompanion
         {
             if (ViewModel.LastExceptionMessage != null)
             {
-                var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
-                await md.ShowAsync();
+                var dialog = new ContentDialog()
+                {
+                    Title = "Error",
+                    Content = $"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}",
+                    CloseButtonText = "Ok"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+                await dialog.ShowAsync();
             }
         }
 
@@ -440,28 +442,28 @@ namespace PowerwallCompanion
             }
             try
             {
-                var tariffs = await tariffHelper.GetTariffsForDay(date);
+                //var tariffs = await tariffHelper.GetTariffsForDay(date);
 
-                dailyChart.PrimaryAxis.MultiLevelLabels.Clear();
-                ChartMultiLevelLabel lastMultiLabel = null;
-                foreach (var tariff in tariffs.OrderBy(t => t.StartDate).AsEnumerable())
-                {
-                    if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
-                    {
-                        lastMultiLabel.End = tariff.EndDate;
-                        continue;
-                    }
-                    var multiLabel = new ChartMultiLevelLabel()
-                    {
-                        Start = tariff.StartDate,
-                        End = tariff.EndDate,
-                        Text = tariff.DisplayName,
-                        Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
-                        FontSize = 14,
-                    };
-                    lastMultiLabel = multiLabel; 
-                    dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
-                }
+                //dailyChart.XAxes[0].MultiLevelLabels.Clear();
+                //ChartMultiLevelLabel lastMultiLabel = null;
+                //foreach (var tariff in tariffs.OrderBy(t => t.StartDate).AsEnumerable())
+                //{
+                //    if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
+                //    {
+                //        lastMultiLabel.End = tariff.EndDate;
+                //        continue;
+                //    }
+                //    var multiLabel = new ChartMultiLevelLabel()
+                //    {
+                //        Start = tariff.StartDate,
+                //        End = tariff.EndDate,
+                //        Text = tariff.DisplayName,
+                //        Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
+                //        FontSize = 14,
+                //    };
+                //    lastMultiLabel = multiLabel; 
+                //    dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
+                //}
             }
             catch (Exception ex)
             {

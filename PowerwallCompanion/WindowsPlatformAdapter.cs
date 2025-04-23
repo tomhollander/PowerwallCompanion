@@ -5,10 +5,11 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TimeZoneConverter;
 using Windows.Storage;
+using Windows.UI.ViewManagement.Core;
 
 namespace PowerwallCompanion
 {
-    public class UwpPlatformAdapter : IPlatformAdapter
+    public class WindowsPlatformAdapter : IPlatformAdapter
     {
         private Windows.Storage.ApplicationDataContainer _localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -25,8 +26,16 @@ namespace PowerwallCompanion
         public string AccessToken { get => Settings.AccessToken; set => Settings.AccessToken = value; }
         public string RefreshToken { get => Settings.RefreshToken; set => Settings.RefreshToken = value; }
         public string InstallationTimeZone 
-        { 
-            get => Settings.InstallationTimeZone ?? TZConvert.WindowsToIana(TimeZoneInfo.Local.Id); 
+        {
+            get
+            {
+                string tz = Settings.InstallationTimeZone ?? TZConvert.WindowsToIana(TimeZoneInfo.Local.Id);
+                if (tz == "GMT") // Returned by Powerwall API for London, interpreted by Windows as UTC without DST
+                {
+                    tz = "Europe/London";
+                }
+                return tz;
+            }
             set => Settings.InstallationTimeZone = value; 
         }
 

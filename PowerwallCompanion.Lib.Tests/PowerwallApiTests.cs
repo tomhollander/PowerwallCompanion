@@ -138,6 +138,38 @@ namespace PowerwallCompanion.Lib.Tests
             Assert.AreEqual("2019-08-25 00:10:00,30,0,3579.784003067017,0,3609.784003067017,17", line);
             Assert.IsTrue(sr.EndOfStream);
         }
+
+        [TestMethod]
+        public async Task CanGetDetailsFromFromSiteInfo()
+        {
+            var mockApiHelper = new MockApiHelper();
+            mockApiHelper.SetResponse("/api/1/energy_sites/11111/site_info",
+                @"
+{ ""response"": {
+    ""id"": ""--GatewayId--"",
+    ""site_name"": ""--SiteName--"",
+    ""battery_count"": 11,
+    ""installation_date"": ""2017-09-04T16:49:44\u002B10:00"",
+    ""backup_reserve_percent"": 22,
+    ""components"" : {
+        ""batteries"" : [
+            { ""part_name"": ""Thingy"" },
+            { ""part_name"": ""Powerwall 7"" }
+        ]
+    }
+}}");
+            var api = new PowerwallApi("11111", new TestPlatformAdapter(), mockApiHelper);
+            var energySiteInfo = await api.GetEnergySiteInfo();
+            Assert.AreEqual("--GatewayId--", energySiteInfo.GatewayId);
+            Assert.AreEqual("--SiteName--", energySiteInfo.SiteName);
+            Assert.AreEqual(11, energySiteInfo.NumberOfBatteries);
+            Assert.AreEqual(22, energySiteInfo.ReservePercent);
+            Assert.AreEqual(new DateTime(2017, 9, 4, 16, 49, 44), energySiteInfo.InstallDate);
+            Assert.AreEqual("Powerwall 7", energySiteInfo.PowerwallVersion);
+
+        }
     }
 
 }
+
+    

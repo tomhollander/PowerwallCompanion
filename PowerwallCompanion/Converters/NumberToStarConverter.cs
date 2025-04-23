@@ -1,22 +1,19 @@
-﻿using PowerwallCompanion.ViewModels;
-using Syncfusion.UI.Xaml.Charts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Data;
 
 namespace PowerwallCompanion.Converters
 {
-    internal class EnergySourcePercentageConverter : IValueConverter
+    public class NumberToStarConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var segment = (BarSegment)value;
-            var energySources = (GridEnergySources)segment.Item;
-            int percentage = (int)(segment.YData / energySources.Total * 100);
-            return $" ({percentage}%)";
+            int i = (int)value;
+            return new GridLength(i, GridUnitType.Star);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

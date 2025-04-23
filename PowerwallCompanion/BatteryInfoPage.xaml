@@ -10,9 +10,8 @@
     xmlns:libmodels="using:PowerwallCompanion.Lib.Models"
     xmlns:chart="using:Syncfusion.UI.Xaml.Charts" 
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:primitives="using:Microsoft.Toolkit.Uwp.UI.Controls.Primitives"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:dataGrid="using:Syncfusion.UI.Xaml.DataGrid"
+    Background="Black">
 
     <Page.Resources>
         <converters:KilowattHourConverter x:Key="KilowattHourConverter"/>
@@ -20,6 +19,7 @@
         <converters:BatteryCapacityToBrushConverter x:Key="BatteryCapacityToBrushConverter"/>
         <converters:FalseToVisibilityCollapsedConverter x:Key="FalseToVisibilityCollapsedConverter"/>
         <converters:TrueToVisibilityCollapsedConverter x:Key="TrueToVisibilityCollapsedConverter"/>
+
     </Page.Resources>
 
     <Grid >
@@ -93,69 +93,77 @@
 
 
 
-            <toolkit:DataGrid IsReadOnly="True" ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-                <toolkit:DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="primitives:DataGridColumnHeader">
-                        <Setter Property="FontSize" Value="20"/>
+            <dataGrid:SfDataGrid IsReadOnly="True" ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" HeaderRowHeight="60"
+                                 ColumnWidthMode="SizeToHeader" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" RowHeight="50" AllowSorting="False" AllowEditing="False" HorizontalAlignment="Stretch">
+                <dataGrid:SfDataGrid.Resources>
+                    <Style x:Key="HeaderStyle" TargetType="dataGrid:GridHeaderCellControl">
+                        <Setter Property="FontSize" Value="16" />
                     </Style>
-                </toolkit:DataGrid.ColumnHeaderStyle>
-                <toolkit:DataGrid.Columns>
-                    <toolkit:DataGridTextColumn Header="Serial" Width="200" IsReadOnly="True" Binding="{Binding ShortSerialNumber}" FontSize="30" />
-                    <toolkit:DataGridTextColumn Header="Current &#x0a;Charge" IsReadOnly="True" Width="SizeToHeader" Binding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" FontSize="30" />
-                    <toolkit:DataGridTextColumn Header="Capacity &#x0a;(kWh)" IsReadOnly="True" Width="SizeToHeader" Binding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" FontSize="30" />
-                    <toolkit:DataGridTemplateColumn Header="Vs Baseline" IsReadOnly="True" Width="SizeToHeader">
-                        <toolkit:DataGridTemplateColumn.CellEditingTemplate>
+                    <Style x:Key="CellStyle" TargetType="dataGrid:GridCell">
+                        <Setter Property="FontSize" Value="30" />
+          
+                    </Style>
+                </dataGrid:SfDataGrid.Resources>
+   
+                <dataGrid:SfDataGrid.Columns>
+                    <dataGrid:GridTextColumn HeaderText="Serial" Width="200" IsReadOnly="True" AllowSorting="False" MappingName="ShortSerialNumber" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}"/>
+                    <dataGrid:GridTextColumn HeaderText="Current &#x0a;Charge"  Width="200"  AllowSorting="False"  IsReadOnly="True" MappingName="CurrentChargePercent" DisplayBinding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}" />
+                    <dataGrid:GridTextColumn HeaderText="Capacity &#x0a;(kWh)"  Width="200" AllowSorting="False" IsReadOnly="True" MappingName="FullCapacity" DisplayBinding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}" />
+                    <dataGrid:GridTemplateColumn MappingName="VsBaseline" HeaderText="Vs Baseline" HeaderStyle="{StaticResource HeaderStyle}">
+                        <dataGrid:GridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="libmodels:BatteryDetails">
-                                <StackPanel>
-                                    <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" VerticalAlignment="Center" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
                                 </StackPanel>
                             </DataTemplate>
-                        </toolkit:DataGridTemplateColumn.CellEditingTemplate>
-                    </toolkit:DataGridTemplateColumn>
-                    <toolkit:DataGridTemplateColumn Header="Degradation" Width="SizeToHeader">
-                        <toolkit:DataGridTemplateColumn.CellEditingTemplate>
+                        </dataGrid:GridTemplateColumn.CellTemplate>
+                    </dataGrid:GridTemplateColumn>
+                    <dataGrid:GridTemplateColumn MappingName="Degradation" HeaderText="Degradation" HeaderStyle="{StaticResource HeaderStyle}">
+                        <dataGrid:GridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="libmodels:BatteryDetails">
-                                <StackPanel>
-                                    <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" VerticalAlignment="Center" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
                                 </StackPanel>
                             </DataTemplate>
-                        </toolkit:DataGridTemplateColumn.CellEditingTemplate>
-                    </toolkit:DataGridTemplateColumn>
-                </toolkit:DataGrid.Columns>
-            </toolkit:DataGrid>
+                        </dataGrid:GridTemplateColumn.CellTemplate>
+                    </dataGrid:GridTemplateColumn>
+                </dataGrid:SfDataGrid.Columns>
+            </dataGrid:SfDataGrid>
 
         </Grid>
-        <chart:SfChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
-            <chart:SfChart.Behaviors>
-                <chart:ChartTrackBallBehavior x:Name="batteryTrackBall" />
-            </chart:SfChart.Behaviors>
-
-            <chart:SfChart.PrimaryAxis>
-                <chart:DateTimeAxis IntervalType="Months"  ShowTrackBallInfo="True" LabelFormat="d">
+        <chart:SfCartesianChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
+   
+            <chart:SfCartesianChart.TrackballBehavior>
+                <chart:ChartTrackballBehavior/>
+            </chart:SfCartesianChart.TrackballBehavior>
+            
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis  >
                     <chart:DateTimeAxis.LabelStyle>
-                        <chart:LabelStyle Foreground="DarkGray" FontSize="16" />
+                        <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="d"/>
                     </chart:DateTimeAxis.LabelStyle>
                 </chart:DateTimeAxis>
-            </chart:SfChart.PrimaryAxis>
+            </chart:SfCartesianChart.XAxes>
 
-            <chart:SfChart.SecondaryAxis>
-                <chart:NumericalAxis RangePadding="Auto" LabelFormat="0.## kWh" >
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis RangePadding="Auto">
                     <chart:NumericalAxis.LabelStyle>
-                        <chart:LabelStyle Foreground="DarkGray" FontSize="16"/>
+                        <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="0.## kWh" />
                     </chart:NumericalAxis.LabelStyle>
                 </chart:NumericalAxis>
-            </chart:SfChart.SecondaryAxis>
-            <chart:SfChart.Legend>
-                <chart:ChartLegend ToggleSeriesVisibility="False" DockPosition="Right" FontSize="14"  ItemMargin="10,0,0,0">
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Legend>
+                <chart:ChartLegend ToggleSeriesVisibility="False" Placement="Right">
                 </chart:ChartLegend>
-            </chart:SfChart.Legend>
+            </chart:SfCartesianChart.Legend>
 
-            <chart:SfChart.Annotations>
-                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="100% baseline capacity" Y1="{x:Bind ViewModel.WarrantedCapacityKWh, Mode=OneWay}" Stroke="Green" StrokeThickness="1" />
-                <chart:HorizontalLineAnnotation StrokeDashArray="5" ShowToolTip="True" ToolTipContent="{x:Bind ViewModel.MinimumWarrantedCapacityPercentageMessage}" Y1="{x:Bind ViewModel.MinimumWarrantedCapacityKWh, Mode=OneWay}" Stroke="Red" StrokeThickness="1" />
-            </chart:SfChart.Annotations>
+            <chart:SfCartesianChart.Series>
+                <chart:LineSeries StrokeDashArray="5" StrokeWidth="1" Fill="Green" Label="Original Warranted Capacity" ItemsSource="{x:Bind ViewModel.WarrantedCapacityKWhSeries, Mode=OneWay}" XBindingPath="XValue" YBindingPath="YValue" />
+                <chart:LineSeries StrokeDashArray="5" StrokeWidth="1" Fill="Red" Label="Min Warranted Capacity" ItemsSource="{x:Bind ViewModel.MinimumWarrantedCapacityKWhSeries, Mode=OneWay}" XBindingPath="XValue" YBindingPath="YValue" />
+            </chart:SfCartesianChart.Series>
+
             
-        </chart:SfChart>
+        </chart:SfCartesianChart>
 
         <StackPanel Grid.Row="2" Visibility="{x:Bind ViewModel.StoreBatteryHistory, Converter={StaticResource TrueToVisibilityCollapsedConverter}, Mode=OneWay}" VerticalAlignment="Bottom">
             <TextBlock FontSize="16" TextWrapping="Wrap" Margin="40,0,40,10" Foreground="LightGray">Powerwall Companion can track how your battery's reported capacity changes over time. 

@@ -119,7 +119,8 @@ namespace PowerwallCompanion.Lib
 
         private TimeZoneInfo GetInstallationTimeZone()
         {
-            return TZConvert.GetTimeZoneInfo(platformAdapter.InstallationTimeZone);
+            string timezoneName = platformAdapter.InstallationTimeZone;
+            return TZConvert.GetTimeZoneInfo(timezoneName);
         }
 
         public async Task<EnergyTotals> GetEnergyTotalsForDay(int dateOffset, ITariffProvider tariffHelper)
@@ -684,17 +685,19 @@ namespace PowerwallCompanion.Lib
         public async Task<EnergySiteInfo> GetEnergySiteInfo()
         {
             var energySiteStatus = new EnergySiteInfo();
-            var tasks = new List<Task<JsonObject>>();
-            tasks.Add(apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_status"));
-            tasks.Add(apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info"));
-            await Task.WhenAll(tasks);
-            var siteStatusJson = tasks[0].Result;
-            energySiteStatus.SiteName = Utils.GetValueOrDefault<string>(siteStatusJson["response"]["site_name"]);
-            energySiteStatus.GatewayId = Utils.GetValueOrDefault<string>(siteStatusJson["response"]["gateway_id"]);
-            var siteInfoJson = tasks[1].Result;
+
+            var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
+            energySiteStatus.SiteName = Utils.GetValueOrDefault<string>(siteInfoJson["response"]["site_name"]);
+            energySiteStatus.GatewayId = Utils.GetValueOrDefault<string>(siteInfoJson["response"]["id"]);
             energySiteStatus.NumberOfBatteries = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["battery_count"]);
             energySiteStatus.InstallDate = Utils.GetValueOrDefault<DateTime>(siteInfoJson["response"]["installation_date"]);
             energySiteStatus.ReservePercent = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["backup_reserve_percent"]);
+            var batteries = (JsonArray)siteInfoJson["response"]["components"]["batteries"];
+            var battery = batteries.Where(b => Utils.GetValueOrDefault<string>(b["part_name"]).StartsWith("Powerwall"));
+            if (battery != null)
+            {
+                energySiteStatus.PowerwallVersion = Utils.GetValueOrDefault<string>(battery.First()["part_name"]);
+            }
             return energySiteStatus;
         }
 

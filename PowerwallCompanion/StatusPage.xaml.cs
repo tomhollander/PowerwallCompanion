@@ -13,11 +13,15 @@ using Windows.Devices.Geolocation;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Shapes;
+using System.Reflection;
+using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -45,7 +49,7 @@ namespace PowerwallCompanion
         {
             this.InitializeComponent();
             Telemetry.TrackEvent("StatusPage opened");
-            powerwallApi = new PowerwallApi(Settings.SiteId, new UwpPlatformAdapter());
+            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
             viewModel = new StatusViewModel();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
@@ -61,7 +65,30 @@ namespace PowerwallCompanion
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await RefreshDataFromTeslaOwnerApi();
+            ShowBatteryHealthNavForPowerwall2Only();
             base.OnNavigatedTo(e);
+        }
+
+        private void ShowBatteryHealthNavForPowerwall2Only()
+        {
+            try
+            {
+                // Show BatteryInfo nav if it's a Powerwall 2
+                if (ViewModel.EnergySiteInfo.PowerwallVersion.StartsWith("Powerwall 2")) // Not sre if there's a 2+
+                {
+                    var nav = (NavigationView)(this.Parent as Frame).Parent;
+                    var batteryInfoMenu = (NavigationViewItem)nav.MenuItems.Where(m => ((NavigationViewItem)m).Tag.ToString() == "BatteryInfo").FirstOrDefault();
+                    if (batteryInfoMenu != null)
+                    {
+                        batteryInfoMenu.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+            }
+
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -112,7 +139,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                if (ViewModel.EnergySiteInfo == null ||  (DateTime.Now - viewModel.EnergySiteInfoLastRefreshed > energySiteInfoRefreshInterval))
+                if (ViewModel.EnergySiteInfo == null || (DateTime.Now - viewModel.EnergySiteInfoLastRefreshed > energySiteInfoRefreshInterval))
                 {
                     ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                     ViewModel.EnergySiteInfoLastRefreshed = DateTime.Now;
@@ -269,7 +296,7 @@ namespace PowerwallCompanion
                 catch (Exception ex)
                 {
                     Telemetry.TrackException(ex);
-                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
+                    viewModel.TariffColor = new SolidColorBrush(Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
                     viewModel.TariffBadgeVisibility = Visibility.Visible;
                 }
@@ -289,7 +316,7 @@ namespace PowerwallCompanion
                 catch (Exception ex)
                 {
                     Telemetry.TrackException(ex);
-                    viewModel.TariffColor = new SolidColorBrush(Windows.UI.Colors.DimGray);
+                    viewModel.TariffColor = new SolidColorBrush(Colors.DimGray);
                     viewModel.TariffName = "Rates unavailable";
                     viewModel.TariffBadgeVisibility = Visibility.Visible;
                 }
@@ -307,11 +334,15 @@ namespace PowerwallCompanion
       
         private async void errorIndicator_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (ViewModel.LastExceptionMessage != null)
+            var dialog = new ContentDialog()
             {
-                var md = new MessageDialog($"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}");
-                await md.ShowAsync();
-            }
+                Title = "Error",
+                Content = $"Last error occurred at {ViewModel.LastExceptionDate.ToString("g")}:\r\n{ViewModel.LastExceptionMessage}",
+                CloseButtonText = "Ok"
+            };
+
+            dialog.XamlRoot = this.Content.XamlRoot;  
+            await dialog.ShowAsync();
         }
 
         bool notifyCheckRunBefore;
@@ -488,5 +519,38 @@ namespace PowerwallCompanion
 
         }
 
+        private void EnergySource_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Rectangle graphRectangle;
+            if (sender is Rectangle)
+            {
+                graphRectangle = (Rectangle) sender;
+            }
+            else
+            {
+                Image image = sender as Image;
+                string rectName = image.Name.Replace("icon", "rect");
+                graphRectangle = (Rectangle)this.FindName(rectName);
+            }
+
+            ViewModel.SelectedEnergySourceName = graphRectangle.Name.Replace("rect", "");
+            ViewModel.SelectedEnergySourceBrush = graphRectangle.Fill;
+            var powerProperty = typeof(GridEnergySources).GetProperty(ViewModel.SelectedEnergySourceName);
+            if (powerProperty != null)
+            {
+                ViewModel.SelectedEnergySourcePower = (int)powerProperty.GetValue(ViewModel.GridEnergySources);
+                double percent = (double)ViewModel.SelectedEnergySourcePower / ViewModel.GridEnergySources.Total * 100;
+                ViewModel.SelectedEnergySourcePercentageLabel = $"({percent:0}%)";
+            }
+            ViewModel.NotifySelectedEnergySourceProperties();
+
+            popup.HorizontalOffset = graphRectangle.ActualOffset.X;
+            popup.IsOpen = true;
+        }
+
+        private void EnergySource_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            popup.IsOpen = false;
+        }
     }
 }

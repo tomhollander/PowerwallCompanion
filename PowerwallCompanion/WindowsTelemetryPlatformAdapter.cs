@@ -7,12 +7,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
-using Windows.System;
+using Microsoft.Windows.System;
 using Windows.System.Profile;
 
 namespace PowerwallCompanion
 {
-    public class UwpTelemetryPlatformAdapter : ITelemetryPlatformAdapter
+    public class WindowsTelemetryPlatformAdapter : ITelemetryPlatformAdapter
     {
         string userId;
 

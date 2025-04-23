@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
+﻿using Microsoft.UI;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Media;
+using System;
 
 namespace PowerwallCompanion.Converters
 {
@@ -15,11 +12,11 @@ namespace PowerwallCompanion.Converters
             var cost = System.Convert.ToDecimal(value);
             if (cost > 0M)
             {
-                return new SolidColorBrush(Windows.UI.Colors.LightGray);
+                return new SolidColorBrush(Colors.LightGray); // Use Colors from Windows.UI
             }
             else
             {
-                return new SolidColorBrush(Windows.UI.Colors.LightGreen);
+                return new SolidColorBrush(Colors.LightGreen); // Use Colors from Windows.UI
             }
         }
 
