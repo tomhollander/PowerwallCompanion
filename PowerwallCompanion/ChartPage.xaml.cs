@@ -16,6 +16,9 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
+using System.Formats.Tar;
+using Microsoft.UI.Xaml.Shapes;
+using System.Globalization;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PowerwallCompanion
@@ -159,6 +162,7 @@ namespace PowerwallCompanion
                 energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
                 dailyCost.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
+                tariffBar.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
 
                 await GetTariffsForDay(ViewModel.PeriodStart);
             }
@@ -169,6 +173,7 @@ namespace PowerwallCompanion
                 energyChart.Visibility = Visibility.Visible;
                 powerGraphOptionsCombo.Visibility = Visibility.Collapsed;
                 dailyCost.Visibility = Visibility.Collapsed;
+                tariffBar.Visibility = Visibility.Collapsed;
 
                 if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
                 {
@@ -442,28 +447,61 @@ namespace PowerwallCompanion
             }
             try
             {
-                //var tariffs = await tariffHelper.GetTariffsForDay(date);
+                var tariffs = await tariffHelper.GetTariffsForDay(date);
+                tariffs.Sort((x, y) => x.StartDate.CompareTo(y.StartDate));
+                tariffBar.ColumnDefinitions.Clear();
+                tariffBar.Children.Clear();
+                int columnNumber = 0;
+                TextBlock lastTextBlock = null;
+                foreach ( var tariff in tariffs)
+                { 
+                    var rates = tariffHelper.GetRatesForTariff(tariff);
+                    // Create column
+                    var column = new ColumnDefinition();
+                    var tariffDuration = (tariff.EndDate - tariff.StartDate).TotalHours;
+                    column.Width = new GridLength(tariffDuration, GridUnitType.Star);
+                    tariffBar.ColumnDefinitions.Add(column);
 
-                //dailyChart.XAxes[0].MultiLevelLabels.Clear();
-                //ChartMultiLevelLabel lastMultiLabel = null;
-                //foreach (var tariff in tariffs.OrderBy(t => t.StartDate).AsEnumerable())
-                //{
-                //    if (lastMultiLabel != null && lastMultiLabel.Text == tariff.DisplayName)
-                //    {
-                //        lastMultiLabel.End = tariff.EndDate;
-                //        continue;
-                //    }
-                //    var multiLabel = new ChartMultiLevelLabel()
-                //    {
-                //        Start = tariff.StartDate,
-                //        End = tariff.EndDate,
-                //        Text = tariff.DisplayName,
-                //        Foreground = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color)),
-                //        FontSize = 14,
-                //    };
-                //    lastMultiLabel = multiLabel; 
-                //    dailyChart.PrimaryAxis.MultiLevelLabels.Add(multiLabel);
-                //}
+                    // Create rectangle
+                    var rect = new Rectangle();
+                    rect.Fill = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color));
+                    rect.Opacity = 0.2;
+                    rect.Stroke = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color));
+                    tariffBar.Children.Add(rect);
+                    Grid.SetColumn(rect, columnNumber);
+
+                    // Set tooltips
+                    string rateMessage = $"Buy at {rates.Item1.ToString("C", CultureInfo.CurrentCulture)} / Sell at {rates.Item2.ToString("C", CultureInfo.CurrentCulture)}";
+                    ToolTipService.SetToolTip(rect, rateMessage);
+
+                    // Create textblock (unless the previous tariff has the same name, for dynamic tariffs)
+                    var previousTariff = tariffs.ElementAtOrDefault(columnNumber - 1);
+                    if (previousTariff == null || previousTariff.DisplayName != tariff.DisplayName)
+                    {
+                        var textBlock = new TextBlock();
+                        lastTextBlock = textBlock;
+                        textBlock.Text = tariff.DisplayName;
+                        textBlock.Foreground = new SolidColorBrush(Microsoft.UI.Colors.LightGray);
+                        textBlock.HorizontalAlignment = HorizontalAlignment.Center;
+                        textBlock.VerticalAlignment = VerticalAlignment.Center;
+                        textBlock.FontSize = 12;
+                        tariffBar.Children.Add(textBlock);
+                        Grid.SetColumn(textBlock, columnNumber);
+
+                        ToolTipService.SetToolTip(textBlock, rateMessage);
+                    }
+                    else
+                    {
+                        // Span the previous text block over this column
+                        if (lastTextBlock != null)
+                        {
+                            Grid.SetColumnSpan(lastTextBlock, Grid.GetColumnSpan(lastTextBlock) + 1);
+                        }
+                    }
+
+                    columnNumber++;
+                }
+
             }
             catch (Exception ex)
             {

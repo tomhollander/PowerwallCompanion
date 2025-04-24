@@ -76,12 +76,16 @@ namespace PowerwallCompanion
                 // Show BatteryInfo nav if it's a Powerwall 2
                 if (ViewModel.EnergySiteInfo.PowerwallVersion.StartsWith("Powerwall 2")) // Not sre if there's a 2+
                 {
-                    var nav = (NavigationView)(this.Parent as Frame).Parent;
-                    var batteryInfoMenu = (NavigationViewItem)nav.MenuItems.Where(m => ((NavigationViewItem)m).Tag.ToString() == "BatteryInfo").FirstOrDefault();
-                    if (batteryInfoMenu != null)
+                    var nav = (NavigationView)(this?.Parent as Frame)?.Parent; // May be null if we've changed pages
+                    if (nav != null)
                     {
-                        batteryInfoMenu.Visibility = Visibility.Visible;
+                        var batteryInfoMenu = (NavigationViewItem)nav.MenuItems.Where(m => ((NavigationViewItem)m).Tag.ToString() == "BatteryInfo").FirstOrDefault();
+                        if (batteryInfoMenu != null)
+                        {
+                            batteryInfoMenu.Visibility = Visibility.Visible;
+                        }
                     }
+
                 }
             }
             catch (Exception ex)

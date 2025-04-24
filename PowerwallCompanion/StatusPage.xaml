@@ -411,7 +411,7 @@
                 <chart:SfCartesianChart.Resources>
                     <Style TargetType="Line" x:Key="lineStyle">
                         <Setter Property="StrokeThickness" Value="2"/>
-                        <Setter Property="Stroke" Value="#404040" />
+                        <Setter Property="Stroke" Value="#202020" />
                     </Style>
                 </chart:SfCartesianChart.Resources>
                 <chart:SfCartesianChart.XAxes>

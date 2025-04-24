@@ -2,6 +2,7 @@
 using PowerwallCompanion.Lib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -97,7 +98,11 @@ namespace PowerwallCompanion
                     dict.Add(kvp.Key, kvp.Value);
                 }
             }
+#if DEBUG
+            Debug.WriteLine($"Telemetry: {eventName} {string.Join(", ", dict.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}");
+#else
             await mc.TrackAsync(eventName, dict);
+#endif
         }
 
     }
