@@ -13,10 +13,12 @@ namespace PowerwallCompanion.Lib
     {
         private string apiKey;
         private string siteId;
+        private decimal dailySupplyCharge;
         private Dictionary<DateTime, List<Tariff>> tariffCache = new Dictionary<DateTime, List<Tariff>>();
-        public AmberElectricTariffProvider(string apiKey)
+        public AmberElectricTariffProvider(string apiKey, decimal dailySupplyCharge)
         {
             this.apiKey = apiKey;
+            this.dailySupplyCharge = dailySupplyCharge;
         }
 
         public string ProviderName => "Amber";
@@ -60,6 +62,7 @@ namespace PowerwallCompanion.Lib
                 totalCost += (decimal)energyImported * tariff.DynamicSellAndFeedInRate.Item1;
                 totalFeedIn += (decimal)energyExported * tariff.DynamicSellAndFeedInRate.Item2;
             }
+            totalCost += dailySupplyCharge;
             return new Tuple<decimal, decimal>(totalCost, totalFeedIn);
         }
 

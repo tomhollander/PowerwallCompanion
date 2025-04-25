@@ -643,7 +643,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetWeekDayTariffsForNonWrappingSeason()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 6, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Winter", Name = "SUPER_OFF_PEAK", StartDate = new DateTime(2024, 6, 5, 0, 0, 0), EndDate = new DateTime(2024, 6, 5, 6, 0, 0) });
@@ -657,7 +657,7 @@ namespace PowerwallCompanion.Lib.Tests
         {
             var ratePlan = (JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons);
             ratePlan["response"]["seasons"]["Season3"]["toDay"] = 31;
-            var tariffHelper = new TeslaRatePlanTariffProvider(ratePlan);
+            var tariffHelper = new TeslaRatePlanTariffProvider(ratePlan, 0.0m);
             
             var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 11, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
@@ -670,7 +670,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetWeekendTariffsForNonWrappingSeason()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 6, 1, 0, 0, 0));
             Assert.AreEqual(2, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Winter", Name = "SUPER_OFF_PEAK", StartDate = new DateTime(2024, 6, 1, 0, 0, 0), EndDate = new DateTime(2024, 6, 1, 6, 0, 0) });
@@ -680,7 +680,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetWeekDayTariffsForWrappingSeason()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 2, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Summer", Name = "SUPER_OFF_PEAK", StartDate = new DateTime(2024, 2, 5, 0, 0, 0), EndDate = new DateTime(2024, 2, 5, 6, 0, 0) });
@@ -692,7 +692,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetWeekDayTariffsForWrappingDay()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 11, 5, 0, 0, 0));
             Assert.AreEqual(4, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Season3", Name = "OFF_PEAK", StartDate = new DateTime(2024, 11, 5, 0, 0, 0), EndDate = new DateTime(2024, 11, 5, 9, 0, 0) });
@@ -704,7 +704,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetTariffsForOnePopulatedSeason()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonSingleRate));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonSingleRate), 0.0m);
             var tariffs = await tariffHelper.GetTariffsForDay(new DateTime(2024, 6, 5, 0, 0, 0));
             Assert.AreEqual(1, tariffs.Count);
             CollectionAssert.Contains(tariffs, new Tariff { Season = "Summer", Name = "OFF_PEAK", StartDate = new DateTime(2024, 6, 5, 0, 0, 0), EndDate = new DateTime(2024, 6, 6, 0, 0, 0) });
@@ -713,7 +713,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetInstantTariff()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariff = await tariffHelper.GetTariffForInstant(new DateTime(2024, 6, 5, 10, 10, 0));
             Assert.AreEqual("Winter", tariff.Season);
             Assert.AreEqual("OFF_PEAK", tariff.Name);
@@ -722,7 +722,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetInstantTariffOnBoundary()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariff = await tariffHelper.GetTariffForInstant(new DateTime(2024, 6, 5, 16, 0, 0));
             Assert.AreEqual("Winter", tariff.Season);
             Assert.AreEqual("ON_PEAK", tariff.Name);
@@ -731,7 +731,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetInstantTariffOnWrappingDayMorning()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariff = await tariffHelper.GetTariffForInstant(new DateTime(2024, 11, 5, 8, 0, 0));
             Assert.AreEqual("Season3", tariff.Season);
             Assert.AreEqual("OFF_PEAK", tariff.Name);
@@ -740,7 +740,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetInstantTariffOnWrappingDayEvening()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariff = await tariffHelper.GetTariffForInstant(new DateTime(2024, 11, 5, 21, 0, 0));
             Assert.AreEqual("Season3", tariff.Season);
             Assert.AreEqual("OFF_PEAK", tariff.Name);
@@ -749,7 +749,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public void GetRatesForTariff()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var tariff = new Tariff { Season = "Winter", Name = "OFF_PEAK" };
             var rates = tariffHelper.GetRatesForTariff(tariff);
             Assert.AreEqual(0.3m, rates.Item1);
@@ -759,7 +759,7 @@ namespace PowerwallCompanion.Lib.Tests
         [TestMethod]
         public async Task GetEnergyCostAndFeedInFromEnergyHistory()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             var energyHistory = (JsonArray)JsonArray.Parse(energyHistoryJson);
             var rates = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory.ToList());
             Assert.AreEqual(0.08m * 0.5m + 0.3m * 0.7m + 0.3m * 0.2m, rates.Item1);
@@ -767,16 +767,26 @@ namespace PowerwallCompanion.Lib.Tests
         }
 
         [TestMethod]
+        public async Task GetEnergyCostAndFeedInFromEnergyHistoryWithDailySupplyCharge()
+        {
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 1.11m);
+            var energyHistory = (JsonArray)JsonArray.Parse(energyHistoryJson);
+            var rates = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(energyHistory.ToList());
+            Assert.AreEqual((0.08m * 0.5m + 0.3m * 0.7m + 0.3m * 0.2m) + 1.11m, rates.Item1);
+            Assert.AreEqual(0.07m * 0.6m, rates.Item2);
+        }
+
+        [TestMethod]
         public void SingleRatePlanReturnsTrue()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonSingleRate));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonSingleRate), 0.0m);
             Assert.IsTrue(tariffHelper.IsSingleRatePlan);
         }
 
         [TestMethod]
         public void MultiRatePlanReturnsFalse()
         {
-            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons));
+            var tariffHelper = new TeslaRatePlanTariffProvider((JsonObject)JsonObject.Parse(ratePlanJsonWithSeasons), 0.0m);
             Assert.IsFalse(tariffHelper.IsSingleRatePlan);
         }
     }

@@ -15,11 +15,11 @@ namespace PowerwallCompanion
             if (Settings.TariffProvider == "Tesla")
             {
                 var ratePlan = await powerwallApi.GetRatePlan();
-                return new TeslaRatePlanTariffProvider(ratePlan);
+                return new TeslaRatePlanTariffProvider(ratePlan, Settings.TariffDailySupplyCharge);
             }
             else if (Settings.TariffProvider == "Amber")
             {
-                return new AmberElectricTariffProvider(Settings.AmberElectricApiKey);
+                return new AmberElectricTariffProvider(Settings.AmberElectricApiKey, Settings.TariffDailySupplyCharge);
             }
             else
             {

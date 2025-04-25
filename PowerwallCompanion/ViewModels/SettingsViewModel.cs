@@ -93,6 +93,12 @@ namespace PowerwallCompanion.ViewModels
             set => Settings.AmberElectricApiKey = value;
         }
 
+        public decimal TariffDailySupplyCharge
+        {
+            get => Settings.TariffDailySupplyCharge;
+            set => Settings.TariffDailySupplyCharge = value;
+        }
+
         public bool? ShowEnergySources
         {
             get { return Settings.ShowEnergySources; }

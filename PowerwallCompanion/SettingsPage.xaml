@@ -59,6 +59,8 @@
                     <ComboBox VerticalAlignment="Center" ItemsSource="{x:Bind ViewModel.TariffProviders}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedTariffProvider, Mode=TwoWay}" />
                     <TextBlock Text="API Key:" VerticalAlignment="Center"  Margin="10" Visibility="{x:Bind ViewModel.AmberApiKeyVisibility, Mode=OneWay}"/>
                     <TextBox Text="{x:Bind ViewModel.AmberElectricApiKey, Mode=TwoWay}" Visibility="{x:Bind ViewModel.AmberApiKeyVisibility, Mode=OneWay}" VerticalAlignment="Center" Width="300"/>
+                    <TextBlock Text="Add daily supply charge:" VerticalAlignment="Center"  Margin="10"/>
+                    <TextBox Text="{x:Bind ViewModel.TariffDailySupplyCharge, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" VerticalAlignment="Center" Width="30"/>
                 </StackPanel>
                 
                 <CheckBox IsChecked="{x:Bind ViewModel.ShowEnergySources, Mode=TwoWay}" Margin="5">Show energy sources from electricitymaps.com or OpenNEM</CheckBox>

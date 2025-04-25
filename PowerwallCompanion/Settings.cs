@@ -135,6 +135,25 @@ namespace PowerwallCompanion
             }
         }
 
+        public static decimal TariffDailySupplyCharge
+        {
+            get
+            {
+                if (_localSettings.Values["TariffDailySupplyCharge"] == null)
+                {
+                    return 0.0M;
+                }
+                else
+                {
+                    return decimal.Parse((string)_localSettings.Values["TariffDailySupplyCharge"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["TariffDailySupplyCharge"] = value.ToString();
+            }
+        }
+
         public static string AmberElectricApiKey
         {
             get

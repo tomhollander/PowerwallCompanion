@@ -15,14 +15,16 @@ namespace PowerwallCompanion.Lib
     {
 
         private JsonObject ratePlan;
+        private decimal dailySupplyCharge;
 
-        public TeslaRatePlanTariffProvider(JsonObject ratePlan)
+        public TeslaRatePlanTariffProvider(JsonObject ratePlan, decimal dailySupplyCharge)
         {
             if (ratePlan == null)
             {
                 throw new ArgumentNullException(nameof(ratePlan));
             }
             this.ratePlan = ratePlan;
+            this.dailySupplyCharge = dailySupplyCharge;
         }
 
         public string ProviderName => "Tesla";
@@ -254,6 +256,7 @@ namespace PowerwallCompanion.Lib
                 totalCost += (decimal)energyImported * rate.Item1;
                 totalFeedIn += (decimal)energyExported * rate.Item2;
             }
+            totalCost += dailySupplyCharge;
             return new Tuple<decimal, decimal>(totalCost, totalFeedIn);
             
 
