@@ -45,6 +45,10 @@ namespace PowerwallCompanion.Lib
         public async Task<Tuple<decimal, decimal>> GetEnergyCostAndFeedInFromEnergyHistory(List<JsonNode> energyHistoryTimeSeries)
         {
             var tariffs = await GetTariffsForDay(Utils.GetUnspecifiedDateTime(energyHistoryTimeSeries.First()["timestamp"]));
+            if (tariffs == null)
+            {
+                return new Tuple<decimal, decimal>(0M, 0M);
+            }
             decimal totalCost = 0M;
             decimal totalFeedIn = 0M;
             foreach (var energyHistory in energyHistoryTimeSeries)
@@ -168,6 +172,11 @@ namespace PowerwallCompanion.Lib
                 return System.Drawing.Color.DarkOrange;
             else
                 return System.Drawing.Color.Red;
+        }
+
+        public decimal DailySupplyCharge
+        {
+            get => this.dailySupplyCharge;
         }
 
     }

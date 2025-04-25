@@ -172,10 +172,10 @@
                 <ComboBoxItem>Battery</ComboBoxItem>
             </ComboBox>
 
-            <TextBlock x:Name="dailyCost" Grid.Row="2" Width="120" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+            <TextBlock x:Name="periodNetCost" Grid.Row="2" Width="120" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                        TextAlignment="Left" FontSize="24" 
-                       Text="{x:Bind ViewModel.EnergyTotals.EnergyNetCost, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" 
-                       Foreground="{x:Bind ViewModel.EnergyTotals.EnergyNetCost, Mode=OneWay, Converter={StaticResource PostitiveNegativeCostBrushConverter}}"   
+                       Text="{x:Bind ViewModel.CurrentPeriodNetCost, Mode=OneWay, Converter={StaticResource RateCurrencyConverter}}" 
+                       Foreground="{x:Bind ViewModel.CurrentPeriodNetCost, Mode=OneWay, Converter={StaticResource PostitiveNegativeCostBrushConverter}}"   
                        ToolTipService.ToolTip="Estimated net energy cost" Margin="0,10,0,-15"/>
             
             <!-- Daily battery chart -->
@@ -287,7 +287,7 @@
                     <chart:ChartLegend ToggleSeriesVisibility="True" Placement="Right" ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
                 </chart:SfCartesianChart.Legend>
-
+                <chart:StackedColumnSeries x:Name="dailySupplyChargeSeries" GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="Coral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.DailySupplyChargeGraphData, Mode=OneWay}" Label="Daily Supply Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
                 <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightCoral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyCostGraphData, Mode=OneWay}" Label="Est. Energy Cost" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
                 <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGreen" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyFeedInGraphData, Mode=OneWay}" Label="Est. Feed In Value" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
                 <chart:LineSeries Fill="CornflowerBlue" StrokeWidth="3" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyNetCostGraphData, Mode=OneWay}" Label="Est. Net Cost" XBindingPath="XValue" YBindingPath="YValue" EnableTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000">

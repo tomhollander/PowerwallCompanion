@@ -15,6 +15,7 @@ namespace PowerwallCompanion.Lib.Models
         public List<ChartDataPoint> EnergyCostGraphData { get; set; }
         public List<ChartDataPoint> EnergyFeedInGraphData { get; set; }
         public List<ChartDataPoint> EnergyNetCostGraphData { get; set; }
+        public List<ChartDataPoint> DailySupplyChargeGraphData { get; set; }
         public EnergyTotals EnergyTotals { get; set; }
     }
 }

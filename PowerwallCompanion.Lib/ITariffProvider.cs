@@ -12,6 +12,7 @@ namespace PowerwallCompanion.Lib
         string ProviderName { get; }
         Task<List<Tariff>> GetTariffsForDay(DateTime date);
         bool IsSingleRatePlan { get; }
+        decimal DailySupplyCharge { get; }
         Task<Tariff> GetInstantaneousTariff();
         Task<Tuple<decimal, decimal>> GetEnergyCostAndFeedInFromEnergyHistory(List<JsonNode> energyHistoryTimeSeries);
         Tuple<decimal, decimal> GetRatesForTariff(Tariff tariff);

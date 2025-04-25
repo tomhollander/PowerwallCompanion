@@ -60,7 +60,7 @@ namespace PowerwallCompanion
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // Reset the tariffProvider if it was changed in settings
-            if (tariffHelper != null && tariffHelper.ProviderName != Settings.TariffProvider)
+            if (tariffHelper != null && (tariffHelper.ProviderName != Settings.TariffProvider || tariffHelper.DailySupplyCharge != Settings.TariffDailySupplyCharge))
             {
                 await CreateTariffProvider();
                 await RefreshDataAndCharts();
@@ -161,7 +161,7 @@ namespace PowerwallCompanion
                 energyChart.Visibility = Visibility.Collapsed;
                 energyCostChart.Visibility = Visibility.Collapsed;
                 powerGraphOptionsCombo.Visibility = Visibility.Visible;
-                dailyCost.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
+                periodNetCost.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
                 tariffBar.Visibility = Settings.ShowEnergyRates ? Visibility.Visible : Visibility.Collapsed;
 
                 await GetTariffsForDay(ViewModel.PeriodStart);
@@ -172,18 +172,21 @@ namespace PowerwallCompanion
                 batteryChart.Visibility = Visibility.Collapsed;
                 energyChart.Visibility = Visibility.Visible;
                 powerGraphOptionsCombo.Visibility = Visibility.Collapsed;
-                dailyCost.Visibility = Visibility.Collapsed;
                 tariffBar.Visibility = Visibility.Collapsed;
 
                 if (Settings.ShowEnergyRates && (ViewModel.Period == "Week" || ViewModel.Period == "Month"))
                 {
                     Grid.SetRowSpan(energyChart, 1);
+                    dailySupplyChargeSeries.IsVisibleOnLegend = Settings.TariffDailySupplyCharge > 0;
+                    dailySupplyChargeSeries.IsSeriesVisible = Settings.TariffDailySupplyCharge > 0;
                     energyCostChart.Visibility = Visibility.Visible;
+                    periodNetCost.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     Grid.SetRowSpan(energyChart, 2);
                     energyCostChart.Visibility = Visibility.Collapsed;
+                    periodNetCost.Visibility = Visibility.Collapsed;
                 }
 
 
@@ -286,6 +289,7 @@ namespace PowerwallCompanion
             {
                 ViewModel.EnergyTotals = await powerwallApi.GetEnergyTotalsForPeriod(ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, tariffHelper);
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.CurrentPeriodNetCost));
             }
             catch (Exception ex)
             {
@@ -320,6 +324,7 @@ namespace PowerwallCompanion
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.ChartPeriodInterval));
+                ViewModel.NotifyPropertyChanged(nameof(ViewModel.CurrentPeriodNetCost));
             }
             catch (Exception ex)
             {
@@ -448,6 +453,10 @@ namespace PowerwallCompanion
             try
             {
                 var tariffs = await tariffHelper.GetTariffsForDay(date);
+                if (tariffs == null || tariffs.Count == 0)
+                {
+                    return;
+                }
                 tariffs.Sort((x, y) => x.StartDate.CompareTo(y.StartDate));
                 tariffBar.ColumnDefinitions.Clear();
                 tariffBar.Children.Clear();

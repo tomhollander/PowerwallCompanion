@@ -430,6 +430,7 @@ namespace PowerwallCompanion.Lib
                 energyChartSeries.EnergyCostGraphData = new List<ChartDataPoint>();
                 energyChartSeries.EnergyFeedInGraphData = new List<ChartDataPoint>();
                 energyChartSeries.EnergyNetCostGraphData = new List<ChartDataPoint>();
+                energyChartSeries.DailySupplyChargeGraphData = new List<ChartDataPoint>();
 
                 var dailyData = new Dictionary<DateTime, List<JsonNode>>();
                 // Split array by date
@@ -447,9 +448,10 @@ namespace PowerwallCompanion.Lib
                 foreach (var date in dailyData.Keys)
                 {
                     var energyCost = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dailyData[date]);
-                    energyChartSeries.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)energyCost.Item1));
+                    energyChartSeries.EnergyCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - tariffHelper.DailySupplyCharge)));
                     energyChartSeries.EnergyFeedInGraphData.Add(new ChartDataPoint(date, (double)-energyCost.Item2));
                     energyChartSeries.EnergyNetCostGraphData.Add(new ChartDataPoint(date, (double)(energyCost.Item1 - energyCost.Item2)));
+                    energyChartSeries.DailySupplyChargeGraphData.Add(new ChartDataPoint(date, (double)tariffHelper.DailySupplyCharge));
                 }
 
             }

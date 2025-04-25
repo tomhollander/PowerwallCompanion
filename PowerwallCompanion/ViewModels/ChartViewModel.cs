@@ -130,6 +130,33 @@ namespace PowerwallCompanion.ViewModels
             get; set;
         }
        
+        public Decimal CurrentPeriodNetCost
+        {
+            get
+            {
+                if (Period == "Day")
+                { 
+                    return EnergyTotals != null ? EnergyTotals.EnergyNetCost : 0;
+                }
+                else if (Period == "Month" || Period == "Week")
+                {
+                    decimal cost = 0;
+                    if (EnergyChartSeries == null || EnergyChartSeries.EnergyNetCostGraphData == null)
+                    {
+                        return 0;
+                    }
+                    foreach (var d in EnergyChartSeries.EnergyNetCostGraphData)
+                    {
+                        cost += (decimal) d.YValue;
+                    }
+                    return cost; 
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         public PowerChartSeries PowerChartSeries { get; set;  }
         public PowerChartSeries PowerChartStackingSeries { get; set; }

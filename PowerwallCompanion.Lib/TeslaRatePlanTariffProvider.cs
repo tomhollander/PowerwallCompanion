@@ -284,5 +284,10 @@ namespace PowerwallCompanion.Lib
                     return Color.DarkGray;
             }
         }
+
+        public decimal DailySupplyCharge
+        {
+            get => this.dailySupplyCharge;
+        }
     }
 }
