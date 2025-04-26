@@ -64,9 +64,17 @@ namespace PowerwallCompanion
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            await RefreshDataFromTeslaOwnerApi();
-            ShowBatteryHealthNavForPowerwall2Only();
-            base.OnNavigatedTo(e);
+            try // All exceptions should be handled already, but since this event handler is async they won't propagate 
+            {
+                await RefreshDataFromTeslaOwnerApi();
+                ShowBatteryHealthNavForPowerwall2Only();
+                base.OnNavigatedTo(e);
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackUnhandledException(ex);
+                throw;
+            }
         }
 
         private void ShowBatteryHealthNavForPowerwall2Only()

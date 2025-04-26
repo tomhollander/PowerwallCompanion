@@ -9,6 +9,7 @@ using TeslaAuth;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Web.WebView2.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -38,11 +39,15 @@ namespace PowerwallCompanion
         {
             await webView.EnsureCoreWebView2Async();
             webView.CoreWebView2.CookieManager.DeleteAllCookies();
+            webView.CoreWebView2.PermissionRequested += WebView_PermissionRequested;
             webView.Visibility = Visibility.Visible;
             //webView.Source = new Uri(teslaAuth.GetLoginUrlForBrowser());
         }
 
-
+        private void WebView_PermissionRequested(CoreWebView2 sender, CoreWebView2PermissionRequestedEventArgs args)
+        {
+            args.Handled = true;
+        }
 
         private async void webView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
         {

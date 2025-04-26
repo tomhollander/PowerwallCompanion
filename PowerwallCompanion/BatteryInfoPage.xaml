@@ -57,7 +57,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Foreground="Black" Margin="10" TextWrapping="Wrap">Unable to connect to the gateway. Please double check the IP and password on the Settings page, and ensure you are on the same network as the gateway.</TextBlock>
-            <HyperlinkButton Margin="0,0,10,0" HorizontalAlignment="Right" Grid.Column="1" Tapped="HyperlinkButton_Tapped">Details</HyperlinkButton>
+            <HyperlinkButton Margin="0,0,10,0" HorizontalAlignment="Right" Grid.Column="1" RequestedTheme="Light" Tapped="HyperlinkButton_Tapped">Details</HyperlinkButton>
         </Grid>
         <Grid x:Name="staleDataBanner" Background="LightYellow" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
@@ -65,7 +65,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="staleDataBannerTextBlock" Foreground="Black" Margin="10" TextWrapping="Wrap">Unable to connect to the gateway. This page is showing cached data from </TextBlock>
-            <HyperlinkButton Margin="0,0,10,0" HorizontalAlignment="Right" Grid.Column="1" Tapped="HyperlinkButton_Tapped">Details</HyperlinkButton>
+            <HyperlinkButton Margin="0,0,10,0" HorizontalAlignment="Right" Grid.Column="1" RequestedTheme="Light" Tapped="HyperlinkButton_Tapped">Details</HyperlinkButton>
         </Grid>
         <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="20" Margin="20">
             <Grid.ColumnDefinitions>

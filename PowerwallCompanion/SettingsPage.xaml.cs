@@ -34,8 +34,16 @@ namespace PowerwallCompanion
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            await LoadEnergySourceZones();
-            base.OnNavigatedTo(e);
+            try // All exceptions should be handled already, but since this event handler is async they won't propagate 
+            {
+                await LoadEnergySourceZones();
+                base.OnNavigatedTo(e);
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackUnhandledException(ex);
+                throw;
+            }
         }
 
         private async Task LoadEnergySourceZones()
