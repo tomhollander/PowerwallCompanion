@@ -138,13 +138,12 @@
             </chart:SfCartesianChart.TrackballBehavior>
             
             <chart:SfCartesianChart.XAxes>
-                <chart:DateTimeAxis  >
+                <chart:DateTimeAxis ShowTrackballLabel="True">
                     <chart:DateTimeAxis.LabelStyle>
                         <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="d"/>
                     </chart:DateTimeAxis.LabelStyle>
                 </chart:DateTimeAxis>
             </chart:SfCartesianChart.XAxes>
-
             <chart:SfCartesianChart.YAxes>
                 <chart:NumericalAxis RangePadding="Auto">
                     <chart:NumericalAxis.LabelStyle>

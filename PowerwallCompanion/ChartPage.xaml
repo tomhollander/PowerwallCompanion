@@ -124,11 +124,11 @@
             <!-- Daily power chart -->
             <chart:SfCartesianChart x:Name="dailyChart"  Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0">
                 <chart:SfCartesianChart.TrackballBehavior>
-                    <chart:ChartTrackballBehavior/>
+                    <chart:ChartTrackballBehavior />
                 </chart:SfCartesianChart.TrackballBehavior>
 
                 <chart:SfCartesianChart.XAxes>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" MinorTicksPerInterval="2" >
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" MinorTicksPerInterval="2" ShowTrackballLabel="True">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="t" />
                         </chart:DateTimeAxis.LabelStyle>
@@ -185,7 +185,7 @@
                 </chart:SfCartesianChart.TrackballBehavior>
 
                 <chart:SfCartesianChart.XAxes>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" MinorTicksPerInterval="2">
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="3" MinorTicksPerInterval="2" ShowTrackballLabel="True">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="t" />
                         </chart:DateTimeAxis.LabelStyle>
@@ -290,15 +290,17 @@
                 <chart:StackedColumnSeries x:Name="dailySupplyChargeSeries" GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="Coral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.DailySupplyChargeGraphData, Mode=OneWay}" Label="Daily Supply Charge" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
                 <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightCoral" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyCostGraphData, Mode=OneWay}" Label="Est. Energy Cost" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
                 <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGreen" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyFeedInGraphData, Mode=OneWay}" Label="Est. Feed In Value" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
-                <chart:LineSeries Fill="CornflowerBlue" StrokeWidth="3" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyNetCostGraphData, Mode=OneWay}" Label="Est. Net Cost" XBindingPath="XValue" YBindingPath="YValue" EnableTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000">
-                    <!--<chart:LineSeries.AdornmentsInfo>
-                        <chart:ChartAdornmentInfo ShowMarker="True" SymbolInterior="CornflowerBlue" Symbol="Diamond" />
-                    </chart:LineSeries.AdornmentsInfo>-->
+                <chart:LineSeries Fill="CornflowerBlue" ShowDataLabels="True" StrokeWidth="3" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.EnergyNetCostGraphData, Mode=OneWay}" Label="Est. Net Cost" XBindingPath="XValue" YBindingPath="YValue" EnableTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000">
+                    <chart:LineSeries.DataLabelSettings>
+                        <chart:CartesianDataLabelSettings Position="Default">
+                            <chart:CartesianDataLabelSettings.ContentTemplate>
+                                <DataTemplate>
+                                    <FontIcon FontFamily="Wingdings" Glyph="u" Foreground="CornflowerBlue" />
+                                </DataTemplate>
+                            </chart:CartesianDataLabelSettings.ContentTemplate>
+                        </chart:CartesianDataLabelSettings>
+                    </chart:LineSeries.DataLabelSettings>
                 </chart:LineSeries>
-                <!--<chart:SfCartesianChart.Annotations>
-                    <chart:HorizontalLineAnnotation Y1="0" Stroke="LightGray" StrokeThickness="2" />
-                </chart:SfCartesianChart.Annotations>-->
-
             </chart:SfCartesianChart>
 
             <!-- Self consumption -->

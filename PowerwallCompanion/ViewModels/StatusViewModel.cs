@@ -206,7 +206,7 @@ namespace PowerwallCompanion.ViewModels
 
         public string EnergyCostsTooltip
         {
-            get => $"Sell rate: {TariffSellRate.ToString("c")}/kWh\nBuy rate: {TariffBuyRate.ToString("c")}/kWh";
+            get => $"Buy at: {TariffSellRate.ToString("c")}/kWh\nSell at: {TariffBuyRate.ToString("c")}/kWh";
         }
 
 

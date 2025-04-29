@@ -12,6 +12,6 @@ namespace PowerwallCompanion.Lib.Models
         public DateTime InstallDate { get; set; }
         public string InstallDateString { get { return InstallDate.ToString("d"); } }
         public int ReservePercent { get; set; }
-        public string PowerwallVersion { get; set; }
+        public string PowerwallPartNumber { get; set; }
     }
 }

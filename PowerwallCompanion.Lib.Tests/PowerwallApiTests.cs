@@ -153,8 +153,8 @@ namespace PowerwallCompanion.Lib.Tests
     ""backup_reserve_percent"": 22,
     ""components"" : {
         ""batteries"" : [
-            { ""part_name"": ""Thingy"" },
-            { ""part_name"": ""Powerwall 7"" }
+            { ""part_number"": ""XYZ123"" },
+            { ""part_number"": ""ABC9000"" }
         ]
     }
 }}");
@@ -165,7 +165,7 @@ namespace PowerwallCompanion.Lib.Tests
             Assert.AreEqual(11, energySiteInfo.NumberOfBatteries);
             Assert.AreEqual(22, energySiteInfo.ReservePercent);
             Assert.AreEqual(new DateTime(2017, 9, 4, 16, 49, 44), energySiteInfo.InstallDate);
-            Assert.AreEqual("Powerwall 7", energySiteInfo.PowerwallVersion);
+            Assert.AreEqual("XYZ123", energySiteInfo.PowerwallPartNumber);
 
         }
     }

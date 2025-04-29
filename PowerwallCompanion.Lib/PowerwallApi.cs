@@ -695,10 +695,10 @@ namespace PowerwallCompanion.Lib
             energySiteStatus.InstallDate = Utils.GetValueOrDefault<DateTime>(siteInfoJson["response"]["installation_date"]);
             energySiteStatus.ReservePercent = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["backup_reserve_percent"]);
             var batteries = (JsonArray)siteInfoJson["response"]["components"]["batteries"];
-            var battery = batteries.Where(b => Utils.GetValueOrDefault<string>(b["part_name"]).StartsWith("Powerwall"));
+            var battery = batteries == null ? null : batteries.Where(b => Utils.GetValueOrDefault<string>(b["part_number"]).Length > 0);
             if (battery != null)
             {
-                energySiteStatus.PowerwallVersion = Utils.GetValueOrDefault<string>(battery.First()["part_name"]);
+                energySiteStatus.PowerwallPartNumber = Utils.GetValueOrDefault<string>(battery.First()["part_number"]);
             }
             return energySiteStatus;
         }

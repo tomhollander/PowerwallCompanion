@@ -82,7 +82,10 @@ namespace PowerwallCompanion
             try
             {
                 // Show BatteryInfo nav if it's a Powerwall 2
-                if (ViewModel.EnergySiteInfo.PowerwallVersion.StartsWith("Powerwall 2")) // Not sre if there's a 2+
+                if (ViewModel.EnergySiteInfo.PowerwallPartNumber == null || 
+                    ViewModel.EnergySiteInfo.PowerwallPartNumber.StartsWith("1092170") ||
+                    ViewModel.EnergySiteInfo.PowerwallPartNumber.StartsWith("2012170") ||
+                    ViewModel.EnergySiteInfo.PowerwallPartNumber.StartsWith("3012170")) // https://service.tesla.com/docs/Public/Energy/Powerwall/Powerwall-2-Owners-Manual-NA-EN/GUID-9ACA2015-05B4-41A0-B8BC-1D9AD658B307.html
                 {
                     var nav = (NavigationView)(this?.Parent as Frame)?.Parent; // May be null if we've changed pages
                     if (nav != null)
