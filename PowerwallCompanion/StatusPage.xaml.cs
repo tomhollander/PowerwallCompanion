@@ -82,10 +82,7 @@ namespace PowerwallCompanion
             try
             {
                 // Show BatteryInfo nav if it's a Powerwall 2
-                if (ViewModel.EnergySiteInfo.PowerwallPartNumber == null || 
-                    ViewModel.EnergySiteInfo.PowerwallPartNumber.StartsWith("1092170") ||
-                    ViewModel.EnergySiteInfo.PowerwallPartNumber.StartsWith("2012170") ||
-                    ViewModel.EnergySiteInfo.PowerwallPartNumber.StartsWith("3012170")) // https://service.tesla.com/docs/Public/Energy/Powerwall/Powerwall-2-Owners-Manual-NA-EN/GUID-9ACA2015-05B4-41A0-B8BC-1D9AD658B307.html
+                if (ViewModel.EnergySiteInfo.PowerwallVersion == "Powerwall 2") 
                 {
                     var nav = (NavigationView)(this?.Parent as Frame)?.Parent; // May be null if we've changed pages
                     if (nav != null)
@@ -311,9 +308,7 @@ namespace PowerwallCompanion
                 catch (Exception ex)
                 {
                     Telemetry.TrackException(ex);
-                    viewModel.TariffColor = new SolidColorBrush(Colors.DimGray);
-                    viewModel.TariffName = "Rates unavailable";
-                    viewModel.TariffBadgeVisibility = Visibility.Visible;
+                    ShowTariffsUnavailable();
                 }
                 
             }
@@ -322,23 +317,36 @@ namespace PowerwallCompanion
                 try
                 {
                     var tariff = await tariffHelper.GetInstantaneousTariff();
-                    var prices = tariffHelper.GetRatesForTariff(tariff);
-                    viewModel.TariffName = tariff.DisplayName;
-                    viewModel.TariffSellRate = prices.Item1;
-                    viewModel.TariffBuyRate = prices.Item2;
-                    viewModel.TariffColor = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color));
+                    if (tariff != null)
+                    {
+                        var prices = tariffHelper.GetRatesForTariff(tariff);
+                        viewModel.TariffName = tariff.DisplayName;
+                        viewModel.TariffSellRate = prices.Item1;
+                        viewModel.TariffBuyRate = prices.Item2;
+                        viewModel.TariffColor = new SolidColorBrush(WindowsColorFromDrawingColor(tariff.Color));
+                    }
+                    else
+                    {
+                        ShowTariffsUnavailable();
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     Telemetry.TrackException(ex);
-                    viewModel.TariffColor = new SolidColorBrush(Colors.DimGray);
-                    viewModel.TariffName = "Rates unavailable";
-                    viewModel.TariffBadgeVisibility = Visibility.Visible;
+                    ShowTariffsUnavailable();
                 }
 
                 
             }
             viewModel.NotifyTariffProperties();
+        }
+
+        private void ShowTariffsUnavailable()
+        {
+            viewModel.TariffColor = new SolidColorBrush(Colors.DimGray);
+            viewModel.TariffName = "Rates unavailable";
+            viewModel.TariffBadgeVisibility = Visibility.Visible;
         }
 
         private Windows.UI.Color WindowsColorFromDrawingColor(System.Drawing.Color c)

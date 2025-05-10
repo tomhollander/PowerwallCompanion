@@ -689,16 +689,17 @@ namespace PowerwallCompanion.Lib
             var energySiteStatus = new EnergySiteInfo();
 
             var siteInfoJson = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/site_info");
+
             energySiteStatus.SiteName = Utils.GetValueOrDefault<string>(siteInfoJson["response"]["site_name"]);
             energySiteStatus.GatewayId = Utils.GetValueOrDefault<string>(siteInfoJson["response"]["id"]);
             energySiteStatus.NumberOfBatteries = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["battery_count"]);
             energySiteStatus.InstallDate = Utils.GetValueOrDefault<DateTime>(siteInfoJson["response"]["installation_date"]);
             energySiteStatus.ReservePercent = Utils.GetValueOrDefault<int>(siteInfoJson["response"]["backup_reserve_percent"]);
             var batteries = (JsonArray)siteInfoJson["response"]["components"]["batteries"];
-            var battery = batteries == null ? null : batteries.Where(b => Utils.GetValueOrDefault<string>(b["part_number"]).Length > 0);
+            var battery = batteries == null ? null : batteries.Where(b => b["part_number"] != null && Utils.GetValueOrDefault<string>(b["part_number"]).Length > 0).FirstOrDefault();
             if (battery != null)
             {
-                energySiteStatus.PowerwallPartNumber = Utils.GetValueOrDefault<string>(battery.First()["part_number"]);
+                energySiteStatus.PowerwallPartNumber = Utils.GetValueOrDefault<string>(battery["part_number"]);
             }
             return energySiteStatus;
         }

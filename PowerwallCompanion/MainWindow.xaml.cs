@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics;
 using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -63,6 +64,8 @@ namespace PowerwallCompanion
                 // TODO Show alternative UI for any functionality in
                 // the title bar, such as the back button, if used
             }
+
+            m_AppWindow.Resize(new SizeInt32(1600, 1000));
         }
 
         public Button BackButton => AppTitleBarBackButton;

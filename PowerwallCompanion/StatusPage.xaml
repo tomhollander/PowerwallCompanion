@@ -408,6 +408,9 @@
 
             <!-- Power history chart -->
             <chart:SfCartesianChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
+                <chart:SfCartesianChart.TrackballBehavior>
+                    <chart:ChartTrackballBehavior />
+                </chart:SfCartesianChart.TrackballBehavior>
                 <chart:SfCartesianChart.Resources>
                     <Style TargetType="Line" x:Key="lineStyle">
                         <Setter Property="StrokeThickness" Value="2"/>
@@ -415,7 +418,7 @@
                     </Style>
                 </chart:SfCartesianChart.Resources>
                 <chart:SfCartesianChart.XAxes>
-                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}" MajorGridLineStyle="{StaticResource lineStyle}">
+                    <chart:DateTimeAxis IntervalType="Hours" Interval="6" Maximum="{x:Bind ViewModel.ChartMaxDate, Mode=OneWay}" MajorGridLineStyle="{StaticResource lineStyle}" ShowTrackballLabel="True">
                         <chart:DateTimeAxis.LabelStyle>
                             <chart:LabelStyle Foreground="DarkGray" LabelFormat="h tt" FontSize="16"/>
                         </chart:DateTimeAxis.LabelStyle>

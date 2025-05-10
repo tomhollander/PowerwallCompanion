@@ -253,7 +253,16 @@ namespace PowerwallCompanion.ViewModels
                 {
                     return null;
                 }
-                return $"Estimated net cost of today's energy based on Tesla app rate plan.\nEnergy cost: {EnergyTotalsToday.EnergyCost.ToString("c")}, Feed in: {EnergyTotalsToday.EnergyFeedIn.ToString("c")}";
+                string message = "Estimated net cost of today's energy based on current rate plan.\n";
+
+                if (Settings.TariffDailySupplyCharge > 0)
+                {
+                    message += $"Daily supply charge: {Settings.TariffDailySupplyCharge.ToString("c")}\n";
+                }
+                decimal energyCost = EnergyTotalsToday.EnergyCost - Settings.TariffDailySupplyCharge;
+                message += $"Energy cost: {energyCost.ToString("c")}\nFeed in: {EnergyTotalsToday.EnergyFeedIn.ToString("c")}";
+
+                return message;
             }
         }
 
@@ -265,7 +274,16 @@ namespace PowerwallCompanion.ViewModels
                 {
                     return null;
                 }
-                return $"Estimated net cost of yesterday's energy based on Tesla app rate plan.\nEnergy cost: {EnergyTotalsYesterday.EnergyCost.ToString("c")}, Feed in: {EnergyTotalsYesterday.EnergyFeedIn.ToString("c")}";
+                string message = "Estimated net cost of yesterday's energy based on current rate plan.\n";
+
+                if (Settings.TariffDailySupplyCharge > 0)
+                {
+                    message += $"Daily supply charge: {Settings.TariffDailySupplyCharge.ToString("c")}\n";
+                }
+                decimal energyCost = EnergyTotalsYesterday.EnergyCost - Settings.TariffDailySupplyCharge;
+                message += $"Energy cost: {energyCost.ToString("c")}\nFeed in: {EnergyTotalsYesterday.EnergyFeedIn.ToString("c")}";
+
+                return message;
             }
         }
 

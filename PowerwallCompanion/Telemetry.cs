@@ -1,15 +1,10 @@
 ﻿using Mixpanel;
-using PowerwallCompanion.Lib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.ServiceModel.Channels;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
 
 namespace PowerwallCompanion
 {
@@ -47,11 +42,15 @@ namespace PowerwallCompanion
 
         private static Dictionary<string, string> BuildExceptionMetadata(Exception ex, bool handled)
         {
+            // Split stack trace into 256 character segments as this is the limit for Mixpanel strings
+            var stackTrace1 = ex.StackTrace.Length > 256 ? ex.StackTrace.Substring(0, 256) : ex.StackTrace;
+            var stackTrace2 = ex.StackTrace.Length > 256 ? ex.StackTrace.Substring(256) : null;
             return new Dictionary<string, string>()
             {
                 { "Type", ex.GetType().ToString() },
                 { "Message", ex.Message },
-                { "FullException", ex.ToString() },
+                { "StackTrace1", stackTrace1 },
+                { "StackTrace2", stackTrace2 },
                 { "IsHandled", handled.ToString() }
             };
         }
