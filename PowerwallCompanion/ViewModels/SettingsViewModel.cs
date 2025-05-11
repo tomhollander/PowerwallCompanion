@@ -12,7 +12,7 @@ namespace PowerwallCompanion.ViewModels
 
         public bool SignedIn
         {
-            get { return Settings.AccessToken != null || Settings.LocalGatewayIP != null; }
+            get { return Settings.AccessToken != null;  }
         }
 
         public string SignInName
@@ -45,21 +45,21 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public bool? ShowClock
+        public bool ShowClock
         {
             get { return Settings.ShowClock; }
             set
             {
-                Settings.ShowClock = value.Value;
+                Settings.ShowClock = value;
             }
         }
 
-        public bool? ShowEnergyRates
+        public bool ShowEnergyRates
         {
             get { return Settings.ShowEnergyRates; }
             set
             {
-                Settings.ShowEnergyRates = value.Value;
+                Settings.ShowEnergyRates = value;
             }
         }
 
@@ -99,12 +99,12 @@ namespace PowerwallCompanion.ViewModels
             set => Settings.TariffDailySupplyCharge = value;
         }
 
-        public bool? ShowEnergySources
+        public bool ShowEnergySources
         {
             get { return Settings.ShowEnergySources; }
             set
             {
-                Settings.ShowEnergySources = value.Value;
+                Settings.ShowEnergySources = value;
             }
         }
 
@@ -147,21 +147,21 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public bool? PlaySounds
+        public bool PlaySounds
         {
             get { return Settings.PlaySounds; }
             set
             {
-                Settings.PlaySounds = value.Value;
+                Settings.PlaySounds = value;
             }
         }
 
-        public bool? StoreBatteryHistory
+        public bool StoreBatteryHistory
         {
             get { return Settings.StoreBatteryHistory; }
             set
             {
-                Settings.StoreBatteryHistory = value.Value;
+                Settings.StoreBatteryHistory = value;
             }
         }
 
