@@ -72,7 +72,7 @@
 
                     <toolkit:SettingsExpander Header="Local Gateway" Description="Connect to your PW2 Gateway to access battery health stats">
                         <toolkit:SettingsExpander.HeaderIcon>
-                            <FontIcon Glyph="&#xE167;" />
+                            <FontIcon Glyph="&#xe969;" />
                         </toolkit:SettingsExpander.HeaderIcon>
                         <toolkit:SettingsExpander.Items>
                             <toolkit:SettingsCard  Header="Gateway IP" Description="To find your Powerwall gateway's IP address, log into your WiFi router's admin portal and look for 'Tesla Powerwall' in your list of devices.">
@@ -105,7 +105,7 @@
 
                     <toolkit:SettingsExpander Header="Energy Sources" Description="Show details about where your grid energy is sourced from, courtesty of electricitymaps.com and openelectricity.org.au">
                         <toolkit:SettingsExpander.HeaderIcon>
-                            <FontIcon Glyph="&#xE128;" />
+                            <FontIcon Glyph="&#xE945;" />
                         </toolkit:SettingsExpander.HeaderIcon>
                         <ToggleSwitch IsOn="{x:Bind ViewModel.ShowEnergySources, Mode=TwoWay}" />
                         <toolkit:SettingsExpander.Items>
@@ -141,7 +141,7 @@
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Appearance"  />
                     <toolkit:SettingsCard Header="Bar Graph Scale" Description="kW per cm (approx)">
                         <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE126;" />
+                            <FontIcon Glyph="&#xed5e;" />
                         </toolkit:SettingsCard.HeaderIcon>
                         <TextBox x:Name="graphScale" VerticalAlignment="Center" Text="{x:Bind ViewModel.GraphScale, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Width="100" InputScope="CurrencyAmount"></TextBox>
                     </toolkit:SettingsCard>
@@ -193,7 +193,7 @@
                             </TextBlock>
                         </toolkit:SettingsCard.Header>
                         <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE170;" />
+                            <FontIcon Glyph="&#xeb51;" />
                         </toolkit:SettingsCard.HeaderIcon>
                         <StackPanel Orientation="Vertical">
                             <HyperlinkButton FontSize="12" NavigateUri="https://tomsapps2.blob.core.windows.net/powerwall-companion/PowerwallCompanionPrivacyPolicy.txt">

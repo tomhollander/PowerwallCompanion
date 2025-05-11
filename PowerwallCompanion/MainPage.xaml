@@ -15,12 +15,12 @@
                 <NavigationViewItem Icon="Home" Content="Live Stats" Tag="Status" IsSelected="True" />
                 <NavigationViewItem Content="Historical Charts" Tag="Charts">
                     <NavigationViewItem.Icon>
-                        <BitmapIcon UriSource="ms-appx:///Assets/ChartIcon.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <FontIcon Glyph="&#xe9d2;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem  Content="Battery Health" Tag="BatteryInfo"  Visibility="Collapsed">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE857;"/>
+                        <FontIcon Glyph="&#xE857;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
