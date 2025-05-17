@@ -8,4 +8,6 @@ on a phone, check out the Android version: ([Store](https://play.google.com/stor
 The app is available to download from the Windows Store [here](https://www.microsoft.com/en-au/p/powerwall-companion/9n3m45c4zcj4). 
 The store is the easiest way to get the app, but I'm sharing the source in case anyone wants to improve it or is curious about the underlying APIs.
 
+Powerwall Companion is completely free to use, but if you'd like to show your appreciation you can support me on [Ko-fi](https://ko-fi.com/tomhollander). 
+
 ![Screenshot](StatusPage.png)
