@@ -437,7 +437,8 @@ namespace PowerwallCompanion
                 energySourcesZoneOverride == "AU-QLD" ||
                 energySourcesZoneOverride == "AU-VIC" ||
                 energySourcesZoneOverride == "AU-SA" ||
-                energySourcesZoneOverride == "AU-TAS");
+                energySourcesZoneOverride == "AU-TAS"); 
+                // energySourcesZoneOverride == "AU-WA"); // Not getting good data from the API :(
         }
 
         private bool trackedGridEvent = false;

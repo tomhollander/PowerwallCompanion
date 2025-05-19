@@ -1,63 +1,68 @@
 ﻿using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PowerwallCompanion.CustomEnergySourceProviders
 {
     internal class AustraliaNemEnergySourceProvider
     {
-        private const string openNemBaseUrl = "https://api.opennem.org.au";
+        private const string openNemBaseUrl = "https://api.openelectricity.org.au";
         private const string network = "NEM";
-        private List<string> networkRegions;
+        private List<Tuple<string, string>> networkRegions = new List<Tuple<string, string>>()
+        {
+            new Tuple<string, string>("NEM", null),
+            new Tuple<string, string>("NEM", "NSW1"),
+            new Tuple<string, string>("NEM", "QLD1"),
+            new Tuple<string, string>("NEM", "SA1"),
+            new Tuple<string, string>("NEM", "TAS1"),
+            new Tuple<string, string>("NEM", "VIC1"),
+            new Tuple<string, string>("WEM", "WEM"),
+        };
+
         private Dictionary<string, FuelTech> fuelTechs;
         private Dictionary<string, double> fuelTypeGeneration;
         private string selectedRegion;
         public AustraliaNemEnergySourceProvider(string selectedRegion)
         {
             this.selectedRegion = selectedRegion;
+            GetFuelTechs();
         }
 
-        private async Task Init()
-        {
-            Task[] tasks = { GetNetworkRegions(), GetFuelTechs() };
-            await Task.WhenAll(tasks);
-        }
 
         public async Task Refresh()
         {
-            if (networkRegions == null)
-            {
-                await Init();
-            }
-
             fuelTypeGeneration = new Dictionary<string, double>();
-            var tasks = new List<Task<Dictionary<string, double>>>();
-            foreach (var region in networkRegions)
-            {
-                if (selectedRegion == null || region.StartsWith(selectedRegion))
-                {
-                    tasks.Add(GetLatestFuelTechGenerationForRegion(region));
-                }
-            }
-            var results = await Task.WhenAll(tasks);
-            foreach (var result in results)
-            {
-                foreach (var key in result.Keys)
-                {
-                    if (fuelTypeGeneration.ContainsKey(key))
-                    {
-                        fuelTypeGeneration[key] += result[key];
-                    }
-                    else
-                    {
-                        fuelTypeGeneration[key] = result[key];
-                    }
-                }
 
+            Tuple<string, string> region = null;
+            if (selectedRegion == null)
+            {
+                region = networkRegions.First();
             }
+            else
+            {
+                region = networkRegions.Find(r => r.Item2 != null && r.Item2.StartsWith(selectedRegion));
+            }
+            var results = await GetLatestFuelTechGenerationForRegion(region);
+
+   
+            foreach (var key in results.Keys)
+            {
+                if (fuelTypeGeneration.ContainsKey(key))
+                {
+                    fuelTypeGeneration[key] += results[key];
+                }
+                else
+                {
+                    fuelTypeGeneration[key] = results[key];
+                }
+            }
+
         }
 
         public int RenewablePercent
@@ -116,17 +121,21 @@ namespace PowerwallCompanion.CustomEnergySourceProviders
                     {
                         results.Gas += (int) fuelTypeGeneration[fuelType];
                     }
-                    else if (fuelType.Contains("biomass"))
+                    else if (fuelType.Contains("bioenergy"))
                     {
                         results.Biomass += (int)fuelTypeGeneration[fuelType];
                     }
-                    else if (fuelType.Contains("battery"))
+                    else if (fuelType.Contains("battery_discharging"))
                     {
                         results.BatteryStorage += (int)fuelTypeGeneration[fuelType];
                     }
                     else if (fuelType.Contains("distillate"))
                     {
                         results.Oil += (int)fuelTypeGeneration[fuelType];
+                    }
+                    else if (fuelType.Contains("battery_charging") || fuelType.Contains("pumps"))
+                    {
+                        // Skip, we don't want to count battery charge as generation
                     }
                     else
                     {
@@ -148,46 +157,64 @@ namespace PowerwallCompanion.CustomEnergySourceProviders
 
         }
 
-        private async Task<Dictionary<string, double>> GetLatestFuelTechGenerationForRegion(string region)
+        private async Task<Dictionary<string, double>> GetLatestFuelTechGenerationForRegion(Tuple<string, string> region)
         {
             var results = new Dictionary<string, double>();
             var client = new HttpClient();
-            var response = await client.GetStringAsync($"{openNemBaseUrl}/stats/power/network/fueltech/{network}/{region}");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Keys.OpenElectricityApiKey);
+            string networkRegionQuery = region.Item2 == null ? "" : $"&network_region={region.Item2}";
+            var response = await client.GetStringAsync($"{openNemBaseUrl}/v4/data/network/{region.Item1}?metrics=power{networkRegionQuery}&secondary_grouping=fueltech_group");
             var json = JsonNode.Parse(response);
             UpdatedDate = json["created_at"].GetValue<DateTime>();
-            var array = (JsonArray)json["data"];
-
-
-            foreach (var fuelTech in array)
+            var dataArray = (JsonArray)json["data"];
+            if (dataArray == null || dataArray.Count == 0)
             {
-                string type = fuelTech["type"]?.GetValue<string>();
-                string fuelTechCode = fuelTech["fuel_tech"]?.GetValue<string>();
+                return results;
+            }
+            var resultsArray = (JsonArray)dataArray[0]["results"];
+            if (resultsArray == null || resultsArray.Count == 0)
+            {
+                return results;
+            }
 
-                if (type == "power" && fuelTechCode != null && fuelTechCode != "imports" && fuelTechCode != "exports")
+
+            foreach (var fuelTech in resultsArray)
+            {
+                string groupName = fuelTech["name"]?.GetValue<string>();
+                string fuelTechCode = null;
+
+                if (groupName.Contains("|"))
                 {
-                    var historyData = (JsonArray)fuelTech["history"]["data"];
-                    var latestPower = GetLastNonZeroValue(historyData, fuelTechCode);
-                    results.Add(fuelTechCode, latestPower);
+                    fuelTechCode = groupName.Substring(groupName.IndexOf('|') + 1); // Format is "power_NSW1|battery_charging",
                 }
+                else if(groupName.StartsWith("power_"))
+                {
+                    fuelTechCode = groupName.Substring(6); // Format is "power_battery_charging",
+                }
+                else
+                {
+                    continue;
+                }
+
+                var historyData = (JsonArray)fuelTech["data"];
+                var latestPower = GetLastNonZeroValue(historyData);
+                results.Add(fuelTechCode, latestPower);
+     
             }
             return results;
         }
 
-        private double GetLastNonZeroValue(JsonArray array, string fuelTypeCode)
+        private double GetLastNonZeroValue(JsonArray array)
         {
             int valuesChecked = 0;
-            int maxValuesToCheck = (fuelTypeCode == "solar_rooftop") ? 2 : 5; // Rooftop solar has a 30 minute interval so don't look back so far
+            int maxValuesToCheck =  5; 
             for (int i = array.Count - 1; i >= 0; i--)
             {
                 if (valuesChecked++ > maxValuesToCheck) // It's probably really 0
                 {
                     return 0;
                 }
-                if (array[i] == null) // Happens occasionally 
-                {
-                    return 0;
-                }
-                double val = array[i].GetValue<double>();
+                double val = array[i][1].GetValue<double>();
                 if (val != 0)
                 {
                     return val;
@@ -196,35 +223,20 @@ namespace PowerwallCompanion.CustomEnergySourceProviders
             return 0;
         }
 
-        private async Task GetNetworkRegions()
-        {
-            networkRegions = new List<string>();
-            var client = new HttpClient();
-            var response = await client.GetStringAsync($"{openNemBaseUrl}/networks/regions?network_code={network}");
-            var json = (JsonArray)JsonArray.Parse(response);
-            foreach (var item in json)
-            {
-                networkRegions.Add(item["code"].GetValue<string>());
-            }
-        }
 
-        private async Task GetFuelTechs()
+        private void GetFuelTechs()
         {
             fuelTechs = new Dictionary<string, FuelTech>();
-            var client = new HttpClient();
-            var response = await client.GetStringAsync($"{openNemBaseUrl}/fueltechs");
-            var json = (JsonArray)JsonArray.Parse(response);
-            foreach (var item in json)
-            {
-                string code = item["code"].GetValue<string>();
-                var fuelTech = new FuelTech()
-                {
-                    Code = code,
-                    Label = item["label"].GetValue<string>(),
-                    IsRenewable = item["renewable"].GetValue<bool>(),
-                };
-                fuelTechs.Add(code, fuelTech);
-            }
+            fuelTechs.Add("coal", new FuelTech() { Code = "coal", Label = "Coal", IsRenewable = false });
+            fuelTechs.Add("gas", new FuelTech() { Code = "gas", Label = "Gas", IsRenewable = false });
+            fuelTechs.Add("wind", new FuelTech() { Code = "wind", Label = "Wind", IsRenewable = true });
+            fuelTechs.Add("solar", new FuelTech() { Code = "solar", Label = "Solar", IsRenewable = true });
+            fuelTechs.Add("battery_charging", new FuelTech() { Code = "battery_charging", Label = "Battery (Charging)", IsRenewable = false });
+            fuelTechs.Add("battery_discharging", new FuelTech() { Code = "battery_discharging", Label = "Battery (Charging)", IsRenewable = true });
+            fuelTechs.Add("hydro", new FuelTech() { Code = "hydro", Label = "Hydro", IsRenewable = true });
+            fuelTechs.Add("distillate", new FuelTech() { Code = "distillate", Label = "Distillate", IsRenewable = false });
+            fuelTechs.Add("bioenergy", new FuelTech() { Code = "bioenergy", Label = "Bioenergy", IsRenewable = true });
+            fuelTechs.Add("pumps", new FuelTech() { Code = "pumps", Label = "Pumps", IsRenewable = false });
         }
 
         class FuelTech

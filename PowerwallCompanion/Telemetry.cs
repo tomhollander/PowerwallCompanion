@@ -10,6 +10,7 @@ namespace PowerwallCompanion
 {
     internal static class Telemetry
     {
+        private static Dictionary<string, DateTime> exceptionLastTrackedTimes = new Dictionary<string, DateTime>();
 
         public static void TrackUser()
         {
@@ -31,6 +32,14 @@ namespace PowerwallCompanion
 
         public static void TrackException(Exception ex)
         {
+            string exceptionKey = ex.Message + ":" + ex.GetType().ToString();
+            DateTime lastTracked = exceptionLastTrackedTimes.ContainsKey(exceptionKey) ? exceptionLastTrackedTimes[exceptionKey] : DateTime.MinValue;
+            if (lastTracked != DateTime.MinValue && (DateTime.UtcNow - lastTracked).TotalSeconds < 180)
+            {
+                // Don't track the same exception more than once every 180 seconds
+                return;
+            }
+            exceptionLastTrackedTimes[exceptionKey] = DateTime.UtcNow;
 
             TrackEventToMixpanelSafe("Exception", BuildExceptionMetadata(ex, true));
         }

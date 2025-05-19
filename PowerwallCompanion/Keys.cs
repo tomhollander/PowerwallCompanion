@@ -14,5 +14,6 @@ namespace PowerwallCompanion
         public static string TeslaAppRedirectUrl; // Register at developer.tesla.com
         public static string ElectricityMapsApiKey; // Get a key at electricitymaps.com
         public static string MixpanelToken;
+        public static string OpenElectricityApiKey; // Get a key at openelectricity.org.au
     }
 }
