@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
+using System.Globalization;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,6 +31,10 @@ namespace PowerwallCompanion
             this.InitializeComponent();
             Telemetry.TrackEvent("SettingsPage opened");
             this.ViewModel = new SettingsViewModel();
+
+            dailySupplyChargeLabel.Text = dailySupplyChargeLabel.Text.Replace("¤", NumberFormatInfo.CurrentInfo.CurrencySymbol);
+            nonBypasableChargeLabel.Text = nonBypasableChargeLabel.Text.Replace("¤", NumberFormatInfo.CurrentInfo.CurrencySymbol);
+
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

@@ -417,14 +417,15 @@ namespace PowerwallCompanion
             {
                 if ((DateTime.Now - _energyUsageDataLastUpdated).TotalMinutes > 15)
                 {
-                    if (IsNemRegion(Settings.EnergySourcesZoneOverride))
-                    {
-                        await RefreshGridEnergyUsageDataFromOpenNem();
-                    }
-                    else
-                    {
-                        await RefreshGridEnergyUsageDataFromElectricityMaps();
-                    }
+                    // Probably going to retire OpenNEM support, as ElectricityMaps is easier to use and seems just as accurate now
+                    //if (IsNemRegion(Settings.EnergySourcesZoneOverride))
+                    //{
+                    //    await RefreshGridEnergyUsageDataFromOpenNem();
+                    //}
+                    //else
+                    //
+                     await RefreshGridEnergyUsageDataFromElectricityMaps();
+                    //}
                     _energyUsageDataLastUpdated = DateTime.Now;
                 }
             }
@@ -432,6 +433,7 @@ namespace PowerwallCompanion
 
         private bool IsNemRegion(string energySourcesZoneOverride)
         {
+            return false; 
             return (energySourcesZoneOverride == "AU" ||
                 energySourcesZoneOverride == "AU-NSW" ||
                 energySourcesZoneOverride == "AU-QLD" ||

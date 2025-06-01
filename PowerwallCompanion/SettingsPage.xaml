@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
-    xmlns:converters="using:PowerwallCompanion.Converters">
+    xmlns:converters="using:PowerwallCompanion.Converters"
+    Background="Black">
     <Page.Resources>
         <!--  These styles can be referenced to create a consistent SettingsPage layout  -->
         <!--  Reference SettingsExpander Page in Windows Community Toolkit Gallery for the full sample  -->
@@ -98,12 +99,21 @@
                                 <TextBox Text="{x:Bind ViewModel.AmberElectricApiKey, Mode=TwoWay}" Visibility="{x:Bind ViewModel.AmberApiKeyVisibility, Mode=OneWay}"  Width="300"/>
                             </toolkit:SettingsCard>
                             <toolkit:SettingsCard  Header="Daily Supply Charge" Description="The amount specified here will be added to your daily energy cost.">
-                                <TextBox Text="{x:Bind ViewModel.TariffDailySupplyCharge, Mode=TwoWay, Converter={StaticResource DecimalConverter}}"  Width="30"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <TextBox Text="{x:Bind ViewModel.TariffDailySupplyCharge, Mode=TwoWay, Converter={StaticResource DecimalConverter}}"  Width="20"/>
+                                    <TextBlock x:Name="dailySupplyChargeLabel" Text="¤ / day" VerticalAlignment="Center" Margin="10,0,00,0"/>
+                                </StackPanel>
+                            </toolkit:SettingsCard>
+                            <toolkit:SettingsCard  Header="Non-bypassable charge" Description="The amount specified here will be added to each kWh of grid import and cannot be offset.">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <TextBox Text="{x:Bind ViewModel.TariffNonBypassableCharge, Mode=TwoWay, Converter={StaticResource DecimalConverter}}"  Width="20"/>
+                                    <TextBlock x:Name="nonBypasableChargeLabel" Text="¤ / kWh" VerticalAlignment="Center" Margin="10,0,00,0"/>
+                                </StackPanel>
                             </toolkit:SettingsCard>
                         </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
 
-                    <toolkit:SettingsExpander Header="Energy Sources" Description="Show details about where your grid energy is sourced from, courtesty of electricitymaps.com and openelectricity.org.au">
+                    <toolkit:SettingsExpander Header="Energy Sources" Description="Show details about where your grid energy is sourced from, courtesty of electricitymaps.com">
                         <toolkit:SettingsExpander.HeaderIcon>
                             <FontIcon Glyph="&#xE945;" />
                         </toolkit:SettingsExpander.HeaderIcon>

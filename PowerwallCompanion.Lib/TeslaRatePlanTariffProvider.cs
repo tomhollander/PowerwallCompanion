@@ -16,8 +16,9 @@ namespace PowerwallCompanion.Lib
 
         private JsonObject ratePlan;
         private decimal dailySupplyCharge;
+        private decimal nonBypassableCharge;
 
-        public TeslaRatePlanTariffProvider(JsonObject ratePlan, decimal dailySupplyCharge)
+        public TeslaRatePlanTariffProvider(JsonObject ratePlan, decimal dailySupplyCharge, decimal nonBypassableCharge)
         {
             if (ratePlan == null)
             {
@@ -25,6 +26,7 @@ namespace PowerwallCompanion.Lib
             }
             this.ratePlan = ratePlan;
             this.dailySupplyCharge = dailySupplyCharge;
+            this.nonBypassableCharge = nonBypassableCharge;
         }
 
         public string ProviderName => "Tesla";
@@ -240,6 +242,7 @@ namespace PowerwallCompanion.Lib
             }
             decimal totalCost = 0M;
             decimal totalFeedIn = 0M;
+            decimal nonBypassableCost = 0M;
             foreach (var energyHistory in energyHistoryTimeSeries)
             {
                 var timestamp = Utils.GetUnspecifiedDateTime(energyHistory["timestamp"]);
@@ -255,7 +258,16 @@ namespace PowerwallCompanion.Lib
                 var rate = rates[tariff.Name];
                 totalCost += (decimal)energyImported * rate.Item1;
                 totalFeedIn += (decimal)energyExported * rate.Item2;
+                nonBypassableCost += (decimal)energyImported * this.nonBypassableCharge;
             }
+
+            if (nonBypassableCharge > 0)
+            {
+                // TODO: confirm this is the right way of doing it... 
+                totalCost += nonBypassableCost;
+                totalCost = Math.Max(totalCost, nonBypassableCost); // Ensure we charge at least the non-bypassable charge
+            }
+
             totalCost += dailySupplyCharge;
             return new Tuple<decimal, decimal>(totalCost, totalFeedIn);
             

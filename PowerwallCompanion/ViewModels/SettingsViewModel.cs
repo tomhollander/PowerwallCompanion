@@ -99,6 +99,13 @@ namespace PowerwallCompanion.ViewModels
             set => Settings.TariffDailySupplyCharge = value;
         }
 
+        public decimal TariffNonBypassableCharge
+        {
+            get => Settings.TariffNonBypassableCharge;
+            set => Settings.TariffNonBypassableCharge = value;
+        }
+
+
         public bool ShowEnergySources
         {
             get { return Settings.ShowEnergySources; }

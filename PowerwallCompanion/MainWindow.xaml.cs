@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -17,6 +18,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics;
 using WinRT.Interop;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -65,7 +67,48 @@ namespace PowerwallCompanion
                 // the title bar, such as the back button, if used
             }
 
-            m_AppWindow.Resize(new SizeInt32(1600, 1000));
+            RestoreLastWindowSize();
+            this.SizeChanged += MainWindow_SizeChanged;
+
+        }
+
+        private void RestoreLastWindowSize()
+        {
+            try
+            {
+                m_AppWindow.Resize(new SizeInt32(Settings.WindowWidth, Settings.WindowHeight));
+                Debug.WriteLine($"Restoring window size to {Settings.WindowWidth}x{Settings.WindowHeight}");
+
+                var presenter = m_AppWindow.Presenter as OverlappedPresenter;
+                if (Settings.WindowState == "Maximized")
+                {
+                    presenter.Maximize();
+                }
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+            }
+        }
+
+        private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
+        {
+            try
+            {
+                // Do not use args.Size, as it is not accurate for the app window.
+                Settings.WindowWidth = m_AppWindow.Size.Width;
+                Settings.WindowHeight = m_AppWindow.Size.Height;
+
+                Debug.WriteLine($"Saving window size: {m_AppWindow.Size.Width}x{m_AppWindow.Size.Height}");
+
+                var presenter = m_AppWindow.Presenter as OverlappedPresenter;
+                Settings.WindowState = presenter.State.ToString();
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+            }
+
         }
 
         public Button BackButton => AppTitleBarBackButton;
@@ -73,7 +116,6 @@ namespace PowerwallCompanion
         private void AppTitleBar_Loaded(object sender, RoutedEventArgs e)
         {
             SetTitleBar(AppTitleBar);
-            // TODO Raname MainPage in case your app Main Page has a different name
             PageFrame.Navigate(typeof(MainPage));
             if (AppWindowTitleBar.IsCustomizationSupported())
             {

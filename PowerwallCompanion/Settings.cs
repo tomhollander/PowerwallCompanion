@@ -154,6 +154,26 @@ namespace PowerwallCompanion
             }
         }
 
+        public static decimal TariffNonBypassableCharge
+        {
+            get
+            {
+                if (_localSettings.Values["TariffNonBypassableCharge"] == null)
+                {
+                    return 0.0M;
+                }
+                else
+                {
+                    return decimal.Parse((string)_localSettings.Values["TariffNonBypassableCharge"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["TariffNonBypassableCharge"] = value.ToString();
+            }
+        }
+
+
         public static string AmberElectricApiKey
         {
             get
@@ -369,6 +389,63 @@ namespace PowerwallCompanion
             set
             {
                 _localSettings.Values["EnergyDecimals"] = value.ToString();
+            }
+        }
+
+        public static int WindowHeight
+        {
+            get
+            {
+                if (_localSettings.Values["WindowHeight"] == null)
+                {
+                    return 1000;
+                }
+                else
+                {
+                    return int.Parse((string)_localSettings.Values["WindowHeight"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["WindowHeight"] = value.ToString();
+            }
+        }
+
+        public static int WindowWidth
+        {
+            get
+            {
+                if (_localSettings.Values["WindowWidth"] == null)
+                {
+                    return 1600;
+                }
+                else
+                {
+                    return int.Parse((string)_localSettings.Values["WindowWidth"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["WindowWidth"] = value.ToString();
+            }
+        }
+
+        public static string WindowState
+        {
+            get
+            {
+                if (_localSettings.Values["WindowState"] == null)
+                {
+                    return "Restored";
+                }
+                else
+                {
+                    return ((string)_localSettings.Values["WindowState"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["WindowState"] = value; 
             }
         }
     }
