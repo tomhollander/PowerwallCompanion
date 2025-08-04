@@ -1,6 +1,7 @@
 ﻿using PowerwallCompanion.Lib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -54,12 +55,13 @@ namespace PowerwallCompanion.Lib
             client.DefaultRequestHeaders.UserAgent.ParseAdd("X-Tesla-User-Agent");
             var response = await client.GetAsync(url);
             var responseMessage = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine($"GET {url} => {response.StatusCode} {responseMessage}");
             if (response.IsSuccessStatusCode)
             {
                 var responseJson = (JsonObject)JsonNode.Parse(responseMessage);
                 if (responseJson["response"].GetValueKind() == System.Text.Json.JsonValueKind.String && responseJson["response"].GetValue<string>() == "")
                 {
-                    throw new HttpRequestException("API returned no data");
+                    throw new NoDataException("API returned no data");
                 }
                 return responseJson;
             }

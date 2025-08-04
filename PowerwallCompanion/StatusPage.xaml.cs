@@ -44,7 +44,7 @@ namespace PowerwallCompanion
         private DispatcherTimer timer;
         private PowerwallApi powerwallApi;
         private ITariffProvider tariffHelper;
-
+        private int noDataResponseCount = 0;
         public StatusPage()
         {
             this.InitializeComponent();
@@ -180,7 +180,7 @@ namespace PowerwallCompanion
                 
                 viewModel.NotifyPowerProperties();
 
-
+                noDataResponseCount = 0;
                 SendNotificationsOnBatteryStatus(viewModel.InstantaneousPower.BatteryStoragePercent);
             }
             catch (UnauthorizedAccessException ex)
@@ -195,6 +195,17 @@ namespace PowerwallCompanion
                 viewModel.NotifyPowerProperties();
                 viewModel.Status = StatusViewModel.StatusEnum.Error;
 
+            }
+            catch (NoDataException ex)
+            {
+                noDataResponseCount++;
+                if (noDataResponseCount > 5)
+                {
+                    viewModel.LastExceptionMessage = ex.Message;
+                    viewModel.LastExceptionDate = DateTime.Now;
+                    viewModel.NotifyPowerProperties();
+                    viewModel.Status = StatusViewModel.StatusEnum.Error;
+                }
             }
             catch (Exception ex)
             {
@@ -248,11 +259,24 @@ namespace PowerwallCompanion
                     powerwallApi.GetEnergyTotalsForDay(0, tariffHelper)
                 };
                 var results = await Task.WhenAll(tasks);
-                viewModel.EnergyTotalsYesterday = results[0];
-                viewModel.EnergyTotalsToday = results[1];
 
+                if (!EnergyTotalsAllZeros(results[0]))
+                {
+                    viewModel.EnergyTotalsYesterday = results[0];
+                    viewModel.EnergyHistoryLastRefreshed = DateTime.Now;
+                }
+                if (!EnergyTotalsAllZeros(results[1]))
+                {
+                    viewModel.EnergyTotalsToday = results[1];
+                    viewModel.EnergyHistoryLastRefreshed = DateTime.Now;
+                }
+                
                 viewModel.NotifyDailyEnergyProperties();
 
+            }
+            catch (NoDataException)
+            {
+                // Don't update the energy history if there is a no data response
             }
             catch (Exception ex)
             {
@@ -261,6 +285,21 @@ namespace PowerwallCompanion
                 viewModel.LastExceptionDate = DateTime.Now;
                 viewModel.NotifyDailyEnergyProperties();
             }
+        }
+
+        private bool EnergyTotalsAllZeros(EnergyTotals energyTotals)
+        {
+            // Sometimes the Tesla API returns what looks like a valid response, but with all values as zero
+            if (energyTotals == null)
+            {
+                return true;
+            }
+            if (energyTotals.SolarEnergy == 0 && energyTotals.BatteryEnergyCharged == 0 && energyTotals.BatteryEnergyDischarged == 0 &&
+                energyTotals.GridEnergyExported == 0 && energyTotals.GridEnergyImported == 0 && energyTotals.HomeEnergy == 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task GetPowerHistoryData()
@@ -287,6 +326,10 @@ namespace PowerwallCompanion
 
                 viewModel.PowerHistoryLastRefreshed = DateTime.Now;
                 viewModel.NotifyGraphProperties();
+            }
+            catch (NoDataException)
+            {
+                // Don't update the power history if there is a no data response
             }
             catch (Exception ex)
             {
