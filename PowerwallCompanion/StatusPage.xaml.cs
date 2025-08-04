@@ -228,6 +228,7 @@ namespace PowerwallCompanion
                 var minMax = await powerwallApi.GetBatteryMinMaxToday();
                 viewModel.MinBatteryPercentToday = minMax.Item1;
                 viewModel.MaxBatteryPercentToday = minMax.Item2;
+                viewModel.BatteryDay = DateTime.Today;
             }
             else if (viewModel.BatteryDay != (powerwallApi.ConvertToPowerwallDate(DateTime.Now)).Date) 
             {
