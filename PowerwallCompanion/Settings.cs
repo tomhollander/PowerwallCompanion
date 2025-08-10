@@ -97,6 +97,26 @@ namespace PowerwallCompanion
             }
         }
 
+
+        public static bool ShowAnimations
+        {
+            get
+            {
+                if (_localSettings.Values["showAnimations"] == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return bool.Parse((string)_localSettings.Values["showAnimations"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["showAnimations"] = value.ToString();
+            }
+        }
+
         public static bool ShowEnergyRates
         {
             get

@@ -176,7 +176,14 @@
                         </toolkit:SettingsCard.HeaderIcon>
                         <ToggleSwitch IsOn="{x:Bind ViewModel.ShowClock, Mode=TwoWay}" />
                     </toolkit:SettingsCard>
-                    
+
+                    <toolkit:SettingsCard Header="Show Animations">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xe8b2;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.ShowAnimations, Mode=TwoWay}" />
+                    </toolkit:SettingsCard>
+
                     <!--  About  -->
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="About" />
                     <toolkit:SettingsCard Header="Powerwall Companion">

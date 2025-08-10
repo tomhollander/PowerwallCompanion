@@ -45,6 +45,16 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public bool ShowAnimations
+        {
+            get { return Settings.ShowAnimations; }
+            set
+            {
+                Settings.ShowAnimations = value;
+            }
+        }
+
+
         public bool ShowClock
         {
             get { return Settings.ShowClock; }
@@ -273,6 +283,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(SignedIn));
             NotifyPropertyChanged(nameof(SignInName));
             NotifyPropertyChanged(nameof(ShowClock));
+            NotifyPropertyChanged(nameof(ShowAnimations));
             NotifyPropertyChanged(nameof(ShowEnergySources));
             NotifyPropertyChanged(nameof(GraphScale));
             NotifyPropertyChanged(nameof(PlaySounds));

@@ -79,11 +79,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <gauge:SfRadialGauge VerticalAlignment="Center" Width="260"  Grid.Row="0">
+            <gauge:SfRadialGauge VerticalAlignment="Center" Width="260" Grid.Row="0">
                 <gauge:SfRadialGauge.Axes>
                     <gauge:RadialAxis StartAngle="95" EndAngle="85" ShowLabels="False" ShowTicks="False" ShowAxisLine="True" AxisLineWidth="30"  RadiusFactor="1" TickPosition="Cross" TickOffset="30" AxisLineFill="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBackgroundBrushConverter}, Mode=OneWay}" >
                         <gauge:RadialAxis.Ranges>
                             <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}"  />
+                            <gauge:GaugeRange StartValue="{x:Bind ViewModel.AnimatedBatteryPercentStart, Mode=OneWay}"  EndValue="{x:Bind ViewModel.AnimatedBatteryPercentEnd, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="Black" Opacity="0.2" />
                             <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="#80000000"  />
                             <gauge:GaugeRange StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StartWidth="5" EndWidth="5" RangeOffset="35" Background="Green" />
                             <!-- Ticks because the control doesn't let you put normal ticks over the range -->
@@ -95,7 +96,7 @@
                             <gauge:GaugeRange StartValue="59.7" EndValue="60.3" StartWidth="35" EndWidth="35" Background="Black" />
                             <gauge:GaugeRange StartValue="69.7" EndValue="70.3" StartWidth="35" EndWidth="35" Background="Black" />
                             <gauge:GaugeRange StartValue="79.7" EndValue="80.3" StartWidth="35" EndWidth="35" Background="Black" />
-                            <gauge:GaugeRange StartValue="89.7" EndValue="90.3" StartWidth="35" EndWidth="35" Background="Black" />
+                            <gauge:GaugeRange StartValue="89.7" EndValue="90.3" StartWidth="35" EndWidth="35" Background="Black"  />
                         </gauge:RadialAxis.Ranges>
                         <gauge:RadialAxis.Annotations>
                             <gauge:GaugeAnnotation>

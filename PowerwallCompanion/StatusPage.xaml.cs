@@ -42,6 +42,7 @@ namespace PowerwallCompanion
         private double minPercentSinceNotification = 0D;
         private double maxPercentSinceNotification = 100D;
         private DispatcherTimer timer;
+        private DispatcherTimer animationTimer;
         private PowerwallApi powerwallApi;
         private ITariffProvider tariffHelper;
         private int noDataResponseCount = 0;
@@ -55,7 +56,17 @@ namespace PowerwallCompanion
             timer.Interval = TimeSpan.FromSeconds(30);
             timer.Tick += Timer_Tick;
             timer.Start();
+
+            if (Settings.ShowAnimations)
+            {
+                animationTimer = new DispatcherTimer();
+                animationTimer.Interval = TimeSpan.FromSeconds(5);
+                animationTimer.Tick += AnimationTimer_Tick;
+                animationTimer.Start();
+            }
+
         }
+
 
         public StatusViewModel ViewModel
         {
@@ -177,7 +188,7 @@ namespace PowerwallCompanion
                 await UpdateMinMaxPercentToday(); 
                 viewModel.LiveStatusLastRefreshed = DateTime.Now;
                 viewModel.Status = viewModel.InstantaneousPower.GridActive ? StatusViewModel.StatusEnum.Online : StatusViewModel.StatusEnum.GridOutage;
-                
+
                 viewModel.NotifyPowerProperties();
 
                 noDataResponseCount = 0;
@@ -215,6 +226,48 @@ namespace PowerwallCompanion
                 viewModel.NotifyPowerProperties();
                 viewModel.Status = StatusViewModel.StatusEnum.Error;
             }
+        }
+
+        private async void AnimationTimer_Tick(object sender, object e)
+        {
+            if (ViewModel.InstantaneousPower.BatteryPower < 0)
+            {
+                // Battery is charging
+                ViewModel.AnimatedBatteryPercentEnd = ViewModel.InstantaneousPower.BatteryStoragePercent;
+                await PropertyAnimator.AnimatePropertyAsync(
+                      value => {
+                          ViewModel.AnimatedBatteryPercentStart = value;
+                          ViewModel.NotifyPowerProperties();
+                      },
+                      0,
+                      ViewModel.InstantaneousPower.BatteryStoragePercent,
+                      ViewModel.InstantaneousPower.BatteryStoragePercent,
+                      TimeSpan.FromMilliseconds(800)
+                );
+            }
+            else if (ViewModel.InstantaneousPower.BatteryPower > 0)
+            {
+                // Battery is discharging
+                ViewModel.AnimatedBatteryPercentStart = 0;
+                await PropertyAnimator.AnimatePropertyAsync(
+                      value => {
+                          ViewModel.AnimatedBatteryPercentEnd = value;
+                          ViewModel.NotifyPowerProperties();
+                      },
+                      ViewModel.InstantaneousPower.BatteryStoragePercent,
+                      0,
+                      0,
+                      TimeSpan.FromMilliseconds(800)
+                );
+            }
+            else
+            {
+                // Battery is not charging or discharging
+                ViewModel.AnimatedBatteryPercentStart = 0;
+                ViewModel.AnimatedBatteryPercentEnd = 0;
+                ViewModel.NotifyPowerProperties();
+            }
+
         }
 
         private async Task UpdateMinMaxPercentToday()
