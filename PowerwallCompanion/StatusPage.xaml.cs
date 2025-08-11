@@ -237,7 +237,7 @@ namespace PowerwallCompanion
                 await PropertyAnimator.AnimatePropertyAsync(
                       value => {
                           ViewModel.AnimatedBatteryPercentStart = value;
-                          ViewModel.NotifyPowerProperties();
+                          ViewModel.NotifyAnimationProperties();
                       },
                       0,
                       ViewModel.InstantaneousPower.BatteryStoragePercent,
@@ -248,15 +248,15 @@ namespace PowerwallCompanion
             else if (ViewModel.InstantaneousPower.BatteryPower > 0)
             {
                 // Battery is discharging
-                ViewModel.AnimatedBatteryPercentStart = 0;
+                ViewModel.AnimatedBatteryPercentStart = ViewModel.InstantaneousPower.BatteryStoragePercent;
                 await PropertyAnimator.AnimatePropertyAsync(
                       value => {
                           ViewModel.AnimatedBatteryPercentEnd = value;
-                          ViewModel.NotifyPowerProperties();
+                          ViewModel.NotifyAnimationProperties();
                       },
                       ViewModel.InstantaneousPower.BatteryStoragePercent,
                       0,
-                      0,
+                      ViewModel.InstantaneousPower.BatteryStoragePercent,
                       TimeSpan.FromMilliseconds(800)
                 );
             }
@@ -265,7 +265,7 @@ namespace PowerwallCompanion
                 // Battery is not charging or discharging
                 ViewModel.AnimatedBatteryPercentStart = 0;
                 ViewModel.AnimatedBatteryPercentEnd = 0;
-                ViewModel.NotifyPowerProperties();
+                ViewModel.NotifyAnimationProperties();
             }
 
         }

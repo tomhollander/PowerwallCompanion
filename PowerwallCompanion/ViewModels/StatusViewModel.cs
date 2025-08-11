@@ -48,8 +48,6 @@ namespace PowerwallCompanion.ViewModels
         public void NotifyPowerProperties()
         {
             NotifyPropertyChanged(nameof(InstantaneousPower));
-            NotifyPropertyChanged(nameof(AnimatedBatteryPercentStart));
-            NotifyPropertyChanged(nameof(AnimatedBatteryPercentEnd));
             NotifyPropertyChanged(nameof(MinBatteryPercentToday));
             NotifyPropertyChanged(nameof(MaxBatteryPercentToday));
 
@@ -58,6 +56,12 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(TariffFeedInVisibility));
             NotifyPropertyChanged(nameof(TariffCostVisibility));
             NotifyPropertyChanged(nameof(Time));
+        }
+
+        public void NotifyAnimationProperties()
+        {
+            NotifyPropertyChanged(nameof(AnimatedBatteryPercentStart));
+            NotifyPropertyChanged(nameof(AnimatedBatteryPercentEnd));
         }
 
         public void NotifyDailyEnergyProperties()

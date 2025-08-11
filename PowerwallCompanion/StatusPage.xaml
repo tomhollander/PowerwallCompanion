@@ -86,7 +86,7 @@
                             <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.InstantaneousPower.BatteryStoragePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="{x:Bind ViewModel.Status,Converter={StaticResource StatusToBrushConverter}, Mode=OneWay}"  />
                             <gauge:GaugeRange StartValue="{x:Bind ViewModel.AnimatedBatteryPercentStart, Mode=OneWay}"  EndValue="{x:Bind ViewModel.AnimatedBatteryPercentEnd, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="Black" Opacity="0.2" />
                             <gauge:GaugeRange StartValue="0" EndValue="{x:Bind ViewModel.EnergySiteInfo.ReservePercent, Mode=OneWay}" StartWidth="30" EndWidth="30" Background="#80000000"  />
-                            <gauge:GaugeRange StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StartWidth="5" EndWidth="5" RangeOffset="35" Background="Green" />
+                            <gauge:GaugeRange StartValue="{x:Bind ViewModel.MinBatteryPercentToday, Mode=OneWay}" EndValue="{x:Bind ViewModel.MaxBatteryPercentToday, Mode=OneWay}" StartWidth="5" EndWidth="5" RangeOffset="35" Background="Green" ToolTipService.ToolTip="Range of battery charge level today" />
                             <!-- Ticks because the control doesn't let you put normal ticks over the range -->
                             <gauge:GaugeRange StartValue="9.7"  EndValue="10.3" StartWidth="35" EndWidth="35" Background="Black"/>
                             <gauge:GaugeRange StartValue="19.7" EndValue="20.3" StartWidth="35" EndWidth="35" Background="Black"/>
