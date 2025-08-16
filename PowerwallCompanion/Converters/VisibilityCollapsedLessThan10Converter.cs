@@ -10,11 +10,9 @@ namespace PowerwallCompanion.Converters
 {
     class VisibilityCollapsedLessThan10Converter : IValueConverter
     {
-        public object Visbility { get; private set; }
-
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            double doubleValue = (double)value;
+            double doubleValue = Math.Abs((double)value); // Absolute value to handle negative numbers
             if (doubleValue < 10D)
             {
                 return Visibility.Collapsed;

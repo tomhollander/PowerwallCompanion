@@ -230,6 +230,10 @@ namespace PowerwallCompanion
 
         private async void AnimationTimer_Tick(object sender, object e)
         {
+            if (ViewModel.InstantaneousPower == null)
+            {
+                return; // No data available yet
+            }
             if (ViewModel.InstantaneousPower.BatteryPower < 0)
             {
                 // Battery is charging
@@ -256,7 +260,7 @@ namespace PowerwallCompanion
                       },
                       ViewModel.InstantaneousPower.BatteryStoragePercent,
                       0,
-                      ViewModel.InstantaneousPower.BatteryStoragePercent,
+                      0,
                       TimeSpan.FromMilliseconds(800)
                 );
             }

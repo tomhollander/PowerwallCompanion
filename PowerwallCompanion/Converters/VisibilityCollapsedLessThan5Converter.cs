@@ -10,7 +10,6 @@ namespace PowerwallCompanion.Converters
 {
     class VisibilityCollapsedLessThan5Converter : IValueConverter
     {
-        public object Visbility { get; private set; }
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {

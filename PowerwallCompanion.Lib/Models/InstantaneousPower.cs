@@ -18,32 +18,42 @@ namespace PowerwallCompanion.Lib.Models
         // Derived values
         public double HomeFromGrid
         {
-            get { return GridPower > 0D ? GridPower : 0D; }
+            get { return Math.Max(0, HomePower - HomeFromSolar - HomeFromBattery); }
         }
 
         public double HomeFromBattery
         {
-            get { return BatteryPower > 0D ? BatteryPower : 0D; }
+            get { return BatteryPower > 0D ? Math.Min(BatteryPower, Math.Max(0, HomePower - HomeFromSolar)) : 0D; }
         }
 
         public double HomeFromSolar
         {
-            get { return HomePower - HomeFromGrid - HomeFromBattery; }
+            get { return Math.Min(SolarPower, HomePower); }
         }
 
         public double SolarToGrid
         {
-            get { return GridPower < 0D ? -GridPower : 0D; }
+            get { return Math.Max(0, SolarPower - SolarToHome - SolarToBattery); }
         }
 
         public double SolarToBattery
         {
-            get { return BatteryPower < 0D ? -BatteryPower : 0D; }
+            get { return BatteryPower > 0D ? Math.Min(SolarPower - SolarToHome, Math.Abs(BatteryPower)): 0D; }
         }
 
         public double SolarToHome
         {
-            get { return SolarPower - SolarToGrid - SolarToBattery; }
+            get { return HomeFromSolar; }
+        }
+
+        public double BatteryToGrid
+        {
+            get { return BatteryPower > 0D ? Math.Max(0, BatteryPower - HomePower) : 0D; }
+        }
+
+        public double BatteryFromGrid
+        {
+            get { return BatteryPower < 0 && GridPower > HomeFromGrid ? Math.Abs(BatteryPower) : Math.Max(0, GridPower - HomeFromGrid);  }
         }
     }
 }
