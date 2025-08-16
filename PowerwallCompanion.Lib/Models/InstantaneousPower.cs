@@ -16,44 +16,44 @@ namespace PowerwallCompanion.Lib.Models
         public bool StormWatchActive { get; set; }
 
         // Derived values
-        public double HomeFromGrid
-        {
-            get { return Math.Max(0, HomePower - HomeFromSolar - HomeFromBattery); }
-        }
+        public double SolarToHome => Math.Min(SolarPower, HomePower);
 
-        public double HomeFromBattery
-        {
-            get { return BatteryPower > 0D ? Math.Min(BatteryPower, Math.Max(0, HomePower - HomeFromSolar)) : 0D; }
-        }
+        public double BatteryToHome =>
+            BatteryPower > 0D ? Math.Min(BatteryPower, Math.Max(0D, HomePower - SolarToHome)) : 0D;
 
-        public double HomeFromSolar
-        {
-            get { return Math.Min(SolarPower, HomePower); }
-        }
+        public double GridToHome =>
+            Math.Max(0D, HomePower - SolarToHome - BatteryToHome);
 
-        public double SolarToGrid
-        {
-            get { return Math.Max(0, SolarPower - SolarToHome - SolarToBattery); }
-        }
-
+        // Battery charging attribution
         public double SolarToBattery
         {
-            get { return BatteryPower > 0D ? Math.Min(SolarPower - SolarToHome, Math.Abs(BatteryPower)): 0D; }
+            get
+            {
+                if (BatteryPower >= 0D) return 0D;
+
+                double batteryCharge = Math.Abs(BatteryPower);
+                double solarSurplus = Math.Max(0D, SolarPower - SolarToHome);
+                return Math.Min(solarSurplus, batteryCharge);
+            }
         }
 
-        public double SolarToHome
+        public double GridToBattery
         {
-            get { return HomeFromSolar; }
+            get
+            {
+                if (BatteryPower >= 0D) return 0D;
+
+                double batteryCharge = Math.Abs(BatteryPower);
+                double solarToBattery = SolarToBattery;
+                return batteryCharge - solarToBattery;
+            }
         }
 
-        public double BatteryToGrid
-        {
-            get { return BatteryPower > 0D ? Math.Max(0, BatteryPower - HomePower) : 0D; }
-        }
+        public double SolarToGrid =>
+            Math.Max(0D, SolarPower - SolarToHome - SolarToBattery);
 
-        public double BatteryFromGrid
-        {
-            get { return BatteryPower < 0 && GridPower > HomeFromGrid ? Math.Abs(BatteryPower) : Math.Max(0, GridPower - HomeFromGrid);  }
-        }
+        public double BatteryToGrid =>
+            BatteryPower > 0D ? Math.Max(0D, BatteryPower - BatteryToHome) : 0D;
+
     }
 }

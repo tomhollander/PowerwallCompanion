@@ -62,9 +62,9 @@ namespace PowerwallCompanion.Lib.Tests
             Assert.AreEqual(550, power.BatteryPower);
             Assert.AreEqual(1336.2943267822266, power.GridPower);
             Assert.AreEqual(44, power.SolarPower);
-            Assert.AreEqual(1336.2943267822266, power.HomeFromGrid);
-            Assert.AreEqual(550, power.HomeFromBattery);
-            Assert.AreEqual(44, power.HomeFromSolar);
+            Assert.AreEqual(1336.2943267822266, power.GridToHome);
+            Assert.AreEqual(550, power.BatteryToHome);
+            Assert.AreEqual(44, power.SolarToHome);
             Assert.AreEqual(0, power.SolarToGrid);
             Assert.AreEqual(0, power.SolarToBattery);
             Assert.AreEqual(44, power.SolarToHome);
