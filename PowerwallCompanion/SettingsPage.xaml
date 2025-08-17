@@ -86,7 +86,7 @@
                     </toolkit:SettingsExpander>
 
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Features"  />
-                    <toolkit:SettingsCard Header="Power Display Mode">
+                    <toolkit:SettingsCard Header="Power Display Mode" Description="Choose how you would like to view your instantaneous power usage">
                         <toolkit:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE781;" />
                         </toolkit:SettingsCard.HeaderIcon>
