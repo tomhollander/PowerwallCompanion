@@ -45,6 +45,21 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public IEnumerable<string> PowerDisplayModes
+        {
+            get => new string[] { "Graph", "Flow" };
+            
+        }
+
+        public string PowerDisplayMode
+        {
+            get { return Settings.PowerDisplayMode; }
+            set
+            {
+                Settings.PowerDisplayMode = value;
+            }
+        }
+     
         public bool ShowAnimations
         {
             get { return Settings.ShowAnimations; }

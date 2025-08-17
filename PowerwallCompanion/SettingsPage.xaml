@@ -86,6 +86,12 @@
                     </toolkit:SettingsExpander>
 
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Features"  />
+                    <toolkit:SettingsCard Header="Power Display Mode">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE781;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ComboBox VerticalAlignment="Center" ItemsSource="{x:Bind ViewModel.PowerDisplayModes}" SelectedItem="{x:Bind ViewModel.PowerDisplayMode, Mode=TwoWay}" />
+                    </toolkit:SettingsCard>
                     <toolkit:SettingsExpander Header="Energy Costs" Description="Show energy costs based on your rate plan">
                         <toolkit:SettingsExpander.HeaderIcon>
                             <FontIcon Glyph="&#xE1D0;" />
