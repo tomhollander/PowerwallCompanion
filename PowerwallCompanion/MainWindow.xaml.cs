@@ -68,8 +68,24 @@ namespace PowerwallCompanion
             }
 
             RestoreLastWindowSize();
+            SendSessionStartEvent();
             this.SizeChanged += MainWindow_SizeChanged;
 
+        }
+
+        private void SendSessionStartEvent()
+        {
+            var props = new Dictionary<string, string>
+            {
+                { "ShowEnergyCosts", Settings.ShowEnergyRates.ToString() },
+                { "ShowEnergySources", Settings.ShowEnergySources.ToString() },
+                { "ShowClock", Settings.ShowClock.ToString() },
+                { "ShowAnimations", Settings.ShowAnimations.ToString() },
+                { "PowerDisplayMode", Settings.PowerDisplayMode },
+                { "StoreBatteryHistory", Settings.StoreBatteryHistory.ToString() },
+            };
+
+            Telemetry.TrackEvent("SessionStart", props);
         }
 
         private void RestoreLastWindowSize()
