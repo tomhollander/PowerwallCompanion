@@ -40,9 +40,7 @@
         <converters:VisibilityCollapsedLessThan10Converter x:Key="VisibilityCollapsedLessThan10Converter"/> 
     </Page.Resources>
 
-
-    <Grid x:Name="rootGrid">
-
+    <Viewbox x:Name="rootViewbox">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="NarrowView">
@@ -51,6 +49,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column2.Width" Value="0" />
+                        <Setter Target="chart.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideView">
@@ -59,11 +58,15 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column2.Width" Value="*" />
+                        <Setter Target="chart.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
+
+        <Grid x:Name="rootGrid">
+
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="column1" Width="*" />
             <ColumnDefinition x:Name="column2" Width="*" />
@@ -377,34 +380,34 @@
                 </Grid.RowDefinitions>
                        
                 <!-- Flows -->
-                <Ellipse x:Name="background" Width="200" Height="200" Stroke="#101010" StrokeThickness="12" Grid.Row="1" Grid.Column="1"/>
+                <Ellipse x:Name="background" Margin="-12,-12,0,0" Width="212" Height="212" Stroke="#202020" StrokeThickness="12" Grid.Row="1" Grid.Column="1"/>
 
-                <Path x:Name="solarToHomePath" Data="M 30,30 A 100,100 0 0 0 30,170" Stroke="{StaticResource SolarToHomeGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
-                <Path x:Name="solarToGridPath" Data="M 30,30 A 100,100 0 0 1 170,30" Stroke="{StaticResource SolarToGridGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
-                <Path x:Name="batteryToHomePath" Data="M 170,170 A 100,100 0 0 1 30,170" Stroke="{StaticResource BatteryToHomeGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
-                <Path x:Name="batteryToGridPath" Data="M 170,170 A 100,100 0 0 0 170,30" Stroke="{StaticResource BatteryToGridGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
-                <Path x:Name="gridToBatteryPath" Data="M 170,30 A 100,100 0 0 1 170,170" Stroke="{StaticResource GridToBatteryGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
-                <Path x:Name="solarToBatteryPath" Data="M 30,30 L 170,170" Stroke="{StaticResource SolarToBatteryGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
-                <Path x:Name="gridToHomePath" Data="M 170,30 L 30,170" Stroke="{StaticResource GridToHomeGradient}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="solarToHomePath" Data="M 9.369,57.738 A 100,100 0 0 0 13.397,150" Stroke="{StaticResource SolarToHomeGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="solarToGridPath" Data="M 36,23 A 100,100 0 0 1 150,13" Stroke="{StaticResource SolarToGridGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="batteryToHomePath" Data="M 157,182 A 100,100 0 0 1 60,192" Stroke="{StaticResource BatteryToHomeGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="batteryToGridPath" Data="M 189,145 A 100,100 0 0 0 192,60" Stroke="{StaticResource BatteryToGridGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="gridToBatteryPath" Data="M 187,50 A 100,100 0 0 1 189,145" Stroke="{StaticResource GridToBatteryGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="solarToBatteryPath" Data="M 30,30 L 160,160" Stroke="{StaticResource SolarToBatteryGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
+                <Path x:Name="gridToHomePath" Data="M 170,30 L 50,155" Stroke="{StaticResource GridToHomeGradient}" StrokeEndLineCap="Triangle" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}, FallbackValue=Collapsed}" StrokeThickness="12" Grid.Row="1" Grid.Column="1" />
                 
                 <Image Source="ms-appx:///Assets/flow-background.png" Width="200" Height="200" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
 
                 <!-- Power kW labels -->
                 <TextBlock Foreground="Gold" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.SolarPower, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarPower, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.SolarPower, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of solar power being generated now'}" Margin="0,0,0,-10"></TextBlock>
-                <TextBlock Foreground="Gold" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of solar power being exported to the grid now'}"></TextBlock>
+                <TextBlock Foreground="Gold" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.SolarToGrid, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of solar power being exported to the grid now'}"></TextBlock>
                 <TextBlock Foreground="LightGray" Grid.Row="0" Grid.ColumnSpan="3"  VerticalAlignment="Bottom" HorizontalAlignment="Right"  FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.GridPower, Mode=OneWay, Converter={StaticResource GridPowerTooltipMessageConverter}}" Margin="0,0,0,-10"></TextBlock>
 
-                <TextBlock Foreground="Gold" Grid.Row="1" Grid.Column="0"  VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of solar power going to your home now'}"></TextBlock>
+                <TextBlock Foreground="Gold" Grid.Row="1" Grid.Column="0"  VerticalAlignment="Center"  HorizontalAlignment="Right" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}"  ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.SolarToHome, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of solar power going to your home now'}" Margin="0,0,10,0"></TextBlock>
                 <TextBlock Foreground="Gold" Grid.Row="1" Grid.Column="1"  VerticalAlignment="Center" FontSize="30" Margin="50,-50,0,0" Text="{x:Bind ViewModel.InstantaneousPower.SolarToBattery, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.SolarToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.SolarToBattery, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of solar power going to your battery now'}"></TextBlock>
-                <TextBlock Foreground="LightGray" Grid.Row="1" Grid.Column="1"  VerticalAlignment="Center" FontSize="30" Margin="40,40,0,0" Text="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of grid power going to your home now'}"></TextBlock>
-                <TextBlock Foreground="LightGray" Grid.Row="1" Grid.Column="3"  VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of grid power charing your battery now'}"></TextBlock>
-                <TextBlock Foreground="LimeGreen" Grid.Row="1" Grid.Column="3"  VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of battery power being exported to the grid now'}"></TextBlock>
+                <TextBlock Foreground="LightGray" Grid.Row="1" Grid.Column="1"  VerticalAlignment="Center" FontSize="30" Margin="100,45,0,0" Text="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Left" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.GridToHome, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of grid power going to your home now'}"></TextBlock>
+                <TextBlock Foreground="LightGray" Grid.Row="1" Grid.Column="3"  VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Left" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.GridToBattery, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of grid power charging your battery now'}" Margin="5,0,0,0"></TextBlock>
+                <TextBlock Foreground="LimeGreen" Grid.Row="1" Grid.Column="3"  VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" HorizontalAlignment="Left" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.BatteryToGrid, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of battery power being exported to the grid now'}" Margin="5,0,0,0"></TextBlock>
 
                 <TextBlock Foreground="DeepSkyBlue" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.HomePower, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.HomePower, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.HomePower, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of power being used by your home now'}" Margin="0,-10,0,0"></TextBlock>
                 <TextBlock Foreground="LimeGreen" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.InstantaneousPower.BatteryToHome, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryToHome, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.BatteryToHome, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kW of battery power going to your home now'}"></TextBlock>
                 <TextBlock Foreground="LimeGreen" Grid.Row="2" Grid.ColumnSpan="3"  VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="50" Text="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource KilowattConverter}}" Visibility="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}" ToolTipService.ToolTip="{x:Bind ViewModel.InstantaneousPower.BatteryPower, Mode=OneWay, Converter={StaticResource BatteryPowerTooltipMessageConverter}}" Margin="0,-10,0,0"></TextBlock>
 
-                <TextBlock FontSize="20" Margin="0,0,0,-15" Foreground="#888888" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1" Text="kW" />
+                <TextBlock FontSize="20" Margin="0,0,0,-5" Foreground="#888888" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1" Text="kW" />
 
             </Grid>
             
@@ -599,7 +602,7 @@
             </Grid>
 
             <!-- Power history chart -->
-            <chart:SfCartesianChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400" VerticalAlignment="Bottom">
+            <chart:SfCartesianChart x:Name="chart" Grid.Row="1" Margin="0,20,20,10" HorizontalAlignment="Center" MaxHeight="400"  Width="600" VerticalAlignment="Bottom">
                 <chart:SfCartesianChart.TrackballBehavior>
                     <chart:ChartTrackballBehavior />
                 </chart:SfCartesianChart.TrackballBehavior>
@@ -645,6 +648,6 @@
 
     </Grid>
 
-
+    </Viewbox>
 
 </Page>
