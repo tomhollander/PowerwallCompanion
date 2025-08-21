@@ -71,7 +71,7 @@ namespace PowerwallCompanion.Lib
             }
             else
             {
-                throw new HttpRequestException(responseMessage);
+                throw new HttpRequestException($"Request failed with HTTP {response.StatusCode}");
             }
         }
 
