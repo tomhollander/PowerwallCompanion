@@ -468,5 +468,24 @@ namespace PowerwallCompanion
                 _localSettings.Values["WindowState"] = value; 
             }
         }
+
+        public static string PowerDisplayMode
+        {
+            get
+            {
+                if (_localSettings.Values["PowerDisplayMode"] == null)
+                {
+                    return "Graph";
+                }
+                else
+                {
+                    return ((string)_localSettings.Values["PowerDisplayMode"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["PowerDisplayMode"] = value;
+            }
+        }
     }
 }

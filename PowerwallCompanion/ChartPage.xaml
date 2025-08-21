@@ -87,7 +87,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="0">
                     <Image Source="ms-appx:///Assets/icon_home.png" VerticalAlignment="Center" ToolTipService.ToolTip="Home Use" Width="30" Margin="5,0,5,0"></Image>
-                    <TextBlock Foreground="Cyan" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.EnergyTotals.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.HomeEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy used in the home during this period'}"/>
+                    <TextBlock Foreground="DeepSkyBlue" VerticalAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.EnergyTotals.HomeEnergy, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotals.HomeEnergy, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy used in the home during this period'}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Grid.Column="1">
                     <Image Source="ms-appx:///Assets/icon_solar.png" VerticalAlignment="Center" ToolTipService.ToolTip="Solar Generated" Width="30"></Image>
@@ -146,12 +146,12 @@
                     <chart:ChartLegend x:Name="powerChartLegend" ToggleSeriesVisibility="True" CheckBoxVisibility="Visible" Placement="Right"  ItemMargin="10,0,0,0">
                     </chart:ChartLegend>
                 </chart:SfCartesianChart.Legend>
-                <chart:AreaSeries x:Name="homeSeries" Stroke="Cyan" StrokeWidth="1" Fill="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
+                <chart:AreaSeries x:Name="homeSeries" Stroke="DeepSkyBlue" StrokeWidth="1" Fill="DeepSkyBlue" BorderBrush="DeepSkyBlue" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.PowerChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  />
                 <chart:AreaSeries x:Name="solarSeries" Stroke="Gold" StrokeWidth="1" Fill="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" />
                 <chart:AreaSeries x:Name="gridSeries" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue" />
                 <chart:AreaSeries x:Name="batterySeries" Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue" />
 
-                <chart:StackedAreaSeries x:Name="homeStackingSeries" Stroke="Cyan" StrokeWidth="1" Fill="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" IsVisibleOnLegend="False" />
+                <chart:StackedAreaSeries x:Name="homeStackingSeries" Stroke="DeepSkyBlue" StrokeWidth="1" Fill="DeepSkyBlue" BorderBrush="DeepSkyBlue" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue" IsVisibleOnLegend="False" />
                 <chart:StackedAreaSeries x:Name="solarStackingSeries" Stroke="Gold" StrokeWidth="1" Fill="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue"  IsVisibleOnLegend="False" />
                 <chart:StackedAreaSeries x:Name="gridStackingSeries" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Grid, Mode=OneWay}" Label="Grid" XBindingPath="XValue" YBindingPath="YValue"  IsVisibleOnLegend="False" />
                 <chart:StackedAreaSeries x:Name="batteryStackingSeries" Stroke="LimeGreen" StrokeWidth="1" Fill="LimeGreen" BorderBrush="LimeGreen" Opacity="0.5" ItemsSource="{x:Bind ViewModel.PowerChartStackingSeries.Battery, Mode=OneWay}" Label="Battery" XBindingPath="XValue" YBindingPath="YValue"  IsVisibleOnLegend="False"/>
@@ -243,7 +243,7 @@
                     </chart:ChartLegend>
                 </chart:SfCartesianChart.Legend>
 
-                <chart:ColumnSeries EnableTooltip="True" Stroke="Cyan" StrokeWidth="1" Fill="Cyan" BorderBrush="Cyan" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
+                <chart:ColumnSeries EnableTooltip="True" Stroke="DeepSkyBlue" StrokeWidth="1" Fill="DeepSkyBlue" BorderBrush="DeepSkyBlue" Opacity="0.5"  ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Home, Mode=OneWay}" Label="Home" XBindingPath="XValue" YBindingPath="YValue"  TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
                 <chart:ColumnSeries EnableTooltip="True" Stroke="Gold" StrokeWidth="1" Fill="Gold" BorderBrush="Gold" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.Solar, Mode=OneWay}" Label="Solar" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
                 <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.GridImport, Mode=OneWay}" Label="Grid Import" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}" chart:ChartTooltip.Duration="10000" />
                 <chart:StackedColumnSeries GroupName="Grid" EnableTooltip="True" Stroke="LightGray" StrokeWidth="1" Fill="LightGray" BorderBrush="LightGray" Opacity="0.5" ItemsSource="{x:Bind ViewModel.EnergyChartSeries.GridExport, Mode=OneWay}" Label="Grid Export" XBindingPath="XValue" YBindingPath="YValue" TooltipTemplate="{StaticResource tooltipTemplate}"  chart:ChartTooltip.Duration="10000" />
@@ -318,7 +318,7 @@
                         <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.SolarUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
                         <ColumnDefinition Width="{x:Bind ViewModel.EnergyTotals.GridUsePercent, Mode=OneWay, Converter={StaticResource PercentageToGridWidthConverter}}" />
                     </Grid.ColumnDefinitions>
-                    <Rectangle Fill="Green" Grid.Column="0"  ToolTipService.ToolTip="Percentage of home use coming from battery" />
+                    <Rectangle Fill="LimeGreen" Grid.Column="0"  ToolTipService.ToolTip="Percentage of home use coming from battery" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Foreground="Black" Visibility="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource VisibilityCollapsedLessThan10Converter}}">Battery:</TextBlock>
                         <TextBlock Foreground="Black" Margin="5 0 0 0" Text="{x:Bind ViewModel.EnergyTotals.BatteryUsePercent, Mode=OneWay, Converter={StaticResource BatteryPercentageConverter}}"  ToolTipService.ToolTip="Percentage of home use coming from battery"

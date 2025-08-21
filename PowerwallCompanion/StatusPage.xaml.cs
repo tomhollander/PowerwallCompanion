@@ -63,6 +63,18 @@ namespace PowerwallCompanion
                 animationTimer.Interval = TimeSpan.FromSeconds(5);
                 animationTimer.Tick += AnimationTimer_Tick;
                 animationTimer.Start();
+
+                if (Settings.PowerDisplayMode == "Flow")
+                {
+
+                    SolarToHomeStoryBoard.Begin();
+                    SolarToBatteryStoryBoard.Begin();
+                    SolarToGridStoryBoard.Begin();
+                    BatteryToHomeStoryBoard.Begin();
+                    GridToHomeStoryBoard.Begin();
+                    GridToBatteryStoryBoard.Begin();
+                    BatteryToGridStoryBoard.Begin();
+                }
             }
 
         }
@@ -79,12 +91,27 @@ namespace PowerwallCompanion
             {
                 await RefreshDataFromTeslaOwnerApi();
                 ShowBatteryHealthNavForPowerwall2Only();
+                ShowRequestedPowerView();
                 base.OnNavigatedTo(e);
             }
             catch (Exception ex)
             {
                 Telemetry.TrackUnhandledException(ex);
                 throw;
+            }
+        }
+
+        private void ShowRequestedPowerView()
+        {
+            if (Settings.PowerDisplayMode == "Graph")
+            {
+                powerGraphView.Visibility = Visibility.Visible;
+                powerFlowView.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                powerGraphView.Visibility = Visibility.Collapsed;
+                powerFlowView.Visibility = Visibility.Visible;
             }
         }
 
@@ -117,7 +144,11 @@ namespace PowerwallCompanion
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             timer.Stop();
-            
+            if (animationTimer != null)
+            {
+                animationTimer.Stop();
+            }
+
             base.OnNavigatedFrom(e);
         }
 
@@ -185,6 +216,7 @@ namespace PowerwallCompanion
                 }
 
                 viewModel.InstantaneousPower = await powerwallApi.GetInstantaneousPower();
+
                 await UpdateMinMaxPercentToday(); 
                 viewModel.LiveStatusLastRefreshed = DateTime.Now;
                 viewModel.Status = viewModel.InstantaneousPower.GridActive ? StatusViewModel.StatusEnum.Online : StatusViewModel.StatusEnum.GridOutage;
@@ -230,6 +262,10 @@ namespace PowerwallCompanion
 
         private async void AnimationTimer_Tick(object sender, object e)
         {
+            if (ViewModel.InstantaneousPower == null)
+            {
+                return; // No data available yet
+            }
             if (ViewModel.InstantaneousPower.BatteryPower < 0)
             {
                 // Battery is charging
@@ -256,7 +292,7 @@ namespace PowerwallCompanion
                       },
                       ViewModel.InstantaneousPower.BatteryStoragePercent,
                       0,
-                      ViewModel.InstantaneousPower.BatteryStoragePercent,
+                      0,
                       TimeSpan.FromMilliseconds(800)
                 );
             }

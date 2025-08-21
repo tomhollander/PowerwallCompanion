@@ -202,7 +202,7 @@ namespace PowerwallCompanion.ViewModels
                 {
                     return 0;
                 }
-                return TariffSellRate * (decimal)(InstantaneousPower.HomeFromGrid / 1000); 
+                return TariffSellRate * (decimal)(InstantaneousPower.GridToHome / 1000); 
             }
         }
 
@@ -250,7 +250,7 @@ namespace PowerwallCompanion.ViewModels
                 {
                     return Visibility.Collapsed;
                 }    
-                return InstantaneousPower.HomeFromGrid > 50D ? Visibility.Visible : Visibility.Collapsed;
+                return InstantaneousPower.GridToHome > 50D ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
