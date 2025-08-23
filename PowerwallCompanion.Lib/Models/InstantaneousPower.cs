@@ -55,5 +55,10 @@ namespace PowerwallCompanion.Lib.Models
         public double BatteryToGrid =>
             BatteryPower > 0D ? Math.Max(0D, BatteryPower - BatteryToHome) : 0D;
 
+        // Combined power values for bar chart
+        public double AllGridImport => GridToHome + GridToBattery;
+
+        public double AllBatteryCharge => SolarToBattery + GridToBattery;
+
     }
 }
