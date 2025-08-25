@@ -175,6 +175,7 @@ public class InstantaneousPowerTests
         Assert.AreEqual(0, instantaneousPower.GridToBattery);
     }
 
+    [TestMethod]
     public void GridToHomeAndBattery()
     {
         var instantaneousPower = new InstantaneousPower
@@ -209,6 +210,63 @@ public class InstantaneousPowerTests
         Assert.AreEqual(0, instantaneousPower.SolarToGrid);
         Assert.AreEqual(0, instantaneousPower.SolarToBattery);
         Assert.AreEqual(400, instantaneousPower.BatteryToGrid);
+        Assert.AreEqual(0, instantaneousPower.GridToBattery);
+    }
+
+    [TestMethod]
+    public void SolarToGridBatteryToHome()
+    {
+        var instantaneousPower = new InstantaneousPower
+        {
+            HomePower = 600,
+            SolarPower = 1000,
+            BatteryPower = 600, // Discharging battery
+            GridPower = -1000 // Excess power sent to grid
+        };
+        Assert.AreEqual(0, instantaneousPower.GridToHome);
+        Assert.AreEqual(600, instantaneousPower.BatteryToHome);
+        Assert.AreEqual(0, instantaneousPower.SolarToHome);
+        Assert.AreEqual(1000, instantaneousPower.SolarToGrid);
+        Assert.AreEqual(0, instantaneousPower.SolarToBattery);
+        Assert.AreEqual(0, instantaneousPower.BatteryToGrid);
+        Assert.AreEqual(0, instantaneousPower.GridToBattery);
+    }
+
+    [TestMethod]
+    public void SolarToHomeAndGridBatteryToHome()
+    {
+        var instantaneousPower = new InstantaneousPower
+        {
+            HomePower = 2100,
+            SolarPower = 800,
+            BatteryPower = 1400, // Discharging battery
+            GridPower = -100 // Excess power sent to grid
+        };
+        Assert.AreEqual(0, instantaneousPower.GridToHome);
+        Assert.AreEqual(1400, instantaneousPower.BatteryToHome);
+        Assert.AreEqual(700, instantaneousPower.SolarToHome);
+        Assert.AreEqual(100, instantaneousPower.SolarToGrid);
+        Assert.AreEqual(0, instantaneousPower.SolarToBattery);
+        Assert.AreEqual(0, instantaneousPower.BatteryToGrid);
+        Assert.AreEqual(0, instantaneousPower.GridToBattery);
+    }
+
+    [TestMethod]
+    public void GridToHomeSolarToBattery()
+    {
+        var instantaneousPower = new InstantaneousPower
+        {
+            HomePower = 1500,
+            SolarPower = 2000,
+            BatteryPower = -2000, // Charging battery
+            GridPower = 1500
+        };
+        Assert.AreEqual(1500, instantaneousPower.GridToHome);
+        Assert.AreEqual(0, instantaneousPower.BatteryToHome);
+        Assert.AreEqual(0, instantaneousPower.SolarToHome);
+        Assert.AreEqual(0, instantaneousPower.SolarToGrid);
+        Assert.AreEqual(2000, instantaneousPower.SolarToBattery);
+        Assert.AreEqual(0, instantaneousPower.BatteryToGrid);
         Assert.AreEqual(0, instantaneousPower.GridToBattery);
     }
 }

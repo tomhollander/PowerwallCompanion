@@ -120,7 +120,7 @@ namespace PowerwallCompanion
             try
             {
                 // Show BatteryInfo nav if it's a Powerwall 2
-                if (ViewModel.EnergySiteInfo.PowerwallVersion == "Powerwall 2") 
+                if (ViewModel.EnergySiteInfo?.PowerwallVersion == "Powerwall 2") 
                 {
                     var nav = (NavigationView)(this?.Parent as Frame)?.Parent; // May be null if we've changed pages
                     if (nav != null)
