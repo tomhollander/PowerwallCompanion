@@ -90,6 +90,9 @@
     <None Remove="BundleArtifacts\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Assets\flow-background.pdn" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="BatteryInfoPage.xaml" />
     <None Remove="ChartPage.xaml" />
   </ItemGroup>

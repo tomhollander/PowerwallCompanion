@@ -12,6 +12,10 @@ namespace PowerwallCompanion.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             double scaledValue = (double)(value) / 1000;
+            if (parameter != null && parameter.ToString() == "abs")
+            {
+                scaledValue = Math.Abs(scaledValue);
+            }
             return scaledValue.ToString("f" + Settings.PowerDecimals.ToString());
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿
+using Microsoft.Toolkit.Uwp.Notifications;
 using PowerwallCompanion.CustomEnergySourceProviders;
 using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
@@ -216,6 +217,12 @@ namespace PowerwallCompanion
                 }
 
                 viewModel.InstantaneousPower = await powerwallApi.GetInstantaneousPower();
+#if FAKE
+                viewModel.InstantaneousPower.SolarPower = 0;
+                viewModel.InstantaneousPower.HomePower = 2000;
+                viewModel.InstantaneousPower.GridPower = 1000;
+                viewModel.InstantaneousPower.BatteryPower = 1000;
+#endif
 
                 await UpdateMinMaxPercentToday(); 
                 viewModel.LiveStatusLastRefreshed = DateTime.Now;
@@ -327,7 +334,7 @@ namespace PowerwallCompanion
             }
             else if (viewModel.InstantaneousPower.BatteryStoragePercent < viewModel.MinBatteryPercentToday)
             {
-                viewModel.MaxBatteryPercentToday = viewModel.InstantaneousPower.BatteryStoragePercent;
+                viewModel.MinBatteryPercentToday = viewModel.InstantaneousPower.BatteryStoragePercent;
             }
             else if (viewModel.InstantaneousPower.BatteryStoragePercent > viewModel.MaxBatteryPercentToday)
             {
