@@ -42,7 +42,7 @@
 
     <Viewbox x:Name="rootViewbox">
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
+            <VisualStateGroup x:Name="WidthVisualStateGroup">
                 <VisualState x:Name="NarrowView">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
@@ -62,13 +62,35 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
+            <VisualStateGroup x:Name="HeightVisualStateGroup">
+                <VisualState x:Name="ShortView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="chart.Visibility" Value="Collapsed" />
+                        <Setter Target="graphRow.Height" Value="0" />
+                        <Setter Target="gridEnergySources.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="TallView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="600" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="chart.Visibility" Value="Visible" />
+                        <Setter Target="graphRow.Height" Value="*" />
+                        <Setter Target="gridEnergySources.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <Grid x:Name="rootGrid">
 
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="column1" Width="*" />
+                <ColumnDefinition x:Name="column1" Width="*" MinWidth="400" />
                 <ColumnDefinition x:Name="column2" Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -527,7 +549,7 @@
             <Grid Grid.Row="0" Grid.Column="1"  >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition x:Name="graphRow" Height="*"/>
                 </Grid.RowDefinitions>
 
                 <!-- Yesterday / Today energy stats -->
@@ -560,7 +582,7 @@
                     <TextBlock Grid.Row="3" Grid.Column="2" Margin="10" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.EnergyTotalsToday.GridEnergyImported, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotalsToday.GridEnergyImported, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid today'}"></TextBlock>
                     <TextBlock Grid.Row="3" Grid.Column="1" Margin="10" Opacity="0.6" Foreground="LightGray" VerticalAlignment="Center" HorizontalTextAlignment="Center" FontSize="50" Text="{x:Bind ViewModel.EnergyTotalsYesterday.GridEnergyImported, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" Visibility="{x:Bind ViewModel.ShowBothGridSettingsYesterday, Mode=OneWay, Converter={StaticResource NegateVisiblityConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotalsYesterday.GridEnergyImported, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid yesterday'}"></TextBlock>
 
-                    <StackPanel Grid.Row="3" Grid.Column="2" Margin="10"  Orientation="Vertical" Spacing="-20" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay}">
+                    <StackPanel Grid.Row="3" Grid.Column="2" Margin="10"  Orientation="Vertical" Spacing="-10" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind ViewModel.ShowBothGridSettingsToday, Mode=OneWay}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Image Source="ms-appx:///Assets/icon_grid_import.png" Width="30" VerticalAlignment="Center" Margin="5" />
                             <TextBlock Foreground="LightGray" VerticalAlignment="Center" FontSize="40" Text="{x:Bind ViewModel.EnergyTotalsToday.GridEnergyImported, Mode=OneWay, Converter={StaticResource KilowattHourConverter}}" ToolTipService.ToolTip="{x:Bind ViewModel.EnergyTotalsToday.GridEnergyImported, Mode=OneWay, Converter={StaticResource TooltipMessageConverter}, ConverterParameter=' kWh of energy imported from the grid today'}"></TextBlock>

@@ -475,7 +475,7 @@ namespace PowerwallCompanion
             {
                 if (_localSettings.Values["PowerDisplayMode"] == null)
                 {
-                    return "Graph";
+                    return "Flow";
                 }
                 else
                 {
@@ -485,6 +485,25 @@ namespace PowerwallCompanion
             set
             {
                 _localSettings.Values["PowerDisplayMode"] = value;
+            }
+        }
+
+        // Migrate everyone to flow display mode once. After that, they can choose.
+        public static bool ForceFlowDisplayMode
+        {
+            get {                 
+                if (_localSettings.Values["ForceFlowDisplayMode"] == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return bool.Parse((string)_localSettings.Values["ForceFlowDisplayMode"]);
+                }
+            }
+            set
+            {
+                _localSettings.Values["ForceFlowDisplayMode"] = value.ToString();
             }
         }
     }
