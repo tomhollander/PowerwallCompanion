@@ -58,13 +58,6 @@ namespace PowerwallCompanion
             timer.Tick += Timer_Tick;
             timer.Start();
 
-            // Temporary code to force existing users to Flow mode. We can delete once enough users are migrated.
-            if (Settings.ForceFlowDisplayMode)
-            {
-                Settings.PowerDisplayMode = "Flow";
-                Settings.ForceFlowDisplayMode = false;
-            }
-
             if (Settings.ShowAnimations)
             {
                 animationTimer = new DispatcherTimer();
