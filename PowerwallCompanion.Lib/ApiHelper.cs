@@ -61,7 +61,7 @@ namespace PowerwallCompanion.Lib
                 var responseJson = (JsonObject)JsonNode.Parse(responseMessage);
                 if (responseJson["response"].GetValueKind() == System.Text.Json.JsonValueKind.String && responseJson["response"].GetValue<string>() == "")
                 {
-                    throw new NoDataException("API returned no data");
+                    throw new NoDataException("Tesla API returned no data. Use the Tesla app to check that your Powerwall is connected to your network.");
                 }
                 return responseJson;
             }

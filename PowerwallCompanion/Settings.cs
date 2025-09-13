@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -10,12 +11,50 @@ namespace PowerwallCompanion
         private static Windows.Storage.ApplicationDataContainer _localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         public const decimal DefaultGraphScale = 1.0M;
 
+        private static T GetSetting<T>(string key, T defaultValue)
+        {
+            if (_localSettings.Values[key] == null)
+            {
+                return defaultValue;
+            }
+            else
+            {
+                try
+                {
+                    if (typeof(T) == typeof(bool))
+                    {
+                        return (T)(object)bool.Parse((string)_localSettings.Values[key]);
+                    }
+                    else if (typeof(T) == typeof(int))
+                    {
+                        return (T)(object)Int32.Parse((string)_localSettings.Values[key], CultureInfo.InvariantCulture);
+                    }
+                    else if (typeof(T) == typeof(decimal))
+                    {
+                        return (T)(object)Decimal.Parse((string)_localSettings.Values[key], CultureInfo.InvariantCulture);
+                    }
+                    else if (typeof(T) == typeof(string))
+                    {
+                        return (T)(object)((string)_localSettings.Values[key]);
+                    }
+                    else
+                    {
+                        return (T)_localSettings.Values[key];
+                    }
+                }
+                catch (Exception ex) when (ex is ArgumentException || ex is FormatException || ex is OverflowException)
+                {
+                    return defaultValue;
+                }
+                
+            }
+        }
 
         public static string AccessToken
         {
             get
             {
-                return _localSettings.Values["AccessToken"] as string;
+                return GetSetting<string>("AccessToken", null);
             }
             set
             {
@@ -27,7 +66,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["RefreshToken"] as string;
+                return GetSetting<string>("RefreshToken", null);
             }
             set
             {
@@ -39,7 +78,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["SignInName"] as string;
+                return GetSetting<string>("SignInName", null);
             }
             set
             {
@@ -51,7 +90,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["SiteId"] as string;
+                return GetSetting<string>("SiteId", null);
             }
             set
             {
@@ -63,18 +102,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["graphScale"] == null)
-                {
-                    return DefaultGraphScale;
-                }
-                else
-                {
-                    return Decimal.Parse((string)_localSettings.Values["graphScale"]);
-                }
+                return GetSetting<decimal>("graphScale", DefaultGraphScale);
             }
             set
             {
-                _localSettings.Values["graphScale"] = value.ToString();
+                _localSettings.Values["graphScale"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -82,14 +114,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["showClock"] == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return bool.Parse((string)_localSettings.Values["showClock"]);
-                }
+                return GetSetting<bool>("showClock", false);
             }
             set
             {
@@ -102,14 +127,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["showAnimations"] == null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return bool.Parse((string)_localSettings.Values["showAnimations"]);
-                }
+                return GetSetting<bool>("showAnimations", true);
             }
             set
             {
@@ -121,14 +139,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["ShowEnergyRates"] == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return bool.Parse((string)_localSettings.Values["ShowEnergyRates"]);
-                }
+                return GetSetting<bool>("ShowEnergyRates", false);
             }
             set
             {
@@ -140,14 +151,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["TariffProvider"] == null)
-                {
-                    return "Tesla";
-                }
-                else
-                {
-                    return (string)_localSettings.Values["TariffProvider"];
-                }
+                return GetSetting<string>("TariffProvider", "Tesla");
             }
             set
             {
@@ -159,18 +163,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["TariffDailySupplyCharge"] == null)
-                {
-                    return 0.0M;
-                }
-                else
-                {
-                    return decimal.Parse((string)_localSettings.Values["TariffDailySupplyCharge"]);
-                }
+                return GetSetting<decimal>("TariffDailySupplyCharge", 0.0M);
             }
             set
             {
-                _localSettings.Values["TariffDailySupplyCharge"] = value.ToString();
+                _localSettings.Values["TariffDailySupplyCharge"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -178,18 +175,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["TariffNonBypassableCharge"] == null)
-                {
-                    return 0.0M;
-                }
-                else
-                {
-                    return decimal.Parse((string)_localSettings.Values["TariffNonBypassableCharge"]);
-                }
+                return GetSetting<decimal>("TariffNonBypassableCharge", 0.0M);
             }
             set
             {
-                _localSettings.Values["TariffNonBypassableCharge"] = value.ToString();
+                _localSettings.Values["TariffNonBypassableCharge"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -198,14 +188,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["AmberElectricApiKey"] == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return (string)_localSettings.Values["AmberElectricApiKey"];
-                }
+                return GetSetting<string>("AmberElectricApiKey", null);
             }
             set
             {
@@ -218,14 +201,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["ShowEnergySources"] == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return bool.Parse((string)_localSettings.Values["ShowEnergySources"]);
-                }
+                return GetSetting<bool>("ShowEnergySources", false);
             }
             set
             {
@@ -237,7 +213,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["EnergySourcesZoneOverride"] as string;
+                return GetSetting<string>("EnergySourcesZoneOverride", null);
             }
             set
             {
@@ -250,14 +226,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["UseLocalGateway"] == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return Boolean.Parse((string)_localSettings.Values["UseLocalGateway"]);
-                }
+                return GetSetting<bool>("UseLocalGateway", false);
             }
             set
             {
@@ -269,7 +238,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["LocalGatewayIP"] as string;
+                return GetSetting<string>("LocalGatewayIP", null);
             }
             set
             {
@@ -281,7 +250,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["LocalGatewayPassword"] as string;
+                return GetSetting<string>("LocalGatewayPassword", null);
             }
             set
             {
@@ -300,7 +269,7 @@ namespace PowerwallCompanion
                 }
                 else
                 {
-                    return DateTime.Parse(date);
+                    return DateTime.Parse(date, CultureInfo.InvariantCulture);
                 }
             }
             set
@@ -327,14 +296,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["PlaySounds"] == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return bool.Parse((string)_localSettings.Values["PlaySounds"]);
-                }
+                return GetSetting<bool>("PlaySounds", false);
             }
             set
             {
@@ -346,14 +308,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["StoreBatteryHistory"] == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return bool.Parse((string)_localSettings.Values["StoreBatteryHistory"]);
-                }
+                return GetSetting<bool>("StoreBatteryHistory", false);
             }
             set
             {
@@ -378,18 +333,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["PowerDecimals"] == null)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return Int32.Parse((string)_localSettings.Values["PowerDecimals"]);
-                }
+                return GetSetting<int>("PowerDecimals", 1);
             }
             set
             {
-                _localSettings.Values["PowerDecimals"] = value.ToString();
+                _localSettings.Values["PowerDecimals"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -397,18 +345,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["EnergyDecimals"] == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return Int32.Parse((string)_localSettings.Values["EnergyDecimals"]);
-                }
+                return GetSetting<int>("EnergyDecimals", 0);
             }
             set
             {
-                _localSettings.Values["EnergyDecimals"] = value.ToString();
+                _localSettings.Values["EnergyDecimals"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -416,18 +357,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["WindowHeight"] == null)
-                {
-                    return 1000;
-                }
-                else
-                {
-                    return int.Parse((string)_localSettings.Values["WindowHeight"]);
-                }
+                return GetSetting<int>("WindowHeight", 1000);
             }
             set
             {
-                _localSettings.Values["WindowHeight"] = value.ToString();
+                _localSettings.Values["WindowHeight"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -435,18 +369,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["WindowWidth"] == null)
-                {
-                    return 1600;
-                }
-                else
-                {
-                    return int.Parse((string)_localSettings.Values["WindowWidth"]);
-                }
+                return GetSetting<int>("WindowWidth", 1600);
             }
             set
             {
-                _localSettings.Values["WindowWidth"] = value.ToString();
+                _localSettings.Values["WindowWidth"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -454,14 +381,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["WindowState"] == null)
-                {
-                    return "Restored";
-                }
-                else
-                {
-                    return ((string)_localSettings.Values["WindowState"]);
-                }
+                return GetSetting<string>("WindowState", "Restored");
             }
             set
             {
@@ -473,14 +393,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                if (_localSettings.Values["PowerDisplayMode"] == null)
-                {
-                    return "Flow";
-                }
-                else
-                {
-                    return ((string)_localSettings.Values["PowerDisplayMode"]);
-                }
+                return GetSetting<string>("PowerDisplayMode", "Flow");
             }
             set
             {
