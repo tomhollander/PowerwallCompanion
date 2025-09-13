@@ -83,6 +83,8 @@ namespace PowerwallCompanion
                 { "ShowAnimations", Settings.ShowAnimations.ToString() },
                 { "PowerDisplayMode", Settings.PowerDisplayMode },
                 { "StoreBatteryHistory", Settings.StoreBatteryHistory.ToString() },
+                { "PowerDecimals", Settings.PowerDecimals.ToString() },
+                { "EnergyDecimals", Settings.EnergyDecimals.ToString() },
             };
 
             Telemetry.TrackEvent("SessionStart", props);
