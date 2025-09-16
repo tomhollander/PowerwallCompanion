@@ -318,10 +318,14 @@ namespace PowerwallCompanion.Lib
                 return batteryDailySoeGraphData;
             }
 
+            var now = ConvertToPowerwallDate(DateTime.Now);
             foreach (var data in json["response"]["time_series"].AsArray())
             {
                 var date = Utils.GetUnspecifiedDateTime(data["timestamp"]);
-                batteryDailySoeGraphData.Add(new ChartDataPoint(date, Utils.GetValueOrDefault<double>(data["soe"])));
+                if (date <= now) // Ignore future dates which show as zero
+                {
+                    batteryDailySoeGraphData.Add(new ChartDataPoint(date, Utils.GetValueOrDefault<double>(data["soe"])));
+                }
             }
             return batteryDailySoeGraphData;
         }

@@ -45,6 +45,24 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
+            <VisualStateGroup x:Name="HeightVisualStateGroup">
+                <VisualState x:Name="ShortView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="bottomChartRow.Height" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="TallView">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="600" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="bottomChartRow.Height" Value="2*" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid>
             <Grid.RowDefinitions>
@@ -55,9 +73,9 @@
                 <!-- 2: Top Chart -->
                 <RowDefinition Height="3*" />
                 <!-- 3: Bottom Chart -->
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" x:Name="bottomChartRow" />
                 <!-- 4: Self Consumption -->
-                <RowDefinition Height="70" />
+                <RowDefinition Height="70" x:Name="bottomRow" />
 
             </Grid.RowDefinitions>
             <TextBlock x:Name="errorIndicator" Text="⚠️" Margin="0,0,5,0" FontSize="24" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" 

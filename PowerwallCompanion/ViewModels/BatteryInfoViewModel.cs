@@ -1,4 +1,5 @@
-﻿using PowerwallCompanion.Lib.Models;
+﻿using Microsoft.UI.Xaml;
+using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -145,6 +146,17 @@ namespace PowerwallCompanion.ViewModels
         }
 
         public EnergySiteInfo EnergySiteInfo { get; set; }
+
+        private Visibility _loadingStateVisibility = Visibility.Collapsed;
+        public Visibility LoadingStateVisibility
+        {
+            get => _loadingStateVisibility;
+            set
+            {
+                _loadingStateVisibility = value;
+                NotifyPropertyChanged(nameof(LoadingStateVisibility));
+            }
+        }
         public void NotifyAllProperties()
         {
             NotifyPropertyChanged(nameof(EnergySiteInfo));

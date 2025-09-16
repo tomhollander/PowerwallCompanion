@@ -66,6 +66,7 @@ namespace PowerwallCompanion
         {
             try
             {
+                ViewModel.LoadingStateVisibility = Visibility.Visible;
                 var gatewayApi = new LocalGatewayApi(new WindowsPlatformAdapter());
                 var response = await gatewayApi.GetBatteryDetails(Settings.LocalGatewayIP, Settings.LocalGatewayPassword);
                 ViewModel.BatteryDetails = response.BatteryDetails;
@@ -89,10 +90,12 @@ namespace PowerwallCompanion
                     staleDataBanner.Visibility = Visibility.Collapsed;
                     Settings.CachedGatewayDetailsUpdated = DateTime.Now;
                 }
+                ViewModel.LoadingStateVisibility = Visibility.Collapsed;
 
             }
             catch (Exception ex)
             {
+                ViewModel.LoadingStateVisibility = Visibility.Collapsed;
                 // Shouldn't happen as we catch all exceptions in the LocalGatewayApi
                 Telemetry.TrackException(ex);
             }

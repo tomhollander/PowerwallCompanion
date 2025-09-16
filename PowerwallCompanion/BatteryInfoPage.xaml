@@ -48,6 +48,9 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+        <ProgressBar Visibility="{x:Bind ViewModel.LoadingStateVisibility, Mode=OneWay}"   VerticalAlignment="Bottom" Grid.Row="2" IsIndeterminate="True"></ProgressBar>
+
+        
         <Grid x:Name="noGatewayBanner" Background="LightSkyBlue" Visibility="Collapsed">
             <TextBlock Foreground="Black" Margin="10" TextWrapping="Wrap">To view battery details, you must configure your Gateway IP and password on the Settings page, and run the app from the same network as your gateway.</TextBlock>
         </Grid>

@@ -402,6 +402,17 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        private Visibility _loadingStateVisibility = Visibility.Visible;
+        public Visibility LoadingStateVisibility
+        {
+            get => _loadingStateVisibility;
+            set
+            { 
+                _loadingStateVisibility = value;
+                NotifyPropertyChanged(nameof(LoadingStateVisibility));
+            }   
+        }
+
         public string SelectedEnergySourceName { get; set; }
         public int SelectedEnergySourcePower { get; set; }
         public string SelectedEnergySourcePercentageLabel { get; set; }

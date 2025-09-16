@@ -216,6 +216,12 @@ namespace PowerwallCompanion
                     return;
                 }
 
+                // Set loading state only if it's the first time or we previously had an error
+                if (viewModel.InstantaneousPower == null || viewModel.Status == StatusViewModel.StatusEnum.Error)
+                {
+                    viewModel.LoadingStateVisibility = Visibility.Visible;
+                }
+
                 viewModel.InstantaneousPower = await powerwallApi.GetInstantaneousPower();
 #if FAKE
                 viewModel.InstantaneousPower.SolarPower = 0;
@@ -227,6 +233,7 @@ namespace PowerwallCompanion
                 await UpdateMinMaxPercentToday(); 
                 viewModel.LiveStatusLastRefreshed = DateTime.Now;
                 viewModel.Status = viewModel.InstantaneousPower.GridActive ? StatusViewModel.StatusEnum.Online : StatusViewModel.StatusEnum.GridOutage;
+                viewModel.LoadingStateVisibility = Visibility.Collapsed;
 
                 viewModel.NotifyPowerProperties();
 

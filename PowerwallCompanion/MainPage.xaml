@@ -10,7 +10,7 @@
 
     <Grid Background="#171717">
 
-        <NavigationView x:Name="navView" IsBackButtonVisible="Collapsed" ItemInvoked="navView_ItemInvoked" IsPaneOpen="False">
+        <NavigationView x:Name="navView" IsBackButtonVisible="Collapsed" CompactModeThresholdWidth="300" ExpandedModeThresholdWidth="2000"  OpenPaneLength="250" ItemInvoked="navView_ItemInvoked" IsPaneOpen="False">
             <NavigationView.MenuItems>
                 <NavigationViewItem Icon="Home" Content="Live Stats" Tag="Status" IsSelected="True" />
                 <NavigationViewItem Content="Historical Charts" Tag="Charts">
