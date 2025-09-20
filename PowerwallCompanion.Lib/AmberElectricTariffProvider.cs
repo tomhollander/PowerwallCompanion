@@ -1,6 +1,7 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -65,6 +66,7 @@ namespace PowerwallCompanion.Lib
                 }
                 totalCost += (decimal)energyImported * tariff.DynamicSellAndFeedInRate.Item1;
                 totalFeedIn += (decimal)energyExported * tariff.DynamicSellAndFeedInRate.Item2;
+                
             }
             totalCost += dailySupplyCharge;
             return new Tuple<decimal, decimal>(totalCost, totalFeedIn);
@@ -91,8 +93,8 @@ namespace PowerwallCompanion.Lib
                 tariff.IsDynamic = true;
                 tariff.DynamicSellAndFeedInRate = new Tuple<decimal, decimal>(json[0]["perKwh"].GetValue<decimal>() / 100, json[1]["perKwh"].GetValue<decimal>() / -100);
                 tariff.Name = "Dynamic";
-                tariff.DisplayName = GetDisplayName(tariff.DynamicSellAndFeedInRate.Item1);
-                tariff.Color = GetColor(tariff.DynamicSellAndFeedInRate.Item1);
+                tariff.DisplayName = GetDisplayName(json[0]["descriptor"].GetValue<string>());
+                tariff.Color = GetColor(tariff.DisplayName);
                 return tariff;
             }
             return null;
@@ -113,7 +115,6 @@ namespace PowerwallCompanion.Lib
                 {
                     return null;
                 }
-                
                 var tariffs = new List<Tariff>();
                 var json = (JsonArray)JsonNode.Parse(responseMessage);
                 foreach (var item in json)
@@ -127,13 +128,13 @@ namespace PowerwallCompanion.Lib
                         tariff.IsDynamic = true;
                         tariff.DynamicSellAndFeedInRate = new Tuple<decimal, decimal>(item["perKwh"].GetValue<decimal>() / 100, 0);
                         tariff.Name = "Dynamic";
-                        tariff.DisplayName = GetDisplayName(tariff.DynamicSellAndFeedInRate.Item1);
-                        tariff.Color = GetColor(tariff.DynamicSellAndFeedInRate.Item1);
+                        tariff.DisplayName = GetDisplayName(item["descriptor"].GetValue<string>());
+                        tariff.Color = GetColor(tariff.DisplayName);
                         tariffs.Add(tariff);
                     }
                     else if (item["channelType"].GetValue<string>() == "feedIn")
                     {
-                        var tariff = tariffs.Where(t => t.StartDate == item["startTime"].GetValue<DateTime>()).FirstOrDefault();
+                        var tariff = tariffs.Where(t => t.StartDate == item["startTime"].GetValue<DateTimeOffset>().LocalDateTime).FirstOrDefault();
                         if (tariff != null)
                         {
                             tariff.DynamicSellAndFeedInRate = new Tuple<decimal, decimal>(tariff.DynamicSellAndFeedInRate.Item1, item["perKwh"].GetValue<decimal>() / -100);
@@ -146,32 +147,36 @@ namespace PowerwallCompanion.Lib
             return tariffCache[date];
         }
 
-        private string GetDisplayName(decimal price)
+        private string GetDisplayName(string descriptor)
         {
-            if (price < 0)
-                return "Negative";
-            else if (price < 0.10M)
-                return "Very Cheap";
-            else if (price < 0.20M)
-                return "Cheap";
-            else if (price < 0.30M)
-                return "Moderate";
-            else
-                return "Expensive";
+            // Descriptor is one or more words in camel case, e.g. "low" or "extremelyHigh"
+            // Split into words and capitalize first letter of each word
+            if (string.IsNullOrEmpty(descriptor))
+                return String.Empty;
+
+            var words = System.Text.RegularExpressions.Regex.Matches(descriptor, @"([A-Z][a-z]+|[a-z]+)")
+                .Cast<System.Text.RegularExpressions.Match>()
+                .Select(m => m.Value);
+            descriptor = string.Join(" ", words.Select(w => char.ToUpper(w[0]) + w.Substring(1)));
+            return descriptor;
         }
 
-        private System.Drawing.Color GetColor(decimal price)
+        private System.Drawing.Color GetColor(string displayName)
         {
-            if (price < 0)
+            if (displayName == "Extremely Low")
                 return System.Drawing.Color.Magenta;
-            else if (price < 0.10M)
+            else if (displayName == "Very Low")
                 return System.Drawing.Color.Blue;
-            else if (price < 0.20M)
+            else if (displayName == "Low")
                 return System.Drawing.Color.Green;
-            else if (price < 0.30M)
+            else if (displayName == "Neutral")
                 return System.Drawing.Color.DarkOrange;
-            else
+            else if (displayName == "High")
                 return System.Drawing.Color.Red;
+            else if (displayName == "Spike")
+                return System.Drawing.Color.OrangeRed;
+            else
+                return System.Drawing.Color.Gray;
         }
 
         public decimal DailySupplyCharge
