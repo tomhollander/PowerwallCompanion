@@ -42,6 +42,10 @@ namespace PowerwallCompanion.Lib
                     response.BatteryDetails = new List<BatteryDetails>();
                     foreach (var batteryBlock in (JsonArray)json["battery_blocks"])
                     {
+                        if (batteryBlock["nominal_full_pack_energy"] == null || batteryBlock["nominal_energy_remaining"] == null)
+                        {
+                            continue; // Can happen if battery is disabled
+                        }
                         response.BatteryDetails.Add(new BatteryDetails
                         {
                             SerialNumber = batteryBlock["PackageSerialNumber"].GetValue<string>(),

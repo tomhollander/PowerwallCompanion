@@ -9,11 +9,19 @@ namespace PowerwallCompanion
     static class Settings
     {
         private static Windows.Storage.ApplicationDataContainer _localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        private static Windows.Storage.ApplicationDataContainer _roamingSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         public const decimal DefaultGraphScale = 1.0M;
 
         private static T GetSetting<T>(string key, T defaultValue)
         {
-            if (_localSettings.Values[key] == null)
+            // Use local settings if they exist, otherwise roaming settings
+            var savedValue = _roamingSettings.Values[key];
+            if (savedValue != null)
+            {
+                savedValue = _localSettings.Values[key];
+            }
+
+            if (savedValue == null)
             {
                 return defaultValue;
             }
@@ -23,23 +31,23 @@ namespace PowerwallCompanion
                 {
                     if (typeof(T) == typeof(bool))
                     {
-                        return (T)(object)bool.Parse((string)_localSettings.Values[key]);
+                        return (T)(object)bool.Parse((string)savedValue);
                     }
                     else if (typeof(T) == typeof(int))
                     {
-                        return (T)(object)Int32.Parse((string)_localSettings.Values[key], CultureInfo.InvariantCulture);
+                        return (T)(object)Int32.Parse((string)savedValue, CultureInfo.InvariantCulture);
                     }
                     else if (typeof(T) == typeof(decimal))
                     {
-                        return (T)(object)Decimal.Parse((string)_localSettings.Values[key], CultureInfo.InvariantCulture);
+                        return (T)(object)Decimal.Parse((string)savedValue, CultureInfo.InvariantCulture);
                     }
                     else if (typeof(T) == typeof(string))
                     {
-                        return (T)(object)((string)_localSettings.Values[key]);
+                        return (T)(object)((string)savedValue);
                     }
                     else
                     {
-                        return (T)_localSettings.Values[key];
+                        return (T)savedValue;
                     }
                 }
                 catch (Exception ex) when (ex is ArgumentException || ex is FormatException || ex is OverflowException)
@@ -58,7 +66,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["AccessToken"] = value;
+                _roamingSettings.Values["AccessToken"] = value;
             }
         }
 
@@ -70,7 +78,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["RefreshToken"] = value;
+                _roamingSettings.Values["RefreshToken"] = value;
             }
         }
 
@@ -82,7 +90,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["SignInName"] = value;
+                _roamingSettings.Values["SignInName"] = value;
             }
         }
 
@@ -94,7 +102,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["SiteId"] = value;
+                _roamingSettings.Values["SiteId"] = value;
             }
         }
 
@@ -106,7 +114,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["graphScale"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["graphScale"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -118,7 +126,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["showClock"] = value.ToString();
+                _roamingSettings.Values["showClock"] = value.ToString();
             }
         }
 
@@ -131,7 +139,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["showAnimations"] = value.ToString();
+                _roamingSettings.Values["showAnimations"] = value.ToString();
             }
         }
 
@@ -143,7 +151,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["ShowEnergyRates"] = value.ToString();
+                _roamingSettings.Values["ShowEnergyRates"] = value.ToString();
             }
         }
 
@@ -155,7 +163,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["TariffProvider"] = value;
+                _roamingSettings.Values["TariffProvider"] = value;
             }
         }
 
@@ -167,7 +175,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["TariffDailySupplyCharge"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["TariffDailySupplyCharge"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -179,7 +187,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["TariffNonBypassableCharge"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["TariffNonBypassableCharge"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -192,7 +200,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["AmberElectricApiKey"] = value;
+                _roamingSettings.Values["AmberElectricApiKey"] = value;
             }
         }
 
@@ -205,7 +213,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["ShowEnergySources"] = value.ToString();
+                _roamingSettings.Values["ShowEnergySources"] = value.ToString();
             }
         }
 
@@ -217,7 +225,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["EnergySourcesZoneOverride"] = value;
+                _roamingSettings.Values["EnergySourcesZoneOverride"] = value;
             }
         }
 
@@ -230,7 +238,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["UseLocalGateway"] = value.ToString();
+                _roamingSettings.Values["UseLocalGateway"] = value.ToString();
             }
         }
 
@@ -242,7 +250,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["LocalGatewayIP"] = value;
+                _roamingSettings.Values["LocalGatewayIP"] = value;
             }
         }
 
@@ -254,7 +262,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["LocalGatewayPassword"] = value;
+                _roamingSettings.Values["LocalGatewayPassword"] = value;
             }
         }
 
@@ -262,7 +270,7 @@ namespace PowerwallCompanion
         {
             get
             {
-                string date = _localSettings.Values["CachedGatewayDetailsUpdated"] as string;
+                string date = _roamingSettings.Values["CachedGatewayDetailsUpdated"] as string;
                 if (date == null)
                 {
                     return DateTime.MinValue;
@@ -274,7 +282,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["CachedGatewayDetailsUpdated"] = value.ToString("O");
+                _roamingSettings.Values["CachedGatewayDetailsUpdated"] = value.ToString("O");
             }
         }
 
@@ -282,13 +290,13 @@ namespace PowerwallCompanion
         {
             get
             {
-                var json = _localSettings.Values["AvailableSites"] as string;
+                var json = _roamingSettings.Values["AvailableSites"] as string;
                 return json == null ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(json);
             }
             set
             {
                 var json = JsonSerializer.Serialize(value);
-                _localSettings.Values["AvailableSites"] = json;
+                _roamingSettings.Values["AvailableSites"] = json;
             }
         }
 
@@ -300,7 +308,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["PlaySounds"] = value.ToString();
+                _roamingSettings.Values["PlaySounds"] = value.ToString();
             }
         }
 
@@ -312,7 +320,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["StoreBatteryHistory"] = value.ToString();
+                _roamingSettings.Values["StoreBatteryHistory"] = value.ToString();
             }
         }
 
@@ -321,11 +329,11 @@ namespace PowerwallCompanion
         {
             get
             {
-                return _localSettings.Values["InstallationTimeZone"] as string;
+                return _roamingSettings.Values["InstallationTimeZone"] as string;
             }
             set
             {
-                _localSettings.Values["InstallationTimeZone"] = value;
+                _roamingSettings.Values["InstallationTimeZone"] = value;
             }
         }
 
@@ -337,7 +345,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["PowerDecimals"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["PowerDecimals"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -349,7 +357,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["EnergyDecimals"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["EnergyDecimals"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -361,7 +369,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["WindowHeight"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["WindowHeight"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -373,7 +381,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["WindowWidth"] = value.ToString(CultureInfo.InvariantCulture);
+                _roamingSettings.Values["WindowWidth"] = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -385,7 +393,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["WindowState"] = value; 
+                _roamingSettings.Values["WindowState"] = value; 
             }
         }
 
@@ -397,7 +405,7 @@ namespace PowerwallCompanion
             }
             set
             {
-                _localSettings.Values["PowerDisplayMode"] = value;
+                _roamingSettings.Values["PowerDisplayMode"] = value;
             }
         }
 
