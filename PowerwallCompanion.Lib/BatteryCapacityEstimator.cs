@@ -10,7 +10,7 @@ namespace PowerwallCompanion.Lib
 {
     public class BatteryCapacityEstimator
     {
-        internal struct ChargeRun
+        public struct ChargeRun 
         {
             public DateTime StartDate;
             public DateTime EndDate;
@@ -51,6 +51,9 @@ namespace PowerwallCompanion.Lib
                     negativeRunsFound++;
                 }
                 daysSearched++;
+                
+                // Add safety limit to prevent infinite loop
+                if (daysSearched > 30) break;
             }
 
             // Calculate capacity estimates from each run
@@ -72,9 +75,22 @@ namespace PowerwallCompanion.Lib
             }
 
             // Return the weighted average of both estimates - double weight to positive estimates
-            return (positiveCapacityEstimates.Average() + positiveCapacityEstimates.Average() + negativeCapacityEstimates.Average()) / 3;
-            
-
+            if (positiveCapacityEstimates.Any() && negativeCapacityEstimates.Any())
+            {
+                return (positiveCapacityEstimates.Average() + positiveCapacityEstimates.Average() + negativeCapacityEstimates.Average()) / 3;
+            }
+            else if (positiveCapacityEstimates.Any())
+            {
+                return positiveCapacityEstimates.Average();
+            }
+            else if (negativeCapacityEstimates.Any())
+            {
+                return negativeCapacityEstimates.Average();
+            }
+            else
+            {
+                throw new InvalidOperationException("No valid charge or discharge runs found to estimate battery capacity");
+            }
         }
 
         private ChargeRun GetLargestPositiveChargeRun(List<ChartDataPoint> soeData)
