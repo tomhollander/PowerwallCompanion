@@ -119,7 +119,7 @@
                         </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
 
-                    <toolkit:SettingsExpander Header="Energy Sources" Description="Show details about where your grid energy is sourced from, courtesty of electricitymaps.com">
+                    <toolkit:SettingsExpander Header="Energy Sources" Description="Show details about where your grid energy is sourced from, courtesy of electricitymaps.com">
                         <toolkit:SettingsExpander.HeaderIcon>
                             <FontIcon Glyph="&#xE945;" />
                         </toolkit:SettingsExpander.HeaderIcon>

@@ -252,7 +252,7 @@ namespace PowerwallCompanion.Lib
                 if (solarPower == 0 && gridPower == 0 && batteryPower == 0 && homePower == 0)
                     continue; // Likely a future date, but checking dates is tricky due to potential time zone differences.
 
-                // Calcs somewhat dervied from https://raw.githubusercontent.com/reptilex/tesla-style-solar-power-card/master/README.md
+                // Calcs somewhat derived from https://raw.githubusercontent.com/reptilex/tesla-style-solar-power-card/master/README.md
                 var gridImport = gridPower >= 0 ? gridPower : 0;
                 var gridExport = gridPower < 0 ? -gridPower : 0;
                 var batteryDischarge = batteryPower >= 0 ? batteryPower : 0;

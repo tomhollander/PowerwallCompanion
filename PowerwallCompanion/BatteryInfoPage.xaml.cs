@@ -111,6 +111,7 @@ namespace PowerwallCompanion
                     ViewModel.BatteryHistoryChartData = await localGatewayApi.GetBatteryHistoryDataFromServer(Settings.SiteId, ViewModel.EnergySiteInfo.GatewayId);
                     AddCurrentDataPointToBatteryChartData();
                     await localGatewayApi.SaveBatteryHistoryDataToServer(Settings.SiteId, ViewModel.EnergySiteInfo.GatewayId, ViewModel.BatteryDetails);
+                    SendShadowCapacityEstimateTelemetryEvent();
 
                     double maxValue = 0;
                     double minValue = 20;
@@ -147,6 +148,40 @@ namespace PowerwallCompanion
                 Telemetry.TrackException(ex);
             }
             
+        }
+
+        private async Task SendShadowCapacityEstimateTelemetryEvent()
+        {
+            try
+            {
+                var powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
+
+                // Shadow execution of then new estimator. Save the data for comparison later.
+                var estimator = new BatteryCapacityEstimator(powerwallApi);
+                var estimatedCapacity = await estimator.GetEstimatedBatteryCapacity(DateTime.Today);
+
+                double totalCapacityFromGateway = 0;
+                foreach (var battery in ViewModel.BatteryDetails)
+                {
+                    totalCapacityFromGateway += battery.FullCapacity;
+                }
+                var capacityDeltaPercent = Math.Abs((estimatedCapacity - totalCapacityFromGateway) / totalCapacityFromGateway * 100);
+
+                var dict = new Dictionary<string, string>()
+                {
+                    { "GatewayCapacity", totalCapacityFromGateway.ToString() },
+                    { "EstimatedCapacity", estimatedCapacity.ToString() },
+                    { "DeltaPercent", capacityDeltaPercent.ToString() }
+                };
+
+                Telemetry.TrackEvent("BatteryCapacity", dict);
+
+            }
+            catch (Exception ex)
+            {
+                Telemetry.TrackException(ex);
+            }
+
         }
 
         private void AddCurrentDataPointToBatteryChartData()
