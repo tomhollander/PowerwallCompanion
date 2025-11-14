@@ -42,6 +42,8 @@ namespace PowerwallCompanion
             try
             {
                 var powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
+                var estimator = new BatteryCapacityEstimator(powerwallApi);
+                // var batteryCapacity = await estimator.GetEstimatedBatteryCapacity(new DateTime(2024,1, 1));
                 ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
                 if (String.IsNullOrEmpty(Settings.LocalGatewayIP) || String.IsNullOrEmpty(Settings.LocalGatewayPassword))
                 {
