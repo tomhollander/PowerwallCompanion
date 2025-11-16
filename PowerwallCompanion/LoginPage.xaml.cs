@@ -89,7 +89,6 @@ namespace PowerwallCompanion
                     Settings.AccessToken = tokens.AccessToken;
                     Settings.RefreshToken = tokens.RefreshToken;
                     Settings.SignInName = "Tesla User";
-                    Settings.UseLocalGateway = false;
                     Settings.SiteId = await powerwallApi.GetFirstSiteId();
                     Settings.AvailableSites = await powerwallApi.GetEnergySites();
                     await powerwallApi.StoreInstallationTimeZone();
@@ -128,7 +127,6 @@ namespace PowerwallCompanion
             Settings.AccessToken = "DEMO";
             Settings.RefreshToken = "DEMO";
             Settings.SignInName = "Demo User";
-            Settings.UseLocalGateway = false;
             Settings.SiteId = "DEMO";
             this.Frame.Navigate(typeof(StatusPage), true);
         }

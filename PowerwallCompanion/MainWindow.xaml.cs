@@ -85,6 +85,8 @@ namespace PowerwallCompanion
                 { "StoreBatteryHistory", Settings.StoreBatteryHistory.ToString() },
                 { "PowerDecimals", Settings.PowerDecimals.ToString() },
                 { "EnergyDecimals", Settings.EnergyDecimals.ToString() },
+                { "UseLocalGatewayForBatteryCapacity", Settings.UseLocalGatewayForBatteryCapacity.ToString() },
+                { "EstimateBatteryCapacity", Settings.EstimateBatteryCapacity.ToString() },
             };
 
             Telemetry.TrackEvent("SessionStart", props);

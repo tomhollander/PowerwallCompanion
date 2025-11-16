@@ -91,7 +91,6 @@ namespace PowerwallCompanion
             try // All exceptions should be handled already, but since this event handler is async they won't propagate 
             {
                 await RefreshDataFromTeslaOwnerApi();
-                ShowBatteryHealthNavForPowerwall2Only();
                 ShowRequestedPowerView();
                 base.OnNavigatedTo(e);
             }
@@ -114,32 +113,6 @@ namespace PowerwallCompanion
                 powerGraphView.Visibility = Visibility.Collapsed;
                 powerFlowView.Visibility = Visibility.Visible;
             }
-        }
-
-        private void ShowBatteryHealthNavForPowerwall2Only()
-        {
-            try
-            {
-                // Show BatteryInfo nav if it's a Powerwall 2
-                if (ViewModel.EnergySiteInfo?.PowerwallVersion == "Powerwall 2") 
-                {
-                    var nav = (NavigationView)(this?.Parent as Frame)?.Parent; // May be null if we've changed pages
-                    if (nav != null)
-                    {
-                        var batteryInfoMenu = (NavigationViewItem)nav.MenuItems.Where(m => ((NavigationViewItem)m).Tag.ToString() == "BatteryInfo").FirstOrDefault();
-                        if (batteryInfoMenu != null)
-                        {
-                            batteryInfoMenu.Visibility = Visibility.Visible;
-                        }
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Telemetry.TrackException(ex);
-            }
-
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)

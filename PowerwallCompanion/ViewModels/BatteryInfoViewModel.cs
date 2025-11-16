@@ -1,7 +1,9 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -36,6 +38,21 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public double EstimatedCapacity
+        {
+            get; set;
+        }
+
+        public double EstimatedCapacityPercentOfBaseline
+        {
+            get => WarrantedCapacity == 0 ? 0 : (EstimatedCapacity / WarrantedCapacity) * 100;
+        }
+
+        public double EstimatedDegradationPercent
+        {
+            get => WarrantedCapacity == 0 ? 0 : 100 - EstimatedCapacityPercentOfBaseline;
+        }
+
         public double WarrantedCapacityKWh
         {
             get => WarrantedCapacity / 1000;
@@ -54,9 +71,10 @@ namespace PowerwallCompanion.ViewModels
                     };
                 }
                 var series = new List<ChartDataPoint>();
-                for (int i = 0; i < BatteryHistoryChartData.First().Value.Count; i++)
+                var data = BatteryHistoryChartData.ContainsKey("Estimated") ? BatteryHistoryChartData["Estimated"] : BatteryHistoryChartData.First().Value;
+                for (int i = 0; i < data.Count; i++)
                 {
-                    series.Add(new ChartDataPoint(BatteryHistoryChartData.First().Value[i].XValue, WarrantedCapacityKWh));
+                    series.Add(new ChartDataPoint(data[i].XValue, WarrantedCapacityKWh));
                 }
                 return series;
             }
@@ -97,9 +115,10 @@ namespace PowerwallCompanion.ViewModels
                     return new List<ChartDataPoint>();
                 }
                 var series = new List<ChartDataPoint>();
-                for (int i = 0; i < BatteryHistoryChartData.First().Value.Count; i++)
+                var data = BatteryHistoryChartData.ContainsKey("Estimated") ? BatteryHistoryChartData["Estimated"] : BatteryHistoryChartData.First().Value;
+                for (int i = 0; i < data.Count; i++)
                 {
-                    series.Add(new ChartDataPoint(BatteryHistoryChartData.First().Value[i].XValue, MinimumWarrantedCapacityKWh));
+                    series.Add(new ChartDataPoint(data[i].XValue, MinimumWarrantedCapacityKWh));
                 }
                 return series;
             }
@@ -113,7 +132,7 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public Dictionary<string, List<ChartDataPoint>> BatteryHistoryChartData
+        public Dictionary<string, ObservableCollection<ChartDataPoint>> BatteryHistoryChartData
         {
             get; set;
         }
@@ -145,7 +164,26 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
-        public EnergySiteInfo EnergySiteInfo { get; set; }
+        public Visibility ShowEstimatedData
+        {
+            get => Settings.EstimateBatteryCapacity? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public Visibility ShowGatewayData
+        {
+            get => Settings.UseLocalGatewayForBatteryCapacity ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private EnergySiteInfo _energySiteInfo;
+        public EnergySiteInfo EnergySiteInfo
+        {
+            get => _energySiteInfo;
+            set
+            {
+                _energySiteInfo = value;
+                NotifyPropertyChanged(nameof(EnergySiteInfo));
+            }
+        }
 
         private Visibility _loadingStateVisibility = Visibility.Collapsed;
         public Visibility LoadingStateVisibility
@@ -157,6 +195,26 @@ namespace PowerwallCompanion.ViewModels
                 NotifyPropertyChanged(nameof(LoadingStateVisibility));
             }
         }
+
+        public DateTime LastUpdate { get; set; } = DateTime.MinValue;
+
+        private bool _previousSettingsUseLocalGatewayForBatteryCapacity = Settings.UseLocalGatewayForBatteryCapacity;
+        private bool _previousSettingsEstimateBatteryCapacity = Settings.EstimateBatteryCapacity;
+        private bool _previousSettingsStoreBatteryHistory = Settings.StoreBatteryHistory;
+        private string _previousSettingsGatewayIP = Settings.LocalGatewayIP;
+        private string _previousSettingsGatewayPassword = Settings.LocalGatewayPassword;
+
+        public bool SettingsHaveChanged()
+        {
+            bool changed = _previousSettingsUseLocalGatewayForBatteryCapacity != Settings.UseLocalGatewayForBatteryCapacity ||
+                           _previousSettingsEstimateBatteryCapacity != Settings.EstimateBatteryCapacity ||
+                           _previousSettingsStoreBatteryHistory != Settings.StoreBatteryHistory ||
+                           _previousSettingsGatewayIP != Settings.LocalGatewayIP ||
+                           _previousSettingsGatewayPassword != Settings.LocalGatewayPassword;
+            return changed;
+        }
+
+
         public void NotifyAllProperties()
         {
             NotifyPropertyChanged(nameof(EnergySiteInfo));
@@ -174,6 +232,13 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(MinimumWarrantedCapacityKWh));
             NotifyPropertyChanged(nameof(WarrantedCapacityKWhSeries));
             NotifyPropertyChanged(nameof(MinimumWarrantedCapacityKWhSeries));
+        }
+
+        public void NotifyEstimatedCapacityProperties()
+        {
+            NotifyPropertyChanged(nameof(EstimatedCapacity));
+            NotifyPropertyChanged(nameof(EstimatedCapacityPercentOfBaseline));
+            NotifyPropertyChanged(nameof(EstimatedDegradationPercent));
         }
 
         private void NotifyPropertyChanged(string propertyName)

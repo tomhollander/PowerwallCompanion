@@ -18,9 +18,9 @@
                         <FontIcon Glyph="&#xe9d2;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem  Content="Battery Health" Tag="BatteryInfo"  Visibility="Collapsed">
+                <NavigationViewItem  Content="Battery Health" Tag="BatteryInfo">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE857;"/>
+                        <FontIcon Glyph="&#xe95e;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>

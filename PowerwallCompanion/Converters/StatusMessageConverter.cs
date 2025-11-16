@@ -14,14 +14,13 @@ namespace PowerwallCompanion.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             bool boolValue = (bool)value;
-            string service = Settings.UseLocalGateway ? "Local Gateway" : "Tesla";
             if (boolValue == true)
             {
-                return "Connected to " + service;
+                return "Connected to Tesla";
             }
             else
             {
-                return "Not Connected to " + service;
+                return "Not Connected to Tesla";
             }
         }
 

@@ -19,10 +19,6 @@ namespace PowerwallCompanion.ViewModels
         {
             get
             {
-                if (Settings.UseLocalGateway)
-                {
-                    return "Local Gateway User";
-                }
                 return Settings.SignInName;
             }
         }
@@ -194,6 +190,24 @@ namespace PowerwallCompanion.ViewModels
             set
             {
                 Settings.StoreBatteryHistory = value;
+            }
+        }
+
+        public bool EstimateBatteryCapacity
+        {
+            get { return Settings.EstimateBatteryCapacity; }
+            set
+            {
+                Settings.EstimateBatteryCapacity = value;
+            }
+        }
+
+        public bool UseLocalGatewayForBatteryCapacity
+        {
+            get { return Settings.UseLocalGatewayForBatteryCapacity; }
+            set
+            {
+                Settings.UseLocalGatewayForBatteryCapacity = value;
             }
         }
 

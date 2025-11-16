@@ -42,19 +42,21 @@ namespace PowerwallCompanion.Lib
             while (positiveRunsFound < 5 )
             {
                 var date = baselineDate.AddDays(-daysSearched);
-                var batterySoeData = await _powerwallApi.GetBatteryHistoricalChargeLevel(date, date.AddDays(1));
-                var positiveChargeRun = GetLargestPositiveChargeRun(batterySoeData);
-                if (positiveChargeRun.EndSoe - positiveChargeRun.StartSoe > 60)
+                try
                 {
-                    positiveChargeRuns.Add(positiveChargeRun);
-                    positiveRunsFound++;
+                    var batterySoeData = await _powerwallApi.GetBatteryHistoricalChargeLevel(date, date.AddDays(1));
+                    var positiveChargeRun = GetLargestPositiveChargeRun(batterySoeData);
+                    if (positiveChargeRun.EndSoe - positiveChargeRun.StartSoe > 60)
+                    {
+                        positiveChargeRuns.Add(positiveChargeRun);
+                        positiveRunsFound++;
+                    }
                 }
-                //var negativeChargeRun = GetLargestNegativeChargeRun(batterySoeData);
-                //if (negativeChargeRun.StartSoe - negativeChargeRun.EndSoe > 50)
-                //{
-                //    negativeChargeRuns.Add(negativeChargeRun);
-                //    negativeRunsFound++;
-                //}
+                catch (Exception)
+                {
+                    // Ignore days with no data
+                }
+
                 daysSearched++;
                 
                 // Add safety limit to prevent infinite loop
