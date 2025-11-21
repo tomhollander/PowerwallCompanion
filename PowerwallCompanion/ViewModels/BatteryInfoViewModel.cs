@@ -137,6 +137,40 @@ namespace PowerwallCompanion.ViewModels
             get; set;
         }
 
+        public Dictionary<string, ObservableCollection<ChartDataPoint>> BatteryHistoryChartDataMovingAverage
+        {
+            get
+            {
+                if (BatteryHistoryChartData == null)
+                {
+                    return null;
+                }
+                var movingAverageData = new Dictionary<string, ObservableCollection<ChartDataPoint>>();
+                foreach (var key in BatteryHistoryChartData.Keys)
+                {
+                    var data = BatteryHistoryChartData[key];
+                    var movingAverageSeries = new ObservableCollection<ChartDataPoint>();
+                    int windowSize = 4; 
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        int start = Math.Max(0, i - windowSize + 1);
+                        int end = i;
+                        double sum = 0;
+                        int count = 0;
+                        for (int j = start; j <= end; j++)
+                        {
+                            sum += data[j].YValue;
+                            count++;
+                        }
+                        double average = sum / count;
+                        movingAverageSeries.Add(new ChartDataPoint(data[i].XValue, average));
+                    }
+                    movingAverageData[key] = movingAverageSeries;
+                }
+                return movingAverageData;
+            }
+        }
+
         public bool EnoughDataToShowChart
         {
             get; set;
@@ -201,6 +235,7 @@ namespace PowerwallCompanion.ViewModels
         private bool _previousSettingsUseLocalGatewayForBatteryCapacity = Settings.UseLocalGatewayForBatteryCapacity;
         private bool _previousSettingsEstimateBatteryCapacity = Settings.EstimateBatteryCapacity;
         private bool _previousSettingsStoreBatteryHistory = Settings.StoreBatteryHistory;
+        private bool _previousSettingsUseMovingAveragesForBatteryCapacity = Settings.UseMovingAveragesForBatteryCapacity;
         private string _previousSettingsGatewayIP = Settings.LocalGatewayIP;
         private string _previousSettingsGatewayPassword = Settings.LocalGatewayPassword;
 
@@ -210,7 +245,8 @@ namespace PowerwallCompanion.ViewModels
                            _previousSettingsEstimateBatteryCapacity != Settings.EstimateBatteryCapacity ||
                            _previousSettingsStoreBatteryHistory != Settings.StoreBatteryHistory ||
                            _previousSettingsGatewayIP != Settings.LocalGatewayIP ||
-                           _previousSettingsGatewayPassword != Settings.LocalGatewayPassword;
+                           _previousSettingsGatewayPassword != Settings.LocalGatewayPassword ||
+                           _previousSettingsUseMovingAveragesForBatteryCapacity != Settings.UseMovingAveragesForBatteryCapacity;
             return changed;
         }
 
@@ -219,6 +255,8 @@ namespace PowerwallCompanion.ViewModels
         {
             NotifyPropertyChanged(nameof(EnergySiteInfo));
             NotifyPropertyChanged(nameof(BatteryDetails));
+            NotifyPropertyChanged(nameof(ShowGatewayData));
+            NotifyPropertyChanged(nameof(ShowEstimatedData));
         }
 
         public void NotifyChartProperties()
@@ -227,6 +265,7 @@ namespace PowerwallCompanion.ViewModels
             NotifyPropertyChanged(nameof(ShowChart));
             NotifyPropertyChanged(nameof(EnoughDataToShowChart));
             NotifyPropertyChanged(nameof(BatteryHistoryChartData));
+            NotifyPropertyChanged(nameof(BatteryHistoryChartDataMovingAverage));
             NotifyPropertyChanged(nameof(ShowNotEnoughDataMessage));
             NotifyPropertyChanged(nameof(WarrantedCapacityKWh));
             NotifyPropertyChanged(nameof(MinimumWarrantedCapacityKWh));

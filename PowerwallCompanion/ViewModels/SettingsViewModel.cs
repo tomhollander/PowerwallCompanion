@@ -211,6 +211,15 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        public bool UseMovingAveragesForBatteryCapacity
+        {
+            get { return Settings.UseMovingAveragesForBatteryCapacity; }
+            set
+            {
+                Settings.UseMovingAveragesForBatteryCapacity = value;
+            }
+        }
+
         public decimal GraphScale
         {
             get { return Settings.GraphScale; }

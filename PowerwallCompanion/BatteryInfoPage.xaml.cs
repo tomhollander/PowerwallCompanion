@@ -1,18 +1,20 @@
-﻿using PowerwallCompanion.Lib;
+﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using PowerwallCompanion.Lib;
 using PowerwallCompanion.Lib.Models;
 using PowerwallCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Popups;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Input;
-using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -21,8 +23,14 @@ namespace PowerwallCompanion
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class BatteryInfoPage : Page
+    public sealed partial class BatteryInfoPage : Page, INotifyPropertyChanged
     {
+        private PowerwallApi powerwallApi;
+        private LocalGatewayApi localGatewayApi;
+        private BatteryCapacityEstimator batteryCapacityEstimator;
+        private BatteryInfoViewModel _viewModel;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public BatteryInfoPage()
         {
             this.InitializeComponent();
@@ -45,11 +53,25 @@ namespace PowerwallCompanion
             base.OnNavigatedTo(e);
         }
 
+        public BatteryInfoViewModel ViewModel
+        {
+            get => _viewModel;
+            set
+            {
+                if (_viewModel != value)
+                {
+                    _viewModel = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public BatteryInfoViewModel ViewModel { get; set; }
-        private PowerwallApi powerwallApi;
-        private LocalGatewayApi localGatewayApi;
-        private BatteryCapacityEstimator batteryCapacityEstimator;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         private async Task GetData()
         {
@@ -100,6 +122,7 @@ namespace PowerwallCompanion
             }
             finally
             {
+                ViewModel.NotifyAllProperties();
                 ViewModel.LoadingStateVisibility = Visibility.Collapsed;
             }
             
@@ -122,6 +145,7 @@ namespace PowerwallCompanion
         {
             try
             {
+                Telemetry.TrackEvent("Battery Capacity Estimate");
                 ViewModel.EstimatedCapacity = await batteryCapacityEstimator.GetEstimatedBatteryCapacity(DateTime.Today);
                 ViewModel.NotifyEstimatedCapacityProperties();
             }
@@ -147,8 +171,6 @@ namespace PowerwallCompanion
                 }
 
                 ViewModel.NotifyAllProperties();
-
-                await ProcessGatewayBatteryHistoryData();
             }
             catch (System.Exception ex)
             {
@@ -160,7 +182,6 @@ namespace PowerwallCompanion
         {
             try
             {
-                
                 var response = await localGatewayApi.GetBatteryDetails(Settings.LocalGatewayIP, Settings.LocalGatewayPassword);
                 ViewModel.BatteryDetails = response.BatteryDetails;
 
@@ -183,7 +204,7 @@ namespace PowerwallCompanion
                     staleDataBanner.Visibility = Visibility.Collapsed;
                     Settings.CachedGatewayDetailsUpdated = DateTime.Now;
                 }
-                
+                Telemetry.TrackEvent("Battery Capacity from Gateway", new Dictionary<string, string> { { "Success", (response.ErrorMessage == null).ToString() }});
 
             }
             catch (Exception ex)
@@ -260,8 +281,9 @@ namespace PowerwallCompanion
         private void AddEstimatedSeriesToChart()
         {
             var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
-            series.StrokeWidth = 1;
-            series.ItemsSource = ViewModel.BatteryHistoryChartData["Estimated"];
+            series.StrokeWidth = 2;
+            series.ItemsSource = Settings.UseMovingAveragesForBatteryCapacity ?
+                   ViewModel.BatteryHistoryChartDataMovingAverage["Estimated"] : ViewModel.BatteryHistoryChartData["Estimated"];
             series.Label = "Estimated";
             series.XBindingPath = nameof(ChartDataPoint.XValue);
             series.YBindingPath = nameof(ChartDataPoint.YValue);
@@ -302,18 +324,21 @@ namespace PowerwallCompanion
                         maxValue = Math.Max(maxValue, maxValueInSeries);
                         minValue = Math.Min(minValue, minValueInSeries);
 
-                        if (batteryHistoryChart.Series.Where(s => s.Label == label).Count() == 0)
+                        var existingSeries = batteryHistoryChart.Series.Where(s => s.Label == label).FirstOrDefault();
+                        if (existingSeries != null)
                         {
-
-                            var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
-                            series.StrokeWidth = 1;
-                            series.ItemsSource = ViewModel.BatteryHistoryChartData[serial];
-                            series.Label = label;
-                            series.XBindingPath = nameof(ChartDataPoint.XValue);
-                            series.YBindingPath = nameof(ChartDataPoint.YValue);
-
-                            batteryHistoryChart.Series.Add(series);
+                            batteryHistoryChart.Series.Remove(existingSeries);
                         }
+
+                        var series = new Syncfusion.UI.Xaml.Charts.LineSeries();
+                        series.StrokeWidth = 2;
+                        series.ItemsSource = Settings.UseMovingAveragesForBatteryCapacity ?
+                                ViewModel.BatteryHistoryChartDataMovingAverage[serial] : ViewModel.BatteryHistoryChartData[serial];
+                        series.Label = label;
+                        series.XBindingPath = nameof(ChartDataPoint.XValue);
+                        series.YBindingPath = nameof(ChartDataPoint.YValue);
+
+                        batteryHistoryChart.Series.Add(series);
 
                     }
                     ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Maximum = Math.Max(maxValue, 14);
@@ -332,7 +357,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                if (ViewModel.BatteryDetails == null || ViewModel.BatteryDetails.Count == 0)
+                if (ViewModel.BatteryDetails == null || ViewModel.BatteryDetails.Count == 0 || staleDataBanner.Visibility == Visibility.Visible)
                 {
                     return;
                 }

@@ -137,6 +137,12 @@
                                 </toolkit:SettingsCard.HeaderIcon>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.StoreBatteryHistory, Mode=TwoWay}" />
                             </toolkit:SettingsCard>
+                            <toolkit:SettingsCard Header="Use moving averages to smooth historical chart">
+                                <toolkit:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xe75c;" />
+                                </toolkit:SettingsCard.HeaderIcon>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.UseMovingAveragesForBatteryCapacity, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
                             <toolkit:SettingsCard Header="Estimate battery capacity from charge cycles">
                                 <toolkit:SettingsCard.HeaderIcon>
                                     <FontIcon Glyph="&#xe794;" />

@@ -324,6 +324,18 @@ namespace PowerwallCompanion
             }
         }
 
+        public static bool UseMovingAveragesForBatteryCapacity
+        {
+            get
+            {
+                return GetSetting<bool>("UseMovingAveragesForBatteryCapacity", true);
+            }
+            set
+            {
+                _roamingSettings.Values["UseMovingAveragesForBatteryCapacity"] = value.ToString();
+            }
+        }
+
         public static bool UseLocalGatewayForBatteryCapacity
         {
             get
