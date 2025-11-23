@@ -341,8 +341,10 @@ namespace PowerwallCompanion
                         batteryHistoryChart.Series.Add(series);
 
                     }
-                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Maximum = Math.Max(maxValue, 14);
-                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Minimum = Math.Min(minValue, 9);
+                    int multiplier = (Settings.EstimateBatteryCapacity && ViewModel.EnergySiteInfo != null) ? ViewModel.EnergySiteInfo.NumberOfBatteries : 1;
+
+                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Maximum = Math.Max(maxValue, multiplier * 14);
+                    ((Syncfusion.UI.Xaml.Charts.NumericalAxis)batteryHistoryChart.YAxes[0]).Minimum = Math.Min(minValue, multiplier * 9);
                     ViewModel.NotifyChartProperties();
                 }
             }
