@@ -1,6 +1,7 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Runtime;
 using System.Text;
@@ -64,9 +65,9 @@ namespace PowerwallCompanion.Lib
             
         }
 
-        public async Task<Dictionary<string, List<ChartDataPoint>>> GetBatteryHistoryDataFromServer(string siteId, string gatewayId)
+        public async Task<Dictionary<string, ObservableCollection<ChartDataPoint>>> GetBatteryHistoryDataFromServer(string siteId, string gatewayId)
         {
-            var batteryHistoryChartDictionary = new Dictionary<string, List<ChartDataPoint>>();
+            var batteryHistoryChartDictionary = new Dictionary<string, ObservableCollection<ChartDataPoint>>();
 
             var client = new HttpClient();
             var url = $"https://pwcfunctions.azurewebsites.net/api/getBatteryHistory?siteId={siteId}&gatewayId={gatewayId}&code={Keys.AzureFunctionsApiKey}";
@@ -86,14 +87,15 @@ namespace PowerwallCompanion.Lib
                         {
                             batteryHistoryChartData.Add(new ChartDataPoint(xValue: history["date"].GetValue<DateTime>(), yValue: history["capacity"].GetValue<double>() / 1000));
                         }
-                        batteryHistoryChartDictionary.Add(serial, batteryHistoryChartData);
+                        batteryHistoryChartData.Sort((a, b) => a.XValue.CompareTo(b.XValue));
+                        batteryHistoryChartDictionary.Add(serial, new ObservableCollection<ChartDataPoint>(batteryHistoryChartData));
                     }
                 }
             }
             return batteryHistoryChartDictionary;
         }
 
-        public async Task SaveBatteryHistoryDataToServer(string siteId, string gatewayId, List<BatteryDetails> batteryDetails)
+        public async Task SaveBatteryHistoryDataToServer(string siteId, string gatewayId, List<BatteryDetails> batteryDetails, DateTime? date)
         {
             if (batteryDetails != null)
             {
@@ -110,7 +112,8 @@ namespace PowerwallCompanion.Lib
                 {
                     sb.Remove(sb.Length - 2, 2);
                 }
-                var body = $"{{\"siteId\": \"{siteId}\", \"gatewayId\": \"{gatewayId}\", \"batteryData\": {{ {sb.ToString()} }}}}";
+                string dateString = date.HasValue ? $"\"date\": \"{date.Value.ToString("yyyy-MM-dd")}\", " : "";
+                var body = $"{{\"siteId\": \"{siteId}\", \"gatewayId\": \"{gatewayId}\", {dateString}\"batteryData\": {{ {sb.ToString()} }}}}";
                 var response = await client.PostAsync(url, new StringContent(body, Encoding.UTF8, "application/json"));
             }
         }

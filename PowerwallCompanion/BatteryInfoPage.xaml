@@ -26,7 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="30" Height="Auto" />
             <RowDefinition Height="Auto"/>
-            <RowDefinition />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
@@ -36,6 +36,9 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column1.Width" Value="0" />
+                        <Setter Target="col2Labels.Width" Value="0" />
+                        <Setter Target="col2Labels.MinWidth" Value="0" />
+                        <Setter Target="col2Values.Width" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideView">
@@ -44,6 +47,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="column1.Width" Value="120" />
+
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -53,6 +57,12 @@
         
         <Grid x:Name="noGatewayBanner" Background="LightSkyBlue" Visibility="Collapsed">
             <TextBlock Foreground="Black" Margin="10" TextWrapping="Wrap">To view battery details, you must configure your Gateway IP and password on the Settings page, and run the app from the same network as your gateway.</TextBlock>
+        </Grid>
+        <Grid x:Name="loadingHistoricalEstimatesBanner" Background="LightSkyBlue" Visibility="Collapsed">
+            <TextBlock Foreground="Black" Margin="10" TextWrapping="Wrap">Sit tight, we're gathering data to estimate how your battery's health has changed over time.</TextBlock>
+        </Grid>
+        <Grid x:Name="noEstimatesBanner" Background="LightYellow" Visibility="Collapsed">
+            <TextBlock Foreground="Black" Margin="10" TextWrapping="Wrap">Sorry, we couldn't get enough data to estimate your battery capacity.</TextBlock>
         </Grid>
         <Grid x:Name="gatewayErrorBanner" Background="LightPink" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
@@ -67,13 +77,15 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="staleDataBannerTextBlock" Foreground="Black" Margin="10" TextWrapping="Wrap">Unable to connect to the gateway. This page is showing cached data from </TextBlock>
+            <TextBlock x:Name="staleDataBannerTextBlock" Foreground="Black" Margin="10" TextWrapping="Wrap">Unable to connect to the gateway. Gateway battery details are showing cached data from </TextBlock>
             <HyperlinkButton Margin="0,0,10,0" HorizontalAlignment="Right" Grid.Column="1" RequestedTheme="Light" Tapped="HyperlinkButton_Tapped">Details</HyperlinkButton>
         </Grid>
-        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="40" RowSpacing="20" Margin="20">
+        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnSpacing="10" RowSpacing="10" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" x:Name="column1"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*" MinWidth="150" x:Name="col2Labels" />
+                <ColumnDefinition Width="210" x:Name="col2Values"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -81,42 +93,65 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+
             </Grid.RowDefinitions>
             
-            <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"  Width="100" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <Image Source="Assets/StoreLogo.png" Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"  Width="100" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-            <TextBlock VerticalAlignment="Center" FontSize="20" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergySiteInfo.SiteName, Mode=OneWay, FallbackValue='⌛ Data Loading...'}" Grid.Row="0" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="Energy Site"  Grid.Row="0" Grid.Column="1" Foreground="DimGray"/>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{x:Bind ViewModel.EnergySiteInfo.SiteName, Mode=OneWay}" Grid.Row="0" Grid.Column="2"></TextBlock>
 
-            <TextBlock VerticalAlignment="Center" FontSize="20" Text="Install Date"  Grid.Row="1" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergySiteInfo.InstallDateString, Mode=OneWay}" Grid.Row="1" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="Install Date"  Grid.Row="0" Grid.Column="3" Foreground="DimGray" TextWrapping="NoWrap"/>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{x:Bind ViewModel.EnergySiteInfo.InstallDateString, Mode=OneWay}" Grid.Row="0" Grid.Column="4"></TextBlock>
 
-            <TextBlock VerticalAlignment="Center" FontSize="20" Text="Number of Powerwalls" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Foreground="DimGray"/>
-            <TextBlock VerticalAlignment="Center" FontSize="30" Text="{x:Bind ViewModel.EnergySiteInfo.NumberOfBatteries, Mode=OneWay}" Grid.Row="2" Grid.Column="2"></TextBlock>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="Estimated site capacity ℹ️" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" Foreground="DimGray" Visibility="{x:Bind ViewModel.ShowEstimatedData, Mode=OneWay}">
+                <ToolTipService.ToolTip>Capacity and degradation are estimated by monitoring the amount of energy accepted by your Powerwall during long charging cycles. 
+                    While every effort has been made to calculate this as accurately as possible, there are many factors that may impact this calculation 
+                    and no guarantees can be made about its accuracy.</ToolTipService.ToolTip>
+            </TextBlock>
+            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal"  Visibility="{x:Bind ViewModel.ShowEstimatedData, Mode=OneWay}">
 
+                <TextBlock VerticalAlignment="Center" FontSize="18" Text="{x:Bind ViewModel.EstimatedCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2', Mode=OneWay}" ></TextBlock>
+                <TextBlock VerticalAlignment="Center" FontSize="18" Text="kWh" Foreground="DimGray" Margin="10,0,0,0"/>
+            </StackPanel>
 
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="Number of Powerwalls" TextWrapping="NoWrap" Grid.Row="1" Grid.Column="3" Foreground="DimGray" />
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{x:Bind ViewModel.EnergySiteInfo.NumberOfBatteries, Mode=OneWay}" Grid.Row="1" Grid.Column="4"></TextBlock>
 
-            <dataGrid:SfDataGrid IsReadOnly="True" ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" HeaderRowHeight="60"
-                                 ColumnWidthMode="SizeToHeader" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" RowHeight="50" AllowSorting="False" AllowEditing="False" HorizontalAlignment="Stretch">
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="Est. capacity vs baseline" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Foreground="DimGray" Visibility="{x:Bind ViewModel.ShowEstimatedData, Mode=OneWay}"/>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{x:Bind ViewModel.EstimatedCapacityPercentOfBaseline, Converter={StaticResource BatteryPercentageConverter},Mode=OneWay}" 
+                       Foreground="{x:Bind ViewModel.EstimatedCapacityPercentOfBaseline, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"
+                       Grid.Row="2" Grid.Column="2" Visibility="{x:Bind ViewModel.ShowEstimatedData, Mode=OneWay}"></TextBlock>
+
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="Estimated degradation" TextWrapping="NoWrap" Grid.Row="2" Grid.Column="3" Foreground="DimGray" Visibility="{x:Bind ViewModel.ShowEstimatedData, Mode=OneWay}"/>
+            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{x:Bind ViewModel.EstimatedDegradationPercent, Converter={StaticResource BatteryPercentageConverter}, Mode=OneWay}" 
+                       Foreground="{x:Bind ViewModel.EstimatedCapacityPercentOfBaseline, Mode=OneWay, Converter={StaticResource BatteryCapacityToBrushConverter}}"
+                       Grid.Row="2" Grid.Column="4" Visibility="{x:Bind ViewModel.ShowEstimatedData, Mode=OneWay}"></TextBlock>
+
+            <TextBlock VerticalAlignment="Center" FontSize="18" Margin="0,20,0,0" Text="Battery status reported by PW2 Gateway" TextWrapping="Wrap" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Foreground="DimGray" Visibility="{x:Bind ViewModel.ShowGatewayData, Mode=OneWay}"/>
+
+            <dataGrid:SfDataGrid IsReadOnly="True" ItemsSource="{x:Bind ViewModel.BatteryDetails, Mode=OneWay}" AutoGenerateColumns="False" HeaderRowHeight="60" Visibility="{x:Bind ViewModel.ShowGatewayData, Mode=OneWay}"
+                                 ColumnWidthMode="SizeToHeader" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" RowHeight="50" AllowSorting="False" AllowEditing="False" HorizontalAlignment="Stretch">
                 <dataGrid:SfDataGrid.Resources>
                     <Style x:Key="HeaderStyle" TargetType="dataGrid:GridHeaderCellControl">
-                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="FontSize" Value="14" />
                     </Style>
                     <Style x:Key="CellStyle" TargetType="dataGrid:GridCell">
-                        <Setter Property="FontSize" Value="30" />
+                        <Setter Property="FontSize" Value="18" />
           
                     </Style>
                 </dataGrid:SfDataGrid.Resources>
    
                 <dataGrid:SfDataGrid.Columns>
                     <dataGrid:GridTextColumn HeaderText="Serial" Width="200" IsReadOnly="True" AllowSorting="False" MappingName="ShortSerialNumber" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}"/>
-                    <dataGrid:GridTextColumn HeaderText="Current &#x0a;Charge"  Width="200"  AllowSorting="False"  IsReadOnly="True" MappingName="CurrentChargePercent" DisplayBinding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}" />
-                    <dataGrid:GridTextColumn HeaderText="Capacity &#x0a;(kWh)"  Width="200" AllowSorting="False" IsReadOnly="True" MappingName="FullCapacity" DisplayBinding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}" />
+                    <dataGrid:GridTextColumn HeaderText="Current Charge"  Width="200"  AllowSorting="False"  IsReadOnly="True" MappingName="CurrentChargePercent" DisplayBinding="{Binding CurrentChargePercent, Converter={StaticResource BatteryPercentageConverter}}" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}" />
+                    <dataGrid:GridTextColumn HeaderText="Capacity (kWh)"  Width="200" AllowSorting="False" IsReadOnly="True" MappingName="FullCapacity" DisplayBinding="{Binding FullCapacity, Converter={StaticResource KilowattHourConverter}, ConverterParameter='2'}" HeaderStyle="{StaticResource HeaderStyle}" CellStyle="{StaticResource CellStyle}" />
                     <dataGrid:GridTemplateColumn MappingName="VsBaseline" HeaderText="Vs Baseline" HeaderStyle="{StaticResource HeaderStyle}">
                         <dataGrid:GridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="libmodels:BatteryDetails">
                                 <StackPanel VerticalAlignment="Center">
-                                    <TextBlock FontSize="30" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" VerticalAlignment="Center" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
+                                    <TextBlock FontSize="18" Text="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" VerticalAlignment="Center" ToolTipService.ToolTip="Current capacity as percentage of baseline 13.5kWh"/>
                                 </StackPanel>
                             </DataTemplate>
                         </dataGrid:GridTemplateColumn.CellTemplate>
@@ -125,7 +160,7 @@
                         <dataGrid:GridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="libmodels:BatteryDetails">
                                 <StackPanel VerticalAlignment="Center">
-                                    <TextBlock  FontSize="30" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" VerticalAlignment="Center" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
+                                    <TextBlock  FontSize="18" Text="{x:Bind DegradationPercent, Mode=OneTime, Converter={StaticResource BatteryPercentageConverter}}" Foreground="{x:Bind WarrantedPercent, Mode=OneTime, Converter={StaticResource BatteryCapacityToBrushConverter}}" VerticalAlignment="Center" ToolTipService.ToolTip="Degradation from baseline of 13.5kWh"/>
                                 </StackPanel>
                             </DataTemplate>
                         </dataGrid:GridTemplateColumn.CellTemplate>
@@ -134,28 +169,34 @@
             </dataGrid:SfDataGrid>
 
         </Grid>
-        <chart:SfCartesianChart x:Name="batteryHistoryChart" MinHeight="100"  MaxHeight="300" Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
-   
+        <chart:SfCartesianChart x:Name="batteryHistoryChart" MinHeight="100"   Grid.Row="2" HorizontalAlignment="Center" Margin="20,10,20,10" Visibility="{x:Bind ViewModel.ShowChart, Converter={StaticResource FalseToVisibilityCollapsedConverter}, Mode=OneWay}">
+            <chart:SfCartesianChart.Resources>
+                <Style TargetType="Line" x:Key="chartGridLines">
+                    <Setter Property="StrokeThickness" Value="0.8"/>
+                    <Setter Property="Stroke" Value="#303030"/>
+                </Style>
+            </chart:SfCartesianChart.Resources>
+            
             <chart:SfCartesianChart.TrackballBehavior>
                 <chart:ChartTrackballBehavior/>
             </chart:SfCartesianChart.TrackballBehavior>
             
             <chart:SfCartesianChart.XAxes>
-                <chart:DateTimeAxis ShowTrackballLabel="True">
+                <chart:DateTimeAxis ShowTrackballLabel="True" MajorGridLineStyle="{StaticResource chartGridLines}">
                     <chart:DateTimeAxis.LabelStyle>
                         <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="d"/>
                     </chart:DateTimeAxis.LabelStyle>
                 </chart:DateTimeAxis>
             </chart:SfCartesianChart.XAxes>
             <chart:SfCartesianChart.YAxes>
-                <chart:NumericalAxis RangePadding="Auto">
+                <chart:NumericalAxis RangePadding="Auto" MajorGridLineStyle="{StaticResource chartGridLines}">
                     <chart:NumericalAxis.LabelStyle>
                         <chart:LabelStyle Foreground="DarkGray" FontSize="16" LabelFormat="0.## kWh" />
                     </chart:NumericalAxis.LabelStyle>
                 </chart:NumericalAxis>
             </chart:SfCartesianChart.YAxes>
             <chart:SfCartesianChart.Legend>
-                <chart:ChartLegend ToggleSeriesVisibility="False" Placement="Right">
+                <chart:ChartLegend ToggleSeriesVisibility="True" Placement="Right">
                 </chart:ChartLegend>
             </chart:SfCartesianChart.Legend>
 

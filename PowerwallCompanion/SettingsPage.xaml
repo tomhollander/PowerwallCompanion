@@ -71,20 +71,6 @@
                         <ComboBox VerticalAlignment="Center" ItemsSource="{x:Bind ViewModel.AvailableSites}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedSite, Mode=TwoWay}" />
                     </toolkit:SettingsCard>
 
-                    <toolkit:SettingsExpander Header="Local Gateway" Description="Connect to your PW2 Gateway to access battery health stats">
-                        <toolkit:SettingsExpander.HeaderIcon>
-                            <FontIcon Glyph="&#xe969;" />
-                        </toolkit:SettingsExpander.HeaderIcon>
-                        <toolkit:SettingsExpander.Items>
-                            <toolkit:SettingsCard  Header="Gateway IP" Description="To find your Powerwall gateway's IP address, log into your WiFi router's admin portal and look for 'Tesla Powerwall' in your list of devices.">
-                                <TextBox Width="150" Text="{x:Bind ViewModel.LocalGatewayIP, Mode=TwoWay}" />
-                            </toolkit:SettingsCard>
-                            <toolkit:SettingsCard  Header="Gateway Password" Description="The default password is normally the last 5 digits of the value labelled as either 'password' or 'serial number' which is printed on label on the gateway. You can reset the password by navigating to https://&lt;your-gateway-ip&gt; in a web browser.">
-                                <PasswordBox Width="150" Password="{x:Bind ViewModel.LocalGatewayPassword, Mode=TwoWay}" />
-                            </toolkit:SettingsCard>
-                        </toolkit:SettingsExpander.Items>
-                    </toolkit:SettingsExpander>
-
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Features"  />
                     <toolkit:SettingsCard Header="Power Display Mode" Description="Choose how you would like to view your instantaneous power usage">
                         <toolkit:SettingsCard.HeaderIcon>
@@ -140,12 +126,45 @@
                         </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
 
-                    <toolkit:SettingsCard Header="Store historical battery health data in the cloud">
-                        <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE1A5;" />
-                        </toolkit:SettingsCard.HeaderIcon>
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.StoreBatteryHistory, Mode=TwoWay}" />
-                    </toolkit:SettingsCard>
+                    <toolkit:SettingsExpander Header="Battery Health" Description="Record your battery's capacity change over time">
+                        <toolkit:SettingsExpander.HeaderIcon>
+                            <FontIcon Glyph="&#xe95e;" />
+                        </toolkit:SettingsExpander.HeaderIcon>
+                        <toolkit:SettingsExpander.Items>
+                            <toolkit:SettingsCard Header="Store historical battery health data in the cloud">
+                                <toolkit:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xE1A5;" />
+                                </toolkit:SettingsCard.HeaderIcon>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.StoreBatteryHistory, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
+                            <toolkit:SettingsCard Header="Use moving averages to smooth historical chart">
+                                <toolkit:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xe75c;" />
+                                </toolkit:SettingsCard.HeaderIcon>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.UseMovingAveragesForBatteryCapacity, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
+                            <toolkit:SettingsCard Header="Estimate battery capacity from charge cycles">
+                                <toolkit:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xe794;" />
+                                </toolkit:SettingsCard.HeaderIcon>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.EstimateBatteryCapacity, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
+                            <toolkit:SettingsCard Header="Retrieve battery capacity from local gateway (PW2 only)">
+                                <toolkit:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xe969;" />
+                                </toolkit:SettingsCard.HeaderIcon>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.UseLocalGatewayForBatteryCapacity, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
+                            <toolkit:SettingsCard  Header="Gateway IP" Description="To find your Powerwall gateway's IP address, log into your WiFi router's admin portal and look for 'Tesla Powerwall' in your list of devices.">
+                                <TextBox Width="150" Text="{x:Bind ViewModel.LocalGatewayIP, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
+                            <toolkit:SettingsCard  Header="Gateway Password" Description="The default password is normally the last 5 digits of the value labelled as either 'password' or 'serial number' which is printed on label on the gateway. You can reset the password by navigating to https://&lt;your-gateway-ip&gt; in a web browser.">
+                                <PasswordBox Width="150" Password="{x:Bind ViewModel.LocalGatewayPassword, Mode=TwoWay}" />
+                            </toolkit:SettingsCard>
+                        </toolkit:SettingsExpander.Items>
+                    </toolkit:SettingsExpander>
+                    
+
 
                     <toolkit:SettingsCard Header="Play sound on battery full/empty">
                         <toolkit:SettingsCard.HeaderIcon>

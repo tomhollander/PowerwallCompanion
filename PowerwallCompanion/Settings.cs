@@ -230,18 +230,6 @@ namespace PowerwallCompanion
         }
 
 
-        public static bool UseLocalGateway
-        {
-            get
-            {
-                return GetSetting<bool>("UseLocalGateway", false);
-            }
-            set
-            {
-                _roamingSettings.Values["UseLocalGateway"] = value.ToString();
-            }
-        }
-
         public static string LocalGatewayIP
         {
             get
@@ -321,6 +309,46 @@ namespace PowerwallCompanion
             set
             {
                 _roamingSettings.Values["StoreBatteryHistory"] = value.ToString();
+            }
+        }
+
+        public static bool EstimateBatteryCapacity
+        {
+            get
+            {
+                return GetSetting<bool>("EstimateBatteryCapacity", true);
+            }
+            set
+            {
+                _roamingSettings.Values["EstimateBatteryCapacity"] = value.ToString();
+            }
+        }
+
+        public static bool UseMovingAveragesForBatteryCapacity
+        {
+            get
+            {
+                return GetSetting<bool>("UseMovingAveragesForBatteryCapacity", true);
+            }
+            set
+            {
+                _roamingSettings.Values["UseMovingAveragesForBatteryCapacity"] = value.ToString();
+            }
+        }
+
+        public static bool UseLocalGatewayForBatteryCapacity
+        {
+            get
+            {
+                if (_roamingSettings.Values["UseLocalGatewayForBatteryCapacity"] == null)
+                {
+                    return LocalGatewayIP != null; // Leave this off unless a local gateway is configured
+                }
+                return GetSetting<bool>("UseLocalGatewayForBatteryCapacity", true);
+            }
+            set
+            {
+                _roamingSettings.Values["UseLocalGatewayForBatteryCapacity"] = value.ToString();
             }
         }
 
