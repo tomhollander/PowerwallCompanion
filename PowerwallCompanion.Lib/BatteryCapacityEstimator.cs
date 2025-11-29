@@ -29,73 +29,64 @@ namespace PowerwallCompanion.Lib
         public async Task<double> GetEstimatedBatteryCapacity(DateTime baselineDate)
         {
             List<ChargeRun> positiveChargeRuns = new List<ChargeRun>();
-            List<ChargeRun> negativeChargeRuns = new List<ChargeRun>();
 
             int positiveRunsFound = 0;
-            int negativeRunsFound = 0;
-            int daysSearched = 0;
+            int idealLengthRunsFound = 0;
+
+            const double minimumRunLength = 50;
+            const double idealRunLength = 80;
+            const int idealRunsToFind = 4;
+            const int maxRunsToFind = 10;
+            const int maxDaysToSearch = 30;
+            const int numberOfRunsForEstimate = 4;
 
             const double chargeLossFactor = 0.96;
 
-
-            // Find at least 5 significant charge runs
-            while (positiveRunsFound < 5 )
+            // Search up to maxDaysToSearch days backward, capturing qualifying runs
+            for (int daysSearched = 0; daysSearched < maxDaysToSearch; daysSearched++)
             {
+                if (positiveRunsFound >= maxRunsToFind) break; // Safety cap on total runs
+                if (idealLengthRunsFound >= idealRunsToFind) break; // Found enough ideal-length runs
+
                 var date = baselineDate.AddDays(-daysSearched);
                 try
                 {
                     var batterySoeData = await _powerwallApi.GetBatteryHistoricalChargeLevel(date, date.AddDays(1));
                     var positiveChargeRun = GetLargestPositiveChargeRun(batterySoeData);
-                    if (positiveChargeRun.EndSoe - positiveChargeRun.StartSoe > 60)
+                    double runLength = positiveChargeRun.EndSoe - positiveChargeRun.StartSoe;
+
+                    if (runLength >= minimumRunLength)
                     {
                         positiveChargeRuns.Add(positiveChargeRun);
                         positiveRunsFound++;
+                        if (runLength >= idealRunLength) idealLengthRunsFound++;
                     }
                 }
                 catch (Exception)
                 {
                     // Ignore days with no data
                 }
-
-                daysSearched++;
-                
-                // Add safety limit to prevent infinite loop
-                if (daysSearched > 30) break;
             }
 
-            // Calculate capacity estimates from each run
-            var positiveCapacityEstimates = new List<double>();
-            //var negativeCapacityEstimates = new List<double>();
+            // Order runs by length (SOE delta) and take the top numberOfRunsForEstimate
+            var selectedRuns = positiveChargeRuns
+                .OrderByDescending(r => r.EndSoe - r.StartSoe)
+                .Take(numberOfRunsForEstimate)
+                .ToList();
 
-            foreach (var chargeRun in positiveChargeRuns)
+            var positiveCapacityEstimates = new List<double>();
+
+            foreach (var chargeRun in selectedRuns)
             {
                 double energyForRun = Math.Abs(await GetBatteryEnergyForChargeRun(chargeRun)) * chargeLossFactor;
                 double capacityEstimate = energyForRun / (Math.Abs(chargeRun.EndSoe - chargeRun.StartSoe) / 100);
                 positiveCapacityEstimates.Add(capacityEstimate);
-                // await LogRun("Positive", chargeRun, energyForRun, capacityEstimate);
             }
 
-            //foreach (var chargeRun in negativeChargeRuns)
-            //{
-            //    double energyForRun = Math.Abs(await GetBatteryEnergyForChargeRun(chargeRun));
-            //    double capacityEstimate = energyForRun / (Math.Abs(chargeRun.EndSoe - chargeRun.StartSoe) / 100);
-            //    negativeCapacityEstimates.Add(capacityEstimate);
-            //    await LogRun("Negative", chargeRun, energyForRun, capacityEstimate);
-            //}
-
-            // Return the weighted average of both estimates - double weight to positive estimates
-            //if (positiveCapacityEstimates.Any() && negativeCapacityEstimates.Any())
-            //{
-            //    return (positiveCapacityEstimates.Average() + positiveCapacityEstimates.Average() + negativeCapacityEstimates.Average()) / 3;
-            //}
             if (positiveCapacityEstimates.Any())
             {
                 return positiveCapacityEstimates.Average();
             }
-            //else if (negativeCapacityEstimates.Any())
-            //{
-            //    return negativeCapacityEstimates.Average();
-            //}
             else
             {
                 throw new InvalidOperationException("No valid charge or discharge runs found to estimate battery capacity");

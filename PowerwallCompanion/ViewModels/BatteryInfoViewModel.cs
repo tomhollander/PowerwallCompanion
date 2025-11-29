@@ -132,10 +132,27 @@ namespace PowerwallCompanion.ViewModels
             }
         }
 
+        private Dictionary<string, ObservableCollection<ChartDataPoint>> _batteryHistoryChartData;
         public Dictionary<string, ObservableCollection<ChartDataPoint>> BatteryHistoryChartData
         {
-            get; set;
+            get => _batteryHistoryChartData;
+            set
+            {
+                if (_batteryHistoryChartData == value)
+                {
+                    return;
+                }
+                UnsubscribeFromSourceCollections();
+                _batteryHistoryChartData = value;
+                SubscribeToSourceCollections();
+                RecalculateAllMovingAverages();
+                NotifyPropertyChanged(nameof(BatteryHistoryChartData));
+                NotifyPropertyChanged(nameof(BatteryHistoryChartDataMovingAverage));
+            }
         }
+
+        private readonly Dictionary<string, ObservableCollection<ChartDataPoint>> _batteryHistoryChartDataMovingAverage = new Dictionary<string, ObservableCollection<ChartDataPoint>>();
+        private const int MovingAverageWindowSize = 4;
 
         public Dictionary<string, ObservableCollection<ChartDataPoint>> BatteryHistoryChartDataMovingAverage
         {
@@ -145,29 +162,119 @@ namespace PowerwallCompanion.ViewModels
                 {
                     return null;
                 }
-                var movingAverageData = new Dictionary<string, ObservableCollection<ChartDataPoint>>();
-                foreach (var key in BatteryHistoryChartData.Keys)
+
+                // Ensure any newly added source series are tracked and have a moving average calculated
+                foreach (var kvp in BatteryHistoryChartData)
                 {
-                    var data = BatteryHistoryChartData[key];
-                    var movingAverageSeries = new ObservableCollection<ChartDataPoint>();
-                    int windowSize = 4; 
-                    for (int i = 0; i < data.Count; i++)
+                    if (!_batteryHistoryChartDataMovingAverage.ContainsKey(kvp.Key))
                     {
-                        int start = Math.Max(0, i - windowSize + 1);
-                        int end = i;
-                        double sum = 0;
-                        int count = 0;
-                        for (int j = start; j <= end; j++)
-                        {
-                            sum += data[j].YValue;
-                            count++;
-                        }
-                        double average = sum / count;
-                        movingAverageSeries.Add(new ChartDataPoint(data[i].XValue, average));
+                        kvp.Value.CollectionChanged += SourceCollectionChanged;
+                        RecalculateMovingAverageForKey(kvp.Key, kvp.Value);
                     }
-                    movingAverageData[key] = movingAverageSeries;
+                    else
+                    {
+                        // Re-subscribe defensively in case the collection instance was replaced
+                        kvp.Value.CollectionChanged -= SourceCollectionChanged;
+                        kvp.Value.CollectionChanged += SourceCollectionChanged;
+                    }
                 }
-                return movingAverageData;
+
+                return _batteryHistoryChartDataMovingAverage;
+            }
+        }
+
+        private void SubscribeToSourceCollections()
+        {
+            if (BatteryHistoryChartData == null)
+            {
+                return;
+            }
+            foreach (var kvp in BatteryHistoryChartData)
+            {
+                kvp.Value.CollectionChanged += SourceCollectionChanged;
+            }
+        }
+
+        private void UnsubscribeFromSourceCollections()
+        {
+            if (_batteryHistoryChartData == null)
+            {
+                return;
+            }
+            foreach (var kvp in _batteryHistoryChartData)
+            {
+                kvp.Value.CollectionChanged -= SourceCollectionChanged;
+            }
+        }
+
+        private void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Identify key
+            if (BatteryHistoryChartData == null)
+            {
+                return;
+            }
+            foreach (var kvp in BatteryHistoryChartData)
+            {
+                if (kvp.Value == sender)
+                {
+                    RecalculateMovingAverageForKey(kvp.Key, kvp.Value);
+                    NotifyPropertyChanged(nameof(BatteryHistoryChartDataMovingAverage));
+                    break;
+                }
+            }
+        }
+
+        private void RecalculateAllMovingAverages()
+        {
+            _batteryHistoryChartDataMovingAverage.Clear();
+            if (BatteryHistoryChartData == null)
+            {
+                return;
+            }
+            foreach (var kvp in BatteryHistoryChartData)
+            {
+                RecalculateMovingAverageForKey(kvp.Key, kvp.Value);
+            }
+        }
+
+        private void RecalculateMovingAverageForKey(string key, ObservableCollection<ChartDataPoint> source)
+        {
+            if (!_batteryHistoryChartDataMovingAverage.TryGetValue(key, out var target))
+            {
+                target = new ObservableCollection<ChartDataPoint>();
+                _batteryHistoryChartDataMovingAverage[key] = target;
+            }
+
+            // Ensure target has same length as source
+            while (target.Count > source.Count)
+            {
+                target.RemoveAt(target.Count - 1);
+            }
+
+            for (int i = 0; i < source.Count; i++)
+            {
+                int start = Math.Max(0, i - MovingAverageWindowSize + 1);
+                double sum = 0;
+                int count = 0;
+                for (int j = start; j <= i; j++)
+                {
+                    sum += source[j].YValue;
+                    count++;
+                }
+                double average = count == 0 ? 0 : sum / count;
+
+                if (i < target.Count)
+                {
+                    // Update existing item to preserve bindings
+                    var item = target[i];
+                    // Replace to ensure X/Y updates are reflected even if ChartDataPoint does not implement INotifyPropertyChanged
+                    target[i] = new ChartDataPoint(source[i].XValue, average);
+                }
+                else
+                {
+                    target.Add(new ChartDataPoint(source[i].XValue, average));
+                }
             }
         }
 
