@@ -17,7 +17,7 @@ namespace PowerwallCompanion.Lib.Tests
         public void Setup()
         {
             _mockApi = new MockPowerwallApi();
-            _estimator = new BatteryCapacityEstimator(_mockApi);
+            _estimator = new BatteryCapacityEstimator(_mockApi, 1);
         }
 
         [TestMethod]

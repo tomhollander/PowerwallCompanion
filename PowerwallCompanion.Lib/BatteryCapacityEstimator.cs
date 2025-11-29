@@ -21,9 +21,12 @@ namespace PowerwallCompanion.Lib
         }
 
         private PowerwallApi _powerwallApi;
-        public BatteryCapacityEstimator(PowerwallApi powerwallApi)
+        private int _numberOfBatteries;
+
+        public BatteryCapacityEstimator(PowerwallApi powerwallApi, int numberOfBatteries)
         {
             this._powerwallApi = powerwallApi;
+            this._numberOfBatteries = numberOfBatteries;
         }
 
         public async Task<double> GetEstimatedBatteryCapacity(DateTime baselineDate)
@@ -33,7 +36,7 @@ namespace PowerwallCompanion.Lib
             int positiveRunsFound = 0;
             int idealLengthRunsFound = 0;
 
-            const double minimumRunLength = 50;
+            double minimumRunLength = _numberOfBatteries == 1 ? 60 : (_numberOfBatteries == 2 ? 40 : 30);
             const double idealRunLength = 80;
             const int idealRunsToFind = 4;
             const int maxRunsToFind = 10;

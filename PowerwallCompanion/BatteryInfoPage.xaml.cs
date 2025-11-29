@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -87,7 +88,8 @@ namespace PowerwallCompanion
                 var tasksToRace = new List<Task>();
                 if (Settings.EstimateBatteryCapacity)
                 {
-                    batteryCapacityEstimator = new BatteryCapacityEstimator(powerwallApi);
+                    int numberOfBatteries = ViewModel.EnergySiteInfo == null ? 1 : ViewModel.EnergySiteInfo.NumberOfBatteries;
+                    batteryCapacityEstimator = new BatteryCapacityEstimator(powerwallApi, numberOfBatteries);
                     tasksToRace.Add(GetEstimatedData());
                 }
                 if (Settings.UseLocalGatewayForBatteryCapacity)
@@ -145,9 +147,14 @@ namespace PowerwallCompanion
         {
             try
             {
-                Telemetry.TrackEvent("Battery Capacity Estimate");
                 ViewModel.EstimatedCapacity = await batteryCapacityEstimator.GetEstimatedBatteryCapacity(DateTime.Today);
+                Telemetry.TrackEvent("Battery Capacity Estimate", new Dictionary<string, string> { { "Capacity", ViewModel.EstimatedCapacity.ToString(CultureInfo.InvariantCulture)} });
                 ViewModel.NotifyEstimatedCapacityProperties();
+            }
+            catch (InvalidOperationException)
+            {
+                noEstimatesBanner.Visibility = Visibility.Visible;
+                Telemetry.TrackEvent("Battery Capacity Estimate", new Dictionary<string, string> { { "Capacity", "Unavailable" } });
             }
             catch (System.Exception ex)
             {
