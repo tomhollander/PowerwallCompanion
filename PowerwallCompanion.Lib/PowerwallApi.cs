@@ -196,14 +196,21 @@ namespace PowerwallCompanion.Lib
             var yesterdayUrl = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", DateTime.Today.AddDays(-1), DateTime.Today);
             var todayUrl = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", DateTime.Today, DateTime.Today.AddDays(1));
 
+            var yesterdayTask = apiHelper.CallGetApiWithTokenRefresh(yesterdayUrl);
+            var todayTask = apiHelper.CallGetApiWithTokenRefresh(todayUrl);
+
             var tasks = new List<Task<JsonObject>>()
             {
-                apiHelper.CallGetApiWithTokenRefresh(todayUrl),
-                apiHelper.CallGetApiWithTokenRefresh(yesterdayUrl)
+                yesterdayTask, todayTask
             };
-            var results = await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
             // Combine results
-            var json = new JsonObject();
+            // Get them in order so graph isn't screwy
+            var results = new List<JsonObject>()
+            {
+                yesterdayTask.Result,
+                todayTask.Result
+            };
             var combinedTimeSeries = new JsonArray();
             foreach (var result in results)
             {
