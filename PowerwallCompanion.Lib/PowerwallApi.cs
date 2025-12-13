@@ -193,7 +193,25 @@ namespace PowerwallCompanion.Lib
                   
         public async Task<PowerChartSeries> GetPowerChartSeriesForLastTwoDays()
         {
-            var json = await apiHelper.CallGetApiWithTokenRefresh($"/api/1/energy_sites/{siteId}/history?kind=power");
+            var yesterdayUrl = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", DateTime.Today.AddDays(-1), DateTime.Today);
+            var todayUrl = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", DateTime.Today, DateTime.Today.AddDays(1));
+
+            var tasks = new List<Task<JsonObject>>()
+            {
+                apiHelper.CallGetApiWithTokenRefresh(todayUrl),
+                apiHelper.CallGetApiWithTokenRefresh(yesterdayUrl)
+            };
+            var results = await Task.WhenAll(tasks);
+            // Combine results
+            var json = new JsonObject();
+            var combinedTimeSeries = new JsonArray();
+            foreach (var result in results)
+            {
+                foreach (var item in result["response"]["time_series"].AsArray())
+                {
+                    combinedTimeSeries.Add(item.DeepClone());
+                }
+            }
 
             var powerChartSeries = new PowerChartSeries();
             powerChartSeries.Home = new List<ChartDataPoint>();
@@ -201,7 +219,7 @@ namespace PowerwallCompanion.Lib
             powerChartSeries.Grid =  new List<ChartDataPoint>();
             powerChartSeries.Battery = new List<ChartDataPoint>();
 
-            foreach (var datapoint in (JsonArray)json["response"]["time_series"])
+            foreach (var datapoint in combinedTimeSeries)
             {
                 var timestamp = Utils.GetUnspecifiedDateTime(datapoint["timestamp"]);
                 var solarPower = datapoint["solar_power"].GetValue<double>() / 1000;
