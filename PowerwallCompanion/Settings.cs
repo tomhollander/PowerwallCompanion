@@ -110,7 +110,12 @@ namespace PowerwallCompanion
         {
             get
             {
-                return GetSetting<decimal>("graphScale", DefaultGraphScale);
+                var graphScale = GetSetting<decimal>("graphScale", DefaultGraphScale);
+                if (graphScale <= 0)
+                {
+                    graphScale = DefaultGraphScale;
+                }
+                return graphScale;
             }
             set
             {

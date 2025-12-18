@@ -301,6 +301,10 @@ namespace PowerwallCompanion
         {
             try
             {
+                if (ViewModel.EnergySiteInfo == null || ViewModel.BatteryDetails == null)
+                {
+                    return;
+                }
                 AddCurrentDataPointToBatteryChartData();
                 await localGatewayApi.SaveBatteryHistoryDataToServer(Settings.SiteId, ViewModel.EnergySiteInfo.GatewayId, ViewModel.BatteryDetails, null);
             }
@@ -398,7 +402,7 @@ namespace PowerwallCompanion
 
         private void AddCurrentDataPointToBatteryChartData()
         {
-            if (ViewModel.BatteryDetails != null)
+            if (ViewModel.BatteryDetails != null && ViewModel.BatteryHistoryChartData != null)
             {
                 foreach (var battery in ViewModel.BatteryDetails)
                 {

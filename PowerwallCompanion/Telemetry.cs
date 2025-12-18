@@ -52,8 +52,15 @@ namespace PowerwallCompanion
         private static Dictionary<string, string> BuildExceptionMetadata(Exception ex, bool handled)
         {
             // Split stack trace into 256 character segments as this is the limit for Mixpanel strings
-            var stackTrace1 = ex.StackTrace.Length > 256 ? ex.StackTrace.Substring(0, 256) : ex.StackTrace;
-            var stackTrace2 = ex.StackTrace.Length > 256 ? ex.StackTrace.Substring(256) : null;
+            string stackTrace1 = null;
+            string stackTrace2 = null;
+
+            if (ex.StackTrace != null)
+            {
+                stackTrace1 = ex.StackTrace.Length > 256 ? ex.StackTrace.Substring(0, 256) : ex.StackTrace;
+                stackTrace2 = ex.StackTrace.Length > 256 ? ex.StackTrace.Substring(256) : null;
+            }
+
             return new Dictionary<string, string>()
             {
                 { "Type", ex.GetType().ToString() },

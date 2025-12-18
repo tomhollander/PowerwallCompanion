@@ -105,7 +105,7 @@ namespace PowerwallCompanion.Lib
         private ChargeRun GetLargestPositiveChargeRun(List<ChartDataPoint> soeData)
         {
             const double minSoeThreshold = 5.0;
-            const double maxSoeThreshold = 95.0;
+            const double maxSoeThreshold = 80.0;
 
             double lastSoe = soeData[0].YValue;
 
