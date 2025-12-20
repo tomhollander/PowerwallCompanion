@@ -16,6 +16,9 @@ namespace PowerwallCompanion.Lib
     {
         private string _baseUrl;
         private IPlatformAdapter _platformAdatper;
+        
+        // Reuse a single HttpClient instance to prevent JNI reference table overflow on Android
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public ApiHelper(IPlatformAdapter platformAdapter)
         {
@@ -49,30 +52,51 @@ namespace PowerwallCompanion.Lib
 
         private async Task<JsonObject> CallGetApi(string url)
         {
-    
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _platformAdatper.AccessToken);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("X-Tesla-User-Agent");
-            var response = await client.GetAsync(url);
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine($"GET {url} => {response.StatusCode} {responseMessage}");
-            if (response.IsSuccessStatusCode)
+            int retries = 0;
+
+            while (retries < 3)
             {
-                var responseJson = (JsonObject)JsonNode.Parse(responseMessage);
-                if (responseJson["response"].GetValueKind() == System.Text.Json.JsonValueKind.String && responseJson["response"].GetValue<string>() == "")
+                // Create a new request message for each attempt to ensure headers are correct and the request can be resent
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _platformAdatper.AccessToken);
+                request.Headers.UserAgent.ParseAdd("X-Tesla-User-Agent");
+
+                var response = await _httpClient.SendAsync(request);
+                var responseMessage = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"GET {url} => {response.StatusCode} {responseMessage}");
+                if (response.IsSuccessStatusCode)
                 {
-                    throw new NoDataException("Tesla API returned no data. Use the Tesla app to check that your Powerwall is connected to your network.");
+                    var responseJson = (JsonObject)JsonNode.Parse(responseMessage);
+                    if (responseJson["response"].GetValueKind() == System.Text.Json.JsonValueKind.String && responseJson["response"].GetValue<string>() == "")
+                    {
+                        throw new NoDataException("Tesla API returned no data. Use the Tesla app to check that your Powerwall is connected to your network.");
+                    }
+                    return responseJson;
                 }
-                return responseJson;
+                else if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    retries++;
+                    // Check for Retry-After header
+                    if (response.Headers.RetryAfter?.Delta.HasValue == true)
+                    {
+                        await Task.Delay(response.Headers.RetryAfter.Delta.Value);
+                    }
+                    else
+                    {
+                        // Fallback to linear backoff if header is missing
+                        await Task.Delay(1000 * retries);
+                    }
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+                else
+                {
+                    throw new HttpRequestException($"Request failed with HTTP {response.StatusCode}");
+                }
             }
-            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-            else
-            {
-                throw new HttpRequestException($"Request failed with HTTP {response.StatusCode}");
-            }
+            throw new HttpRequestException("Failed after maximum retries");
         }
 
 
