@@ -310,7 +310,7 @@ namespace PowerwallCompanion
             }
             catch (Exception ex)
             {
-                Telemetry.TrackUnhandledException(ex);
+                Telemetry.TrackException(ex);
             }
 
 

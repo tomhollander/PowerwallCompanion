@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PowerwallCompanion
@@ -11,6 +13,8 @@ namespace PowerwallCompanion
     internal static class Telemetry
     {
         private static Dictionary<string, DateTime> exceptionLastTrackedTimes = new Dictionary<string, DateTime>();
+        private static bool? _shouldLogExceptionCache;
+        private static DateTime _shouldLogExceptionCacheTime = DateTime.MinValue;
 
         public static void TrackUser()
         {
@@ -34,14 +38,61 @@ namespace PowerwallCompanion
         {
             string exceptionKey = ex.Message + ":" + ex.GetType().ToString();
             DateTime lastTracked = exceptionLastTrackedTimes.ContainsKey(exceptionKey) ? exceptionLastTrackedTimes[exceptionKey] : DateTime.MinValue;
-            if (lastTracked != DateTime.MinValue && (DateTime.UtcNow - lastTracked).TotalSeconds < 180)
+            if (lastTracked != DateTime.MinValue && (DateTime.UtcNow - lastTracked).TotalSeconds < 300)
             {
-                // Don't track the same exception more than once every 180 seconds
+                // Don't track the same exception more than once every 300 seconds
                 return;
             }
             exceptionLastTrackedTimes[exceptionKey] = DateTime.UtcNow;
 
-            TrackEventToMixpanelSafe("Exception", BuildExceptionMetadata(ex, true));
+            Task.Run(async () =>
+            {
+                try
+                {
+                    // Check if telemetry is disabled for this version
+                    if (await ShouldLogException())
+                    {
+                        await TrackEventToMixpanel("Exception", BuildExceptionMetadata(ex, true));
+                    }
+                }
+                catch
+                {
+                    // Ignore errors
+                }
+            });
+        }
+
+        private static async Task<bool> ShouldLogException()
+        {
+            if (_shouldLogExceptionCache.HasValue && (DateTime.UtcNow - _shouldLogExceptionCacheTime).TotalHours < 8)
+            {
+                return _shouldLogExceptionCache.Value;
+            }
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var json = await client.GetStringAsync("https://tomsapps2.blob.core.windows.net/powerwall-companion/disable-exception-telemetry-version.json");
+                    var versions = JsonSerializer.Deserialize<string[]>(json);
+
+                    var telemetryAdapter = new WindowsTelemetryPlatformAdapter();
+                    if (versions.Contains(telemetryAdapter.AppVersion) || versions.Contains("*"))
+                    {
+                        _shouldLogExceptionCache = false;
+                    }
+                    else
+                    {
+                        _shouldLogExceptionCache = true;
+                    }
+                    _shouldLogExceptionCacheTime = DateTime.UtcNow;
+                    return _shouldLogExceptionCache.Value;
+                }
+            }
+            catch
+            {
+                return true;
+            }
         }
 
         public static void TrackUnhandledException(Exception ex)
