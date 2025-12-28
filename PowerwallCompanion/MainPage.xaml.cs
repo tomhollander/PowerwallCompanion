@@ -1,14 +1,18 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.UI;
-using Windows.UI.ViewManagement;
+﻿using Microsoft.UI;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Contacts;
+using Windows.ApplicationModel.Core;
+using Windows.Foundation;
+using Windows.Services.Store;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -19,10 +23,25 @@ namespace PowerwallCompanion
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        private StoreContext context = null;
+
         public MainPage()
         {
             InitializeComponent();
             Telemetry.TrackUser();
+
+            this.DispatcherQueue.TryEnqueue(async () =>
+            {
+                try
+                {
+                    await DownloadAndInstallAllUpdatesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Telemetry.TrackException(ex);
+                }
+            });
 
             //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
             //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
@@ -83,6 +102,34 @@ namespace PowerwallCompanion
             {
                 frame.Navigate(typeof(BatteryInfoPage));
             }
+        }
+
+        public async Task DownloadAndInstallAllUpdatesAsync()
+        {
+            if (context == null)
+            {
+                context = StoreContext.GetDefault();
+                var hwnd = App.WindowHandle;
+                if (hwnd != IntPtr.Zero)
+                {
+                    WinRT.Interop.InitializeWithWindow.Initialize(context, hwnd);
+                }
+            }
+
+            // Get the updates that are available.
+            IReadOnlyList<StorePackageUpdate> updates =
+                await context.GetAppAndOptionalStorePackageUpdatesAsync();
+
+            if (updates.Count > 0)
+            {
+
+                // Download and install the updates (user will be prompted)
+                IAsyncOperationWithProgress<StorePackageUpdateResult, StorePackageUpdateStatus> downloadOperation =
+                    context.RequestDownloadAndInstallStorePackageUpdatesAsync(updates);
+
+                StorePackageUpdateResult result = await downloadOperation.AsTask();
+            }
+            
         }
     }
 }
