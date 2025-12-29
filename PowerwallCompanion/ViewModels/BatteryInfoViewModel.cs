@@ -50,7 +50,7 @@ namespace PowerwallCompanion.ViewModels
 
         public double EstimatedDegradationPercent
         {
-            get => WarrantedCapacity == 0 ? 0 : 100 - EstimatedCapacityPercentOfBaseline;
+            get => WarrantedCapacity == 0 ? 0 : Math.Max(100 - EstimatedCapacityPercentOfBaseline, 0);
         }
 
         public double WarrantedCapacityKWh

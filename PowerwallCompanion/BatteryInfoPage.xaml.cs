@@ -225,6 +225,11 @@ namespace PowerwallCompanion
         {
             try
             {
+                if (ViewModel.EnergySiteInfo == null || ViewModel.BatteryHistoryChartData == null)
+                {
+                    return; // Shouldn't happen unless something failed earlier
+                }
+
                 // If we have no data, start from install date
                 var maxDate = new DateTime(ViewModel.EnergySiteInfo.InstallDate.Year, ViewModel.EnergySiteInfo.InstallDate.Month, 1);
 

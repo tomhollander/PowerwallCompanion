@@ -122,12 +122,29 @@ namespace PowerwallCompanion
 
             if (updates.Count > 0)
             {
-
+                bool mandatoryUpdate = updates.Any(u => u.Mandatory);
+                if (mandatoryUpdate)
+                {
+                    
+                    var contentDialog = new ContentDialog()
+                    {
+                        Title = "Update Available",
+                        Content = "This version of Powerwall Companion is obsolete. Please upgrade to continue using the app.",
+                        CloseButtonText = "OK"
+                    };
+                    contentDialog.XamlRoot = this.Content.XamlRoot;
+                    await contentDialog.ShowAsync();
+                }
                 // Download and install the updates (user will be prompted)
                 IAsyncOperationWithProgress<StorePackageUpdateResult, StorePackageUpdateStatus> downloadOperation =
                     context.RequestDownloadAndInstallStorePackageUpdatesAsync(updates);
 
                 StorePackageUpdateResult result = await downloadOperation.AsTask();
+
+                if (mandatoryUpdate)
+                {
+                    App.Current.Exit();
+                }
             }
             
         }
