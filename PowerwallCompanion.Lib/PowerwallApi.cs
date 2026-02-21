@@ -11,14 +11,14 @@ using TimeZoneConverter;
 
 namespace PowerwallCompanion.Lib
 {
-    public class PowerwallApi
+    public class PowerwallApi : IEnergyAPI
     {
         private string siteId;
         private IPlatformAdapter platformAdapter;
-        private IApiHelper apiHelper;
+        private IPowerwallApiHelper apiHelper;
         private JsonObject productResponse;
 
-        public PowerwallApi(string siteId, IPlatformAdapter platformAdapter, IApiHelper apiHelper)
+        public PowerwallApi(string siteId, IPlatformAdapter platformAdapter, IPowerwallApiHelper apiHelper)
         {
             this.siteId = siteId;
             this.platformAdapter = platformAdapter;
@@ -35,7 +35,7 @@ namespace PowerwallCompanion.Lib
             }
             else
             {
-                this.apiHelper = new ApiHelper(platformAdapter);
+                this.apiHelper = new PowerwallApiHelper(platformAdapter);
             }
         }
    
@@ -241,14 +241,6 @@ namespace PowerwallCompanion.Lib
             return powerChartSeries;
         }
 
-        public enum PowerChartType
-        {
-            AllData,
-            Home,
-            Solar,
-            Grid, 
-            Battery
-        }
         public async Task<PowerChartSeries> GetPowerChartSeriesForPeriod(string period, DateTime startDate, DateTime endDate, PowerChartType chartType)
         {
             var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", period, startDate, endDate);

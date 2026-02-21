@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PowerwallCompanion.Lib
 {
-    public interface IApiHelper
+    public interface IPowerwallApiHelper
     {
         Task<JsonObject> CallGetApiWithTokenRefresh(string url);
     }

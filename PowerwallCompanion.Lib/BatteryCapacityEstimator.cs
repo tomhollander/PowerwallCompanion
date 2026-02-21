@@ -272,7 +272,7 @@ namespace PowerwallCompanion.Lib
 
         private async Task<double> GetBatteryEnergyForChargeRun(ChargeRun chargeRun)
         {
-            var powerData = await _powerwallApi.GetPowerChartSeriesForPeriod("day", chargeRun.StartDate, chargeRun.EndDate, PowerwallApi.PowerChartType.AllData);
+            var powerData = await _powerwallApi.GetPowerChartSeriesForPeriod("day", chargeRun.StartDate, chargeRun.EndDate, PowerChartType.AllData);
             double totalEnergy = 0;
             for (int i = 1; i < powerData.Battery.Count; i++)
             {

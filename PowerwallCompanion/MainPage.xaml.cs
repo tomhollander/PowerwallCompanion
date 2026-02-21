@@ -45,7 +45,8 @@ namespace PowerwallCompanion
 
             //// TODO Windows.UI.ViewManagement.ApplicationView is no longer supported. Use Microsoft.UI.Windowing.AppWindow instead. For more details see https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/windowing
             //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(800, 600));
-            if (Settings.AccessToken == null || Settings.SiteId == null || GetTokenAzp(Settings.AccessToken) != Keys.TeslaAppClientId)
+            if (Settings.AccessToken == null || Settings.SiteId == null || 
+                (Settings.EnergyProvider == Lib.Models.EnergyProvider.Powerwall && GetTokenAzp(Settings.AccessToken) != Keys.TeslaAppClientId))
             {
                 var installInfo = WebView2Install.GetInfo();
                 if (installInfo.InstallType == InstallType.NotInstalled)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PowerwallCompanion.Lib.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
@@ -94,6 +95,18 @@ namespace PowerwallCompanion
             }
         }
 
+        public static EnergyProvider EnergyProvider
+        {
+            get
+            {
+                return Enum.Parse< EnergyProvider>(GetSetting<string>("EnergyProvider", EnergyProvider.Powerwall.ToString()));
+            }
+            set
+            {
+                _roamingSettings.Values["EnergyProvider"] = value.ToString();
+            }
+        }
+
         public static string SiteId
         {
             get
@@ -103,6 +116,18 @@ namespace PowerwallCompanion
             set
             {
                 _roamingSettings.Values["SiteId"] = value;
+            }
+        }
+
+        public static string SiteCountry
+        {
+            get
+            {
+                return GetSetting<string>("SiteCountry", null);
+            }
+            set
+            {
+                _roamingSettings.Values["SiteCountry"] = value;
             }
         }
 

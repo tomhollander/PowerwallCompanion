@@ -11,5 +11,7 @@ namespace PowerwallCompanion.Lib
         public static string TeslaAppClientSecret;
         public static string TeslaAppRedirectUrl;
         public static string AzureFunctionsApiKey;
+        public static string SigenergyAppKey;
+        public static string SigenergyAppSecret;
     }
 }

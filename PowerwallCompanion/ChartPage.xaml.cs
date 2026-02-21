@@ -231,7 +231,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                PowerwallApi.PowerChartType powerChartType = (PowerwallApi.PowerChartType)powerGraphOptionsCombo.SelectedIndex;
+                PowerChartType powerChartType = (PowerChartType)powerGraphOptionsCombo.SelectedIndex;
                 var powerChartSeries = await powerwallApi.GetPowerChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, powerChartType);
 
                 ViewModel.PowerChartSeries = new PowerChartSeries();

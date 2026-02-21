@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PowerwallCompanion.Lib.Tests
 {
-    internal class MockApiHelper : IApiHelper
+    internal class MockApiHelper : IPowerwallApiHelper
     {
         private Dictionary<string, string> responses = new Dictionary<string, string>();
 

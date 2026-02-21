@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PowerwallCompanion.Lib
 {
-    internal class DemoApiHelper : IApiHelper
+    internal class DemoApiHelper : IPowerwallApiHelper
     {
         private IPlatformAdapter platformAdapter;
         public DemoApiHelper(IPlatformAdapter platformAdapter)

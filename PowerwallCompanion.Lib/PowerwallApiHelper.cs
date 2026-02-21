@@ -12,7 +12,7 @@ using TeslaAuth;
 
 namespace PowerwallCompanion.Lib
 {
-    internal class ApiHelper : IApiHelper
+    internal class PowerwallApiHelper : IPowerwallApiHelper
     {
         private string _baseUrl;
         private IPlatformAdapter _platformAdatper;
@@ -20,7 +20,7 @@ namespace PowerwallCompanion.Lib
         // Reuse a single HttpClient instance to prevent JNI reference table overflow on Android
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        public ApiHelper(IPlatformAdapter platformAdapter)
+        public PowerwallApiHelper(IPlatformAdapter platformAdapter)
         {
             _platformAdatper = platformAdapter;
         }

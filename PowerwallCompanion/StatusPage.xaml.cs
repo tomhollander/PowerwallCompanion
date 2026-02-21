@@ -44,14 +44,25 @@ namespace PowerwallCompanion
         private double maxPercentSinceNotification = 100D;
         private DispatcherTimer timer;
         private DispatcherTimer animationTimer;
-        private PowerwallApi powerwallApi;
+        private IEnergyAPI powerwallApi;
         private ITariffProvider tariffHelper;
         private int noDataResponseCount = 0;
         public StatusPage()
         {
             this.InitializeComponent();
             Telemetry.TrackEvent("StatusPage opened");
-            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
+            if (Settings.EnergyProvider == EnergyProvider.Powerwall)
+            {
+                powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
+            }
+            else if (Settings.EnergyProvider == EnergyProvider.Sigenergy)
+            {
+                powerwallApi = new SigenergyApi(Settings.SiteId, new WindowsPlatformAdapter());
+            }
+            else
+            {
+                throw new Exception("Invalid energy provider configured");
+            }
             viewModel = new StatusViewModel();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
@@ -418,11 +429,13 @@ namespace PowerwallCompanion
 
         private async Task RefreshTariffData()
         {
-            if (tariffHelper == null && viewModel.TariffName == null && Settings.ShowEnergyRates)
+            if (tariffHelper == null && viewModel.TariffName == null && 
+                Settings.ShowEnergyRates && 
+                Settings.EnergyProvider == EnergyProvider.Powerwall)
             {
                 try
                 {
-                    tariffHelper = await TariffProviderFactory.Create(powerwallApi);
+                    tariffHelper = await TariffProviderFactory.Create((PowerwallApi)powerwallApi);
                     viewModel.TariffBadgeVisibility = tariffHelper.IsSingleRatePlan ? Visibility.Collapsed : Visibility.Visible;
                 }
                 catch (Exception ex)
