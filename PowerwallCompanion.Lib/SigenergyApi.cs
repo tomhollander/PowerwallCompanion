@@ -99,7 +99,7 @@ namespace PowerwallCompanion.Lib
                 SolarUsePercent = (response["powerOneselfKwh"].GetValue<double>() / totalHomeEnergy) * 100,
                 BatteryUsePercent = ((response["powerOneselfKwh"].GetValue<double>() - response["powerFromGridKwh"].GetValue<double>()) / totalHomeEnergy) * 100,
                 GridUsePercent = (response["powerFromGridKwh"].GetValue<double>() / totalHomeEnergy) * 100,
-                SelfConsumption = 0
+                SelfConsumption = (response["powerSelfConsumptionKwh"].GetValue<double>() / totalHomeEnergy) * 100,
             };
 
             return energyChartSeries;
@@ -134,6 +134,7 @@ namespace PowerwallCompanion.Lib
                 SolarUsePercent = response["powerOneselfKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>() * 100,
                 BatteryUsePercent = (response["powerOneselfKwh"].GetValue<double>() + response["powerFromGridKwh"].GetValue<double>()) / response["powerUseKwh"].GetValue<double>() * 100,
                 GridUsePercent = response["powerFromGridKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>() * 100,
+                SelfConsumption = response["powerSelfConsumptionKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>() * 100,
             };
         }
 

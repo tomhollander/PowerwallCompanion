@@ -15,6 +15,10 @@ namespace PowerwallCompanion.Converters
             try
             {
                 var doubleValue = (double)value;
+                if (Double.IsNaN(doubleValue))
+                {
+                    return new GridLength(0);
+                }
                 return new GridLength(doubleValue, GridUnitType.Star);
             } 
             catch
