@@ -31,7 +31,7 @@ namespace PowerwallCompanion
         public ChartViewModel ViewModel { get; set; }
         private Task ratePlanTask;
         private DispatcherTimer timer;
-        private PowerwallApi powerwallApi;
+        private IEnergyAPI energyApi;
         private ITariffProvider tariffHelper;
 
         public ChartPage()
@@ -44,7 +44,7 @@ namespace PowerwallCompanion
             ViewModel.Period = "Day";
             ViewModel.CalendarDate = DateTime.Now;
 
-            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
+            energyApi = EnergyApiFactory.CreateEnergyApi(new WindowsPlatformAdapter());
             ratePlanTask = CreateTariffProvider();
 
             timer = new DispatcherTimer();
@@ -67,7 +67,7 @@ namespace PowerwallCompanion
             }
 
             // Reset the API helper in case we've signed out and back in
-            powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
+            energyApi = EnergyApiFactory.CreateEnergyApi(new WindowsPlatformAdapter());
             timer.Start();
             base.OnNavigatedTo(e);
         }
@@ -130,7 +130,7 @@ namespace PowerwallCompanion
 
         private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
         {
-            var date = powerwallApi.ConvertToPowerwallDate(DateTime.Now);
+            var date = energyApi.ConvertToPowerwallDate(DateTime.Now);
             if (args.NewDate > date.Date)
             {
                 datePicker.Date = date.Date;
@@ -232,7 +232,7 @@ namespace PowerwallCompanion
             try
             {
                 PowerChartType powerChartType = (PowerChartType)powerGraphOptionsCombo.SelectedIndex;
-                var powerChartSeries = await powerwallApi.GetPowerChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, powerChartType);
+                var powerChartSeries = await energyApi.GetPowerChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, powerChartType);
 
                 ViewModel.PowerChartSeries = new PowerChartSeries();
                 ViewModel.PowerChartStackingSeries = new PowerChartSeries();
@@ -287,7 +287,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                ViewModel.EnergyTotals = await powerwallApi.GetEnergyTotalsForPeriod(ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, tariffHelper);
+                ViewModel.EnergyTotals = await energyApi.GetEnergyTotalsForPeriod(ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, tariffHelper);
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.CurrentPeriodNetCost));
             }
@@ -319,7 +319,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                ViewModel.EnergyChartSeries = await powerwallApi.GetEnergyChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, Settings.ShowEnergyRates ? tariffHelper : null);
+                ViewModel.EnergyChartSeries = await energyApi.GetEnergyChartSeriesForPeriod(ViewModel.Period, ViewModel.PeriodStart, ViewModel.PeriodEnd, Settings.ShowEnergyRates ? tariffHelper : null);
                 ViewModel.EnergyTotals = ViewModel.EnergyChartSeries.EnergyTotals;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyChartSeries));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergyTotals));
@@ -335,7 +335,10 @@ namespace PowerwallCompanion
         {
             try
             {
-                tariffHelper = await TariffProviderFactory.Create(powerwallApi);
+                if (Settings.ShowEnergyRates)
+                {
+                    tariffHelper = await TariffProviderFactory.Create((PowerwallApi)energyApi);
+                }
             }
             catch (Exception ex)
             {
@@ -348,7 +351,7 @@ namespace PowerwallCompanion
         {
             try
             {
-                ViewModel.BatteryDailySoeGraphData = await powerwallApi.GetBatteryHistoricalChargeLevel(ViewModel.PeriodStart, ViewModel.PeriodEnd);
+                ViewModel.BatteryDailySoeGraphData = await energyApi.GetBatteryHistoricalChargeLevel(ViewModel.PeriodStart, ViewModel.PeriodEnd);
                 ((DateTimeAxis)batteryChart.XAxes[0]).Maximum = DateTime.MaxValue;
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.BatteryDailySoeGraphData));
                 ViewModel.NotifyPropertyChanged(nameof(ViewModel.PeriodEnd));
@@ -397,11 +400,11 @@ namespace PowerwallCompanion
 
                     if (ViewModel.Period == "Day")
                     {
-                        await powerwallApi.ExportPowerDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd);
+                        await energyApi.ExportPowerDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd);
                     }
                     else
                     {
-                        await powerwallApi.ExportEnergyDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, 
+                        await energyApi.ExportEnergyDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd, ViewModel.Period, 
                             Settings.ShowEnergyRates ? tariffHelper : null);
                     }
 

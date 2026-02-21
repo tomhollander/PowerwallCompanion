@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PowerwallCompanion.Lib.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -12,7 +13,9 @@ namespace PowerwallCompanion.Lib
         void PersistData(string key, string value);
         string AccessToken { get; set; }
         string RefreshToken { get; set; }
+        string SiteId { get; set; }
 
+        EnergyProvider EnergyProvider { get; set; }
         string InstallationTimeZone { get; set; }
 
         Task<string> ReadFileContents(string filename);

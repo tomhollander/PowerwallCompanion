@@ -44,25 +44,14 @@ namespace PowerwallCompanion
         private double maxPercentSinceNotification = 100D;
         private DispatcherTimer timer;
         private DispatcherTimer animationTimer;
-        private IEnergyAPI powerwallApi;
+        private IEnergyAPI energyApi;
         private ITariffProvider tariffHelper;
         private int noDataResponseCount = 0;
         public StatusPage()
         {
             this.InitializeComponent();
             Telemetry.TrackEvent("StatusPage opened");
-            if (Settings.EnergyProvider == EnergyProvider.Powerwall)
-            {
-                powerwallApi = new PowerwallApi(Settings.SiteId, new WindowsPlatformAdapter());
-            }
-            else if (Settings.EnergyProvider == EnergyProvider.Sigenergy)
-            {
-                powerwallApi = new SigenergyApi(Settings.SiteId, new WindowsPlatformAdapter());
-            }
-            else
-            {
-                throw new Exception("Invalid energy provider configured");
-            }
+            energyApi = EnergyApiFactory.CreateEnergyApi(new WindowsPlatformAdapter());
             viewModel = new StatusViewModel();
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(30);
@@ -165,7 +154,7 @@ namespace PowerwallCompanion
             {
                 try
                 {
-                    await powerwallApi.StoreInstallationTimeZone();
+                    await energyApi.StoreInstallationTimeZone();
                 }
                 catch (Exception ex)
                 {
@@ -180,7 +169,7 @@ namespace PowerwallCompanion
             {
                 if (ViewModel.EnergySiteInfo == null || (DateTime.Now - viewModel.EnergySiteInfoLastRefreshed > energySiteInfoRefreshInterval))
                 {
-                    ViewModel.EnergySiteInfo = await powerwallApi.GetEnergySiteInfo();
+                    ViewModel.EnergySiteInfo = await energyApi.GetEnergySiteInfo();
                     ViewModel.EnergySiteInfoLastRefreshed = DateTime.Now;
                     ViewModel.NotifyPropertyChanged(nameof(ViewModel.EnergySiteInfo));
                 }
@@ -206,7 +195,7 @@ namespace PowerwallCompanion
                     viewModel.LoadingStateVisibility = Visibility.Visible;
                 }
 
-                viewModel.InstantaneousPower = await powerwallApi.GetInstantaneousPower();
+                viewModel.InstantaneousPower = await energyApi.GetInstantaneousPower();
 #if FAKE
                 viewModel.InstantaneousPower.SolarPower = 0;
                 viewModel.InstantaneousPower.HomePower = 2000;
@@ -312,12 +301,12 @@ namespace PowerwallCompanion
             }
             if (viewModel.BatteryDay == DateTime.MinValue)
             {
-                var minMax = await powerwallApi.GetBatteryMinMaxToday();
+                var minMax = await energyApi.GetBatteryMinMaxToday();
                 viewModel.MinBatteryPercentToday = minMax.Item1;
                 viewModel.MaxBatteryPercentToday = minMax.Item2;
                 viewModel.BatteryDay = DateTime.Today;
             }
-            else if (viewModel.BatteryDay != (powerwallApi.ConvertToPowerwallDate(DateTime.Now)).Date) 
+            else if (viewModel.BatteryDay != (energyApi.ConvertToPowerwallDate(DateTime.Now)).Date) 
             {
                 viewModel.BatteryDay = DateTime.Today;
                 viewModel.MinBatteryPercentToday = viewModel.InstantaneousPower.BatteryStoragePercent;
@@ -343,8 +332,8 @@ namespace PowerwallCompanion
 
                 var tasks = new List<Task<EnergyTotals>>()
                 {
-                    powerwallApi.GetEnergyTotalsForDay(-1, tariffHelper),
-                    powerwallApi.GetEnergyTotalsForDay(0, tariffHelper)
+                    energyApi.GetEnergyTotalsForDay(-1, tariffHelper),
+                    energyApi.GetEnergyTotalsForDay(0, tariffHelper)
                 };
                 var results = await Task.WhenAll(tasks);
 
@@ -399,9 +388,9 @@ namespace PowerwallCompanion
                     return;
                 }
 
-                viewModel.PowerChartSeries = await powerwallApi.GetPowerChartSeriesForLastTwoDays();
+                viewModel.PowerChartSeries = await energyApi.GetPowerChartSeriesForLastTwoDays();
 
-                DateTime d = powerwallApi.ConvertToPowerwallDate(DateTime.Now);
+                DateTime d = energyApi.ConvertToPowerwallDate(DateTime.Now);
                 if (Settings.AccessToken == "DEMO")
                 {
                     viewModel.ChartMaxDate = new DateTime(2018, 3, 1);
@@ -435,7 +424,7 @@ namespace PowerwallCompanion
             {
                 try
                 {
-                    tariffHelper = await TariffProviderFactory.Create((PowerwallApi)powerwallApi);
+                    tariffHelper = await TariffProviderFactory.Create((PowerwallApi)energyApi);
                     viewModel.TariffBadgeVisibility = tariffHelper.IsSingleRatePlan ? Visibility.Collapsed : Visibility.Visible;
                 }
                 catch (Exception ex)

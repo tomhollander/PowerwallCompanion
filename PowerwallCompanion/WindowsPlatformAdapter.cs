@@ -1,4 +1,5 @@
 ﻿using PowerwallCompanion.Lib;
+using PowerwallCompanion.Lib.Models;
 using System;
 using System.IO;
 using System.Text.Json.Nodes;
@@ -25,6 +26,8 @@ namespace PowerwallCompanion
 
         public string AccessToken { get => Settings.AccessToken; set => Settings.AccessToken = value; }
         public string RefreshToken { get => Settings.RefreshToken; set => Settings.RefreshToken = value; }
+        public string SiteId { get => Settings.SiteId; set => Settings.SiteId = value; }
+        public EnergyProvider EnergyProvider { get => Settings.EnergyProvider; set => Settings.EnergyProvider = value; }
         public string InstallationTimeZone 
         {
             get
