@@ -15,7 +15,7 @@ namespace PowerwallCompanion.Converters
             try
             {
                 var doubleValue = (double)value;
-                if (Double.IsNaN(doubleValue))
+                if (Double.IsNaN(doubleValue) || doubleValue < 1)
                 {
                     return new GridLength(0);
                 }

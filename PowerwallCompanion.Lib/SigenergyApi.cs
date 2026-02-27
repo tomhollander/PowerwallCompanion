@@ -97,7 +97,7 @@ namespace PowerwallCompanion.Lib
                 BatteryEnergyCharged = response["esChargingKwh"].GetValue<double>() * 1000,
                 BatteryEnergyDischarged = response["esDischargingKwh"].GetValue<double>() * 1000,
                 SolarUsePercent = (response["powerOneselfKwh"].GetValue<double>() / totalHomeEnergy) * 100,
-                BatteryUsePercent = ((response["powerOneselfKwh"].GetValue<double>() - response["powerFromGridKwh"].GetValue<double>()) / totalHomeEnergy) * 100,
+                BatteryUsePercent = ((totalHomeEnergy - response["powerOneselfKwh"].GetValue<double>() - response["powerFromGridKwh"].GetValue<double>()) / totalHomeEnergy) * 100,
                 GridUsePercent = (response["powerFromGridKwh"].GetValue<double>() / totalHomeEnergy) * 100,
                 SelfConsumption = (response["powerSelfConsumptionKwh"].GetValue<double>() / totalHomeEnergy) * 100,
             };
@@ -131,10 +131,10 @@ namespace PowerwallCompanion.Lib
                 GridEnergyExported = response["powerToGridKwh"].GetValue<double>() * 1000,
                 BatteryEnergyCharged = response["esChargingKwh"].GetValue<double>() * 1000,
                 BatteryEnergyDischarged = response["esDischargingKwh"].GetValue<double>() * 1000,
-                SolarUsePercent = response["powerOneselfKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>() * 100,
-                BatteryUsePercent = (response["powerOneselfKwh"].GetValue<double>() + response["powerFromGridKwh"].GetValue<double>()) / response["powerUseKwh"].GetValue<double>() * 100,
-                GridUsePercent = response["powerFromGridKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>() * 100,
-                SelfConsumption = response["powerSelfConsumptionKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>() * 100,
+                SolarUsePercent = (response["powerOneselfKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>()) * 100,
+                BatteryUsePercent = ((response["powerUseKwh"].GetValue<double>() - response["powerOneselfKwh"].GetValue<double>() - response["powerFromGridKwh"].GetValue<double>()) / response["powerUseKwh"].GetValue<double>()) * 100,
+                GridUsePercent = (response["powerFromGridKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>()) * 100,
+                SelfConsumption = (response["powerSelfConsumptionKwh"].GetValue<double>() / response["powerUseKwh"].GetValue<double>()) * 100,
             };
         }
 
