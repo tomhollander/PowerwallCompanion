@@ -233,7 +233,7 @@ namespace PowerwallCompanion.Lib
                 var batteryPower = datapoint["battery_power"].GetValue<double>() / 1000;
                 var gridPower = datapoint["grid_power"].GetValue<double>() / 1000;
                 var homePower = solarPower + batteryPower + gridPower;
-                powerChartSeries.Home.Add(new ChartDataPoint(timestamp, homePower));
+                powerChartSeries.Home.Add(new ChartDataPoint(timestamp, -homePower));
                 powerChartSeries.Solar.Add(new ChartDataPoint(timestamp, solarPower));
                 powerChartSeries.Grid.Add(new ChartDataPoint(timestamp, gridPower));
                 powerChartSeries.Battery.Add(new ChartDataPoint(timestamp, batteryPower));
@@ -300,7 +300,7 @@ namespace PowerwallCompanion.Lib
                     powerChartSeries.Solar.Add(new ChartDataPoint(date, solarPower / 1000));
                     powerChartSeries.Grid.Add(new ChartDataPoint(date, gridPower / 1000));
                     powerChartSeries.Battery.Add(new ChartDataPoint(date, batteryPower / 1000));
-                    powerChartSeries.Home.Add(new ChartDataPoint(date, homePower / 1000));
+                    powerChartSeries.Home.Add(new ChartDataPoint(date, -homePower / 1000));
                 }
                 else if (chartType == PowerChartType.Home)
                 {
