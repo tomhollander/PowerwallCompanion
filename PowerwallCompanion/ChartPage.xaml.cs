@@ -60,7 +60,7 @@ namespace PowerwallCompanion
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // Reset the tariffProvider if it was changed in settings
-            if (tariffHelper != null && (tariffHelper.ProviderName != Settings.TariffProvider || tariffHelper.DailySupplyCharge != Settings.TariffDailySupplyCharge))
+            if (tariffHelper == null || (tariffHelper != null && (tariffHelper.ProviderName != Settings.TariffProvider || tariffHelper.DailySupplyCharge != Settings.TariffDailySupplyCharge)))
             {
                 await CreateTariffProvider();
                 await RefreshDataAndCharts();
@@ -335,7 +335,10 @@ namespace PowerwallCompanion
         {
             try
             {
-                tariffHelper = await TariffProviderFactory.Create(powerwallApi);
+                if (Settings.ShowEnergyRates)
+                {
+                    tariffHelper = await TariffProviderFactory.Create(powerwallApi);
+                }
             }
             catch (Exception ex)
             {
@@ -397,7 +400,7 @@ namespace PowerwallCompanion
 
                     if (ViewModel.Period == "Day")
                     {
-                        await powerwallApi.ExportPowerDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd);
+                        await powerwallApi.ExportPowerDataToCsv(stream, ViewModel.PeriodStart, ViewModel.PeriodEnd, tariffHelper);
                     }
                     else
                     {

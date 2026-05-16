@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -491,26 +492,77 @@ namespace PowerwallCompanion.Lib
 
         }
 
-        public async Task ExportPowerDataToCsv(Stream stream, DateTime startDate, DateTime endDate)
+        private void AddItemsToListIfNotPresent(List<string> list, IEnumerable<string> items)
         {
-            var url = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", startDate, endDate);
-            var json = await apiHelper.CallGetApiWithTokenRefresh(url);
-            var data = json["response"]["time_series"].AsArray();
+            foreach (var item in items)
+            {
+                if (!list.Contains(item))
+                {
+                    list.Add(item);
+                }
+            }
+        }   
+
+        public async Task ExportPowerDataToCsv(Stream stream, DateTime startDate, DateTime endDate, ITariffProvider tariffProvider)
+        {
+            var powerUrl = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "power", "day", startDate, endDate);
+            var powerJson = await apiHelper.CallGetApiWithTokenRefresh(powerUrl);
+            var powerData = powerJson["response"]["time_series"].AsArray();
+
+            var energyUrl = Utils.GetCalendarHistoryUrl(siteId, platformAdapter.InstallationTimeZone, "energy", "day", startDate, endDate);
+            var energyJson = await apiHelper.CallGetApiWithTokenRefresh(energyUrl);
+            var energyData = energyJson["response"]["time_series"].AsArray();
+
             var batteryChargeData = await GetBatteryHistoricalChargeLevel(startDate, endDate);
 
-            if (data.Count > 0)
+            if (powerData.Count > 0 && energyData.Count > 0)
             {
                 var tw = new StreamWriter(stream);
-                var first = (JsonObject) data[0].AsObject();
-                foreach (var prop in first)
+                
+                // Write header line
+                var headerColumns = new List<string>() { "timestamp" };
+                var powerHeaderColumns = new List<string>();
+                var firstPower = (JsonObject) powerData[0].AsObject();
+                foreach (var prop in firstPower)
                 {
-                    await tw.WriteAsync(prop.Key + ",");
+                    if (prop.Key != "timestamp")
+                    {
+                        powerHeaderColumns.Add(prop.Key);
+                    }
                 }
-                await tw.WriteLineAsync("load_power,battery_soe");
+                powerHeaderColumns.Add("load_power");
+                powerHeaderColumns.Sort();
+                headerColumns.AddRange(powerHeaderColumns);
 
-                foreach (var entry in data.AsArray())
+                var energyHeaderColumns = new List<string>();
+                var firstEnergy = (JsonObject) energyData[0].AsObject();
+                foreach (var prop in firstEnergy)
+                {
+                    if (prop.Key != "timestamp" && prop.Key != "raw_timestamp") 
+                    {
+                        energyHeaderColumns.Add(prop.Key);
+                    }
+                }
+                // The "totals" columns aren't always present in the first entry so add them in manually to ensure they're in the export if available, and sort the rest alphabetically
+                AddItemsToListIfNotPresent(energyHeaderColumns, new string[] { "total_battery_charge", "total_battery_discharge", "total_grid_energy_exported", "total_home_usage", "total_solar_generation" });
+
+                energyHeaderColumns.Sort();
+                headerColumns.AddRange(energyHeaderColumns);
+
+                headerColumns.Add("battery_soe");
+                if (tariffProvider != null)
+                {
+                    headerColumns.AddRange(new string[] { "tariff", "buy_rate", "sell_rate", "est_cost" });
+                }
+                await tw.WriteAsync(string.Join(",", headerColumns));
+                await tw.WriteLineAsync();
+
+                foreach (var entry in powerData.AsArray())
                 {
                     DateTime date = DateTime.MinValue;
+
+                    // Get power data and write in same order as header.
+                    var powerProps = new Dictionary<string, double>();
                     foreach (var prop in (JsonObject)entry)
                     {
                         if (prop.Key == "timestamp")
@@ -520,20 +572,76 @@ namespace PowerwallCompanion.Lib
                         }
                         else
                         {
-                            await tw.WriteAsync(prop.Value + ",");
+                            powerProps.Add(prop.Key, Utils.GetValueOrDefault<double>(prop.Value));
                         }
                     }
                     var solarPower = Utils.GetValueOrDefault<double>(entry["solar_power"]);
                     var gridPower = Utils.GetValueOrDefault<double>(entry["grid_power"]);
                     var batteryPower = Utils.GetValueOrDefault<double>(entry["battery_power"]);
                     var homePower = solarPower + gridPower + batteryPower;
-                    await tw.WriteAsync(homePower.ToString() + ",");
+                    powerProps.Add("load_power", homePower);
 
+                    // Write power data in same order as header
+                    var powerPropValues = powerHeaderColumns.Select(h => powerProps.ContainsKey(h) ? powerProps[h].ToString() : "");   
+                    await tw.WriteAsync(string.Join(",", powerPropValues));
+                    await tw.WriteAsync(",");
+
+                    // Write energy props
+                    var energyProps = new Dictionary<string, double>();
+                    // Initialize totals to 0 as they aren't always present in the API response
+                    energyProps["total_battery_charge"] = 0;
+                    energyProps["total_battery_discharge"] = 0;
+                    energyProps["total_grid_energy_exported"] = 0;
+                    energyProps["total_home_usage"] = 0;
+                    energyProps["total_solar_generation"] = 0;
+
+                    var energyEntry = energyData.AsArray().FirstOrDefault(e => Utils.GetUnspecifiedDateTime(e["timestamp"]) == date);
+                    if (energyEntry != null)
+                    {
+                        foreach (var prop in (JsonObject)energyEntry)
+                        {
+                            if (prop.Key != "timestamp" && prop.Key != "raw_timestamp")
+                            {
+                                energyProps[prop.Key] = Utils.GetValueOrDefault<double>(prop.Value);
+                            }
+                        }
+                    }
+                    var energyPropValues = energyHeaderColumns.Select(h => energyProps.ContainsKey(h) ? energyProps[h].ToString() : "");
+                    await tw.WriteAsync(string.Join(",", energyPropValues));
+                    await tw.WriteAsync(",");
                     // Battery charge level is less granular than power data
                     var batteryCharge = batteryChargeData.LastOrDefault(d => d.XValue <= date)?.YValue;
-                    await tw.WriteLineAsync(batteryCharge.HasValue ? batteryCharge.ToString() : "");
+                    await tw.WriteAsync(batteryCharge.HasValue ? batteryCharge.ToString() : "");
+
+                    // Tariff data if available
+                    if (tariffProvider != null)
+                    {
+                        if (energyEntry != null)
+                        {
+                            var dailyTariffs = await tariffProvider.GetTariffsForDay(date.Date);
+                            var tariffForTime = dailyTariffs.LastOrDefault(t => t.StartDate <= date && t.EndDate > date);
+                            if (tariffForTime != null)
+                            {
+                                var rates = tariffProvider.GetRatesForTariff(tariffForTime);
+                                var gridEnergyImported = Utils.GetValueOrDefault<double>(energyEntry["grid_energy_imported"]);
+                                var gridEnergyExported = Utils.GetValueOrDefault<double>(energyEntry["grid_energy_exported_from_solar"]) + Utils.GetValueOrDefault<double>(energyEntry["grid_energy_exported_from_generator"]) + Utils.GetValueOrDefault<double>(energyEntry["grid_energy_exported_from_battery"]);
+                                var netGridEnergy = gridEnergyImported - gridEnergyExported;
+                                await tw.WriteAsync($",{tariffForTime.Name},{rates.Item1},{rates.Item2},{(netGridEnergy > 0 ? netGridEnergy * (double)rates.Item1 / 1000: netGridEnergy * (double)rates.Item2 / 1000)}");
+                            }
+                            else
+                            {
+                                await tw.WriteAsync(",,,,");
+                            }
+                        }
+                        else
+                        {
+                            await tw.WriteAsync(",,,,");
+                        }
+                    }
+                    await tw.WriteLineAsync();
                 }
                 await tw.FlushAsync();
+                stream.SetLength(stream.Position); // Truncate any old data beyond current position
             }            
         }
         public async Task ExportEnergyDataToCsv(Stream stream, DateTime startDate, DateTime endDate, string period, ITariffProvider tariffHelper)
@@ -566,11 +674,12 @@ namespace PowerwallCompanion.Lib
             }
 
             var normalisedExportData = NormaliseExportData(energyData, period);
+            var sortedKeyNames = keyNames.OrderBy(k => k).ToList();
 
             // Header line
             var tw = new StreamWriter(stream);
             await tw.WriteAsync("timestamp,");
-            foreach (var key in keyNames)
+            foreach (var key in sortedKeyNames)
             {
                 await tw.WriteAsync(key + ",");
             }
@@ -585,7 +694,7 @@ namespace PowerwallCompanion.Lib
             foreach (var data in normalisedExportData)
             {
                 await tw.WriteAsync($"{data.Key:yyyy-MM-dd},");
-                foreach (var key in keyNames)
+                foreach (var key in sortedKeyNames)
                 {
                     if (data.Value.ContainsKey(key))
                     {
@@ -605,6 +714,7 @@ namespace PowerwallCompanion.Lib
                 await tw.WriteLineAsync();
             }
             await tw.FlushAsync();
+            stream.SetLength(stream.Position); // Truncate any old data beyond current position
         }
 
         private Func<DateTime, DateTime, bool> GetNormalisationDateComparitor(string period)
