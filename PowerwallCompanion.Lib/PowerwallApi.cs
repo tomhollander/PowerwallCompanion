@@ -552,7 +552,7 @@ namespace PowerwallCompanion.Lib
                 headerColumns.Add("battery_soe");
                 if (tariffProvider != null)
                 {
-                    headerColumns.AddRange(new string[] { "tariff", "buy_rate", "sell_rate", "est_cost" });
+                    headerColumns.AddRange(new string[] { "tariff", "buy_rate", "sell_rate", "est_net_cost" });
                 }
                 await tw.WriteAsync(string.Join(",", headerColumns));
                 await tw.WriteLineAsync();
@@ -674,6 +674,8 @@ namespace PowerwallCompanion.Lib
             }
 
             var normalisedExportData = NormaliseExportData(energyData, period);
+            // The "totals" columns aren't always present in the first entry so add them in manually to ensure they're in the export if available, and sort the rest alphabetically
+            AddItemsToListIfNotPresent(keyNames, new string[] { "total_battery_charge", "total_battery_discharge", "total_grid_energy_exported", "total_home_usage", "total_solar_generation" });
             var sortedKeyNames = keyNames.OrderBy(k => k).ToList();
 
             // Header line
@@ -685,7 +687,7 @@ namespace PowerwallCompanion.Lib
             }
             if (tariffHelper != null && (period == "Week" || period == "Month"))
             {
-                await tw.WriteAsync("Cost,FeedIn,NetCost,");
+                await tw.WriteAsync("est_cost,est_feedin,est_net_cost,");
             }
             await tw.WriteLineAsync();
    
