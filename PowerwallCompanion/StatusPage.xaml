@@ -655,7 +655,7 @@
                         <chart:SfCartesianChart.YAxes>
                             <chart:NumericalAxis RangePadding="None" MajorGridLineStyle="{StaticResource lineStyle}">
                                 <chart:NumericalAxis.LabelStyle>
-                                    <chart:LabelStyle  Foreground="DarkGray" LabelFormat="0 kW" FontSize="16"/>
+                                    <chart:LabelStyle  Foreground="DarkGray" LabelFormat="0.## kW" FontSize="16"/>
                                 </chart:NumericalAxis.LabelStyle>
                             </chart:NumericalAxis>
                         </chart:SfCartesianChart.YAxes>

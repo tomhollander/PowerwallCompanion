@@ -1,6 +1,7 @@
 ﻿using PowerwallCompanion.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -582,7 +583,7 @@ namespace PowerwallCompanion.Lib
                     powerProps.Add("load_power", homePower);
 
                     // Write power data in same order as header
-                    var powerPropValues = powerHeaderColumns.Select(h => powerProps.ContainsKey(h) ? powerProps[h].ToString() : "");   
+                    var powerPropValues = powerHeaderColumns.Select(h => powerProps.ContainsKey(h) ? powerProps[h].ToString(CultureInfo.InvariantCulture) : "");   
                     await tw.WriteAsync(string.Join(",", powerPropValues));
                     await tw.WriteAsync(",");
 
@@ -606,12 +607,12 @@ namespace PowerwallCompanion.Lib
                             }
                         }
                     }
-                    var energyPropValues = energyHeaderColumns.Select(h => energyProps.ContainsKey(h) ? energyProps[h].ToString() : "");
+                    var energyPropValues = energyHeaderColumns.Select(h => energyProps.ContainsKey(h) ? energyProps[h].ToString(CultureInfo.InvariantCulture) : "");
                     await tw.WriteAsync(string.Join(",", energyPropValues));
                     await tw.WriteAsync(",");
                     // Battery charge level is less granular than power data
                     var batteryCharge = batteryChargeData.LastOrDefault(d => d.XValue <= date)?.YValue;
-                    await tw.WriteAsync(batteryCharge.HasValue ? batteryCharge.ToString() : "");
+                    await tw.WriteAsync(batteryCharge.HasValue ? batteryCharge.Value.ToString(CultureInfo.InvariantCulture) : "");
 
                     // Tariff data if available
                     if (tariffProvider != null)
@@ -626,7 +627,8 @@ namespace PowerwallCompanion.Lib
                                 var gridEnergyImported = Utils.GetValueOrDefault<double>(energyEntry["grid_energy_imported"]);
                                 var gridEnergyExported = Utils.GetValueOrDefault<double>(energyEntry["grid_energy_exported_from_solar"]) + Utils.GetValueOrDefault<double>(energyEntry["grid_energy_exported_from_generator"]) + Utils.GetValueOrDefault<double>(energyEntry["grid_energy_exported_from_battery"]);
                                 var netGridEnergy = gridEnergyImported - gridEnergyExported;
-                                await tw.WriteAsync($",{tariffForTime.Name},{rates.Item1},{rates.Item2},{(netGridEnergy > 0 ? netGridEnergy * (double)rates.Item1 / 1000: netGridEnergy * (double)rates.Item2 / 1000)}");
+                                var netCost = (netGridEnergy > 0 ? netGridEnergy * (double)rates.Item1 / 1000 : netGridEnergy * (double)rates.Item2 / 1000);
+                                await tw.WriteAsync($",{tariffForTime.Name},{rates.Item1.ToString(CultureInfo.InvariantCulture)},{rates.Item2.ToString(CultureInfo.InvariantCulture)},{netCost.ToString(CultureInfo.InvariantCulture)}");
                             }
                             else
                             {
@@ -700,7 +702,7 @@ namespace PowerwallCompanion.Lib
                 {
                     if (data.Value.ContainsKey(key))
                     {
-                        await tw.WriteAsync($"{data.Value[key]},");
+                        await tw.WriteAsync($"{data.Value[key].ToString(CultureInfo.InvariantCulture)},");
                     }
                     else
                     {
@@ -711,7 +713,7 @@ namespace PowerwallCompanion.Lib
                 {
                     var dataForDay = json["response"]["time_series"].AsArray().Where(ts => ts["timestamp"].GetValue<DateTime>().Date == data.Key).ToList();
                     var energyCosts = await tariffHelper.GetEnergyCostAndFeedInFromEnergyHistory(dataForDay);
-                    await tw.WriteAsync($"{energyCosts.Item1},{energyCosts.Item2},{energyCosts.Item1 - energyCosts.Item2}");
+                    await tw.WriteAsync($"{energyCosts.Item1.ToString(CultureInfo.InvariantCulture)},{energyCosts.Item2.ToString(CultureInfo.InvariantCulture)},{(energyCosts.Item1 - energyCosts.Item2).ToString(CultureInfo.InvariantCulture)}");
                 }
                 await tw.WriteLineAsync();
             }
