@@ -634,18 +634,18 @@ namespace PowerwallCompanion
                 var jsonEnergy = json["powerConsumptionBreakdown"];
                 var energyUsage = new GridEnergySources()
                 {
-                    Solar = jsonEnergy["solar"].GetValue<int>(),
-                    Wind = jsonEnergy["wind"].GetValue<int>(),
-                    Nuclear = jsonEnergy["nuclear"].GetValue<int>(),
-                    Geothermal = jsonEnergy["geothermal"].GetValue<int>(),
-                    Biomass = jsonEnergy["biomass"].GetValue<int>(),
-                    Coal = jsonEnergy["coal"].GetValue<int>(),
-                    Hydro = jsonEnergy["hydro"].GetValue<int>(),
-                    HydroStorage = Math.Max(jsonEnergy["hydro discharge"].GetValue<int>(), 0),
-                    BatteryStorage = Math.Max(jsonEnergy["battery discharge"].GetValue<int>(), 0),
-                    Oil = jsonEnergy["oil"].GetValue<int>(),
-                    Gas = jsonEnergy["gas"].GetValue<int>(),
-                    Unknown = jsonEnergy["unknown"].GetValue<int>(),
+                    Solar = (int) jsonEnergy["solar"].GetValue<double>(),
+                    Wind = (int) jsonEnergy["wind"].GetValue<double>(),
+                    Nuclear = (int) jsonEnergy["nuclear"].GetValue<double>(),
+                    Geothermal = (int) jsonEnergy["geothermal"].GetValue<double>(),
+                    Biomass = (int) jsonEnergy["biomass"].GetValue<double>(),
+                    Coal = (int) jsonEnergy["coal"].GetValue<double>(),
+                    Hydro = (int) jsonEnergy["hydro"].GetValue<double>(),
+                    HydroStorage = Math.Max((int) jsonEnergy["hydro discharge"].GetValue<double>(), 0),
+                    BatteryStorage = Math.Max((int) jsonEnergy["battery discharge"].GetValue<double>(), 0),
+                    Oil = (int) jsonEnergy["oil"].GetValue<double>(),
+                    Gas = (int) jsonEnergy["gas"].GetValue<double>(),
+                    Unknown = (int) jsonEnergy["unknown"].GetValue<double>(),
 
                 };
                 viewModel.GridEnergySourcesStatusMessage = $"Energy sources for zone '{zone}', data from {date.ToString("g")}";

@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using PowerwallCompanion.Lib.Models;
 using System.Text.Json.Nodes;
 
